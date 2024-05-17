@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="batiment.q4paconv">
+    <row id="1">
+        <type_batiment_id>1</type_batiment_id>
+        <annee_construction lte="1947" lt="" gte="" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds>0</isolation_murs_plafonds>
+        <q4pa_conv>3.3</q4pa_conv>
+        <tv_q4pa_conv_id>5</tv_q4pa_conv_id>
+    </row>
+    <row id="2">
+        <type_batiment_id>1</type_batiment_id>
+        <annee_construction lte="1947" lt="" gte="" gt="" e="" />
+        <presence_joints_menuiserie>1</presence_joints_menuiserie>
+        <isolation_murs_plafonds>0</isolation_murs_plafonds>
+        <q4pa_conv>2.5</q4pa_conv>
+        <tv_q4pa_conv_id>12</tv_q4pa_conv_id>
+    </row>
+    <row id="3">
+        <type_batiment_id>1</type_batiment_id>
+        <annee_construction lte="1974" lt="" gte="1948" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds>0</isolation_murs_plafonds>
+        <q4pa_conv>2.2</q4pa_conv>
+        <tv_q4pa_conv_id>6</tv_q4pa_conv_id>
+    </row>
+    <row id="4">
+        <type_batiment_id>1</type_batiment_id>
+        <annee_construction lte="1974" lt="" gte="1948" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds>1</isolation_murs_plafonds>
+        <q4pa_conv>1.9</q4pa_conv>
+        <tv_q4pa_conv_id>11</tv_q4pa_conv_id>
+    </row>
+    <row id="5">
+        <type_batiment_id>1</type_batiment_id>
+        <annee_construction lte="2005" lt="" gte="1975" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds></isolation_murs_plafonds>
+        <q4pa_conv>1.9</q4pa_conv>
+        <tv_q4pa_conv_id>7</tv_q4pa_conv_id>
+    </row>
+    <row id="6">
+        <type_batiment_id>1</type_batiment_id>
+        <annee_construction lte="2012" lt="" gte="2006" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds></isolation_murs_plafonds>
+        <q4pa_conv>1.3</q4pa_conv>
+        <tv_q4pa_conv_id>8</tv_q4pa_conv_id>
+    </row>
+    <row id="7">
+        <type_batiment_id>1</type_batiment_id>
+        <annee_construction lte="" lt="" gte="2013" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds></isolation_murs_plafonds>
+        <q4pa_conv>0.6</q4pa_conv>
+        <tv_q4pa_conv_id>9</tv_q4pa_conv_id>
+    </row>
+    <row id="8">
+        <type_batiment_id>2</type_batiment_id>
+        <annee_construction lte="1947" lt="" gte="" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds>0</isolation_murs_plafonds>
+        <q4pa_conv>4.6</q4pa_conv>
+        <tv_q4pa_conv_id>1</tv_q4pa_conv_id>
+    </row>
+    <row id="9">
+        <type_batiment_id>2</type_batiment_id>
+        <annee_construction lte="1947" lt="" gte="" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds>1</isolation_murs_plafonds>
+        <q4pa_conv>2</q4pa_conv>
+        <tv_q4pa_conv_id>10</tv_q4pa_conv_id>
+    </row>
+    <row id="10">
+        <type_batiment_id>2</type_batiment_id>
+        <annee_construction lte="1947" lt="" gte="" gt="" e="" />
+        <presence_joints_menuiserie>1</presence_joints_menuiserie>
+        <isolation_murs_plafonds>0</isolation_murs_plafonds>
+        <q4pa_conv>2.5</q4pa_conv>
+        <tv_q4pa_conv_id>12</tv_q4pa_conv_id>
+    </row>
+    <row id="11">
+        <type_batiment_id>2</type_batiment_id>
+        <annee_construction lte="1974" lt="" gte="1948" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds>0</isolation_murs_plafonds>
+        <q4pa_conv>2</q4pa_conv>
+        <tv_q4pa_conv_id>2</tv_q4pa_conv_id>
+    </row>
+    <row id="12">
+        <type_batiment_id>2</type_batiment_id>
+        <annee_construction lte="1974" lt="" gte="1948" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds>1</isolation_murs_plafonds>
+        <q4pa_conv>1.9</q4pa_conv>
+        <tv_q4pa_conv_id>11</tv_q4pa_conv_id>
+    </row>
+    <row id="13">
+        <type_batiment_id>2</type_batiment_id>
+        <annee_construction lte="1977" lt="" gte="1975" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds></isolation_murs_plafonds>
+        <q4pa_conv>1.5</q4pa_conv>
+        <tv_q4pa_conv_id>3</tv_q4pa_conv_id>
+    </row>
+    <row id="14">
+        <type_batiment_id>2</type_batiment_id>
+        <annee_construction lte="" lt="" gte="2013" gt="" e="" />
+        <presence_joints_menuiserie></presence_joints_menuiserie>
+        <isolation_murs_plafonds></isolation_murs_plafonds>
+        <q4pa_conv>1</q4pa_conv>
+        <tv_q4pa_conv_id>4</tv_q4pa_conv_id>
+    </row>
+</table>

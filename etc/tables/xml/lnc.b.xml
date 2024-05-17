@@ -1,0 +1,2051 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="lnc.b">
+    <row id="1">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="0" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>9</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="2">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>10</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="3">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>11</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="4">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>12</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="5">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>13</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="6">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>14</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="7">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>15</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="8">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>16</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="9">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>17</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="10">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>18</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="11">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>19</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="12">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.45</b>
+        <tv_coef_reduction_deperdition_id>20</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="13">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>21</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="14">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>22</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="15">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>23</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="16">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>24</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="17">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>25</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="18">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>26</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="19">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>27</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="20">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>28</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="21">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>29</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="22">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>30</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="23">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>31</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="24">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>32</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="25">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>33</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="26">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>34</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="27">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.6</b>
+        <tv_coef_reduction_deperdition_id>35</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="28">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>36</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="29">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>37</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="30">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>38</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="31">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>39</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="32">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>40</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="33">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>1</b>
+        <tv_coef_reduction_deperdition_id>41</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="34">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>42</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="35">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>43</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="36">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>44</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="37">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>45</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="38">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>46</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="39">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>47</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="40">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>48</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="41">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>49</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="42">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>50</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="43">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>51</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="44">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>52</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="45">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.6</b>
+        <tv_coef_reduction_deperdition_id>53</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="46">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>54</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="47">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>55</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="48">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>56</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="49">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>1</b>
+        <tv_coef_reduction_deperdition_id>57</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="50">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>1</b>
+        <tv_coef_reduction_deperdition_id>58</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="51">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>1</b>
+        <tv_coef_reduction_deperdition_id>59</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="52">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>60</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="53">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>61</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="54">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>62</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="55">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>63</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="56">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>64</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="57">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>65</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="58">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>66</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="59">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>67</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="60">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>68</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="61">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>69</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="62">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>70</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="63">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>71</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="64">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>72</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="65">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>73</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="66">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>74</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="67">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>75</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="68">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>76</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="69">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.45</b>
+        <tv_coef_reduction_deperdition_id>77</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="70">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>78</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="71">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>79</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="72">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>80</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="73">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>81</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="74">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>82</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="75">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>83</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="76">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>84</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="77">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>85</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="78">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>86</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="79">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>87</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="80">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>88</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="81">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>89</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="82">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>90</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="83">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>91</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="84">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>92</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="85">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>93</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="86">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>94</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="87">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>95</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="88">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>96</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="89">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>97</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="90">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>98</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="91">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>99</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="92">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>100</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="93">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>101</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="94">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>102</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="95">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>103</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="96">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>104</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="97">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>105</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="98">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>106</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="99">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>107</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="100">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>108</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="101">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>109</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="102">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>110</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="103">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.45</b>
+        <tv_coef_reduction_deperdition_id>111</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="104">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>112</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="105">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>113</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="106">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>114</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="107">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>115</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="108">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>116</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="109">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>117</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="110">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>118</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="111">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>119</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="112">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>120</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="113">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>121</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="114">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>122</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="115">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>123</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="116">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>124</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="117">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>125</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="118">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>126</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="119">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>127</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="120">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.6</b>
+        <tv_coef_reduction_deperdition_id>128</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="121">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>129</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="122">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>130</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="123">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>131</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="124">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>132</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="125">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>133</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="126">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>134</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="127">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>135</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="128">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>0</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>136</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="129">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>137</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="130">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>138</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="131">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>139</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="132">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>140</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="133">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>141</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="134">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>142</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="135">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>143</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="136">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>144</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="137">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>145</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="138">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>146</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="139">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>147</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="140">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>148</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="141">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>149</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="142">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>150</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="143">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>151</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="144">
+        <uvue>0</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>152</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="145">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>153</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="146">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>154</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="147">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>155</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="148">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>156</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="149">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>157</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="150">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>158</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="151">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>159</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="152">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>160</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="153">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>161</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="154">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>162</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="155">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>163</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="156">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>164</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="157">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>165</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="158">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>166</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="159">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>167</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="160">
+        <uvue>0.3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>168</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="161">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>169</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="162">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>170</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="163">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>171</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="164">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>172</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="165">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>173</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="166">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>174</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="167">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>175</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="168">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>176</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="169">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>177</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="170">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>178</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="171">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>179</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="172">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>180</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="173">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>181</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="174">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>182</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="175">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>183</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="176">
+        <uvue>3</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>184</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="177">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>185</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="178">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>186</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="179">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>187</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="180">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>188</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="181">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>189</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="182">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>190</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="183">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.6</b>
+        <tv_coef_reduction_deperdition_id>191</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="184">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>192</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="185">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>193</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="186">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.45</b>
+        <tv_coef_reduction_deperdition_id>194</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="187">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>195</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="188">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>196</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="189">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>197</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="190">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>198</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="191">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>199</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="192">
+        <uvue>9</uvue>
+        <isolation_aiu>0</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>200</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="193">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>201</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="194">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>202</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="195">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>203</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="196">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.5</b>
+        <tv_coef_reduction_deperdition_id>204</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="197">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.45</b>
+        <tv_coef_reduction_deperdition_id>205</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="198">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>206</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="199">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>207</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="200">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>208</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="201">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>209</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="202">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>210</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="203">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>211</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="204">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>212</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="205">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>213</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="206">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>214</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="207">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>215</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="208">
+        <uvue>0</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0</b>
+        <tv_coef_reduction_deperdition_id>216</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="209">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>217</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="210">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>218</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="211">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>219</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="212">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>220</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="213">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.6</b>
+        <tv_coef_reduction_deperdition_id>221</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="214">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.45</b>
+        <tv_coef_reduction_deperdition_id>222</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="215">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>223</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="216">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>224</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="217">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.35</b>
+        <tv_coef_reduction_deperdition_id>225</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="218">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>226</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="219">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>227</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="220">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.2</b>
+        <tv_coef_reduction_deperdition_id>228</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="221">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.15</b>
+        <tv_coef_reduction_deperdition_id>229</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="222">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>230</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="223">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>231</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="224">
+        <uvue>0.3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.05</b>
+        <tv_coef_reduction_deperdition_id>232</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="225">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>233</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="226">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>234</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="227">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>235</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="228">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>236</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="229">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>237</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="230">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>238</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="231">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>239</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="232">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>240</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="233">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>241</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="234">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>242</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="235">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.6</b>
+        <tv_coef_reduction_deperdition_id>243</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="236">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.55</b>
+        <tv_coef_reduction_deperdition_id>244</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="237">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.45</b>
+        <tv_coef_reduction_deperdition_id>245</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="238">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.4</b>
+        <tv_coef_reduction_deperdition_id>246</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="239">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.25</b>
+        <tv_coef_reduction_deperdition_id>247</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="240">
+        <uvue>3</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.1</b>
+        <tv_coef_reduction_deperdition_id>248</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="241">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.25" lt="" gte="" gt="" e="" />
+        <b>1</b>
+        <tv_coef_reduction_deperdition_id>249</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="242">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.5" lt="" gte="" gt="0.25" e="" />
+        <b>1</b>
+        <tv_coef_reduction_deperdition_id>250</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="243">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="0.75" lt="" gte="" gt="0.5" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>251</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="244">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1" lt="" gte="" gt="0.75" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>252</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="245">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="1.25" lt="" gte="" gt="1" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>253</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="246">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2" lt="" gte="" gt="1.25" e="" />
+        <b>0.95</b>
+        <tv_coef_reduction_deperdition_id>254</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="247">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="2.5" lt="" gte="" gt="2" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>255</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="248">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3" lt="" gte="" gt="2.5" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>256</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="249">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="3.5" lt="" gte="" gt="3" e="" />
+        <b>0.9</b>
+        <tv_coef_reduction_deperdition_id>257</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="250">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="4" lt="" gte="" gt="3.5" e="" />
+        <b>0.85</b>
+        <tv_coef_reduction_deperdition_id>258</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="251">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="6" lt="" gte="" gt="4" e="" />
+        <b>0.8</b>
+        <tv_coef_reduction_deperdition_id>259</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="252">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="8" lt="" gte="" gt="6" e="" />
+        <b>0.75</b>
+        <tv_coef_reduction_deperdition_id>260</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="253">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="10" lt="" gte="" gt="8" e="" />
+        <b>0.7</b>
+        <tv_coef_reduction_deperdition_id>261</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="254">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="25" lt="" gte="" gt="10" e="" />
+        <b>0.65</b>
+        <tv_coef_reduction_deperdition_id>262</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="255">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="50" lt="" gte="" gt="25" e="" />
+        <b>0.45</b>
+        <tv_coef_reduction_deperdition_id>263</tv_coef_reduction_deperdition_id>
+    </row>
+    <row id="256">
+        <uvue>9</uvue>
+        <isolation_aiu>1</isolation_aiu>
+        <isolation_aue>1</isolation_aue>
+        <aiu_aue lte="" lt="" gte="" gt="50" e="" />
+        <b>0.3</b>
+        <tv_coef_reduction_deperdition_id>264</tv_coef_reduction_deperdition_id>
+    </row>
+</table>

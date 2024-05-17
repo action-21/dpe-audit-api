@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="climatisation.seer">
+    <row id="1">
+        <periode_installation>1</periode_installation>
+        <zone_climatique>H1</zone_climatique>
+        <seer_ou_eer>eer</seer_ou_eer>
+        <seer>3.6</seer>
+        <eer>3.6</eer>
+    </row>
+    <row id="2">
+        <periode_installation>2</periode_installation>
+        <zone_climatique>H1</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>6.5</seer>
+        <eer>6.175</eer>
+    </row>
+    <row id="3">
+        <periode_installation>3</periode_installation>
+        <zone_climatique>H1</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>6.7</seer>
+        <eer>6.365</eer>
+    </row>
+    <row id="4">
+        <periode_installation>4</periode_installation>
+        <zone_climatique>H1</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>6.7</seer>
+        <eer>6.365</eer>
+    </row>
+    <row id="5">
+        <periode_installation>5</periode_installation>
+        <zone_climatique>H1</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>6.7</seer>
+        <eer>6.365</eer>
+    </row>
+    <row id="6">
+        <periode_installation>1</periode_installation>
+        <zone_climatique>H2</zone_climatique>
+        <seer_ou_eer>eer</seer_ou_eer>
+        <seer>3.6</seer>
+        <eer>3.6</eer>
+    </row>
+    <row id="7">
+        <periode_installation>2</periode_installation>
+        <zone_climatique>H2</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>6.5</seer>
+        <eer>6.175</eer>
+    </row>
+    <row id="8">
+        <periode_installation>3</periode_installation>
+        <zone_climatique>H2</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>6.7</seer>
+        <eer>6.365</eer>
+    </row>
+    <row id="9">
+        <periode_installation>4</periode_installation>
+        <zone_climatique>H2</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>6.7</seer>
+        <eer>6.365</eer>
+    </row>
+    <row id="10">
+        <periode_installation>5</periode_installation>
+        <zone_climatique>H2</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>6.7</seer>
+        <eer>6.365</eer>
+    </row>
+    <row id="11">
+        <periode_installation>1</periode_installation>
+        <zone_climatique>H3</zone_climatique>
+        <seer_ou_eer>eer</seer_ou_eer>
+        <seer>3.25</seer>
+        <eer>3.25</eer>
+    </row>
+    <row id="12">
+        <periode_installation>2</periode_installation>
+        <zone_climatique>H3</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>5.7</seer>
+        <eer>5.415</eer>
+    </row>
+    <row id="13">
+        <periode_installation>3</periode_installation>
+        <zone_climatique>H3</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>7.5</seer>
+        <eer>7.125</eer>
+    </row>
+    <row id="14">
+        <periode_installation>4</periode_installation>
+        <zone_climatique>H3</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>7.5</seer>
+        <eer>7.125</eer>
+    </row>
+    <row id="15">
+        <periode_installation>5</periode_installation>
+        <zone_climatique>H3</zone_climatique>
+        <seer_ou_eer>seer</seer_ou_eer>
+        <seer>7.5</seer>
+        <eer>7.125</eer>
+    </row>
+</table>

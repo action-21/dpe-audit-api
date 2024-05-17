@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="chauffage.emission.re">
+    <row id="1">
+        <type_emission_id>1</type_emission_id>
+        <type_generateur_id>29</type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>1</tv_rendement_emission_id>
+    </row>
+    <row id="2">
+        <type_emission_id>1</type_emission_id>
+        <type_generateur_id>30</type_generateur_id>
+        <re>0.97</re>
+        <tv_rendement_emission_id>2</tv_rendement_emission_id>
+    </row>
+    <row id="3">
+        <type_emission_id>1</type_emission_id>
+        <type_generateur_id>31</type_generateur_id>
+        <re>0.97</re>
+        <tv_rendement_emission_id>2</tv_rendement_emission_id>
+    </row>
+    <row id="4">
+        <type_emission_id>1</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>3</tv_rendement_emission_id>
+    </row>
+    <row id="5">
+        <type_emission_id>2</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>4</tv_rendement_emission_id>
+    </row>
+    <row id="6">
+        <type_emission_id>8</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>1</re>
+        <tv_rendement_emission_id>5</tv_rendement_emission_id>
+    </row>
+    <row id="7">
+        <type_emission_id>9</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.98</re>
+        <tv_rendement_emission_id>6</tv_rendement_emission_id>
+    </row>
+    <row id="8">
+        <type_emission_id>3</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>7</tv_rendement_emission_id>
+    </row>
+    <row id="9">
+        <type_emission_id>4</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>7</tv_rendement_emission_id>
+    </row>
+    <row id="10">
+        <type_emission_id>5</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>7</tv_rendement_emission_id>
+    </row>
+    <row id="11">
+        <type_emission_id>6</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>7</tv_rendement_emission_id>
+    </row>
+    <row id="12">
+        <type_emission_id>7</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>7</tv_rendement_emission_id>
+    </row>
+    <row id="13">
+        <type_emission_id>10</type_emission_id>
+        <type_generateur_id></type_generateur_id>
+        <re>0.95</re>
+        <tv_rendement_emission_id>7</tv_rendement_emission_id>
+    </row>
+</table>
