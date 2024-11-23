@@ -2,44 +2,25 @@
 
 namespace App\Database\Opendata\Ventilation;
 
-use App\Database\Opendata\{XMLElement, XMLReaderIterator};
-use App\Domain\Ventilation\Enum\{TypeInstallation, TypeVentilation};
-use App\Domain\Ventilation\ValueObject\{AnneeInstallation, Surface};
+use App\Database\Opendata\XMLReaderIterator;
+use App\Domain\Common\Type\Id;
+use App\Domain\Ventilation\Enum\{ModeExtraction, ModeInsufflation, TypeGenerateur, TypeSysteme, TypeVentilation};
 
 final class XMLVentilationReader extends XMLReaderIterator
 {
-    private XMLInstallationVentilationReader $context;
-
-    public function id(): \Stringable
+    public function id(): Id
     {
-        return Reference::create($this->reference());
+        return Id::from($this->reference());
     }
 
     public function reference(): string
     {
-        return $this->get()->findOneOrError('.//reference');
+        return $this->xml()->findOneOrError('.//reference')->strval();
     }
 
     public function description(): string
     {
-        return ($value = $this->get()->findOne('.//description')) ? (string) $value : 'Ventilation non décrite';
-    }
-
-    public function surface_ventilee(): Surface
-    {
-        return Surface::from((float) $this->get()->findOneOrError('.//surface_ventile'));
-    }
-
-    public function enum_type_ventilation_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_ventilation_id');
-    }
-
-    // Données déduites
-
-    public function type_installation(): ?TypeInstallation
-    {
-        return TypeInstallation::try_from_enum_type_ventilation_id($this->enum_type_ventilation_id());
+        return $this->xml()->findOne('.//description')?->strval() ?? 'Ventilation non décrite';
     }
 
     public function type_ventilation(): TypeVentilation
@@ -47,15 +28,61 @@ final class XMLVentilationReader extends XMLReaderIterator
         return TypeVentilation::from_enum_type_ventilation_id($this->enum_type_ventilation_id());
     }
 
-    public function annee_installation(): ?AnneeInstallation
+    public function type_systeme(): TypeSysteme
     {
-        return AnneeInstallation::try_from_enum_type_installation_id($this->enum_type_ventilation_id());
+        return TypeSysteme::from_enum_type_ventilation_id($this->enum_type_ventilation_id());
     }
 
-    public function read(XMLElement $xml, XMLInstallationVentilationReader $context): self
+    public function type_generateur(): ?TypeGenerateur
     {
-        $this->context = $context;
-        $this->array = $xml->findManyOrError('.//ventilation_collection//ventilation');
-        return $this;
+        return TypeGenerateur::from_enum_type_ventilation_id($this->enum_type_ventilation_id());
+    }
+
+    public function surface(): float
+    {
+        return $this->xml()->findOneOrError('.//surface_ventile')->floatval();
+    }
+
+    public function annee_installation(): ?int
+    {
+        return match ($this->enum_type_ventilation_id()) {
+            3 => 1981,
+            4, 7, 10, 13, 26, 29 => 2000,
+            5, 8, 11, 14, 19, 21, 23, 27, 30, 32, 35, 37 => 2012,
+            6, 9, 12, 15, 20, 22, 24, 28, 31, 33, 36, 38 => $this->xml()->annee_etablissement(),
+            default => null,
+        };
+    }
+
+    public function presence_echangeur_thermique(): bool
+    {
+        return match ($this->enum_type_ventilation_id()) {
+            19, 20, 21, 22, 37, 38 => true,
+            23, 24, 35, 36 => false,
+            default => false,
+        };
+    }
+
+    public function generateur_collectif(): bool
+    {
+        return match ($this->enum_type_ventilation_id()) {
+            21, 22 => true,
+            default => false,
+        };
+    }
+
+    public function mode_extraction(): ?ModeExtraction
+    {
+        return ModeExtraction::from_enum_type_ventilation_id($this->enum_type_ventilation_id());
+    }
+
+    public function mode_insufflation(): ?ModeInsufflation
+    {
+        return ModeInsufflation::from_enum_type_ventilation_id($this->enum_type_ventilation_id());
+    }
+
+    public function enum_type_ventilation_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_ventilation_id')->intval();
     }
 }

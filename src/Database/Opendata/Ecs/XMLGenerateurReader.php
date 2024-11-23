@@ -2,65 +2,80 @@
 
 namespace App\Database\Opendata\Ecs;
 
-use App\Database\Opendata\{XMLElement, XMLReaderIterator};
-use App\Domain\Common\Identifier\Reference;
-use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur, TypeStockage, UsageGenerateur};
-use App\Domain\Ecs\ValueObject\{AnneeInstallation, Performance, Stockage, VolumeStockage};
+use App\Database\Opendata\XMLReaderIterator;
+use App\Domain\Common\Type\Id;
+use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur, LabelGenerateur, TypeChaudiere, TypeGenerateur, TypeStockage};
+use App\Domain\Ecs\ValueObject\Signaletique;
+use App\Domain\Ecs\ValueObject\Stockage;
 
 final class XMLGenerateurReader extends XMLReaderIterator
 {
-    private XMLInstallationEcsReader $context;
-
-    // * Données d'entrée
-
-    public function id(): \Stringable
+    public function apply(): bool
     {
-        return Reference::create($this->reference());
+        return match ($this->enum_type_generateur_ecs_id()) {
+            120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133 => false,
+            default => true,
+        };
     }
 
-    public function reference(): string
+    public function id(): Id
     {
-        return $this->get()->findOneOrError('.//reference');
+        return Id::from($this->xml()->findOneOrError('.//reference')->strval());
+    }
+
+    public function generateur_mixte_id(): ?Id
+    {
+        return ($value = $this->xml()->findOne('.//reference_generateur_mixte')) ? Id::from($value->strval()) : null;
+    }
+
+    public function reseau_chaleur_id(): ?Id
+    {
+        return ($value = $this->xml()->findOne('.//identifiant_reseau_chaleur')) ? Id::from($value->strval()) : null;
     }
 
     public function description(): string
     {
-        return $this->get()->findOne('.//description')?->getValue() ?? 'Générateur non décrit';
+        return $this->xml()->findOne('.//description')?->strval() ?? 'Générateur non décrit';
     }
 
-    public function reference_generateur_mixte(): ?string
+    public function signaletique(): Signaletique
     {
-        return $this->get()->findOne('.//reference_generateur_mixte')?->getValue();
+        return new Signaletique(
+            type_chaudiere: $this->type_chaudiere(),
+            label: $this->label(),
+            presence_ventouse: $this->presence_ventouse(),
+            pn: $this->pn_saisi(),
+            rpn: $this->rpn_saisi(),
+            qp0: $this->qp0_saisi(),
+            pveilleuse: $this->pveilleuse_saisi(),
+            cop: $this->cop_saisi(),
+        );
     }
 
-    public function identifiant_reseau_chaleur(): ?\Stringable
+    public function categorie(): CategorieGenerateur
     {
-        return ($value = $this->get()->findOne('.//identifiant_reseau_chaleur')) ? Reference::create($value->getValue()) : null;
+        return CategorieGenerateur::determine(type: $this->type(), energie: $this->energie());
     }
 
-    public function enum_type_generateur_ecs_id(): int
+    public function type_chaudiere(): ?TypeChaudiere
     {
-        return (int) $this->get()->findOneOrError('.//enum_type_generateur_ecs_id');
+        return match ($this->categorie()) {
+            CategorieGenerateur::CHAUDIERE_BOIS,
+            CategorieGenerateur::CHAUDIERE_ELECTRIQUE,
+            CategorieGenerateur::CHAUDIERE_STANDARD,
+            CategorieGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
+            CategorieGenerateur::CHAUDIERE_CONDENSATION => match (true) {
+                ($this->pn() < 18) => TypeChaudiere::CHAUDIERE_MURALE,
+                ($this->pn() >= 18) => TypeChaudiere::CHAUDIERE_SOL,
+                default => null,
+            },
+            default => null,
+        };
     }
 
-    public function type_generateur(): TypeGenerateur
+    public function type(): TypeGenerateur
     {
         return TypeGenerateur::from_enum_type_generateur_ecs_id($this->enum_type_generateur_ecs_id());
-    }
-
-    public function enum_usage_generateur_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_usage_generateur_id');
-    }
-
-    public function usage(): UsageGenerateur
-    {
-        return UsageGenerateur::from_enum_usage_generateur_id($this->enum_usage_generateur_id());
-    }
-
-    public function enum_type_energie_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_energie_id');
     }
 
     public function energie(): EnergieGenerateur
@@ -68,132 +83,188 @@ final class XMLGenerateurReader extends XMLReaderIterator
         return EnergieGenerateur::from_enum_type_energie_id($this->enum_type_energie_id());
     }
 
-    public function enum_periode_installation_ecs_thermo_id(): ?int
+    public function annee_installation(): ?int
     {
-        return ($value = $this->get()->findOne('.//enum_periode_installation_ecs_thermo_id')) ? (int) $value : null;
+        return match ($this->enum_type_generateur_ecs_id()) {
+            35 => 1969,
+            36 => 1975,
+            15, 22, 29, 85 => 1977,
+            63, 110 => 1979,
+            37, 45, 92, 46, 54, 93, 101 => 1980,
+            58, 64, 105, 111 => 1989,
+            38, 47, 94 => 1990,
+            16, 23, 30, 86 => 1994,
+            48, 51, 55, 59, 61, 65, 95, 98, 102, 106, 108, 112 => 2000,
+            17, 24, 31, 87 => 2003,
+            1, 4, 7, 10 => 2009,
+            13, 115 => 2011,
+            18, 25, 32, 88 => 2012,
+            2, 5, 8, 11 => 2014,
+            39, 41, 43, 49, 52, 56, 66, 96, 99, 103, 113 => 2015,
+            19, 26, 89 => 2017,
+            20, 27, 33, 90 => 2019,
+            3, 6, 9, 12, 14, 21, 28, 34, 40, 42, 44, 50, 53, 57, 60, 62, 67, 91, 97, 100, 104, 107, 109, 114, 116 => $this->xml()->annee_etablissement(),
+            default => null,
+        };
     }
 
-    public function annee_installation(): ?AnneeInstallation
+    public function label(): ?LabelGenerateur
     {
-        return ($value = $this->get()->findOne('.//annee_installation'))
-            ? AnneeInstallation::from_enum_periode_installation_ecs_thermo_id((int) $value)
-            : null;
+        return LabelGenerateur::from_enum_type_generateur_ecs_id($this->enum_type_generateur_ecs_id());
     }
 
-    public function enum_type_stockage_ecs_id(): int
+    public function stockage_integre(): bool
     {
-        return (int) $this->get()->findOneOrError('.//enum_type_stockage_ecs_id');
+        return $this->enum_type_stockage_ecs_id() === 3;
     }
 
-    public function type_stockage(): TypeStockage
+    public function stockage_independant(): bool
     {
-        return TypeStockage::from_enum_type_stockage_ecs_id($this->enum_type_stockage_ecs_id());
+        return $this->enum_type_stockage_ecs_id() === 2;
+    }
+
+    public function stockage(): ?Stockage
+    {
+        return $this->stockage_independant() ? new Stockage(
+            position_volume_chauffe: $this->position_volume_chauffe_stockage(),
+            volume_stockage: $this->volume_stockage(),
+        ) : null;
     }
 
     public function position_volume_chauffe(): bool
     {
-        return (bool)(int) $this->get()->findOneOrError('.//position_volume_chauffe');
+        return $this->xml()->findOneOrError('.//position_volume_chauffe')->boolval();
     }
 
     public function position_volume_chauffe_stockage(): ?bool
     {
-        return ($value = $this->get()->findOne('.//position_volume_chauffe_stockage')) ? (bool)(int) $value : null;
+        return $this->xml()->findOne('.//position_volume_chauffe_stockage')?->boolval();
     }
 
-    public function volume_stockage(): ?VolumeStockage
+    public function volume_stockage(): float
     {
-        return (0 < $value = (float) $this->get()->findOneOrError('.//volume_stockage')) ? VolumeStockage::from($value) : null;
+        return $this->xml()->findOneOrError('.//volume_stockage')->floatval();
     }
 
     public function presence_ventouse(): ?bool
     {
-        return ($value = $this->get()->findOne('.//presence_ventouse')) ? (bool)(int) $value : null;
+        return $this->xml()->findOne('.//presence_ventouse')?->boolval();
     }
 
-    // * Données déduites
-
-    public function stockage(): Stockage
+    public function pn_saisi(): ?float
     {
-        return new Stockage(
-            type_stockage: $this->type_stockage(),
-            position_volume_chauffe: $this->position_volume_chauffe(),
-            volume_stockage: $this->volume_stockage(),
-        );
+        return match ($this->enum_methode_saisie_carac_sys_id()) {
+            2, 3, 4, 5, 6 => $this->pn(),
+            default => null,
+        };
     }
 
-    public function performance(): Performance
+    public function rpn_saisi(): ?float
     {
-        return new Performance(
-            presence_ventouse: $this->presence_ventouse(),
-            pn: null,
-            rpn: null,
-            qp0: null,
-            pveilleuse: null,
-            cop: null,
-        );
+        return match ($this->enum_methode_saisie_carac_sys_id()) {
+            2, 3, 4, 5, 6 => $this->rpn(),
+            default => null,
+        };
     }
 
-    // * Données intermédiaires
+    public function qp0_saisi(): ?float
+    {
+        return match ($this->enum_methode_saisie_carac_sys_id()) {
+            2, 3, 4, 5, 6 => $this->qp0(),
+            default => null,
+        };
+    }
+
+    public function pveilleuse_saisi(): ?float
+    {
+        return match ($this->enum_methode_saisie_carac_sys_id()) {
+            2, 3, 4, 5, 6 => $this->pveilleuse(),
+            default => null,
+        };
+    }
+
+    public function cop_saisi(): ?float
+    {
+        return match ($this->enum_methode_saisie_carac_sys_id()) {
+            2, 3, 4, 5, 6 => $this->cop(),
+            default => null,
+        };
+    }
+
+    public function enum_type_generateur_ecs_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_generateur_ecs_id')->intval();
+    }
+
+    public function enum_usage_generateur_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_usage_generateur_id')->intval();
+    }
+
+    public function enum_type_energie_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_energie_id')->intval();
+    }
+
+    public function enum_methode_saisie_carac_sys_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_methode_saisie_carac_sys_id')->intval();
+    }
+
+    public function enum_periode_installation_ecs_thermo_id(): ?int
+    {
+        return $this->xml()->findOne('.//enum_periode_installation_ecs_thermo_id')?->intval();
+    }
+
+    public function enum_type_stockage_ecs_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_stockage_ecs_id')->intval();
+    }
+
+    // Données intermédiaires
+
+    public function cop(): ?float
+    {
+        return $this->xml()->findOne('.//cop')?->floatval();
+    }
 
     public function pn(): ?float
     {
-        return ($value = $this->get()->findOne('.//pn')) ? (float) $value : null;
+        return $this->xml()->findOne('.//pn')?->floatval();
     }
 
     public function qp0(): ?float
     {
-        return ($value = $this->get()->findOne('.//qp0')) ? (float) $value : null;
+        return $this->xml()->findOne('.//qp0')?->floatval();
     }
 
     public function pveilleuse(): ?float
     {
-        return ($value = $this->get()->findOne('.//pveilleuse')) ? (float) $value : null;
+        return $this->xml()->findOne('.//pveilleuse')?->floatval();
     }
 
     public function rpn(): ?float
     {
-        return ($value = $this->get()->findOne('.//rpn')) ? (float) $value : null;
+        return $this->xml()->findOne('.//rpn')?->floatval();
     }
 
-    public function cop(): ?float
+    public function rpint(): ?float
     {
-        return ($value = $this->get()->findOne('.//cop')) ? (float) $value : null;
-    }
-
-    public function ratio_besoin_ecs(): float
-    {
-        return (float) $this->get()->findOneOrError('.//ratio_besoin_ecs');
+        return $this->xml()->findOne('.//rpint')?->floatval();
     }
 
     public function rendement_generation(): ?float
     {
-        return ($value = $this->get()->findOne('.//rendement_generation')) ? (float) $value : null;
+        return $this->xml()->findOne('.//rendement_generation')?->floatval();
     }
 
     public function rendement_generation_stockage(): ?float
     {
-        return ($value = $this->get()->findOne('.//rendement_generation_stockage')) ? (float) $value : null;
+        return $this->xml()->findOne('.//rendement_generation_stockage')?->floatval();
     }
 
     public function rendement_stockage(): ?float
     {
-        return ($value = $this->get()->findOne('.//rendement_stockage')) ? (float) $value : null;
-    }
-
-    public function conso_ecs(): float
-    {
-        return (float) $this->get()->findOneOrError('.//conso_ecs');
-    }
-
-    public function conso_ecs_depensier(): float
-    {
-        return (float) $this->get()->findOneOrError('.//conso_ecs_depensier');
-    }
-
-    public function read(XMLElement $xml, XMLInstallationEcsReader $context): self
-    {
-        $this->context = $context;
-        $this->array = $xml->findManyOrError('.//generateur_ecs_collection//generateur_ecs');
-        return $this;
+        return $this->xml()->findOne('.//rendement_stockage')?->floatval();
     }
 }

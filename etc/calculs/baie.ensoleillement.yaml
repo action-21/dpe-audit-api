@@ -1,0 +1,8 @@
+tests:
+  sse:
+    - test: Un test unitaire de la fonction sse
+      resultat: 0.56
+      surface: 2
+      sw: 0.5
+      fe: 0.8
+      c1: 0.7

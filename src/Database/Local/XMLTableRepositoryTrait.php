@@ -13,7 +13,7 @@ trait XMLTableRepositoryTrait
     public function __construct(string $projectDir)
     {
         $table = static::table();
-        $this->path = $projectDir . "/etc/tables/xml/{$table}";
+        $this->path = $projectDir . "/etc/tables/{$table}";
     }
 
     abstract public static function table(): string;
@@ -26,7 +26,7 @@ trait XMLTableRepositoryTrait
     public function instance(): XMLTableElement
     {
         if (null === static::$db) {
-            static::$db = \simplexml_load_file($this->path(), XMLTableElement::class, LIBXML_NOCDATA);
+            static::$db = \simplexml_load_file($this->path() . '.xml', XMLTableElement::class, LIBXML_NOCDATA);
         }
         return static::$db;
     }
@@ -58,22 +58,42 @@ trait XMLTableRepositoryTrait
         return $this;
     }
 
-    protected function and(string $expression): static
+    protected function and(string $attribute, null|string|int|float|bool $value, bool $optional = false): static
     {
-        if ($this->query === '//') {
+        if ($this->query === '//')
             $this->query .= 'row';
-        }
+
+        if (\is_bool($value))
+            $value = (int) $value;
+        if (null === $value)
+            $value = '';
+
+        $expression = $optional
+            ? \str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute = "$value" or $attribute = ""')
+            : \str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute = "$value"');
+
         $this->query .= "[{$expression}]";
         return $this;
     }
 
-    protected function andCompareTo(string $attribute, int|float $value): static
+    protected function andCompareTo(string $attribute, null|int|float $value): static
     {
-        $this->and(\str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@lt = "" or $attribute/@lt > "$value"'));
-        $this->and(\str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@lte = "" or $attribute/@lte >= "$value"'));
-        $this->and(\str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@gt = "" or $attribute/@gt < "$value"'));
-        $this->and(\str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@gte = "" or $attribute/@gte <= "$value"'));
-        $this->and(\str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@e = "" or $attribute/@e = "$value"'));
+        if ($this->query === '//')
+            $this->query .= 'row';
+
+        if (null === $value)
+            $value = '';
+
+        $query = \str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@lt = "" or $attribute/@lt > $value');
+        $this->query .= "[{$query}]";
+        $query = \str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@lte = "" or $attribute/@lte >= $value');
+        $this->query .= "[{$query}]";
+        $query = \str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@gt = "" or $attribute/@gt < $value');
+        $this->query .= "[{$query}]";
+        $query = \str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@gte = "" or $attribute/@gte <= $value');
+        $this->query .= "[{$query}]";
+        //$query = \str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@e = "" or $attribute/@e = "$value"');
+        //$this->query .= "[{$query}]";
         return $this;
     }
 

@@ -2,10 +2,10 @@
 
 namespace App\Domain\PlancherBas;
 
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\Type\Id;
 
 interface PlancherBasRepository
 {
     public function find(Id $id): ?PlancherBas;
-    public function search(Id $id_enveloppe): PlancherBasCollection;
+    public function search(Id $enveloppe_id): PlancherBasCollection;
 }

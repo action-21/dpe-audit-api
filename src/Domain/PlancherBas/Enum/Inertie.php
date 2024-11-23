@@ -4,13 +4,13 @@ namespace App\Domain\PlancherBas\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum Inertie: int implements Enum
+enum Inertie: string implements Enum
 {
-    case INCONNU = 1;
-    case LOURDE = 2;
-    case LEGERE = 3;
+    case INCONNU = 'INCONNU';
+    case LOURDE = 'LOURDE';
+    case LEGERE = 'LEGERE';
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -24,11 +24,12 @@ enum Inertie: int implements Enum
         };
     }
 
-    public function lourde(): bool
+    public function est_lourde(): ?bool
     {
         return match ($this) {
+            self::INCONNU => null,
             self::LEGERE => false,
-            self::INCONNU, self::LOURDE => true,
+            self::LOURDE => true,
         };
     }
 }

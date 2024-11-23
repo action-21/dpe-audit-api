@@ -3,8 +3,8 @@
 namespace App\Database\Local\Ventilation;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Ventilation\Enum\{TypeInstallation, TypeVentilation};
-use App\Domain\Ventilation\Table\{Debit, DebitRepository};
+use App\Domain\Ventilation\Enum\{ModeExtraction, ModeInsufflation, TypeSysteme};
+use App\Domain\Ventilation\Data\{Debit, DebitRepository};
 
 final class XMLDebitRepository implements DebitRepository
 {
@@ -12,20 +12,24 @@ final class XMLDebitRepository implements DebitRepository
 
     public static function table(): string
     {
-        return 'ventilation.debit.xml';
+        return 'ventilation.debit';
     }
 
-    public function find(int $id): ?Debit
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(TypeVentilation $type_ventilation, ?TypeInstallation $type_installation, ?int $annee_installation): ?Debit
-    {
+    public function find_by(
+        TypeSysteme $type_systeme,
+        ?ModeExtraction $mode_extraction,
+        ?ModeInsufflation $mode_insufflation,
+        ?bool $presence_echangeur,
+        ?bool $systeme_collectif,
+        ?int $annee_installation,
+    ): ?Debit {
         $record = $this->createQuery()
-            ->and(\sprintf('type_ventilation_id = "%s"', $type_ventilation->id()))
-            ->and(\sprintf('type_installation_id = "" or type_installation_id = "%s"', $type_installation?->id()))
-            ->andCompareTo('annee_installation', $annee_installation)
+            ->and('type_systeme', $type_systeme->id())
+            ->and('mode_extraction', $mode_extraction?->id(), true)
+            ->and('mode_insufflation', $mode_insufflation?->id(), true)
+            ->and('presence_echangeur', $presence_echangeur, true)
+            ->and('systeme_collectif', $systeme_collectif, true)
+            ->andCompareTo('annee_installation_generateur', $annee_installation)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
@@ -33,10 +37,9 @@ final class XMLDebitRepository implements DebitRepository
     protected function to(XMLTableElement $record): Debit
     {
         return new Debit(
-            id: $record->id(),
-            qvarep_conv: (float) $record->qvarep_conv,
-            qvasouf_conv: (float) $record->qvasouf_conv,
-            smea_conv: (float) $record->smea_conv,
+            qvarep_conv: $record->get('qvarep_conv')->floatval(),
+            qvasouf_conv: $record->get('qvasouf_conv')->floatval(),
+            smea_conv: $record->get('smea_conv')->floatval(),
         );
     }
 }

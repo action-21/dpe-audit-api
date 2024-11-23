@@ -2,59 +2,59 @@
 
 namespace App\Domain\Baie\ValueObject;
 
-use App\Domain\Baie\Enum\{NatureGazLame, NatureMenuiserie, TypeBaie, TypePose, TypeVitrage};
+use App\Domain\Baie\Enum\TypeBaie;
+use App\Domain\Baie\Enum\TypeBaie\{Fenetre, ParoiVitree, PorteFenetre};
+use App\Domain\Common\Service\Assert;
 
 final class DoubleFenetre
 {
     public function __construct(
-        public readonly TypeBaie $type_baie,
-        public readonly TypePose $type_pose,
-        public readonly NatureMenuiserie $nature_menuiserie,
-        public readonly TypeVitrage $type_vitrage,
-        public readonly InclinaisonVitrage $inclinaison_vitrage,
-        public readonly ?EpaisseurLameAir $epaisseur_lame,
-        public readonly ?NatureGazLame $nature_gaz_lame,
-        public readonly ?Ug $ug = null,
-        public readonly ?Uw $uw = null,
-        public readonly ?Sw $sw = null,
-    ) {
+        public readonly TypeBaie $type,
+        public readonly ?bool $presence_soubassement = null,
+        public readonly ?Menuiserie $menuiserie = null,
+        public readonly ?float $ug = null,
+        public readonly ?float $uw = null,
+        public readonly ?float $sw = null,
+    ) {}
+
+    public static function create_paroi_vitree(ParoiVitree $type, ?float $ug, ?float $uw, ?float $sw): self
+    {
+        return new self(type: $type->type_baie(), ug: $ug, uw: $uw, sw: $sw,);
     }
 
-    public static function create(
-        TypeBaie $type_baie,
-        TypePose $type_pose,
-        NatureMenuiserie $nature_menuiserie,
-        TypeVitrage $type_vitrage,
-        InclinaisonVitrage $inclinaison_vitrage,
-        ?EpaisseurLameAir $epaisseur_lame,
-        ?NatureGazLame $nature_gaz_lame,
-        ?Ug $ug = null,
-        ?Uw $uw = null,
-        ?Sw $sw = null,
+    public static function create_fenetre(
+        Fenetre $type,
+        Menuiserie $menuiserie,
+        ?float $ug,
+        ?float $uw,
+        ?float $sw,
     ): self {
-        if ($nature_menuiserie === NatureMenuiserie::BRIQUE_VERRE) {
-            $type_vitrage = TypeVitrage::BRIQUE_VERRE;
-        }
-        if ($nature_menuiserie === NatureMenuiserie::POLYCARBONATE) {
-            $type_vitrage = TypeVitrage::POLYCARBONATE;
-        }
-        if (false === $type_vitrage->epaisseur_lame_air_applicable()) {
-            $epaisseur_lame = null;
-        }
-        if (false === $type_vitrage->nature_gaz_lame_applicable()) {
-            $nature_gaz_lame = null;
-        }
+        return new self(type: $type->type_baie(), menuiserie: $menuiserie, ug: $ug, uw: $uw, sw: $sw,);
+    }
+
+    public static function create_porte_fenetre_(
+        PorteFenetre $type,
+        bool $presence_soubassement,
+        Menuiserie $menuiserie,
+        ?float $ug,
+        ?float $uw,
+        ?float $sw,
+    ): self {
         return new self(
-            type_baie: $type_baie,
-            type_pose: $type_pose,
-            nature_menuiserie: $nature_menuiserie,
-            type_vitrage: $type_vitrage,
-            inclinaison_vitrage: $inclinaison_vitrage,
-            epaisseur_lame: $epaisseur_lame,
-            nature_gaz_lame: $nature_gaz_lame,
+            type: $type->type_baie(),
+            presence_soubassement: $presence_soubassement,
+            menuiserie: $menuiserie,
             ug: $ug,
             uw: $uw,
             sw: $sw,
         );
+    }
+
+    public function controle(): void
+    {
+        Assert::positif($this->ug);
+        Assert::positif($this->uw);
+        Assert::positif($this->sw);
+        $this->menuiserie?->controle();
     }
 }

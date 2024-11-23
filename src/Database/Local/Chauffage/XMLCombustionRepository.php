@@ -3,8 +3,8 @@
 namespace App\Database\Local\Chauffage;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Chauffage\Enum\TypeGenerateur;
-use App\Domain\Chauffage\Table\{Combustion, CombustionRepository};
+use App\Domain\Chauffage\Data\{Combustion, CombustionRepository};
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, TypeGenerateur};
 
 final class XMLCombustionRepository implements CombustionRepository
 {
@@ -12,33 +12,32 @@ final class XMLCombustionRepository implements CombustionRepository
 
     public static function table(): string
     {
-        return 'chauffage.generateur.combustion.xml';
+        return 'chauffage.combustion';
     }
 
-    public function find(int $id): ?Combustion
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(TypeGenerateur $type_generateur, int $annee_installation, ?float $puissance_nominale): ?Combustion
-    {
+    public function find_by(
+        TypeGenerateur $type_generateur,
+        EnergieGenerateur $energie_generateur,
+        int $annee_installation_generateur,
+        float $pn,
+    ): ?Combustion {
         $record = $this->createQuery()
-            ->and(\sprintf('type_generateur_id = "%s"', $type_generateur->id()))
-            ->andCompareTo('annee_installation_generateur', $annee_installation)
-            ->andCompareTo('puissance_nominale', $puissance_nominale)
+            ->and('type_generateur', $type_generateur->value)
+            ->and('energie_generateur', $energie_generateur->value, true)
+            ->andCompareTo('annee_installation_generateur', $annee_installation_generateur)
+            ->andCompareTo('pn', $pn)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
-    protected function to(XMLTableElement $record): Combustion
+    public function to(XMLTableElement $element): Combustion
     {
         return new Combustion(
-            id: $record->id(),
-            rpn: (string) $record->rpn,
-            rpint: ($value = $record->rpint) ? (string) $value : null,
-            qp0: ($value = $record->qp0) ? (string) $value : null,
-            pn_max: ($value = $record->pn_max) ? (float) $value : null,
-            pveil: ($value = $record->pveil) ? (float) $value : null,
+            pn_max: $element->get('pn_max')->floatval(),
+            rpn: $element->get('rpn')->strval(),
+            rpint: $element->get('rpint')->strval(),
+            qp0: $element->get('qp0')->strval(),
+            pveilleuse: $element->get('pveilleuse')->floatval(),
         );
     }
 }

@@ -4,20 +4,22 @@ namespace App\Domain\Porte\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum TypePose: int implements Enum
+enum TypePose: string implements Enum
 {
-    case NU_EXTERIEUR = 1;
-    case NU_INTERIEUR = 2;
-    case TUNNEL = 3;
-    /** @deprecated */
-    case SANS_OBJET = 4;
+    case NU_EXTERIEUR = 'NU_EXTERIEUR';
+    case NU_INTERIEUR = 'NU_INTERIEUR';
+    case TUNNEL = 'TUNNEL';
 
-    public static function from_enum_type_pose_id(int $id): self
+    public static function from_enum_type_pose_id(int $type_pose_id): self
     {
-        return self::from($id);
+        return match ($type_pose_id) {
+            1 => self::NU_EXTERIEUR,
+            2 => self::NU_INTERIEUR,
+            3 => self::TUNNEL,
+        };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -28,7 +30,6 @@ enum TypePose: int implements Enum
             self::NU_EXTERIEUR => 'Nu extérieur',
             self::NU_INTERIEUR => 'Nu intérieur',
             self::TUNNEL => 'Tunnel',
-            self::SANS_OBJET => 'Sans objet',
         };
     }
 }

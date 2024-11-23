@@ -2,9 +2,9 @@
 
 namespace App\Database\Local\Chauffage;
 
+use App\Domain\Chauffage\Data\{Fch, FchRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Batiment\Enum\{TypeBatiment, ZoneClimatique};
-use App\Domain\Chauffage\Table\{Fch, FchRepository};
+use App\Domain\Common\Enum\{Enum, ZoneClimatique};
 
 final class XMLFchRepository implements FchRepository
 {
@@ -12,28 +12,20 @@ final class XMLFchRepository implements FchRepository
 
     public static function table(): string
     {
-        return 'chauffage.fch.xml';
+        return 'chauffage.fch';
     }
 
-    public function find(int $id): ?Fch
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(ZoneClimatique $zone_climatique, TypeBatiment $type_batiment): ?Fch
+    public function find_by(Enum $type_batiment, ZoneClimatique $zone_climatique,): ?Fch
     {
         $record = $this->createQuery()
-            ->and(\sprintf('zone_climatique_id = "%s"', $zone_climatique->id()))
-            ->and(\sprintf('type_batiment_id = "%s"', $type_batiment->id()))
+            ->and('type_batiment', $type_batiment->value)
+            ->and('zone_climatique', $zone_climatique->value)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
-    public function to(XMLTableElement $record): Fch
+    protected function to(XMLTableElement $record): Fch
     {
-        return new Fch(
-            id: $record->id(),
-            fch: (float) $record->fch,
-        );
+        return new Fch(fch: $record->get('fch')->floatval(),);
     }
 }

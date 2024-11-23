@@ -2,136 +2,150 @@
 
 namespace App\Database\Opendata\Baie;
 
-use App\Database\Opendata\XMLElement;
-use App\Domain\Baie\Enum\{InclinaisonVitrage as EnumInclinaisonVitrage, NatureGazLame, NatureMenuiserie, TypeBaie, TypePose, TypeVitrage};
-use App\Domain\Baie\ValueObject\{DoubleFenetre, EpaisseurLameAir, InclinaisonVitrage, Sw, Ug, Uw};
-use App\Domain\Common\Identifier\Uuid;
+use App\Database\Opendata\XMLReader;
+use App\Domain\Baie\Enum\{NatureGazLame, NatureMenuiserie, TypeBaie, TypePose, TypeSurvitrage, TypeVitrage};
+use App\Domain\Baie\ValueObject\{Menuiserie, Survitrage};
 
-final class XMLDoubleFenetreReader
+final class XMLDoubleFenetreReader extends XMLReader
 {
-    private XMLElement $xml;
-
-    public function id(): \Stringable
+    public function inclinaison(): float
     {
-        return Uuid::create();
+        return $this->xml()->findOneOrError('.//enum_inclinaison_vitrage_id')->inclinaison();
     }
 
-    public function description(): string
+    public function menuiserie(): ?Menuiserie
     {
-        return $this->xml->findOne('.//description')?->getValue() ?? "Double fenêtre non décrite";
+        return $this->nature_menuiserie() && $this->type_vitrage() ? new Menuiserie(
+            nature: $this->nature_menuiserie(),
+            type_vitrage: $this->type_vitrage(),
+            type_pose: $this->type_pose(),
+            presence_joint: false,
+            presence_retour_isolation: false,
+            largeur_dormant: null,
+            survitrage: $this->survitrage(),
+            presence_rupteur_pont_thermique: $this->presence_rupteur_pont_thermique(),
+            nature_gaz_lame: $this->nature_gaz_lame(),
+            epaisseur_lame: $this->epaisseur_lame(),
+        ) : null;
     }
 
-    public function enum_type_baie_id(): int
+    public function survitrage(): ?Survitrage
     {
-        return (int) $this->xml->findOneOrError('.//enum_type_baie_id')->getValue();
+        return $this->type_survitrage() ? new Survitrage(
+            type_survitrage: $this->type_survitrage(),
+            epaisseur_lame: $this->epaisseur_lame(),
+        ) : null;
     }
 
-    public function enum_type_baie(): TypeBaie
+    public function type_baie(): TypeBaie
     {
         return TypeBaie::from_enum_type_baie_id($this->enum_type_baie_id());
     }
 
-    public function enum_type_pose_id(): int
+    public function type_pose(): TypePose
     {
-        return (int) $this->xml->findOneOrError('.//enum_type_pose_id')->getValue();
+        return TypePose::from_enum_type_pose_id($this->enum_type_pose_id());
     }
 
-    public function enum_type_pose(): TypePose
-    {
-        return TypePose::from($this->enum_type_pose_id());
-    }
-
-    public function enum_type_materiaux_menuiserie_id(): int
-    {
-        return (int) $this->xml->findOneOrError('.//enum_type_materiaux_menuiserie_id')->getValue();
-    }
-
-    public function enum_type_materiaux_menuiserie(): NatureMenuiserie
+    public function nature_menuiserie(): ?NatureMenuiserie
     {
         return NatureMenuiserie::from_enum_type_materiaux_menuiserie_id($this->enum_type_materiaux_menuiserie_id());
     }
 
-    public function enum_type_vitrage_id(): int
+    public function type_vitrage(): ?TypeVitrage
     {
-        return (int) $this->xml->findOneOrError('.//enum_type_vitrage_id')->getValue();
+        return TypeVitrage::from_enum_type_vitrage_id(
+            id: $this->enum_type_vitrage_id(),
+            vitrage_vir: $this->vitrage_vir(),
+        );
     }
 
-    public function enum_type_vitrage(): TypeVitrage
+    public function type_survitrage(): ?TypeSurvitrage
     {
-        return TypeVitrage::try_from_opendata($this->enum_type_vitrage_id(), $this->vitrage_vir());
+        return TypeSurvitrage::from_enum_type_vitrage_id(
+            id: $this->enum_type_vitrage_id(),
+            vitrage_vir: $this->vitrage_vir(),
+        );
     }
 
-    public function enum_inclinaison_vitrage_id(): int
-    {
-        return (int) $this->xml->findOneOrError('.//enum_inclinaison_vitrage_id')->getValue();
-    }
-
-    public function enum_inclinaison_vitrage(): EnumInclinaisonVitrage
-    {
-        return EnumInclinaisonVitrage::from_enum_inclinaison_vitrage_id($this->enum_inclinaison_vitrage_id());
-    }
-
-    public function enum_type_gaz_lame_id(): ?int
-    {
-        return (null !== $value = $this->xml->findOne('.//enum_type_gaz_lame_id')?->getValue()) ? (int) $value : null;
-    }
-
-    public function enum_type_gaz_lame(): ?NatureGazLame
+    public function nature_gaz_lame(): ?NatureGazLame
     {
         return ($value = $this->enum_type_gaz_lame_id()) ? NatureGazLame::from_enum_type_gaz_lame_id($value) : null;
     }
 
-    public function epaisseur_lame(): ?EpaisseurLameAir
+    public function epaisseur_lame(): ?int
     {
-        return ($value = $this->xml->findOne('.//epaisseur_lame')?->getValue()) ? EpaisseurLameAir::from($value) : null;
+        return $this->xml()->findOne('.//epaisseur_lame')?->intval();
     }
 
-    public function vitrage_vir(): ?bool
+    public function presence_rupteur_pont_thermique(): bool
     {
-        return (null !== $value = $this->xml->findOne('.//vitrage_vir')?->getValue()) ? (bool) $value : null;
+        return $this->enum_type_materiaux_menuiserie_id() === 6 ? true : false;
     }
 
-    public function ug_saisi(): ?Ug
+    public function presence_soubassement(): ?bool
     {
-        return ($value = $this->xml->findOne('.//ug_saisi')?->getValue()) ? Ug::from($value) : null;
+        return match ($this->enum_type_baie_id()) {
+            7 => false,
+            8 => true,
+            default => null,
+        };
     }
 
-    public function uw_saisi(): ?Uw
+    public function ug_saisi(): ?float
     {
-        return ($value = $this->xml->findOne('.//uw_saisi')?->getValue()) ? Uw::from($value) : null;
+        return $this->xml()->findOne('.//ug_saisi')?->floatval();
     }
 
-    public function sw_saisi(): ?Sw
+    public function uw_saisi(): ?float
     {
-        return ($value = $this->xml->findOne('.//sw_saisi')?->getValue()) ? Sw::from($value) : null;
+        return $this->xml()->findOne('.//uw_saisi')?->floatval();
     }
 
-    // Données déduites
-
-    public function inclinaison_vitrage(): InclinaisonVitrage
+    public function sw_saisi(): ?float
     {
-        return InclinaisonVitrage::from($this->enum_inclinaison_vitrage()->to_int());
+        return $this->xml()->findOne('.//sw_saisi')?->floatval();
     }
 
-    public function double_fenetre(): DoubleFenetre
+    public function enum_type_baie_id(): int
     {
-        return new DoubleFenetre(
-            type_baie: $this->enum_type_baie(),
-            type_pose: $this->enum_type_pose(),
-            nature_menuiserie: $this->enum_type_materiaux_menuiserie(),
-            type_vitrage: $this->enum_type_vitrage(),
-            inclinaison_vitrage: $this->inclinaison_vitrage(),
-            epaisseur_lame: $this->epaisseur_lame(),
-            nature_gaz_lame: $this->enum_type_gaz_lame(),
-            ug: $this->ug_saisi(),
-            uw: $this->uw_saisi(),
-            sw: $this->sw_saisi(),
-        );
+        return $this->xml()->findOneOrError('.//enum_type_baie_id')->intval();
     }
 
-    public function read(XMLElement $xml): self
+    public function enum_type_materiaux_menuiserie_id(): int
     {
-        $this->xml = $xml;
-        return $this;
+        return $this->xml()->findOne('.//enum_type_materiaux_menuiserie_id')->intval();
+    }
+
+    public function enum_type_vitrage_id(): int
+    {
+        return $this->xml()->findOne('.//enum_type_vitrage_id')->intval();
+    }
+
+    public function enum_type_gaz_lame_id(): ?int
+    {
+        return $this->xml()->findOne('.//enum_type_gaz_lame_id')?->intval();
+    }
+
+    public function enum_type_pose_id(): int
+    {
+        return $this->xml()->findOne('.//enum_type_pose_id')->intval();
+    }
+
+    public function vitrage_vir(): bool
+    {
+        return $this->xml()->findOne('.//vitrage_vir')?->boolval() ?? false;
+    }
+
+    // Données intermédiaires
+
+    public function uw(): float
+    {
+        return $this->xml()->findOneOrError('.//uw')->floatval();
+    }
+
+    public function sw(): float
+    {
+        return $this->xml()->findOneOrError('.//sw')->floatval();
     }
 }

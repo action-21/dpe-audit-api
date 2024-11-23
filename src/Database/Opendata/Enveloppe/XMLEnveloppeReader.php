@@ -2,43 +2,23 @@
 
 namespace App\Database\Opendata\Enveloppe;
 
-use App\Database\Opendata\XMLElement;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Enveloppe\Enum\Exposition;
-use App\Domain\Enveloppe\ValueObject\Permeabilite;
-use App\Domain\Enveloppe\ValueObject\Q4PaConv;
 
-final class XMLEnveloppeReader
+final class XMLEnveloppeReader extends XMLReader
 {
-    private XMLElement $xml;
-
     public function plusieurs_facade_exposee(): bool
     {
-        return $this->xml->findOneOrError('//plusieurs_facade_exposee')->getValue();
+        return $this->xml()->findOneOrError('//plusieurs_facade_exposee')->getValue();
     }
 
-    public function q4pa_conv_saisi(): ?Q4PaConv
+    public function q4pa_conv(): ?float
     {
-        return ($value = $this->xml->findOne('//q4pa_conv_saisi')?->getValue()) ? Q4PaConv::from((float) $value) : null;
+        return $this->xml()->findOne('//q4pa_conv_saisi')?->floatval();
     }
-
-    // Données déduites
 
     public function exposition(): Exposition
     {
-        return Exposition::from_boolean($this->plusieurs_facade_exposee());
-    }
-
-    public function permeabilite(): Permeabilite
-    {
-        return new Permeabilite(
-            exposition: $this->exposition(),
-            q4pa_conv: $this->q4pa_conv_saisi(),
-        );
-    }
-
-    public function read(XMLElement $xml): self
-    {
-        $this->xml = $xml;
-        return $this;
+        return $this->plusieurs_facade_exposee() ? Exposition::EXPOSITION_MULTIPLE : Exposition::EXPOSITION_SIMPLE;
     }
 }

@@ -4,12 +4,12 @@ namespace App\Domain\Enveloppe\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum Exposition: int implements Enum
+enum Exposition: string implements Enum
 {
-    case EXPOSITION_SIMPLE = 1;
-    case EXPOSITION_MULTIPLE = 2;
+    case EXPOSITION_SIMPLE = 'SIMPLE';
+    case EXPOSITION_MULTIPLE = 'MULTIPLE';
 
-    public static function from_boolean(bool $plusieurs_facades_exposées): self
+    public static function from_plusieurs_facades_exposées(bool $plusieurs_facades_exposées): self
     {
         return match ($plusieurs_facades_exposées) {
             true => self::EXPOSITION_MULTIPLE,
@@ -17,7 +17,7 @@ enum Exposition: int implements Enum
         };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -30,10 +30,7 @@ enum Exposition: int implements Enum
         };
     }
 
-    /**
-     * Coefficient de protection e
-     */
-    public function coefficient_e(): float
+    public function e(): float
     {
         return match ($this) {
             self::EXPOSITION_SIMPLE => 0.02,
@@ -41,10 +38,7 @@ enum Exposition: int implements Enum
         };
     }
 
-    /**
-     * Coefficient de protection f
-     */
-    public function coefficient_f(): float
+    public function f(): float
     {
         return match ($this) {
             self::EXPOSITION_SIMPLE => 20,

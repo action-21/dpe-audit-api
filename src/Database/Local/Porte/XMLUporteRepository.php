@@ -3,8 +3,8 @@
 namespace App\Database\Local\Porte;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Porte\Enum\{NatureMenuiserie, TypePorte};
-use App\Domain\Porte\Table\{Uporte, UporteRepository};
+use App\Domain\Porte\Data\{Uporte, UporteRepository};
+use App\Domain\Porte\Enum\{EtatIsolation, NatureMenuiserie, TypeVitrage};
 
 final class XMLUporteRepository implements UporteRepository
 {
@@ -12,28 +12,28 @@ final class XMLUporteRepository implements UporteRepository
 
     public static function table(): string
     {
-        return 'porte.uporte.xml';
+        return 'porte.uporte';
     }
 
-    public function find(int $id): ?Uporte
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(NatureMenuiserie $nature_menuiserie, TypePorte $type_porte): ?Uporte
-    {
+    public function find_by(
+        bool $presence_sas,
+        EtatIsolation $isolation,
+        NatureMenuiserie $nature_menuiserie,
+        ?TypeVitrage $type_vitrage,
+        ?float $taux_vitrage
+    ): ?Uporte {
         $record = $this->createQuery()
-            ->and(\sprintf('nature_menuiserie_id = "%s"', $nature_menuiserie->id()))
-            ->and(\sprintf('type_porte_id = "%s"', $type_porte->id()))
+            ->and('presence_sas', $presence_sas)
+            ->and('isolation', $isolation->id(), true)
+            ->and('nature_menuiserie', $nature_menuiserie->id(), true)
+            ->and('type_vitrage', $type_vitrage?->id(), true)
+            ->andCompareTo('taux_vitrage', $taux_vitrage)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
     protected function to(XMLTableElement $record): Uporte
     {
-        return new Uporte(
-            id: $record->id(),
-            uporte: (float) $record->uporte,
-        );
+        return new Uporte(u: $record->get('uporte')->floatval());
     }
 }

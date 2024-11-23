@@ -4,60 +4,25 @@ namespace App\Domain\Baie\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-/**
- * Type de vitrage
- */
-enum TypeVitrage: int implements Enum
+enum TypeVitrage: string implements Enum
 {
-    case SIMPLE_VITRAGE = 1;
-    case DOUBLE_VITRAGE = 2;
-    case DOUBLE_VITRAGE_FE = 3;
-    case TRIPLE_VITRAGE = 4;
-    case TRIPLE_VITRAGE_FE = 5;
-    case SURVITRAGE = 6;
-    case SURVITRAGE_FE = 7;
-    case BRIQUE_VERRE = 8;
-    case POLYCARBONATE = 9;
+    case SIMPLE_VITRAGE = 'SIMPLE_VITRAGE';
+    case DOUBLE_VITRAGE = 'DOUBLE_VITRAGE';
+    case DOUBLE_VITRAGE_FE = 'DOUBLE_VITRAGE_FE';
+    case TRIPLE_VITRAGE = 'TRIPLE_VITRAGE';
+    case TRIPLE_VITRAGE_FE = 'TRIPLE_VITRAGE_FE';
 
-    public static function try_from_opendata(int $enum_type_vitrage_id, ?bool $vitrage_vir): ?self
+    public static function from_enum_type_vitrage_id(int $id, ?bool $vitrage_vir): ?self
     {
-        if ($vitrage_vir) {
-            return match ($enum_type_vitrage_id) {
-                1 => self::SIMPLE_VITRAGE,
-                2 => self::DOUBLE_VITRAGE_FE,
-                3 => self::TRIPLE_VITRAGE_FE,
-                4 => self::SURVITRAGE_FE,
-                5 => self::BRIQUE_VERRE,
-                6 => self::POLYCARBONATE,
-                default => null,
-            };
-        }
-        return match ($enum_type_vitrage_id) {
-            1 => self::SIMPLE_VITRAGE,
-            2 => self::DOUBLE_VITRAGE,
-            3 => self::TRIPLE_VITRAGE,
-            4 => self::SURVITRAGE,
-            5 => self::BRIQUE_VERRE,
-            6 => self::POLYCARBONATE,
-            default => null,
+        return match ($id) {
+            1, 4 => self::SIMPLE_VITRAGE,
+            2 => $vitrage_vir ? self::DOUBLE_VITRAGE_FE : self::DOUBLE_VITRAGE,
+            3 => $vitrage_vir ? self::TRIPLE_VITRAGE_FE : self::TRIPLE_VITRAGE,
+            5, 6 => null,
         };
     }
 
-    /** @return array<self> */
-    public static function cases_by_nature_menuiserie(NatureMenuiserie $nature_menuiserie): array
-    {
-        return match ($nature_menuiserie) {
-            NatureMenuiserie::POLYCARBONATE => [
-                self::POLYCARBONATE
-            ],
-            NatureMenuiserie::BRIQUE_VERRE => [
-                self::BRIQUE_VERRE
-            ],
-            default => self::cases(),
-        };
-    }
-
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -70,10 +35,6 @@ enum TypeVitrage: int implements Enum
             self::DOUBLE_VITRAGE_FE => 'Double vitrage à faible émissivité',
             self::TRIPLE_VITRAGE => 'Triple vitrage',
             self::TRIPLE_VITRAGE_FE => 'Triple vitrage à faible émissivité',
-            self::SURVITRAGE => 'Survitrage',
-            self::SURVITRAGE_FE => 'Survitrage à faible émissivité',
-            self::BRIQUE_VERRE => 'Brique de Verre',
-            self::POLYCARBONATE => 'Polycarbonate'
         };
     }
 

@@ -3,8 +3,8 @@
 namespace App\Database\Local\Baie;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
+use App\Domain\Baie\Data\{Sw, SwRepository};
 use App\Domain\Baie\Enum\{NatureMenuiserie, TypeBaie, TypePose, TypeVitrage};
-use App\Domain\Baie\Table\{Sw, SwRepository};
 
 final class XMLSwRepository implements SwRepository
 {
@@ -12,30 +12,28 @@ final class XMLSwRepository implements SwRepository
 
     public static function table(): string
     {
-        return 'baie.sw.xml';
+        return 'baie.sw';
     }
 
-    public function find(int $id): ?Sw
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(TypeBaie $type_baie, NatureMenuiserie $nature_menuiserie, ?TypePose $type_pose, ?TypeVitrage $type_vitrage): ?Sw
-    {
+    public function find_by(
+        TypeBaie $type_baie,
+        ?bool $presence_soubassement,
+        ?NatureMenuiserie $nature_menuiserie,
+        ?TypeVitrage $type_vitrage,
+        ?TypePose $type_pose,
+    ): ?Sw {
         $record = $this->createQuery()
-            ->and(\sprintf('type_baie_id = "%s"', $type_baie->id()))
-            ->and(\sprintf('nature_menuiserie_id = "%s"', $nature_menuiserie->id()))
-            ->and(\sprintf('type_pose_id = "%s" or type_pose_id = ""', $type_pose?->id()))
-            ->and(\sprintf('type_vitrage_id = "%s" or type_vitrage_id = ""', $type_vitrage?->id()))
+            ->and('type_baie', $type_baie->id())
+            ->and('presence_soubassement', $presence_soubassement, true)
+            ->and('nature_menuiserie', $nature_menuiserie?->id(), true)
+            ->and('type_vitrage', $type_vitrage?->id(), true)
+            ->and('type_pose', $type_pose?->id(), true)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
     protected function to(XMLTableElement $record): Sw
     {
-        return new Sw(
-            id: $record->id(),
-            sw: (float) $record->sw,
-        );
+        return new Sw(sw: $record->get('sw')->floatval(),);
     }
 }

@@ -2,38 +2,25 @@
 
 namespace App\Domain\Ecs\ValueObject;
 
-use App\Domain\Ecs\Enum\TypeStockage;
+use App\Domain\Common\Service\Assert;
 
 final class Stockage
 {
     public function __construct(
-        public readonly TypeStockage $type_stockage,
-        public readonly ?bool $position_volume_chauffe,
-        public readonly ?VolumeStockage $volume_stockage,
-    ) {
-    }
+        public readonly int $volume_stockage,
+        public readonly bool $position_volume_chauffe,
+    ) {}
 
-    public static function create_sans_stockage(): self
+    public static function create(int $volume_stockage, bool $position_volume_chauffe): self
     {
-        return new static(
-            type_stockage: TypeStockage::SANS_STOCKAGE,
-            position_volume_chauffe: null,
-            volume_stockage: null
+        return new self(
+            volume_stockage: $volume_stockage,
+            position_volume_chauffe: $position_volume_chauffe,
         );
     }
 
-    public static function create(
-        TypeStockage $type_stockage,
-        VolumeStockage $volume_stockage,
-        bool $position_volume_chauffe,
-    ): static {
-        if ($type_stockage === TypeStockage::SANS_STOCKAGE) {
-            return self::create_sans_stockage();
-        }
-        return new static(
-            position_volume_chauffe: $position_volume_chauffe,
-            volume_stockage: $volume_stockage,
-            type_stockage: $type_stockage,
-        );
+    public function controle(): void
+    {
+        Assert::positif($this->volume_stockage);
     }
 }

@@ -3,37 +3,48 @@
 namespace App\Domain\PlancherHaut\Enum;
 
 use App\Domain\Common\Enum\Enum;
+use App\Domain\PlancherHaut\Enum\{EtatIsolation, TypeIsolation};
 
-/**
- * Type de plancher haut
- */
-enum TypePlancherHaut: int implements Enum
+enum TypePlancherHaut: string implements Enum
 {
-    case INCONNU = 1;
-    case PLAFOND_AVEC_OU_SANS_REMPLISSAGE = 2;
-    case PLAFOND_ENTRE_SOLIVES_METALLIQUES = 3;
-    case PLAFOND_ENTRE_SOLIVES_BOIS = 4;
-    case PLAFOND_BOIS_SUR_SOLIVES_METALLIQUES = 5;
-    case PLAFOND_BOIS_SOUS_SOLIVES_METALLIQUES = 6;
-    case BARDEAUX_ET_REMPLISSAGE = 7;
-    case DALLE_BETON = 8;
-    case PLAFOND_BOIS_SUR_SOLIVES_BOIS = 9;
-    case PLAFOND_BOIS_SOUS_SOLIVES_BOIS = 10;
-    case PLAFOND_LOURD = 11;
-    case COMBLES_AMENAGES_SOUS_RAMPANT = 12;
-    case TOITURE_CHAUME = 13;
-    case PLAFOND_PATRE = 14;
-    case BAC_ACIER = 15;
+    case INCONNU = 'INCONNU';
+    case PLAFOND_AVEC_OU_SANS_REMPLISSAGE = 'PLAFOND_AVEC_OU_SANS_REMPLISSAGE';
+    case PLAFOND_ENTRE_SOLIVES_METALLIQUES = 'PLAFOND_ENTRE_SOLIVES_METALLIQUES';
+    case PLAFOND_ENTRE_SOLIVES_BOIS = 'PLAFOND_ENTRE_SOLIVES_BOIS';
+    case PLAFOND_BOIS_SUR_SOLIVES_METALLIQUES = 'PLAFOND_BOIS_SUR_SOLIVES_METALLIQUES';
+    case PLAFOND_BOIS_SOUS_SOLIVES_METALLIQUES = 'PLAFOND_BOIS_SOUS_SOLIVES_METALLIQUES';
+    case BARDEAUX_ET_REMPLISSAGE = 'BARDEAUX_ET_REMPLISSAGE';
+    case PLAFOND_BOIS_SUR_SOLIVES_BOIS = 'PLAFOND_BOIS_SUR_SOLIVES_BOIS';
+    case PLAFOND_BOIS_SOUS_SOLIVES_BOIS = 'PLAFOND_BOIS_SOUS_SOLIVES_BOIS';
+    case DALLE_BETON = 'DALLE_BETON';
+    case PLAFOND_LOURD = 'PLAFOND_LOURD';
+    case COMBLES_AMENAGES_SOUS_RAMPANT = 'COMBLES_AMENAGES_SOUS_RAMPANT';
+    case TOITURE_CHAUME = 'TOITURE_CHAUME';
+    case PLAFOND_PATRE = 'PLAFOND_PATRE';
+    case BAC_ACIER = 'BAC_ACIER';
 
-    /** @deprecated */
-    case AUTRES = 16;
-
-    public static function from_enum_type_plancher_haut_id(int $id): self
+    public static function from_enum_type_plancher_haut_id(int $type_plancher_haut_id): self
     {
-        return self::from($id);
+        return match ($type_plancher_haut_id) {
+            1 => self::INCONNU,
+            2 => self::PLAFOND_AVEC_OU_SANS_REMPLISSAGE,
+            3 => self::PLAFOND_ENTRE_SOLIVES_METALLIQUES,
+            4 => self::PLAFOND_ENTRE_SOLIVES_BOIS,
+            5 => self::PLAFOND_BOIS_SUR_SOLIVES_METALLIQUES,
+            6 => self::PLAFOND_BOIS_SOUS_SOLIVES_METALLIQUES,
+            7 => self::BARDEAUX_ET_REMPLISSAGE,
+            8 => self::DALLE_BETON,
+            9 => self::PLAFOND_BOIS_SUR_SOLIVES_BOIS,
+            10 => self::PLAFOND_BOIS_SOUS_SOLIVES_BOIS,
+            11 => self::PLAFOND_LOURD,
+            12 => self::COMBLES_AMENAGES_SOUS_RAMPANT,
+            13 => self::TOITURE_CHAUME,
+            14 => self::PLAFOND_PATRE,
+            15 => self::BAC_ACIER,
+        };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -56,39 +67,15 @@ enum TypePlancherHaut: int implements Enum
             self::TOITURE_CHAUME => 'Toiture en chaume',
             self::PLAFOND_PATRE => 'Plafond en plaque de plâtre',
             self::BAC_ACIER => 'Toitures en Bac acier',
-            self::AUTRES => 'Autre type de plafond non répertorié',
         };
     }
 
-    /**
-     * Le type de plancher haut est compatible avec une 5ème façade
-     */
-    public function facade(): bool
+    public function categorie(): ?Categorie
     {
-        return match ($this) {
-            self::COMBLES_AMENAGES_SOUS_RAMPANT, self::TOITURE_CHAUME, self::BAC_ACIER => true,
-            default => false,
-        };
-    }
-
-    /**
-     * Configuration du plancher haut
-     * 
-     * @return array<ConfigurationPlancherHaut>
-     */
-    public function configurations_applicables(): array
-    {
-        return match ($this) {
-            self::COMBLES_AMENAGES_SOUS_RAMPANT, self::TOITURE_CHAUME, self::BAC_ACIER => [ConfigurationPlancherHaut::COMBLES_HABITABLES],
-            default => [ConfigurationPlancherHaut::COMBLES_PERDUS, ConfigurationPlancherHaut::TOITURE_TERRASSE],
-        };
-    }
-
-    public function configuration_plancher_haut(): ?ConfigurationPlancherHaut
-    {
-        return match ($this) {
-            self::COMBLES_AMENAGES_SOUS_RAMPANT, self::TOITURE_CHAUME, self::BAC_ACIER => ConfigurationPlancherHaut::COMBLES_HABITABLES,
-            default => null,
-        };
+        return \in_array($this, [
+            self::COMBLES_AMENAGES_SOUS_RAMPANT,
+            self::TOITURE_CHAUME,
+            self::BAC_ACIER,
+        ]) ? Categorie::RAMPANTS : null;
     }
 }

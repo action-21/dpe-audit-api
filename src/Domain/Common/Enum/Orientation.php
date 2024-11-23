@@ -2,18 +2,14 @@
 
 namespace App\Domain\Common\Enum;
 
-enum Orientation: int implements Enum
+enum Orientation: string implements Enum
 {
-    case N = 0;
-    case NE = 45;
-    case E = 90;
-    case SE = 135;
-    case S = 180;
-    case SO = 225;
-    case O = 270;
-    case NO = 315;
+    case NORD = 'NORD';
+    case EST = 'EST';
+    case SUD = 'SUD';
+    case OUEST = 'OUEST';
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -21,107 +17,41 @@ enum Orientation: int implements Enum
     public function lib(): string
     {
         return match ($this) {
-            self::N => 'Nord',
-            self::NE => 'Nord-Est',
-            self::NO => 'Nord-Ouest',
-            self::E => 'Est',
-            self::SE => 'Sud-Est',
-            self::S => 'Sud',
-            self::SO => 'Sud-Ouest',
-            self::O => 'Ouest',
+            self::NORD => 'Nord',
+            self::EST => 'Est',
+            self::SUD => 'Sud',
+            self::OUEST => 'Ouest',
         };
     }
 
-    public static function try_from_enum_orientation_id(int $id): ?self
+    public static function from_enum_orientation_id(int $id): ?self
     {
         return match ($id) {
-            1 => self::S,
-            2 => self::N,
-            3 => self::E,
-            4 => self::O,
-            default => null,
-        };
-    }
-
-    public static function from_enum_orientation_id(int $id): self
-    {
-        return match ($id) {
-            1 => self::S,
-            2 => self::N,
-            3 => self::E,
-            4 => self::O,
-        };
-    }
-
-    public static function from_enum_orientation_pv_id(int $id): self
-    {
-        return match ($id) {
-            1 => self::E,
-            2 => self::SE,
-            3 => self::S,
-            4 => self::SO,
-            5 => self::O,
+            1 => self::SUD,
+            2 => self::NORD,
+            3 => self::EST,
+            4 => self::OUEST,
+            5 => null,
         };
     }
 
     public static function from_azimut(float $azimut): self
     {
         return match (true) {
-            $azimut <= 22.5, $azimut >= 337.5 => self::N,
-            $azimut > 22.5 && $azimut <= 67.5 => self::NE,
-            $azimut > 67.5 && $azimut < 112.5 => self::E,
-            $azimut >= 112.5 && $azimut < 157.5 => self::SE,
-            $azimut >= 157.5 && $azimut <= 202.5 => self::S,
-            $azimut > 202.5 && $azimut <= 247.5 => self::SO,
-            $azimut > 247.5 && $azimut < 292.5 => self::O,
-            $azimut >= 292.5 && $azimut < 337.5 => self::NO,
+            $azimut <= 45, $azimut >= 315 => self::NORD,
+            $azimut > 45 && $azimut < 135 => self::EST,
+            $azimut >= 135 && $azimut <= 225 => self::SUD,
+            $azimut > 225 && $azimut < 315 => self::OUEST,
         };
     }
 
-    public static function from_code(string $code): self
-    {
-        return match ($code) {
-            'N' => self::N,
-            'NE' => self::NE,
-            'NO' => self::NO,
-            'E' => self::E,
-            'SE' => self::SE,
-            'S' => self::S,
-            'SO' => self::SO,
-            'O' => self::O,
-        };
-    }
-
-    public function code(): string
+    public function azimut(): float
     {
         return match ($this) {
-            self::N => 'N',
-            self::NE => 'NE',
-            self::NO => 'NO',
-            self::E => 'E',
-            self::SE => 'SE',
-            self::S => 'S',
-            self::SO => 'SO',
-            self::O => 'O',
+            self::NORD => 0,
+            self::EST => 90,
+            self::SUD => 180,
+            self::OUEST => 270,
         };
-    }
-
-    public function point_cardinal(): string
-    {
-        return match ($this) {
-            self::N => 'N',
-            self::NE => 'N',
-            self::NO => 'N',
-            self::E => 'E',
-            self::SE => 'S',
-            self::S => 'S',
-            self::SO => 'S',
-            self::O => 'O',
-        };
-    }
-
-    public function to_azimut(): float
-    {
-        return (float) $this->value;
     }
 }

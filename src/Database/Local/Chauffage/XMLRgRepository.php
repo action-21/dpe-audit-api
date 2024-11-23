@@ -3,8 +3,8 @@
 namespace App\Database\Local\Chauffage;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Chauffage\Enum\TypeGenerateur;
-use App\Domain\Chauffage\Table\{Rg, RgRepository};
+use App\Domain\Chauffage\Data\{Rg, RgRepository};
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, TypeGenerateur};
 
 final class XMLRgRepository implements RgRepository
 {
@@ -12,28 +12,26 @@ final class XMLRgRepository implements RgRepository
 
     public static function table(): string
     {
-        return 'chauffage.generateur.rg.xml';
+        return 'chauffage.rg';
     }
 
-    public function find(int $id): ?Rg
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(TypeGenerateur $type_generateur, ?int $annee_installation_generateur): ?Rg
-    {
+    public function find_by(
+        TypeGenerateur $type_generateur,
+        EnergieGenerateur $energie_generateur,
+        ?LabelGenerateur $label_generateur,
+        int $annee_installation_generateur,
+    ): ?Rg {
         $record = $this->createQuery()
-            ->and(\sprintf('type_generateur_id = "%s"', $type_generateur->id()))
+            ->and('type_generateur', $type_generateur->value)
+            ->and('energie_generateur', $energie_generateur->value, true)
+            ->and('label_generateur', $label_generateur?->value, true)
             ->andCompareTo('annee_installation_generateur', $annee_installation_generateur)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
-    public function to(XMLTableElement $record): Rg
+    public function to(XMLTableElement $element): Rg
     {
-        return new Rg(
-            id: $record->id(),
-            rg: (float) $record->rg,
-        );
+        return new Rg(rg: $element->get('rg')->floatval(),);
     }
 }

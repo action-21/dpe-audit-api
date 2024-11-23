@@ -2,31 +2,57 @@
 
 namespace App\Domain\Chauffage\Entity;
 
-use App\Domain\Chauffage\Enum\CouvertureGeneration;
-use App\Domain\Chauffage\Enum\UtilisationGenerateur;
+use App\Domain\Chauffage\Enum\CategorieGenerateur;
+use App\Domain\Chauffage\Service\{MoteurDimensionnement, MoteurPerformance, MoteurPerte};
+use App\Domain\Chauffage\ValueObject\PerteCollection;
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\Type\Id;
+use App\Domain\Simulation\Simulation;
 
 /**
  * @property Generateur[] $elements
  */
 final class GenerateurCollection extends ArrayCollection
 {
+    public function controle(): void
+    {
+        $this->walk(fn(Generateur $item) => $item->controle());
+    }
+
+    public function reinitialise(): void
+    {
+        $this->walk(fn(Emetteur $item) => $item->reinitialise());
+    }
+
+    public function calcule_dimensionnement(MoteurDimensionnement $moteur, Simulation $simulation): self
+    {
+        return $this->walk(fn(Generateur $item) => $item->calcule_dimensionnement($moteur, $simulation));
+    }
+
+    public function calcule_performance(MoteurPerformance $moteur, Simulation $simulation): self
+    {
+        return $this->walk(fn(Generateur $item) => $item->calcule_performance($moteur, $simulation));
+    }
+
+    public function calcule_pertes(MoteurPerte $moteur, Simulation $simulation): self
+    {
+        return $this->walk(fn(Generateur $item) => $item->calcule_pertes($moteur, $simulation));
+    }
+
     public function find(Id $id): ?Generateur
     {
-        return $this->filter(fn (Generateur $item) => $item->id()->compare($id))->first();
+        return $this->findFirst(fn(mixed $key, Generateur $item): bool => $item->id()->compare($id));
     }
 
-    public function search_by_utilisation(UtilisationGenerateur $utilisation): self
+    public function filter_by_categorie(CategorieGenerateur $categorie): self
     {
-        return $this->filter(fn (Generateur $item) => $item->utilisation() === $utilisation);
+        return $this->filter(fn(Generateur $generateur) => $generateur->categorie() === $categorie);
     }
 
-    public function effet_joule(): bool
+    public function pertes(): PerteCollection
     {
-        return $this
-            ->search_by_utilisation(UtilisationGenerateur::BASE)
-            ->filter(fn (Generateur $item) => $item->type_generateur()->effet_joule())
-            ->count() > 0;
+        return $this->reduce(fn(PerteCollection $collection, Generateur $item): PerteCollection => $collection->merge(
+            $item->pertes_generation(),
+        ), new PerteCollection());
     }
 }

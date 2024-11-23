@@ -2,89 +2,76 @@
 
 namespace App\Database\Opendata\PontThermique;
 
-use App\Database\Opendata\{XMLElement, XMLReaderIterator};
-use App\Domain\Common\Identifier\Reference;
+use App\Database\Opendata\XMLReaderIterator;
+use App\Domain\Common\Type\Id;
 use App\Domain\PontThermique\Enum\TypeLiaison;
-use App\Domain\PontThermique\ValueObject\{Kpt, Longueur};
 
 final class XMLPontThermiqueReader extends XMLReaderIterator
 {
-    public function id(): \Stringable
+    public function id(): Id
     {
-        return Reference::create($this->reference());
+        return Id::from($this->reference());
     }
 
-    public function reference(): string
+    public function id_paroi_1(): ?Id
     {
-        return $this->get()->findOneOrError('.//reference')->getValue();
+        return ($value = $this->reference_1()) ? Id::from($value) : null;
     }
 
-    public function reference_1(): ?\Stringable
+    public function id_paroi_2(): ?Id
     {
-        return ($value = $this->get()->findOne('.//reference_1')?->getValue()) ? Reference::create($value) : null;
-    }
-
-    public function reference_2(): ?\Stringable
-    {
-        return ($value = $this->get()->findOne('.//reference_2')?->getValue()) ? Reference::create($value) : null;
+        return ($value = $this->reference_2()) ? Id::from($value) : null;
     }
 
     public function description(): string
     {
-        return $this->get()->findOne('.//description')?->getValue() ?? "Pont thermique non décrit";
+        return $this->xml()->findOne('.//description')?->strval() ?? 'Pont thermique non décrit';
     }
 
-    public function tv_pont_thermique_id(): ?int
+    public function type_liaison(): TypeLiaison
     {
-        return ($value = $this->get()->findOne('.//tv_pont_thermique_id')?->getValue()) ? (int) $value : null;
+        return TypeLiaison::from_enum_type_liaison_id($this->enum_type_liaison_id());
     }
 
-    public function pourcentage_valeur_pont_thermique(): float
+    public function longueur(): float
     {
-        return (float) $this->get()->findOneOrError('.//pourcentage_valeur_pont_thermique')->getValue();
+        return $this->xml()->findOneOrError('.//l')->floatval();
     }
-
-    public function l(): Longueur
-    {
-        return Longueur::from((float) $this->get()->findOneOrError('.//l')->getValue());
-    }
-
-    public function enum_type_liaison_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_liaison_id')->getValue();
-    }
-
-    public function enum_type_liaision(): TypeLiaison
-    {
-        return TypeLiaison::from($this->enum_type_liaison_id());
-    }
-
-    public function k_saisi(): ?Kpt
-    {
-        return ($value = $this->get()->findOne('.//k_saisi')?->getValue()) ? Kpt::from((float) $value) : null;
-    }
-
-    public function k(): ?Kpt
-    {
-        return ($value = $this->get()->findOne('.//k')?->getValue()) ? Kpt::from((float) $value) : null;
-    }
-
-    public function enum_etat_composant_id(): ?int
-    {
-        return ($value = $this->get()->findOne('.//enum_etat_composant_id')?->getValue()) ? (int) $value : null;
-    }
-
-    // Données déduites
 
     public function pont_thermique_partiel(): bool
     {
-        return (int) $this->pourcentage_valeur_pont_thermique() === 1 ? false : true;
+        return $this->xml()->findOneOrError('.//pourcentage_valeur_pont_thermique')->floatval() === 1 ? false : true;
     }
 
-    public function read(XMLElement $xml): self
+    public function k_saisi(): ?float
     {
-        $xml = $xml->findOneOfOrError(['/audit/logement_collection//logement[.//enum_scenario_id="0"]', '/dpe/logement']);
-        $this->array = $xml->findMany('.//pont_thermique_collection//pont_thermique');
-        return $this;
+        return $this->xml()->findOne('.//k_saisi')?->floatval();
+    }
+
+    public function reference(): string
+    {
+        return $this->xml()->findOneOrError('.//reference')->strval();
+    }
+
+    public function reference_1(): ?string
+    {
+        return $this->xml()->findOne('.//reference_1')?->strval();
+    }
+
+    public function reference_2(): ?string
+    {
+        return $this->xml()->findOne('.//reference_2')?->strval();
+    }
+
+    public function enum_type_liaison_id(): string
+    {
+        return $this->xml()->findOne('.//enum_type_liaison_id')->strval();
+    }
+
+    // Données intermédaires
+
+    public function k(): float
+    {
+        return $this->xml()->findOneOrError('.//k')->floatval();
     }
 }

@@ -4,57 +4,50 @@ namespace App\Domain\Chauffage\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum TypeChauffage: int implements Enum
+enum TypeChauffage: string implements Enum
 {
-    case CHAUFFAGE_DIVISE = 1;
-    case CHAUFFAGE_CENTRAL = 2;
+    /**
+     * Un système de chauffage divisé est un système pour lequel la génération et l’émission sont confondues. C’est
+     * le cas des convecteurs électriques, planchers chauffants électriques...
+     */
+    case CHAUFFAGE_DIVISE = 'CHAUFFAGE_DIVISE';
+
+    /**
+     * Un système de chauffage central comporte un générateur central, individuel ou collectif, et une distribution par
+     * fluide chauffant : air ou eau.
+     */
+    case CHAUFFAGE_CENTRAL = 'CHAUFFAGE_CENTRAL';
 
     public static function from_enum_type_chauffage_id(int $id): self
     {
-        return self::from($id);
+        return match ($id) {
+            1 => self::CHAUFFAGE_DIVISE,
+            2 => self::CHAUFFAGE_CENTRAL,
+        };
     }
 
-    /**
-     * TODO: à confirmer
-     * 
-     * @see https://github.com/renolab/audit/discussions/21
-     * 
-     * @return self[]
-     */
-    public static function cases_by_type_generateur(TypeGenerateur $type_generateur): array
+    public static function from_categorie(CategorieGenerateur $categorie): self
     {
-        if (\in_array($type_generateur, [
-            TypeGenerateur::POELE_BUCHE,
-            TypeGenerateur::POELE_GRANULES,
-            TypeGenerateur::POELE_GRANULES_FLAMME_VERTE,
-            TypeGenerateur::POELE_FIOUL_OU_GPL_OU_CHARBON,
-            TypeGenerateur::AUTRE_SYSTEME_COMBUSTION_BOIS,
-            TypeGenerateur::AUTRE_SYSTEME_COMBUSTION_GAZ,
-            TypeGenerateur::AUTRE_SYSTEME_COMBUSTION_FIOUL,
-            TypeGenerateur::AUTRE_SYSTEME_COMBUSTION_AUTRES_ENERGIES_FOSSILES,
-        ])) {
-            return self::cases();
-        }
-        if (\in_array($type_generateur, [
-            TypeGenerateur::CUISINIERE,
-            TypeGenerateur::FOYER_FERME,
-            TypeGenerateur::INSERT,
-            TypeGenerateur::RADIATEUR_GAZ_INDEPENDANT_OU_AUTONOME,
-            TypeGenerateur::CONVECTEUR_ELECTRIQUE_NFC,
-            TypeGenerateur::PANNEAU_RAYONNANT_ELECTRIQUE_NFC,
-            TypeGenerateur::RADIATEUR_ELECTRIQUE_NFC,
-            TypeGenerateur::AUTRES_EMETTEURS_EFFET_JOULE,
-            TypeGenerateur::PLANCHER_OU_PLAFOND_RAYONNANT_ELECTRIQUE_AVEC_REGULATION_TERMINALE,
-            TypeGenerateur::PLANCHER_OU_PLAFOND_RAYONNANT_ELECTRIQUE_SANS_REGULATION_TERMINALE,
-            TypeGenerateur::RADIATEUR_ELECTRIQUE_ACCUMULATION,
-            TypeGenerateur::CONVECTEUR_BI_JONCTION,
-        ])) {
-            return [self::CHAUFFAGE_DIVISE];
-        }
-        return [self::CHAUFFAGE_CENTRAL];
+        return match ($categorie) {
+            CategorieGenerateur::PAC,
+            CategorieGenerateur::PAC_HYBRIDE,
+            CategorieGenerateur::PAC_MULTI_BATIMENT,
+            CategorieGenerateur::CHAUDIERE_BOIS,
+            CategorieGenerateur::CHAUDIERE_ELECTRIQUE,
+            CategorieGenerateur::CHAUDIERE_STANDARD,
+            CategorieGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
+            CategorieGenerateur::CHAUDIERE_CONDENSATION,
+            CategorieGenerateur::CHAUDIERE_MULTI_BATIMENT,
+            CategorieGenerateur::GENERATEUR_AIR_CHAUD,
+            CategorieGenerateur::POELE_BOIS_BOUILLEUR,
+            CategorieGenerateur::RESEAU_CHALEUR => self::CHAUFFAGE_CENTRAL,
+            CategorieGenerateur::CHAUFFAGE_ELECTRIQUE,
+            CategorieGenerateur::POELE_INSERT,
+            CategorieGenerateur::RADIATEUR_GAZ => self::CHAUFFAGE_DIVISE,
+        };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }

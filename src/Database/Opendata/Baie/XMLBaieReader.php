@@ -2,231 +2,113 @@
 
 namespace App\Database\Opendata\Baie;
 
-use App\Database\Opendata\{XMLElement, XMLReaderIterator};
-use App\Domain\Baie\Enum\{InclinaisonVitrage as EnumInclinaisonVitrage, Mitoyennete, NatureGazLame, NatureMenuiserie, TypeBaie, TypeFermeture, TypePose, TypeVitrage};
-use App\Domain\Baie\ValueObject\{Caracteristique, EpaisseurLameAir, InclinaisonVitrage, LargeurDormant, Surface, Sw, Ug, Ujn, Uw};
-use App\Domain\Common\Enum\Orientation;
-use App\Domain\Common\Identifier\Reference;
-use App\Domain\Paroi\ValueObject\OrientationParoi;
+use App\Database\Opendata\XMLReaderIterator;
+use App\Domain\Baie\Enum\{Mitoyennete, NatureGazLame, NatureMenuiserie, TypeBaie, TypeFermeture, TypePose, TypeSurvitrage, TypeVitrage};
+use App\Domain\Baie\ValueObject\{Caracteristique, DoubleFenetre, Menuiserie, Survitrage};
+use App\Domain\Common\Type\Id;
 
 final class XMLBaieReader extends XMLReaderIterator
 {
-    public function __construct(private XMLDoubleFenetreReader $double_fenetre_reader)
+    private ?XMLDoubleFenetreReader $double_fenetre = null;
+    private ?XMLMasqueProcheReader $masque_proche = null;
+    private ?XMLMasqueLointainHomogeneReader $masque_lointain_homogene = null;
+    private ?XMLMasqueLointainNonHomogeneReader $masque_lointain_non_homogene_collection = null;
+
+    public function __construct(
+        private XMLDoubleFenetreReader $double_fenetre_reader,
+        private XMLMasqueProcheReader $masque_proche_reader,
+        private XMLMasqueLointainHomogeneReader $masque_lointain_homogene_reader,
+        private XMLMasqueLointainNonHomogeneReader $masque_lointain_non_homogene_reader,
+    ) {}
+
+    public function read_double_fenetre(): ?XMLDoubleFenetreReader
     {
+        if (null === $this->double_fenetre) {
+            $xml = $this->xml()->findOne('.//baie_vitree_double_fenetre');
+            $this->double_fenetre = $xml ? $this->double_fenetre_reader->read($xml) : null;
+        }
+        return $this->double_fenetre;
     }
 
-    public function id(): \Stringable
+    public function read_masque_proche(): ?XMLMasqueProcheReader
     {
-        return Reference::create($this->reference());
+        if (null === $this->masque_proche) {
+            $reader = $this->masque_proche_reader->read($this->xml());
+            $this->masque_proche = $reader->apply() ? $reader : null;
+        }
+        return $this->masque_proche;
+    }
+
+    public function read_masque_lointain_homogene(): ?XMLMasqueLointainHomogeneReader
+    {
+        if (null === $this->masque_lointain_homogene) {
+            $reader = $this->masque_lointain_homogene_reader->read($this->xml());
+            $this->masque_lointain_homogene = $reader->apply() ? $reader : null;
+        }
+        return $this->masque_lointain_homogene;
+    }
+
+    public function read_masque_lointain_non_homogene(): XMLMasqueLointainNonHomogeneReader
+    {
+        if (null === $this->masque_lointain_non_homogene_collection) {
+            $this->masque_lointain_non_homogene_collection = $this->masque_lointain_non_homogene_reader->read(
+                $this->xml()->findMany('.//masque_lointain_non_homogene')
+            );
+        }
+        return $this->masque_lointain_non_homogene_collection;
+    }
+
+    public function id(): Id
+    {
+        return Id::from($this->reference());
     }
 
     public function reference(): string
     {
-        return $this->get()->findOneOrError('.//reference')->getValue();
+        return $this->xml()->findOneOrError('.//reference')->strval();
     }
 
-    public function reference_paroi(): ?string
+    public function paroi_id(): ?Id
     {
-        return $this->get()->findOne('.//reference_paroi')?->getValue();
-    }
-
-    public function reference_lnc(): ?string
-    {
-        return $this->get()->findOne('.//reference_lnc')?->getValue();
+        return ($value = $this->xml()->findOne('.//reference_paroi')?->strval()) ? Id::from($value) : null;
     }
 
     public function description(): string
     {
-        return $this->get()->findOne('.//description')?->getValue() ?? "Porte";
+        return $this->xml()->findOne('.//description')?->strval() ?? 'Baie non décrite';
     }
-
-    public function surface_aue(): ?float
-    {
-        return ($value = $this->get()->findOne('.//surface_aue')?->getValue()) ? (float) $value : null;
-    }
-
-    public function enum_type_adjacence_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_adjacence_id')->getValue();
-    }
-
-    public function enum_type_pose_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_pose_id')->getValue();
-    }
-
-    public function enum_type_pose(): TypePose
-    {
-        return TypePose::from($this->enum_type_pose_id());
-    }
-
-    public function enum_orientation_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_orientation_id')->getValue();
-    }
-
-    public function enum_orientation(): ?Orientation
-    {
-        return Orientation::try_from_enum_orientation_id($this->enum_orientation_id());
-    }
-
-    public function enum_type_baie_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_baie_id')->getValue();
-    }
-
-    public function enum_type_baie(): TypeBaie
-    {
-        return TypeBaie::from_enum_type_baie_id($this->enum_type_baie_id());
-    }
-
-    public function enum_type_materiaux_menuiserie_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_materiaux_menuiserie_id')->getValue();
-    }
-
-    public function enum_type_materiaux_menuiserie(): NatureMenuiserie
-    {
-        return NatureMenuiserie::from_enum_type_materiaux_menuiserie_id($this->enum_type_materiaux_menuiserie_id());
-    }
-
-    public function enum_type_vitrage_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_vitrage_id')->getValue();
-    }
-
-    public function enum_type_vitrage(): TypeVitrage
-    {
-        return TypeVitrage::try_from_opendata($this->enum_type_vitrage_id(), $this->vitrage_vir());
-    }
-
-    public function enum_inclinaison_vitrage_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_inclinaison_vitrage_id')->getValue();
-    }
-
-    public function enum_inclinaison_vitrage(): EnumInclinaisonVitrage
-    {
-        return EnumInclinaisonVitrage::from_enum_inclinaison_vitrage_id($this->enum_inclinaison_vitrage_id());
-    }
-
-    public function enum_type_gaz_lame_id(): ?int
-    {
-        return (null !== $value = $this->get()->findOne('.//enum_type_gaz_lame_id')?->getValue()) ? (int) $value : null;
-    }
-
-    public function enum_type_gaz_lame(): ?NatureGazLame
-    {
-        return ($value = $this->enum_type_gaz_lame_id()) ? NatureGazLame::from_enum_type_gaz_lame_id($value) : null;
-    }
-
-    public function enum_type_fermeture_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_fermeture_id')->getValue();
-    }
-
-    public function enum_type_fermeture(): TypeFermeture
-    {
-        return TypeFermeture::from_enum_type_fermeture_id($this->enum_type_fermeture_id());
-    }
-
-    public function epaisseur_lame(): ?EpaisseurLameAir
-    {
-        return ($value = $this->get()->findOne('.//epaisseur_lame')?->getValue()) ? EpaisseurLameAir::from($value) : null;
-    }
-
-    public function vitrage_vir(): ?bool
-    {
-        return (null !== $value = $this->get()->findOne('.//vitrage_vir')?->getValue()) ? (bool) $value : null;
-    }
-
-    public function presence_protection_solaire_hors_fermeture(): bool
-    {
-        return (bool) $this->get()->findOneOrError('.//presence_protection_solaire_hors_fermeture')->getValue();
-    }
-
-    public function presence_retour_isolation(): bool
-    {
-        return (bool) $this->get()->findOneOrError('.//presence_retour_isolation')->getValue();
-    }
-
-    public function presence_joint(): bool
-    {
-        return (bool) $this->get()->findOneOrError('.//presence_joint')->getValue();
-    }
-
-    public function largeur_dormant(): LargeurDormant
-    {
-        return LargeurDormant::from((float) $this->get()->findOneOrError('.//largeur_dormant')->getValue() * 10);
-    }
-
-    public function surface_totale(): float
-    {
-        return (float) $this->get()->findOneOrError('.//surface_totale_baie')->getValue();
-    }
-
-    public function nombre(): int
-    {
-        return \max((int) $this->get()->findOneOrError('.//nb_baie')->getValue(), 1);
-    }
-
-    public function ug_saisi(): ?Ug
-    {
-        return ($value = $this->get()->findOne('.//ug_saisi')?->getValue()) ? Ug::from($value) : null;
-    }
-
-    public function uw_saisi(): ?Uw
-    {
-        return ($value = $this->get()->findOne('.//uw_saisi')?->getValue()) ? Uw::from($value) : null;
-    }
-
-    public function ujn_saisi(): ?Ujn
-    {
-        return ($value = $this->get()->findOne('.//ujn_saisi')?->getValue()) ? Ujn::from($value) : null;
-    }
-
-    public function sw_saisi(): ?Sw
-    {
-        return ($value = $this->get()->findOne('.//sw_saisi')?->getValue()) ? Sw::from($value) : null;
-    }
-
-    // Données déduites
 
     public function mitoyennete(): Mitoyennete
     {
         return Mitoyennete::from_type_adjacence_id($this->enum_type_adjacence_id());
     }
 
-    public function orientation(): OrientationParoi
+    public function orientation(): ?float
     {
-        return OrientationParoi::from($this->enum_orientation()->to_azimut());
+        return $this->xml()->findOneOrError('.//enum_orientation_id')->orientation();
     }
 
-    public function inclinaison_vitrage(): InclinaisonVitrage
+    public function inclinaison(): float
     {
-        return InclinaisonVitrage::from($this->enum_inclinaison_vitrage()->to_int());
+        return $this->xml()->findOneOrError('.//enum_inclinaison_vitrage_id')->inclinaison();
     }
 
-    public function surface(): Surface
+    public function type_baie(): ?TypeBaie
     {
-        return Surface::from($this->surface_totale() / $this->nombre());
+        return TypeBaie::from_enum_type_baie_id($this->enum_type_baie_id());
     }
 
     public function caracteristique(): Caracteristique
     {
         return new Caracteristique(
-            presence_joint: $this->presence_joint(),
-            presence_retour_isolation: $this->presence_retour_isolation(),
+            type: $this->type_baie(),
             surface: $this->surface(),
-            largeur_dormant: $this->largeur_dormant(),
-            type_pose: $this->enum_type_pose(),
-            type_baie: $this->enum_type_baie(),
-            nature_menuiserie: $this->enum_type_materiaux_menuiserie(),
-            type_vitrage: $this->enum_type_vitrage(),
-            inclinaison_vitrage: $this->inclinaison_vitrage(),
-            epaisseur_lame: $this->epaisseur_lame(),
-            nature_gaz_lame: $this->enum_type_gaz_lame(),
-            type_fermeture: $this->enum_type_fermeture(),
+            inclinaison: $this->inclinaison(),
+            type_fermeture: $this->type_fermeture(),
+            presence_protection_solaire: $this->presence_protection_solaire(),
+            annee_installation: null,
+            presence_soubassement: $this->presence_soubassement(),
+            menuiserie: $this->menuiserie(),
             ug: $this->ug_saisi(),
             uw: $this->uw_saisi(),
             ujn: $this->ujn_saisi(),
@@ -234,14 +116,222 @@ final class XMLBaieReader extends XMLReaderIterator
         );
     }
 
-    public function double_fenetre_reader(): ?XMLDoubleFenetreReader
+    public function menuiserie(): ?Menuiserie
     {
-        return ($value = $this->get()->findOne('.//baie_vitree_double_fenetre')) ? $this->double_fenetre_reader->read($value) : null;
+        return $this->nature_menuiserie() && $this->type_vitrage() ? new Menuiserie(
+            nature: $this->nature_menuiserie(),
+            type_vitrage: $this->type_vitrage(),
+            type_pose: $this->type_pose(),
+            presence_joint: $this->presence_joint(),
+            presence_retour_isolation: $this->presence_retour_isolation(),
+            largeur_dormant: $this->largeur_dormant(),
+            survitrage: $this->survitrage(),
+            presence_rupteur_pont_thermique: $this->presence_rupteur_pont_thermique(),
+            nature_gaz_lame: $this->nature_gaz_lame(),
+            epaisseur_lame: $this->epaisseur_lame(),
+        ) : null;
     }
 
-    public function read(XMLElement $xml): self
+    public function survitrage(): ?Survitrage
     {
-        $this->array = $xml->findMany('//baie_vitree_collection/baie_vitree');
-        return $this;
+        return $this->type_survitrage() ? new Survitrage(
+            type_survitrage: $this->type_survitrage(),
+            epaisseur_lame: $this->epaisseur_lame(),
+        ) : null;
+    }
+
+    public function double_fenetre(): ?DoubleFenetre
+    {
+        $reader = $this->read_double_fenetre();
+        return $reader ? new DoubleFenetre(
+            type: $reader->type_baie(),
+            presence_soubassement: $reader->presence_soubassement(),
+            menuiserie: $reader->menuiserie(),
+            ug: $reader->ug_saisi(),
+            uw: $reader->uw_saisi(),
+            sw: $reader->sw_saisi(),
+        ) : null;
+    }
+
+    public function type_pose(): TypePose
+    {
+        return TypePose::from_enum_type_pose_id($this->enum_type_pose_id());
+    }
+
+    public function nature_menuiserie(): ?NatureMenuiserie
+    {
+        return NatureMenuiserie::from_enum_type_materiaux_menuiserie_id($this->enum_type_materiaux_menuiserie_id());
+    }
+
+    public function type_vitrage(): ?TypeVitrage
+    {
+        return TypeVitrage::from_enum_type_vitrage_id(
+            id: $this->enum_type_vitrage_id(),
+            vitrage_vir: $this->vitrage_vir(),
+        );
+    }
+
+    public function type_survitrage(): ?TypeSurvitrage
+    {
+        return TypeSurvitrage::from_enum_type_vitrage_id(
+            id: $this->enum_type_vitrage_id(),
+            vitrage_vir: $this->vitrage_vir(),
+        );
+    }
+
+    public function nature_gaz_lame(): ?NatureGazLame
+    {
+        return ($value = $this->enum_type_gaz_lame_id()) ? NatureGazLame::from_enum_type_gaz_lame_id($value) : null;
+    }
+
+    public function type_fermeture(): TypeFermeture
+    {
+        return TypeFermeture::from_enum_type_fermeture_id($this->enum_type_fermeture_id());
+    }
+
+    public function epaisseur_lame(): ?int
+    {
+        return $this->xml()->findOne('.//epaisseur_lame')?->intval();
+    }
+
+    public function surface(): float
+    {
+        return $this->surface_totale_baie() / $this->nb_baie();
+    }
+
+    public function presence_soubassement(): ?bool
+    {
+        return match ($this->enum_type_baie_id()) {
+            7 => false,
+            8 => true,
+            default => null,
+        };
+    }
+
+    public function presence_rupteur_pont_thermique(): bool
+    {
+        return $this->enum_type_materiaux_menuiserie_id() === 6 ? true : false;
+    }
+
+    public function presence_protection_solaire(): bool
+    {
+        return $this->xml()->findOneOrError('.//presence_protection_solaire_hors_fermeture')->boolval();
+    }
+
+    public function presence_retour_isolation(): bool
+    {
+        return $this->xml()->findOneOrError('.//presence_retour_isolation')->boolval();
+    }
+
+    public function presence_joint(): bool
+    {
+        return $this->xml()->findOneOrError('.//presence_joint')->boolval();
+    }
+
+    public function largeur_dormant(): int
+    {
+        return $this->xml()->findOneOrError('.//largeur_dormant')->intval() * 10;
+    }
+
+    public function ug_saisi(): ?float
+    {
+        return $this->xml()->findOne('.//ug_saisi')?->floatval();
+    }
+
+    public function uw_saisi(): ?float
+    {
+        return $this->xml()->findOne('.//uw_saisi')?->floatval();
+    }
+
+    public function ujn_saisi(): ?float
+    {
+        return $this->xml()->findOne('.//ujn_saisi')?->floatval();
+    }
+
+    public function sw_saisi(): ?float
+    {
+        return $this->xml()->findOne('.//sw_saisi')?->floatval();
+    }
+
+    public function enum_type_baie_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_baie_id')->intval();
+    }
+
+    public function enum_type_adjacence_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_adjacence_id')->intval();
+    }
+
+    public function enum_type_materiaux_menuiserie_id(): int
+    {
+        return $this->xml()->findOne('.//enum_type_materiaux_menuiserie_id')->intval();
+    }
+
+    public function enum_type_vitrage_id(): int
+    {
+        return $this->xml()->findOne('.//enum_type_vitrage_id')->intval();
+    }
+
+    public function enum_type_gaz_lame_id(): ?int
+    {
+        return $this->xml()->findOne('.//enum_type_gaz_lame_id')?->intval();
+    }
+
+    public function enum_type_fermeture_id(): int
+    {
+        return $this->xml()->findOne('.//enum_type_fermeture_id')->intval();
+    }
+
+    public function enum_type_pose_id(): int
+    {
+        return $this->xml()->findOne('.//enum_type_pose_id')->intval();
+    }
+
+    public function vitrage_vir(): bool
+    {
+        return $this->xml()->findOne('.//vitrage_vir')?->boolval() ?? false;
+    }
+
+    public function surface_totale_baie(): float
+    {
+        return $this->xml()->findOneOrError('.//surface_totale_baie')->floatval();
+    }
+
+    public function nb_baie(): int
+    {
+        return $this->xml()->findOneOrError('.//nb_baie')->intval();
+    }
+
+    // Données intermédiaires
+
+    public function b(): float
+    {
+        return $this->xml()->findOneOrError('.//b')->floatval();
+    }
+
+    public function uw(): float
+    {
+        return $this->xml()->findOneOrError('.//uw')->floatval();
+    }
+
+    public function u_menuiserie(): float
+    {
+        return $this->xml()->findOneOrError('.//u_menuiserie')->floatval();
+    }
+
+    public function sw(): float
+    {
+        return $this->xml()->findOneOrError('.//sw')->floatval();
+    }
+
+    public function fe1(): float
+    {
+        return $this->xml()->findOneOrError('.//fe1')->floatval();
+    }
+
+    public function fe2(): float
+    {
+        return $this->xml()->findOneOrError('.//fe2')->floatval();
     }
 }

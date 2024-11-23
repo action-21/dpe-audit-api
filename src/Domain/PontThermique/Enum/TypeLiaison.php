@@ -4,15 +4,26 @@ namespace App\Domain\PontThermique\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum TypeLiaison: int implements Enum
+enum TypeLiaison: string implements Enum
 {
-    case PLANCHER_BAS_MUR = 1;
-    case PLANCHER_INTERMEDIAIRE_MUR = 2;
-    case PLANCHER_HAUT_MUR = 3;
-    case REFEND_MUR = 4;
-    case MENUISERIE_MUR = 5;
+    case PLANCHER_BAS_MUR = 'PLANCHER_BAS_MUR';
+    case PLANCHER_INTERMEDIAIRE_MUR = 'PLANCHER_INTERMEDIAIRE_MUR';
+    case PLANCHER_HAUT_MUR = 'PLANCHER_HAUT_MUR';
+    case REFEND_MUR = 'REFEND_MUR';
+    case MENUISERIE_MUR = 'MENUISERIE_MUR';
 
-    public function id(): int
+    public static function from_enum_type_liaison_id(int $type_liaison_id): self
+    {
+        return match ($type_liaison_id) {
+            1 => self::PLANCHER_BAS_MUR,
+            2 => self::PLANCHER_INTERMEDIAIRE_MUR,
+            3 => self::PLANCHER_HAUT_MUR,
+            4 => self::REFEND_MUR,
+            5 => self::MENUISERIE_MUR
+        };
+    }
+
+    public function id(): string
     {
         return $this->value;
     }

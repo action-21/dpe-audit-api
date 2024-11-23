@@ -3,8 +3,8 @@
 namespace App\Database\Local\Baie;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Baie\Enum\{NatureGazLame, TypeVitrage};
-use App\Domain\Baie\Table\{Ug, UgRepository, UgCollection};
+use App\Domain\Baie\Data\{Ug, UgRepository, UgCollection};
+use App\Domain\Baie\Enum\{NatureGazLame, TypeBaie, TypeSurvitrage, TypeVitrage};
 
 final class XMLUgRepository implements UgRepository
 {
@@ -12,28 +12,24 @@ final class XMLUgRepository implements UgRepository
 
     public static function table(): string
     {
-        return 'baie.ug.xml';
-    }
-
-    public function search(int $id): UgCollection
-    {
-        return new UgCollection(\array_map(
-            fn (XMLTableElement $record): Ug => $this->to($record),
-            $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getMany(),
-        ));
+        return 'baie.ug';
     }
 
     public function search_by(
-        TypeVitrage $type_vitrage,
+        TypeBaie $type_baie,
+        ?TypeVitrage $type_vitrage,
+        ?TypeSurvitrage $type_survitrage,
         ?NatureGazLame $nature_gaz_lame,
-        ?int $inclinaison_vitrage,
+        ?float $inclinaison_vitrage,
     ): UgCollection {
         return new UgCollection(\array_map(
-            fn (XMLTableElement $record): Ug => $this->to($record),
+            fn(XMLTableElement $record): Ug => $this->to($record),
             $this->createQuery()
-                ->and(\sprintf('type_vitrage_id = "%s"', $type_vitrage->id()))
-                ->and(\sprintf('nature_gaz_lame_id = "%s" or nature_gaz_lame_id = ""', $nature_gaz_lame?->id()))
-                ->andCompareTo('inclinaison', $inclinaison_vitrage)
+                ->and('type_baie', $type_baie->id(), true)
+                ->and('type_vitrage', $type_vitrage?->id(), true)
+                ->and('presence_survitrage', $type_survitrage !== null, true)
+                ->and('nature_gaz_lame', $nature_gaz_lame?->id(), true)
+                ->andCompareTo('inclinaison_vitrage', $inclinaison_vitrage)
                 ->getMany()
         ));
     }
@@ -41,9 +37,8 @@ final class XMLUgRepository implements UgRepository
     protected function to(XMLTableElement $record): Ug
     {
         return new Ug(
-            id: $record->id(),
-            epaisseur_lame: (string) $record->epaisseur_lame ? (float) $record->epaisseur_lame : null,
-            ug: (float) $record->ug,
+            epaisseur_lame: $record->get('epaisseur_lame')->floatval(),
+            ug: $record->get('ug')->floatval(),
         );
     }
 }

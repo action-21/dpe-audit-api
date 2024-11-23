@@ -4,164 +4,179 @@ namespace App\Domain\Ecs\Enum;
 
 use App\Domain\Common\Enum\{Energie, Enum};
 
-enum EnergieGenerateur: int implements Enum
+enum EnergieGenerateur: string implements Enum
 {
-    case ELECTRICITE = 1;
-    case GAZ_NATUREL = 2;
-    case FIOUL_DOMESTIQUE = 3;
-    case BOIS_BUCHES = 4;
-    case BOIS_GRANULES = 5;
-    case BOIS_PLAQUETTES_FORESTIERES = 6;
-    case BOIS_PLAQUETTES_INDUSTRIELLES = 7;
-    case RESEAU_CHAUFFAGE_URBAIN = 8;
-    case PROPANE = 9;
-    case BUTANE = 10;
-    case CHARBON = 11;
-    case ELECTRICITE_RENOUVELABLE = 12;
-    case GPL = 13;
-    case AUTRES_FOSSILES = 14;
+    case ELECTRICITE = 'ELECTRICITE';
+    case GAZ_NATUREL = 'GAZ_NATUREL';
+    case GPL = 'GPL';
+    case FIOUL = 'FIOUL';
+    case BOIS = 'BOIS';
+    case BOIS_BUCHE = 'BOIS_BUCHE';
+    case BOIS_PLAQUETTE = 'BOIS_PLAQUETTE';
+    case BOIS_GRANULE = 'BOIS_GRANULE';
+    case CHARBON = 'CHARBON';
+    case RESEAU_CHALEUR = 'RESEAU_CHALEUR';
 
     public static function from_enum_type_energie_id(int $id): self
     {
-        return self::from($id);
-    }
-
-    /** @return self[] */
-    public static function cases_by_type_generateur(TypeGenerateur $type_generateur): array
-    {
-        if (\in_array($type_generateur, [
-            TypeGenerateur::ACCUMULATEUR_GAZ_CLASSIQUE,
-            TypeGenerateur::ACCUMULATEUR_GAZ_CONDENSATION,
-            TypeGenerateur::CHAUDIERE_GAZ_CLASSIQUE,
-            TypeGenerateur::CHAUDIERE_GAZ_STANDARD,
-            TypeGenerateur::CHAUDIERE_GAZ_BASSE_TEMPERATURE,
-            TypeGenerateur::CHAUDIERE_GAZ_CONDENSATION,
-            TypeGenerateur::AUTRE_SYSTEME_COMBUSTION_GAZ,
-            TypeGenerateur::POMPE_CHALEUR_HYBRIDE_PARTIE_CHAUDIERE_GAZ_CONDENSATION,
-            TypeGenerateur::CHAUFFE_EAU_GAZ_PRODUCTION_INSTANTANEE,
-        ])) {
-            return [self::GAZ_NATUREL];
-        }
-        if (\in_array($type_generateur, [
-            TypeGenerateur::CHAUDIERE_BOIS_BUCHE,
-            TypeGenerateur::POMPE_CHALEUR_HYBRIDE_PARTIE_CHAUDIERE_BOIS_BUCHE,
-        ])) {
-            return [self::BOIS_BUCHES];
-        }
-        if (\in_array($type_generateur, [
-            TypeGenerateur::CHAUDIERE_BOIS_GRANULES,
-            TypeGenerateur::POMPE_CHALEUR_HYBRIDE_PARTIE_CHAUDIERE_BOIS_GRANULES,
-        ])) {
-            return [self::BOIS_GRANULES];
-        }
-        if (\in_array($type_generateur, [
-            TypeGenerateur::RESEAU_CHALEUR_NON_ISOLE,
-            TypeGenerateur::RESEAU_CHALEUR_ISOLE,
-            TypeGenerateur::RESEAU_CHALEUR_NON_REPERTORIE_OU_INCONNU,
-        ])) {
-            return [self::RESEAU_CHAUFFAGE_URBAIN];
-        }
-        if (\in_array($type_generateur, [
-            TypeGenerateur::CET_SUR_AIR_AMBIANT,
-            TypeGenerateur::CET_SUR_AIR_EXTERIEUR,
-            TypeGenerateur::CET_SUR_AIR_EXTRAIT,
-            TypeGenerateur::PAC_DOUBLE_SERVICE,
-            TypeGenerateur::AUTRE_SYSTEME_THERMODYNAMIQUE_ELECTRIQUE,
-            TypeGenerateur::BALLON_ELECTRIQUE_ACCUMULATION_HORIZONTAL,
-            TypeGenerateur::BALLON_ELECTRIQUE_ACCUMULATION_VERTICAL_AUTRES_OU_INCONNUE,
-            TypeGenerateur::BALLON_ELECTRIQUE_ACCUMULATION_VERTICAL_CATEGORIE_B_OU_2_ETOILES,
-            TypeGenerateur::BALLON_ELECTRIQUE_ACCUMULATION_VERTICAL_CATEGORIE_C_OU_3_ETOILES,
-            TypeGenerateur::CHAUFFE_EAU_ELECTRIQUE_INSTANTANE,
-            TypeGenerateur::CHAUDIERE_ELECTRIQUE,
-            TypeGenerateur::POMPE_CHALEUR_MULTI_BATIMENT,
-        ])) {
-            return [self::ELECTRICITE, self::ELECTRICITE_RENOUVELABLE];
-        }
-        if (\in_array($type_generateur, [
-            TypeGenerateur::CHAUDIERE_FIOUL_CLASSIQUE,
-            TypeGenerateur::CHAUDIERE_FIOUL_STANDARD,
-            TypeGenerateur::CHAUDIERE_FIOUL_BASSE_TEMPERATURE,
-            TypeGenerateur::CHAUDIERE_FIOUL_CONDENSATION,
-            TypeGenerateur::POMPE_CHALEUR_HYBRIDE_PARTIE_CHAUDIERE_FIOUL_CONDENSATION,
-            TypeGenerateur::CHAUDIERE_FIOUL_MULTI_BATIMENT,
-        ])) {
-            return [self::FIOUL_DOMESTIQUE, self::AUTRES_FOSSILES];
-        }
-        if (\in_array($type_generateur, [
-            TypeGenerateur::CHAUDIERE_GPL_PROPANE_BUTANE_CLASSIQUE,
-            TypeGenerateur::CHAUDIERE_GPL_PROPANE_BUTANE_STANDARD,
-            TypeGenerateur::CHAUDIERE_GPL_PROPANE_BUTANE_BASSE_TEMPERATURE,
-            TypeGenerateur::CHAUDIERE_GPL_PROPANE_BUTANE_CONDENSATION,
-            TypeGenerateur::ACCUMULATEUR_GPL_PROPANE_BUTANE_CLASSIQUE,
-            TypeGenerateur::ACCUMULATEUR_GPL_PROPANE_BUTANE_CONDENSATION,
-            TypeGenerateur::POMPE_CHALEUR_HYBRIDE_PARTIE_CHAUDIERE_GPL_PROPANE_BUTANE_CONDENSATION,
-            TypeGenerateur::CHAUFFE_EAU_GPL_PROPANE_BUTANE_PRODUCTION_INSTANTANEE,
-        ])) {
-            return [self::PROPANE, self::BUTANE, self::GPL, self::AUTRES_FOSSILES];
-        }
-        return match ($type_generateur) {
-            TypeGenerateur::AUTRE_SYSTEME_COMBUSTION_AUTRES_ENERGIES_FOSSILES => [self::AUTRES_FOSSILES],
-            TypeGenerateur::CHAUDIERE_CHARBON_MULTI_BATIMENT => [self::CHARBON],
-            TypeGenerateur::SYSTEME_COLLECTIF_DEFAUT => self::cases(),
-            TypeGenerateur::CHAUDIERE_CHARBON => [self::CHARBON, self::AUTRES_FOSSILES],
-            TypeGenerateur::AUTRE_SYSTEME_THERMODYNAMIQUE_GAZ, TypeGenerateur::CHAUDIERE_GAZ_MULTI_BATIMENT => [
-                self::GAZ_NATUREL,
-                self::PROPANE,
-                self::BUTANE,
-                self::GPL,
-            ],
-            TypeGenerateur::AUTRE_SYSTEME_COMBUSTION_BOIS, TypeGenerateur::CHAUDIERE_BOIS_MULTI_BATIMENT => [
-                self::BOIS_BUCHES,
-                self::BOIS_GRANULES,
-                self::BOIS_PLAQUETTES_FORESTIERES,
-                self::BOIS_PLAQUETTES_INDUSTRIELLES,
-            ],
-            TypeGenerateur::POÊLE_BOIS_BOUILLEUR_BUCHE, TypeGenerateur::POÊLE_BOIS_BOUILLEUR_GRANULES => [
-                self::BOIS_BUCHES,
-                self::BOIS_PLAQUETTES_FORESTIERES,
-                self::BOIS_PLAQUETTES_INDUSTRIELLES,
-            ],
-            TypeGenerateur::CHAUDIERE_BOIS_PLAQUETTE, TypeGenerateur::POMPE_CHALEUR_HYBRIDE_PARTIE_CHAUDIERE_BOIS_PLAQUETTE => [
-                self::BOIS_PLAQUETTES_FORESTIERES,
-                self::BOIS_PLAQUETTES_INDUSTRIELLES,
-            ],
-            TypeGenerateur::AUTRE_SYSTEME_COMBUSTION_AUTRES_ENERGIES_FOSSILES => [
-                self::PROPANE,
-                self::BUTANE,
-                self::CHARBON,
-                self::GPL,
-                self::AUTRES_FOSSILES,
-            ],
+        return match ($id) {
+            1 => self::ELECTRICITE,
+            2 => self::ELECTRICITE,
+            3 => self::ELECTRICITE,
+            4 => self::ELECTRICITE,
+            5 => self::ELECTRICITE,
+            6 => self::ELECTRICITE,
+            7 => self::ELECTRICITE,
+            8 => self::ELECTRICITE,
+            9 => self::ELECTRICITE,
+            10 => self::ELECTRICITE,
+            11 => self::ELECTRICITE,
+            12 => self::ELECTRICITE,
+            13 => self::BOIS_BUCHE,
+            14 => self::BOIS_BUCHE,
+            15 => self::BOIS_BUCHE,
+            16 => self::BOIS_BUCHE,
+            17 => self::BOIS_BUCHE,
+            18 => self::BOIS_BUCHE,
+            19 => self::BOIS_BUCHE,
+            20 => self::BOIS_BUCHE,
+            21 => self::BOIS_BUCHE,
+            22 => self::BOIS_PLAQUETTE,
+            23 => self::BOIS_PLAQUETTE,
+            24 => self::BOIS_PLAQUETTE,
+            25 => self::BOIS_PLAQUETTE,
+            26 => self::BOIS_PLAQUETTE,
+            27 => self::BOIS_PLAQUETTE,
+            28 => self::BOIS_PLAQUETTE,
+            29 => self::BOIS_GRANULE,
+            30 => self::BOIS_GRANULE,
+            31 => self::BOIS_GRANULE,
+            32 => self::BOIS_GRANULE,
+            33 => self::BOIS_GRANULE,
+            34 => self::BOIS_GRANULE,
+            35 => self::FIOUL,
+            36 => self::FIOUL,
+            37 => self::FIOUL,
+            38 => self::FIOUL,
+            39 => self::FIOUL,
+            40 => self::FIOUL,
+            41 => self::FIOUL,
+            42 => self::FIOUL,
+            43 => self::FIOUL,
+            44 => self::FIOUL,
+            45 => self::GAZ_NATUREL,
+            46 => self::GAZ_NATUREL,
+            47 => self::GAZ_NATUREL,
+            48 => self::GAZ_NATUREL,
+            49 => self::GAZ_NATUREL,
+            50 => self::GAZ_NATUREL,
+            51 => self::GAZ_NATUREL,
+            52 => self::GAZ_NATUREL,
+            53 => self::GAZ_NATUREL,
+            54 => self::GAZ_NATUREL,
+            55 => self::GAZ_NATUREL,
+            56 => self::GAZ_NATUREL,
+            57 => self::GAZ_NATUREL,
+            58 => self::GAZ_NATUREL,
+            59 => self::GAZ_NATUREL,
+            60 => self::GAZ_NATUREL,
+            61 => self::GAZ_NATUREL,
+            62 => self::GAZ_NATUREL,
+            63 => self::GAZ_NATUREL,
+            64 => self::GAZ_NATUREL,
+            65 => self::GAZ_NATUREL,
+            66 => self::GAZ_NATUREL,
+            67 => self::GAZ_NATUREL,
+            68 => self::ELECTRICITE,
+            69 => self::ELECTRICITE,
+            70 => self::ELECTRICITE,
+            71 => self::ELECTRICITE,
+            72 => self::RESEAU_CHALEUR,
+            73 => self::RESEAU_CHALEUR,
+            74 => self::BOIS,
+            75 => self::FIOUL,
+            76 => self::GAZ_NATUREL,
+            77 => self::ELECTRICITE,
+            84 => self::FIOUL,
+            85 => self::CHARBON,
+            86 => self::CHARBON,
+            87 => self::CHARBON,
+            88 => self::CHARBON,
+            89 => self::CHARBON,
+            90 => self::CHARBON,
+            91 => self::CHARBON,
+            92 => self::GPL,
+            93 => self::GPL,
+            94 => self::GPL,
+            95 => self::GPL,
+            96 => self::GPL,
+            97 => self::GPL,
+            98 => self::GPL,
+            99 => self::GPL,
+            100 => self::GPL,
+            101 => self::GPL,
+            102 => self::GPL,
+            103 => self::GPL,
+            104 => self::GPL,
+            105 => self::GPL,
+            106 => self::GPL,
+            107 => self::GPL,
+            108 => self::GPL,
+            109 => self::GPL,
+            110 => self::GPL,
+            111 => self::GPL,
+            112 => self::GPL,
+            113 => self::GPL,
+            114 => self::GPL,
+            115 => self::BOIS_GRANULE,
+            116 => self::BOIS_GRANULE,
+            117 => self::ELECTRICITE,
+            118 => self::ELECTRICITE,
+            119 => self::RESEAU_CHALEUR,
+            120 => self::ELECTRICITE,
+            121 => self::ELECTRICITE,
+            122 => self::ELECTRICITE,
+            123 => self::ELECTRICITE,
+            124 => self::ELECTRICITE,
+            125 => self::ELECTRICITE,
+            126 => self::ELECTRICITE,
+            127 => self::ELECTRICITE,
+            128 => self::ELECTRICITE,
+            129 => self::ELECTRICITE,
+            130 => self::ELECTRICITE,
+            131 => self::ELECTRICITE,
+            132 => self::ELECTRICITE,
+            133 => self::ELECTRICITE,
+            134 => self::CHARBON,
         };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
 
     public function lib(): string
     {
-        return $this->energie()->lib();
+        return match ($this) {
+            self::ELECTRICITE => 'Électricité',
+            self::GAZ_NATUREL => 'Gaz naturel',
+            self::GPL => 'GPL',
+            self::FIOUL => 'Fioul domestique',
+            self::BOIS => 'Bois',
+            self::BOIS_BUCHE => 'Bois - Bûches',
+            self::BOIS_PLAQUETTE => 'Bois - Plaquettes',
+            self::BOIS_GRANULE => 'Bois - Granulés',
+            self::CHARBON => 'Charbon',
+            self::RESEAU_CHALEUR => 'Réseau de chaleur',
+        };
     }
 
-    public function energie(): Energie
+    public function to(): Energie
     {
-        return Energie::from($this->value);
-    }
-
-    public function combustible(): float
-    {
-        return $this->energie()->combustible();
-    }
-
-    public function coefficient_conversion_pcs(): float
-    {
-        return $this->energie()->coefficient_conversion_pcs();
-    }
-
-    public function facteur_energie_primaire(): float
-    {
-        return $this->energie()->facteur_energie_primaire();
+        return match ($this) {
+            self::BOIS, self::BOIS_BUCHE, self::BOIS_PLAQUETTE, self::BOIS_GRANULE => Energie::BOIS,
+            default => Energie::from($this->value),
+        };
     }
 }

@@ -2,22 +2,35 @@
 
 namespace App\Database\Opendata\Lnc;
 
-use App\Database\Opendata\{XMLElement, XMLReaderIterator};
-use App\Domain\Common\Identifier\Uuid;
-use App\Domain\Lnc\Enum\TypeLnc;
-use App\Domain\Paroi\Enum\{IsolationLnc, Mitoyennete};
+use App\Database\Opendata\{XMLElement, XMLReader};
+use App\Domain\Common\Type\Id;
+use App\Domain\Lnc\Enum\{EtatIsolation, Mitoyennete, NatureMenuiserie, TypeBaie, TypeLnc, TypeVitrage};
 
-final class XMLLncReader extends XMLReaderIterator
+/**
+ * Les locaux non chauffés sont reconstruits depuis chaque paroi
+ */
+final class XMLLncReader extends XMLReader
 {
-    public function __construct(private XMLLncParoiReader $paroi_reader)
+    public function __construct(private XMLBaieReader $baie_reader) {}
+
+    public function apply(): bool
     {
+        return TypeLnc::from_type_adjacence_id($this->enum_type_adjacence_id()) !== null;
     }
 
-    // Données déduites
-
-    public function id(): \Stringable
+    public function read_baies(): XMLBaieReader
     {
-        return Uuid::create();
+        return $this->baie_reader->read($this->ets()->findMany('.//baie_ets_collection/baie_ets'));
+    }
+
+    public function ets(): XMLElement
+    {
+        return $this->xml()->findOneOrError('//ets/donnee_entree/reference/' . $this->reference_lnc());
+    }
+
+    public function id(): Id
+    {
+        return Id::create();
     }
 
     public function description(): string
@@ -25,60 +38,112 @@ final class XMLLncReader extends XMLReaderIterator
         return 'Local non chauffé non décrit';
     }
 
+    public function type_lnc(): TypeLnc
+    {
+        return TypeLnc::from_type_adjacence_id($this->enum_type_adjacence_id());
+    }
+
+    public function type_baie(): TypeBaie
+    {
+        return TypeBaie::from_tv_coef_transparence_ets_id($this->tv_coef_transparence_ets_id());
+    }
+
+    public function nature_menuiserie(): ?NatureMenuiserie
+    {
+        return NatureMenuiserie::from_tv_coef_transparence_ets_id($this->tv_coef_transparence_ets_id());
+    }
+
+    public function type_vitrage(): ?TypeVitrage
+    {
+        return TypeVitrage::from_tv_coef_transparence_ets_id($this->tv_coef_transparence_ets_id());
+    }
+
+    public function presence_rupteur_pont_thermique(): ?bool
+    {
+        return match ($this->tv_coef_transparence_ets_id()) {
+            12, 13, 14, 15, 16 => true,
+            17, 18, 19, 20, 21 => false,
+            default => null,
+        };
+    }
+
+    public function isolation_paroi_aue(): EtatIsolation
+    {
+        return match ($this->enum_cfg_isolation_lnc_id()) {
+            2, 4 => EtatIsolation::NON_ISOLE,
+            3, 5 => EtatIsolation::ISOLE,
+        };
+    }
+
+    public function isolation_paroi_aiu(): EtatIsolation
+    {
+        return match ($this->enum_cfg_isolation_lnc_id()) {
+            2, 3 => EtatIsolation::NON_ISOLE,
+            4, 5 => EtatIsolation::ISOLE,
+        };
+    }
+
+    public function reference_lnc(): string
+    {
+        return $this->xml()->findOneOrError('.//reference_lnc')->strval();
+    }
+
     public function enum_type_adjacence_id(): int
     {
-        return (int) $this->get()->findOneOrError('.//enum_type_adjacence_id')->getValue();
+        return $this->xml()->findOneOrError('.//enum_type_adjacence_id')->intval();
     }
 
     public function enum_cfg_isolation_lnc_id(): int
     {
-        return (int) $this->get()->findOneOrError('.//enum_cfg_isolation_lnc_id')->getValue();
+        return $this->xml()->findOneOrError('.//enum_cfg_isolation_lnc_id')->intval();
     }
 
-    public function enum_isolation_lnc(): IsolationLnc
+    public function tv_coef_transparence_ets_id(): int
     {
-        return IsolationLnc::from($this->enum_cfg_isolation_lnc_id());
-    }
-
-    public function enum_mitoyennete(): Mitoyennete
-    {
-        return Mitoyennete::from_type_adjacence_id($this->enum_type_adjacence_id());
-    }
-
-    public function type_lnc(): TypeLnc
-    {
-        if (null === $type_lnc = TypeLnc::try_from_type_adjacence_id($this->enum_type_adjacence_id())) {
-            throw new \Exception("Type de local non chauffé introuvable pour le type d'adjacence {$this->enum_type_adjacence_id()}");
-        }
-        return $type_lnc;
+        return $this->ets()->findOneOrError('.//tv_coef_transparence_ets_id')->intval();
     }
 
     public function surface_aue(): float
     {
-        return (float) $this->get()->findOneOrError('.//surface_aue')->getValue();
+        return $this->xml()->findOneOrError('.//surface_aue')->floatval();
     }
 
-    public function paroi_reader(): XMLLncParoiReader
+    /**
+     * TODO: Vérifier la surface unitaire des portes / baies
+     */
+    public function surface_paroi(): float
     {
-        return $this->paroi_reader->read($this);
+        return $this->xml()->findOneOfOrError([
+            './/surface_paroi_opaque',
+            './/surface_totale_baie',
+            './/surface_porte',
+        ])->floatval();
     }
 
-    public static function apply(XMLElement $xml): bool
+    public function surface_paroi_totale(): float
     {
-        $enum_type_adjacence_id = (int) $xml->findOneOrError('.//enum_type_adjacence_id')->getValue();
-        return Mitoyennete::from_type_adjacence_id($enum_type_adjacence_id) === Mitoyennete::LOCAL_NON_CHAUFFE;
+        if ($value = $this->xml()->findOne('.//surface_paroi_opaque')?->floatval()) {
+            $reference = $this->xml()->findOneOrError('.//reference')->strval();
+
+            foreach ($this->xml()->baie_collection() as $item) {
+                if ($item->findOne('.//reference_paroi')?->strval() === $reference)
+                    $value += $item->findOneOrError('.//surface_totale_baie')->floatval();
+            }
+            foreach ($this->xml()->audit()->porte_collection() as $item) {
+                if ($item->findOne('.//reference_paroi')?->strval() === $reference)
+                    $value += $item->findOneOrError('.//surface_porte')->floatval();
+            }
+            return $value;
+        }
+        return $this->xml()->findOneOfOrError([
+            './/surface_paroi_opaque',
+            './/surface_totale_baie',
+            './/surface_porte',
+        ])->floatval();
     }
 
-    public function read(XMLElement $xml): self
+    public function surface_aiu(): float
     {
-        $xml = $xml->findOneOfOrError(['/audit/logement_collection//logement[.//enum_scenario_id="0"]', '/dpe/logement']);
-        $this->array = \array_filter($xml->findManyOf([
-            './/mur_collection/mur',
-            './/plancher_bas_collection/plancher_bas',
-            './/plancher_haut_collection/plancher_haut',
-            './/baie_vitree_collection/baie_vitree',
-            './/porte_collection/porte',
-        ]), fn (XMLElement $item): bool => self::apply($item));
-        return $this;
+        return $this->xml()->findOneOrError('.//surface_aiu')->floatval();
     }
 }

@@ -4,28 +4,35 @@ namespace App\Domain\Baie\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum Mitoyennete: int implements Enum
+enum Mitoyennete: string implements Enum
 {
-    case EXTERIEUR = 1;
-    case LOCAL_NON_CHAUFFE = 6;
-    case LOCAL_TERTIAIRE_DANS_IMMEUBLE = 7;
-    case BATIMENT_OU_LOCAL_HORS_HABITATION = 8;
-    case LOCAL_NON_DEPERDITIF = 9;
-    case LOCAL_NON_CHAUFFE_NON_ACCESSIBLE = 10;
+    case EXTERIEUR = 'EXTERIEUR';
+    case ENTERRE = 'PAROI_ENTERREE';
+    case VIDE_SANITAIRE = 'VIDE_SANITAIRE';
+    case TERRE_PLEIN = 'TERRE_PLEIN';
+    case SOUS_SOL_NON_CHAUFFE = 'SOUS_SOL_NON_CHAUFFE';
+    case LOCAL_NON_CHAUFFE = 'LOCAL_NON_CHAUFFE';
+    case LOCAL_NON_RESIDENTIEL = 'LOCAL_NON_RESIDENTIEL';
+    case LOCAL_RESIDENTIEL = 'LOCAL_RESIDENTIEL';
+    case LOCAL_NON_ACCESSIBLE = 'LOCAL_NON_ACCESSIBLE';
 
     public static function from_type_adjacence_id(int $id): self
     {
         return match ($id) {
             1 => self::EXTERIEUR,
-            4 => self::BATIMENT_OU_LOCAL_HORS_HABITATION,
-            7 => self::LOCAL_NON_CHAUFFE_NON_ACCESSIBLE,
+            2 => self::ENTERRE,
+            3 => self::VIDE_SANITAIRE,
+            4 => self::LOCAL_NON_RESIDENTIEL,
+            5 => self::TERRE_PLEIN,
+            6 => self::SOUS_SOL_NON_CHAUFFE,
+            7 => self::LOCAL_NON_ACCESSIBLE,
             8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21 => self::LOCAL_NON_CHAUFFE,
-            20 => self::LOCAL_TERTIAIRE_DANS_IMMEUBLE,
-            22 => self::LOCAL_NON_DEPERDITIF,
+            20 => self::LOCAL_NON_RESIDENTIEL,
+            22 => self::LOCAL_RESIDENTIEL,
         };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -34,10 +41,19 @@ enum Mitoyennete: int implements Enum
     {
         return match ($this) {
             self::EXTERIEUR => 'Extérieur',
-            self::BATIMENT_OU_LOCAL_HORS_HABITATION => 'Bâtiment ou local à usage autre que d\'habitation',
+            self::ENTERRE => 'Paroi enterrée',
+            self::VIDE_SANITAIRE => 'Vide sanitaire',
+            self::TERRE_PLEIN => 'Terre-plein',
+            self::SOUS_SOL_NON_CHAUFFE => 'Sous-sol non chauffé',
             self::LOCAL_NON_CHAUFFE => 'Local non chauffé',
-            self::LOCAL_TERTIAIRE_DANS_IMMEUBLE => 'Local tertiaire à l\'intérieur de l\'immeuble en contact avec l\'appartement',
-            self::LOCAL_NON_DEPERDITIF => 'Local non déperditif (local à usage d\'habitation chauffé)',
+            self::LOCAL_NON_RESIDENTIEL => 'Bâtiment ou local à usage autre que d\'habitation',
+            self::LOCAL_NON_ACCESSIBLE => 'Local non accessible',
+            self::LOCAL_RESIDENTIEL => 'Local à usage d\'habitation chauffé',
         };
+    }
+
+    public function local_non_chauffe(): bool
+    {
+        return $this === self::LOCAL_NON_CHAUFFE;
     }
 }

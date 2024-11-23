@@ -3,48 +3,70 @@
 namespace App\Domain\Simulation;
 
 use App\Domain\Audit\Audit;
-use App\Domain\Baie\BaieCollection;
-use App\Domain\Batiment\Batiment;
-use App\Domain\Chauffage\InstallationChauffageCollection;
-use App\Domain\Climatisation\InstallationClimatisationCollection;
-use App\Domain\Ecs\InstallationEcsCollection;
+use App\Domain\Chauffage\Chauffage;
+use App\Domain\Common\Enum\ZoneClimatique;
+use App\Domain\Eclairage\Eclairage;
+use App\Domain\Ecs\Ecs;
 use App\Domain\Enveloppe\Enveloppe;
-use App\Domain\Lnc\LncCollection;
-use App\Domain\Logement\LogementCollection;
-use App\Domain\MasqueLointain\MasqueLointainCollection;
-use App\Domain\MasqueProche\MasqueProcheCollection;
-use App\Domain\Mur\MurCollection;
-use App\Domain\PlancherBas\PlancherBasCollection;
-use App\Domain\PlancherHaut\PlancherHautCollection;
-use App\Domain\PlancherIntermediaire\PlancherIntermediaireCollection;
-use App\Domain\PontThermique\PontThermiqueCollection;
-use App\Domain\Porte\PorteCollection;
-use App\Domain\Refend\RefendCollection;
-use App\Domain\Ventilation\InstallationVentilationCollection;
+use App\Domain\Production\Production;
+use App\Domain\Refroidissement\Refroidissement;
+use App\Domain\Simulation\Service\MoteurPerformance;
+use App\Domain\Simulation\ValueObject\{Bilan, PerformanceCollection};
+use App\Domain\Ventilation\Ventilation;
+use App\Domain\Visite\Visite;
 
 final class Simulation
 {
+    private ?PerformanceCollection $performances = null;
+    private ?Bilan $bilan = null;
+
     public function __construct(
-        public readonly Audit $audit,
-        public readonly Batiment $batiment,
-        public readonly Enveloppe $enveloppe,
-        public readonly LogementCollection $logement_collection,
-        public readonly LncCollection $local_non_chauffe_collection,
-        public readonly MasqueProcheCollection $masque_proche_collection,
-        public readonly MasqueLointainCollection $masque_lointain_collection,
-        public readonly BaieCollection $baie_collection,
-        public readonly MurCollection $mur_collection,
-        public readonly PlancherBasCollection $plancher_bas_collection,
-        public readonly PlancherHautCollection $plancher_haut_collection,
-        public readonly PlancherIntermediaireCollection $plancher_intermediaire_collection,
-        public readonly PontThermiqueCollection $pont_thermique_collection,
-        public readonly PorteCollection $porte_collection,
-        public readonly RefendCollection $refend_collection,
-        public readonly InstallationChauffageCollection $chauffage_collection,
-        public readonly InstallationEcsCollection $ecs_collection,
-        public readonly InstallationClimatisationCollection $climatisation_collection,
-        public readonly InstallationVentilationCollection $ventilation_collection,
-    ) {
+        private Audit $audit,
+        private Enveloppe $enveloppe,
+        private Chauffage $chauffage,
+        private Ecs $ecs,
+        private Refroidissement $refroidissement,
+        private Ventilation $ventilation,
+        private Production $production,
+        private Visite $visite,
+        private Eclairage $eclairage
+    ) {}
+
+    public function reinitialise(): self
+    {
+        $this->audit->reinitialise();
+        $this->enveloppe->reinitialise();
+        $this->chauffage->reinitialise();
+        $this->ecs->reinitialise();
+        $this->refroidissement->reinitialise();
+        $this->ventilation->reinitialise();
+        $this->production->reinitialise();
+        $this->eclairage->reinitialise();
+        $this->visite->reinitialise();
+
+        $this->performances = null;
+        return $this;
+    }
+
+    public function controle(): self
+    {
+        $this->audit->controle();
+        $this->enveloppe->controle();
+        $this->chauffage->controle();
+        $this->ecs->controle();
+        $this->refroidissement->controle();
+        $this->ventilation->controle();
+        $this->production->controle();
+        $this->eclairage->controle();
+        $this->visite->controle();
+        return $this;
+    }
+
+    public function calcule_performance(MoteurPerformance $moteur): self
+    {
+        $this->performances = $moteur->calcule_performance($this);
+        $this->bilan = $moteur->calcule_bilan($this);
+        return $this;
     }
 
     public function audit(): Audit
@@ -52,93 +74,95 @@ final class Simulation
         return $this->audit;
     }
 
-    public function batiment(): Batiment
-    {
-        return $this->batiment;
-    }
-
     public function enveloppe(): Enveloppe
     {
         return $this->enveloppe;
     }
 
-    public function logement_collection(): LogementCollection
+    public function chauffage(): Chauffage
     {
-        return $this->logement_collection;
+        return $this->chauffage;
     }
 
-    public function local_non_chauffe_collection(): LncCollection
+    public function ecs(): Ecs
     {
-        return $this->local_non_chauffe_collection;
+        return $this->ecs;
     }
 
-    public function masque_proche_collection(): MasqueProcheCollection
+    public function ventilation(): Ventilation
     {
-        return $this->masque_proche_collection;
+        return $this->ventilation;
     }
 
-    public function masque_lointain_collection(): MasqueLointainCollection
+    public function refroidissement(): Refroidissement
     {
-        return $this->masque_lointain_collection;
+        return $this->refroidissement;
     }
 
-    public function baie_collection(): BaieCollection
+    public function production(): Production
     {
-        return $this->baie_collection;
+        return $this->production;
     }
 
-    public function mur_collection(): MurCollection
+    public function visite(): Visite
     {
-        return $this->mur_collection;
+        return $this->visite;
     }
 
-    public function plancher_bas_collection(): PlancherBasCollection
+    public function eclairage(): Eclairage
     {
-        return $this->plancher_bas_collection;
+        return $this->eclairage;
     }
 
-    public function plancher_haut_collection(): PlancherHautCollection
+    public function performances(): ?PerformanceCollection
     {
-        return $this->plancher_haut_collection;
+        return $this->performances;
     }
 
-    public function plancher_intermediaire_collection(): PlancherIntermediaireCollection
+    public function bilan(): ?Bilan
     {
-        return $this->plancher_intermediaire_collection;
+        return $this->bilan;
     }
 
-    public function pont_thermique_collection(): PontThermiqueCollection
+    // * helpers
+
+    public function zone_climatique(): ZoneClimatique
     {
-        return $this->pont_thermique_collection;
+        return $this->audit->adresse()->zone_climatique;
     }
 
-    public function porte_collection(): PorteCollection
+    public function effet_joule(): float
     {
-        return $this->porte_collection;
+        return $this->chauffage->effet_joule();
     }
 
-    public function refend_collection(): RefendCollection
+    public function annee_construction_batiment(): int
     {
-        return $this->refend_collection;
+        return $this->audit->batiment()->annee_construction;
     }
 
-    public function chauffage_collection(): InstallationChauffageCollection
+    public function nombre_logements(): int
     {
-        return $this->chauffage_collection;
+        return $this->audit->batiment()->logements;
     }
 
-    public function ecs_collection(): InstallationEcsCollection
+    public function surface_habitable_reference(): float
     {
-        return $this->ecs_collection;
+        return $this->audit->logement()?->surface_habitable ?? $this->audit->batiment()->surface_habitable;
     }
 
-    public function climatisation_collection(): InstallationClimatisationCollection
+    public function hauteur_sous_plafond_reference(): float
     {
-        return $this->climatisation_collection;
+        return $this->audit->logement()?->hauteur_sous_plafond ?? $this->audit->batiment()->hauteur_sous_plafond;
     }
 
-    public function ventilation_collection(): InstallationVentilationCollection
+    public function surface_habitable_moyenne(): float
     {
-        return $this->ventilation_collection;
+        return $this->audit->batiment()->surface_habitable / $this->audit->batiment()->logements;
+    }
+
+    public function ratio_proratisation(): float
+    {
+        return $this->surface_habitable_reference() / $this->audit->batiment()->surface_habitable;
     }
 }

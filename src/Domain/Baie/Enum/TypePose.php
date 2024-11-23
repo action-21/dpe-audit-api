@@ -4,25 +4,22 @@ namespace App\Domain\Baie\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-/**
- * Type de pose d'une baie
- */
-enum TypePose: int implements Enum
+enum TypePose: string implements Enum
 {
-    case NU_EXTERIEUR = 1;
-    case NU_INTERIEUR = 2;
-    case TUNNEL = 3;
+    case NU_EXTERIEUR = 'NU_EXTERIEUR';
+    case NU_INTERIEUR = 'NU_INTERIEUR';
+    case TUNNEL = 'TUNNEL';
 
-    /** @return array<self> */
-    public static function cases_by_type_baie(TypeBaie $type_baie): array
+    public static function from_enum_type_pose_id(int $id): self
     {
-        return match ($type_baie) {
-            TypeBaie::BRIQUE_VERRE_PLEINE, TypeBaie::BRIQUE_VERRE_CREUSE => [],
-            default => self::cases(),
+        return match ($id) {
+            1 => self::NU_EXTERIEUR,
+            2 => self::NU_INTERIEUR,
+            3 => self::TUNNEL,
         };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -30,7 +27,7 @@ enum TypePose: int implements Enum
     public function lib(): string
     {
         return match ($this) {
-            self::NU_EXTERIEUR => 'Nu Extérieur',
+            self::NU_EXTERIEUR => 'Nu extérieur',
             self::NU_INTERIEUR => 'Nu intérieur',
             self::TUNNEL => 'Tunnel',
         };

@@ -3,7 +3,7 @@
 namespace App\Database\Local\Lnc;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Lnc\Table\{B, BRepository};
+use App\Domain\Lnc\Data\{B, BRepository};
 
 final class XMLBRepository implements BRepository
 {
@@ -11,27 +11,22 @@ final class XMLBRepository implements BRepository
 
     public static function table(): string
     {
-        return 'lnc.b.xml';
+        return 'lnc.b';
     }
 
-    public function find(int $id): ?B
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(float $uvue, ?bool $isolation_aiu, ?bool $isolation_aue, ?float $surface_aiu, ?float $surface_aue): ?B
+    public function find_by(float $uvue, float $aiu, float $aue, bool $isolation_aiu, bool $isolation_aue): ?B
     {
         $record = $this->createQuery()
-            ->and(\sprintf('uvue = "%s"', $uvue))
-            ->and(\sprintf('isolation_aiu = "" or isolation_aiu = "%s"', null === $isolation_aiu ? '' : (int) $isolation_aiu))
-            ->and(\sprintf('isolation_aue = "" or isolation_aue = "%s"', null === $isolation_aue ? '' : (int) $isolation_aue))
-            ->andCompareTo('aiu_aue', $surface_aue && $surface_aiu ? $surface_aiu / $surface_aue : null)
+            ->and('uvue', $uvue)
+            ->and('isolation_aiu', $isolation_aiu)
+            ->and('isolation_aue', $isolation_aue)
+            ->andCompareTo('aiu_aue', $aue && $aiu ? $aiu / $aue : 0)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
     public function to(XMLTableElement $record): B
     {
-        return new B(id: $record->id(), b: (float) $record->b);
+        return new B(b: (float) $record->b);
     }
 }

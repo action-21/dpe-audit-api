@@ -1,6 +1,15 @@
 {
+    "doctrine/annotations": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.10",
+            "ref": "64d8583af5ea57b7afa4aba4b159907f3a148b05"
+        }
+    },
     "phpunit/phpunit": {
-        "version": "10.5",
+        "version": "11.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -14,7 +23,7 @@
         ]
     },
     "symfony/console": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -26,7 +35,7 @@
         ]
     },
     "symfony/debug-bundle": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -50,7 +59,7 @@
         ]
     },
     "symfony/framework-bundle": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -69,7 +78,7 @@
         ]
     },
     "symfony/maker-bundle": {
-        "version": "1.58",
+        "version": "1.61",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -78,7 +87,7 @@
         }
     },
     "symfony/phpunit-bridge": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -93,7 +102,7 @@
         ]
     },
     "symfony/routing": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -106,7 +115,7 @@
         ]
     },
     "symfony/twig-bundle": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -119,7 +128,7 @@
         ]
     },
     "symfony/uid": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -128,7 +137,7 @@
         }
     },
     "symfony/validator": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -140,7 +149,7 @@
         ]
     },
     "symfony/web-profiler-bundle": {
-        "version": "7.0",
+        "version": "7.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",

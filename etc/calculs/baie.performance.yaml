@@ -1,0 +1,6 @@
+tests:
+  b:
+    - test: Un test unitaire de la fonction b
+      resultat: 0
+      mitoyennete: LOCAL_CHAUFFE
+      b_lnc: null

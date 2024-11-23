@@ -2,9 +2,9 @@
 
 namespace App\Database\Local\Ecs;
 
+use App\Domain\Ecs\Data\{Rg, RgRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Ecs\Enum\TypeGenerateur;
-use App\Domain\Ecs\Table\{Rg, RgRepository};
+use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur};
 
 final class XMLRgRepository implements RgRepository
 {
@@ -12,27 +12,20 @@ final class XMLRgRepository implements RgRepository
 
     public static function table(): string
     {
-        return 'ecs.generateur.rg.xml';
+        return 'ecs.rg';
     }
 
-    public function find(int $id): ?Rg
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(TypeGenerateur $type_generateur): ?Rg
+    public function find_by(CategorieGenerateur $categorie_generateur, EnergieGenerateur $energie_generateur): ?Rg
     {
         $record = $this->createQuery()
-            ->and(\sprintf('type_generateur_id = "%s"', $type_generateur->id()))
+            ->and('categorie_generateur', $categorie_generateur->id())
+            ->and('energie_generateur', $energie_generateur->id())
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
     protected function to(XMLTableElement $record): Rg
     {
-        return new Rg(
-            id: $record->id(),
-            rg: (float) $record->rg,
-        );
+        return new Rg(rg: (float) $record->rg,);
     }
 }

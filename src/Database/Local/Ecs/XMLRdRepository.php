@@ -2,9 +2,9 @@
 
 namespace App\Database\Local\Ecs;
 
+use App\Domain\Ecs\Data\{Rd, RdRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Ecs\Enum\{BouclageReseau, TypeInstallation};
-use App\Domain\Ecs\Table\{Rd, RdRepository};
+use App\Domain\Ecs\Enum\BouclageReseau;
 
 final class XMLRdRepository implements RdRepository
 {
@@ -12,34 +12,26 @@ final class XMLRdRepository implements RdRepository
 
     public static function table(): string
     {
-        return 'ecs.generateur.rd.xml';
-    }
-
-    public function find(int $id): ?Rd
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
+        return 'ecs.rd';
     }
 
     public function find_by(
-        TypeInstallation $type_installation,
+        bool $reseau_collectif,
         ?BouclageReseau $bouclage_reseau,
         ?bool $alimentation_contigue,
-        ?bool $position_volume_habitable
+        ?bool $production_volume_habitable,
     ): ?Rd {
         $record = $this->createQuery()
-            ->and(\sprintf('type_installation_id = "%s"', $type_installation->id()))
-            ->and(\sprintf('bouclage_reseau_id = "%s" or bouclage_reseau_id = ""', $bouclage_reseau?->id()))
-            ->and(\sprintf('alimentation_contigue = "%s" or alimentation_contigue = ""', null !== $alimentation_contigue ? (int) $alimentation_contigue : null))
-            ->and(\sprintf('position_volume_habitable = "%s" or position_volume_habitable = ""', null !== $position_volume_habitable ? (int) $position_volume_habitable : null))
+            ->and('reseau_collectif', $reseau_collectif)
+            ->and('bouclage_reseau', $bouclage_reseau?->value, true)
+            ->and('alimentation_contigue', $alimentation_contigue, true)
+            ->and('production_volume_habitable', $production_volume_habitable, true)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
     protected function to(XMLTableElement $record): Rd
     {
-        return new Rd(
-            id: $record->id(),
-            rd: (float) $record->rd,
-        );
+        return new Rd(rd: (float) $record->rd,);
     }
 }

@@ -2,40 +2,64 @@
 
 namespace App\Domain\Audit;
 
-use App\Domain\Audit\Enum\{MethodeCalcul, PerimetreApplication};
-use App\Domain\Audit\ValueObject\Auditeur;
-use App\Domain\Batiment\Batiment;
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Audit\Enum\TypeBatiment;
+use App\Domain\Audit\Service\{MoteurDimensionnement, MoteurScenarioConventionnel};
+use App\Domain\Audit\ValueObject\{Adresse, Batiment, Logement, Occupation, Situation};
+use App\Domain\Common\Enum\ZoneClimatique;
+use App\Domain\Common\Type\Id;
+use App\Domain\Simulation\Simulation;
 
 final class Audit
 {
+    private ?float $ratio_virtualisation = null;
+    private ?Occupation $occupation = null;
+    private ?Situation $situation = null;
+
     public function __construct(
         private readonly Id $id,
         private readonly \DateTimeImmutable $date_creation,
-        private readonly MethodeCalcul $methode_calcul,
-        private readonly PerimetreApplication $perimetre_application,
-        private Auditeur $auditeur,
-        private ?Batiment $batiment = null,
-    ) {
-    }
+        private Adresse $adresse,
+        private Batiment $batiment,
+        private ?Logement $logement,
+    ) {}
 
-    public static function create(
-        MethodeCalcul $methode_calcul,
-        PerimetreApplication $perimetre_application,
-        Auditeur $auditeur,
-    ): self {
-        return new self(
-            id: Id::create(),
-            date_creation: new \DateTimeImmutable(),
-            methode_calcul: $methode_calcul,
-            perimetre_application: $perimetre_application,
-            auditeur: $auditeur,
-        );
-    }
-
-    public function update(Auditeur $auditeur): self
+    public function update(Adresse $adresse, Batiment $batiment, ?Logement $logement): self
     {
-        $this->auditeur = $auditeur;
+        $this->adresse = $adresse;
+        $this->batiment = $batiment;
+        $this->logement = $logement;
+        $this->controle();
+        $this->reinitialise();
+        return $this;
+    }
+
+    public function controle(): void
+    {
+        $this->batiment->controle();
+    }
+
+    public function reinitialise(): void
+    {
+        $this->ratio_virtualisation = null;
+        $this->occupation = null;
+        $this->situation = null;
+    }
+
+    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
+    {
+        $this->ratio_virtualisation = $moteur->calcule_dimensionnement($this);
+        return $this;
+    }
+
+    public function calcule_occupation(MoteurScenarioConventionnel $moteur): self
+    {
+        $this->occupation = $moteur->calcule_occupation($this);
+        return $this;
+    }
+
+    public function calcule_situation(MoteurScenarioConventionnel $moteur, Simulation $simulation): self
+    {
+        $this->situation = $moteur->calcule_situation($this, $simulation);
         return $this;
     }
 
@@ -49,29 +73,80 @@ final class Audit
         return $this->date_creation;
     }
 
-    public function methode_calcul(): MethodeCalcul
+    public function adresse(): Adresse
     {
-        return $this->methode_calcul;
+        return $this->adresse;
     }
 
-    public function perimetre_application(): PerimetreApplication
-    {
-        return $this->perimetre_application;
-    }
-
-    public function auditeur(): Auditeur
-    {
-        return $this->auditeur;
-    }
-
-    public function batiment(): ?Batiment
+    public function batiment(): Batiment
     {
         return $this->batiment;
     }
 
-    public function set_batiment(Batiment $entity): self
+    public function logement(): ?Logement
     {
-        $this->batiment = $entity;
-        return $this;
+        return $this->logement;
+    }
+
+    public function occupation(): ?Occupation
+    {
+        return $this->occupation;
+    }
+
+    public function situation(): ?Situation
+    {
+        return $this->situation;
+    }
+
+    public function ratio_virtualisation(): ?float
+    {
+        return $this->ratio_virtualisation;
+    }
+
+    public function ratio_proratisation(): ?float
+    {
+        return $this->ratio_virtualisation;
+    }
+
+    // * helpers
+
+    public function zone_climatique(): ZoneClimatique
+    {
+        return $this->adresse->zone_climatique;
+    }
+
+    public function type_batiment(): TypeBatiment
+    {
+        return $this->batiment->type;
+    }
+
+    public function altitude(): int
+    {
+        return $this->batiment->altitude;
+    }
+
+    public function nombre_logements(): int
+    {
+        return $this->batiment->logements;
+    }
+
+    public function annee_construction_batiment(): int
+    {
+        return $this->batiment->annee_construction;
+    }
+
+    public function surface_habitable_reference(): float
+    {
+        return $this->logement?->surface_habitable ?? $this->batiment->surface_habitable;
+    }
+
+    public function hauteur_sous_plafond_reference(): float
+    {
+        return $this->logement?->hauteur_sous_plafond ?? $this->batiment->hauteur_sous_plafond;
+    }
+
+    public function surface_habitable_moyenne(): float
+    {
+        return $this->batiment->surface_habitable / $this->batiment->logements;
     }
 }

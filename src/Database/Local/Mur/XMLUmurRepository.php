@@ -3,8 +3,8 @@
 namespace App\Database\Local\Mur;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Batiment\Enum\ZoneClimatique;
-use App\Domain\Mur\Table\{Umur, UmurRepository};
+use App\Domain\Common\Enum\ZoneClimatique;
+use App\Domain\Mur\Data\{Umur, UmurRepository};
 
 final class XMLUmurRepository implements UmurRepository
 {
@@ -12,19 +12,14 @@ final class XMLUmurRepository implements UmurRepository
 
     public static function table(): string
     {
-        return 'mur.umur.xml';
-    }
-
-    public function find(int $id): ?Umur
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
+        return 'mur.umur';
     }
 
     public function find_by(ZoneClimatique $zone_climatique, int $annee_construction_isolation, bool $effet_joule): ?Umur
     {
         $record = $this->createQuery()
-            ->and(\sprintf('zone_climatique = "%s"', $zone_climatique->code()))
-            ->and(\sprintf('effet_joule = "%s"', (int) $effet_joule))
+            ->and('zone_climatique', $zone_climatique->code())
+            ->and('effet_joule', $effet_joule)
             ->andCompareTo('annee_construction_isolation', $annee_construction_isolation)
             ->getOne();
         return $record ? $this->to($record) : null;
@@ -32,9 +27,6 @@ final class XMLUmurRepository implements UmurRepository
 
     protected function to(XMLTableElement $record): Umur
     {
-        return new Umur(
-            id: $record->id(),
-            umur: (float) $record->umur,
-        );
+        return new Umur(u: $record->get('umur')->floatval());
     }
 }

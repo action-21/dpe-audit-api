@@ -1,12 +1,5 @@
 {
-    "name": "renolab/audit",
-    "type": "library",
-    "description": "Service PHP de recherche et d'interprétation des Diagnostic de Performance Energétique (DPE)",
-    "keywords": [
-        "dpe",
-        "audit",
-        "3CL"
-    ],
+    "type": "reno-audit-api",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "license": "MIT",
@@ -16,6 +9,27 @@
             "email": "adrienrosi@gmail.com"
         }
     ],
+    "require": {
+        "php": ">=8.2",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "doctrine/annotations": "*",
+        "psr/http-client": "^1.0",
+        "psr/http-message": "^2.0",
+        "symfony/cache": "7.1.*",
+        "symfony/console": "7.1.*",
+        "symfony/dotenv": "7.1.*",
+        "symfony/expression-language": "7.1.*",
+        "symfony/flex": "^2",
+        "symfony/framework-bundle": "7.1.*",
+        "symfony/http-client": "7.1.*",
+        "symfony/options-resolver": "7.1.*",
+        "symfony/runtime": "7.1.*",
+        "symfony/serializer": "7.1.*",
+        "symfony/uid": "7.1.*",
+        "symfony/validator": "7.1.*",
+        "symfony/yaml": "7.1.*"
+    },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
@@ -62,35 +76,17 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.0.*"
+            "require": "7.1.*"
         }
     },
-    "require": {
-        "php": ">=8.2",
-        "ext-ctype": "*",
-        "ext-iconv": "*",
-        "psr/http-client": "^1.0",
-        "psr/http-message": "^2.0",
-        "symfony/cache": "7.0.*",
-        "symfony/console": "7.0.*",
-        "symfony/dotenv": "7.0.*",
-        "symfony/expression-language": "7.0.*",
-        "symfony/flex": "^2",
-        "symfony/framework-bundle": "7.0.*",
-        "symfony/http-client": "7.0.*",
-        "symfony/runtime": "7.0.*",
-        "symfony/uid": "7.0.*",
-        "symfony/validator": "7.0.*",
-        "symfony/yaml": "7.0.*"
-    },
     "require-dev": {
-        "phpunit/phpunit": "^10.0",
-        "symfony/browser-kit": "7.0.*",
-        "symfony/css-selector": "7.0.*",
-        "symfony/debug-bundle": "7.0.*",
-        "symfony/maker-bundle": "^1.58",
-        "symfony/phpunit-bridge": "^7.0",
-        "symfony/stopwatch": "7.0.*",
-        "symfony/web-profiler-bundle": "7.0.*"
+        "phpunit/phpunit": "^11.4",
+        "symfony/browser-kit": "7.1.*",
+        "symfony/css-selector": "7.1.*",
+        "symfony/debug-bundle": "7.1.*",
+        "symfony/maker-bundle": "^1.61",
+        "symfony/phpunit-bridge": "^7.1",
+        "symfony/stopwatch": "7.1.*",
+        "symfony/web-profiler-bundle": "7.1.*"
     }
 }

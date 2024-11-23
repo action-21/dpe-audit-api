@@ -2,10 +2,10 @@
 
 namespace App\Database\Local\Ecs;
 
+use App\Domain\Ecs\Data\{Cop, CopRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Batiment\Enum\ZoneClimatique;
-use App\Domain\Ecs\Enum\TypeInstallation;
-use App\Domain\Ecs\Table\{Cop, CopRepository};
+use App\Domain\Common\Enum\ZoneClimatique;
+use App\Domain\Ecs\Enum\{TypeGenerateur};
 
 final class XMLCopRepository implements CopRepository
 {
@@ -13,19 +13,17 @@ final class XMLCopRepository implements CopRepository
 
     public static function table(): string
     {
-        return 'ecs.generateur.cop.xml';
+        return 'ecs.cop';
     }
 
-    public function find(int $id): ?Cop
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(ZoneClimatique $zone_climatique, TypeInstallation $type_installation, int $annee_installation): ?Cop
-    {
+    public function find_by(
+        ZoneClimatique $zone_climatique,
+        TypeGenerateur $type_generateur,
+        int $annee_installation,
+    ): ?Cop {
         $record = $this->createQuery()
-            ->and(\sprintf('zone_climatique_id = "%s"', $zone_climatique->id()))
-            ->and(\sprintf('type_installation_id = "%s"', $type_installation->id()))
+            ->and('zone_climatique', $zone_climatique->code())
+            ->and('type_generateur', $type_generateur->id())
             ->andCompareTo('annee_installation', $annee_installation)
             ->getOne();
         return $record ? $this->to($record) : null;
@@ -33,9 +31,6 @@ final class XMLCopRepository implements CopRepository
 
     protected function to(XMLTableElement $record): Cop
     {
-        return new Cop(
-            id: $record->id(),
-            cop: (float) $record->cop,
-        );
+        return new Cop(cop: (float) $record->cop,);
     }
 }

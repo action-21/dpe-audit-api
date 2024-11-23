@@ -2,11 +2,9 @@
 
 namespace App\Domain\Audit;
 
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\Type\Id;
 
 interface AuditRepository
 {
-    public function find(Id $id, bool $eager = false): ?Audit;
-    public function save(Audit $audit): void;
-    public function remove(Audit $audit): void;
+    public function find(Id $id): ?Audit;
 }

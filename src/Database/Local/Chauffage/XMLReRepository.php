@@ -3,8 +3,8 @@
 namespace App\Database\Local\Chauffage;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Chauffage\Enum\{TypeEmission, TypeGenerateur};
-use App\Domain\Chauffage\Table\{Re, ReRepository};
+use App\Domain\Chauffage\Data\{Re, ReRepository};
+use App\Domain\Chauffage\Enum\{LabelGenerateur, TypeEmission, TypeGenerateur};
 
 final class XMLReRepository implements ReRepository
 {
@@ -12,28 +12,24 @@ final class XMLReRepository implements ReRepository
 
     public static function table(): string
     {
-        return 'chauffage.emission.re.xml';
+        return 'chauffage.re';
     }
 
-    public function find(int $id): ?Re
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(TypeEmission $type_emission, TypeGenerateur $type_generateur): ?Re
-    {
+    public function find_by(
+        TypeEmission $type_emission,
+        TypeGenerateur $type_generateur,
+        ?LabelGenerateur $label_generateur,
+    ): ?Re {
         $record = $this->createQuery()
-            ->and(\sprintf('type_emission_id = "%s"', $type_emission->id()))
-            ->and(\sprintf('type_generateur_id = "%s" or type_generateur_id = ""', $type_generateur->id()))
+            ->and('type_emission', $type_emission->value)
+            ->and('type_generateur', $type_generateur->value, true)
+            ->and('label_generateur', $label_generateur?->value, true)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
-    public function to(XMLTableElement $record): Re
+    public function to(XMLTableElement $element): Re
     {
-        return new Re(
-            id: $record->id(),
-            re: (float) $record->re,
-        );
+        return new Re(re: $element->get('re')->floatval(),);
     }
 }

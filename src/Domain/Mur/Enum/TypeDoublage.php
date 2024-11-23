@@ -4,21 +4,27 @@ namespace App\Domain\Mur\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum TypeDoublage: int implements Enum
+enum TypeDoublage: string implements Enum
 {
-    case INCONNU = 1;
-    case SANS_DOUBLAGE = 2;
-    case INDETERMINE = 3;
-    case LAME_AIR_INFERIEUR_15MM = 4;
-    case LAME_AIR_SUPERIEUR_15MM = 5;
-    case MATERIAUX_CONNU = 6;
+    case INCONNU = 'INCONNU';
+    case SANS_DOUBLAGE = 'SANS_DOUBLAGE';
+    case INDETERMINE = 'INDETERMINE';
+    case LAME_AIR_INFERIEUR_15MM = 'LAME_AIR_INFERIEUR_15MM';
+    case LAME_AIR_SUPERIEUR_15MM = 'LAME_AIR_SUPERIEUR_15MM';
+    case MATERIAUX_CONNU = 'MATERIAUX_CONNU';
 
-    public static function from_enum_type_doublage_id(int $id): self
+    public static function from_enum_type_doublage_id(int $type_doublage_id): self
     {
-        return static::from($id);
+        return match ($type_doublage_id) {
+            1 => self::INCONNU,
+            2 => self::SANS_DOUBLAGE,
+            3 => self::LAME_AIR_INFERIEUR_15MM,
+            4 => self::LAME_AIR_SUPERIEUR_15MM,
+            5 => self::MATERIAUX_CONNU,
+        };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -35,7 +41,7 @@ enum TypeDoublage: int implements Enum
         };
     }
 
-    public function resistance_doublage(): float
+    public function resistance_thermique_doublage(): float
     {
         return match ($this) {
             self::INCONNU, self::SANS_DOUBLAGE => 0,

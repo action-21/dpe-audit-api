@@ -4,23 +4,27 @@ namespace App\Domain\Lnc\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-/**
- * Type de vitrage
- */
-enum TypeVitrage: int implements Enum
+enum TypeVitrage: string implements Enum
 {
-    case SIMPLE_VITRAGE = 1;
-    case DOUBLE_VITRAGE = 2;
-    case DOUBLE_VITRAGE_FE = 3;
-    case TRIPLE_VITRAGE = 4;
-    case TRIPLE_VITRAGE_FE = 5;
+    case SIMPLE_VITRAGE = 'SIMPLE_VITRAGE';
+    case DOUBLE_VITRAGE = 'DOUBLE_VITRAGE';
+    case DOUBLE_VITRAGE_FE = 'DOUBLE_VITRAGE_FE';
+    case TRIPLE_VITRAGE = 'TRIPLE_VITRAGE';
+    case TRIPLE_VITRAGE_FE = 'TRIPLE_VITRAGE_FE';
 
-    public static function scope(): string
+    public static function from_tv_coef_transparence_ets_id(int $id): ?self
     {
-        return 'local non chauffé . baie . type de vitrage';
+        return match ($id) {
+            1 => null,
+            2, 7, 12, 17 => self::SIMPLE_VITRAGE,
+            3, 8, 13, 18 => self::DOUBLE_VITRAGE,
+            4, 9, 14, 19 => self::DOUBLE_VITRAGE_FE,
+            5, 10, 15, 20 => self::TRIPLE_VITRAGE,
+            6, 11, 16, 21 => self::TRIPLE_VITRAGE_FE,
+        };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -36,11 +40,11 @@ enum TypeVitrage: int implements Enum
         };
     }
 
-    public function est_isole(): bool
+    public function etat_isolation(): EtatIsolation
     {
         return match ($this) {
-            self::TRIPLE_VITRAGE => true,
-            default => false,
+            self::TRIPLE_VITRAGE, self::TRIPLE_VITRAGE_FE => EtatIsolation::ISOLE,
+            default => EtatIsolation::NON_ISOLE,
         };
     }
 }

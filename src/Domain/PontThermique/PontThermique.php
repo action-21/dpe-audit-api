@@ -2,116 +2,56 @@
 
 namespace App\Domain\PontThermique;
 
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Baie\Baie;
+use App\Domain\Common\Service\Assert;
+use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Enveloppe;
-use App\Domain\PontThermique\Enum\TypeLiaison;
-use App\Domain\PontThermique\ValueObject\{Kpt, Longueur};
+use App\Domain\Mur\Mur;
+use App\Domain\PlancherBas\PlancherBas;
+use App\Domain\PlancherHaut\PlancherHaut;
+use App\Domain\PontThermique\Enum\{TypeIsolation, TypeLiaison, TypePose};
+use App\Domain\PontThermique\Service\MoteurPerformance;
+use App\Domain\PontThermique\ValueObject\{Liaison, Performance};
+use App\Domain\Porte\Porte;
 
 final class PontThermique
 {
+    private ?Performance $performance = null;
+
     public function __construct(
         private readonly Id $id,
         private readonly Enveloppe $enveloppe,
-        private TypeLiaison $type_liaison,
         private string $description,
-        private bool $pont_thermique_partiel,
-        private Longueur $longueur,
-        private ?Kpt $valeur,
-        private ?Id $mur_id = null,
-        private ?Id $plancher_id = null,
-        private ?Id $refend_id = null,
-        private ?Id $ouverture_id = null,
-    ) {
-    }
+        private float $longueur,
+        private Liaison $liaison,
+        private ?float $kpt = null,
+    ) {}
 
-    public function update(string $description, bool $pont_thermique_partiel, Longueur $longueur, ?Kpt $kpt): self
+    public function update(string $description, float $longueur, ?float $kpt): self
     {
         $this->description = $description;
-        $this->pont_thermique_partiel = $pont_thermique_partiel;
         $this->longueur = $longueur;
-        $this->valeur = $kpt;
+        $this->kpt = $kpt;
+
+        $this->controle();
+        $this->reinitialise();
         return $this;
     }
 
-    public function set_liaison_plancher_bas_mur(Id $plancher_id, Id $mur_id): self
+    public function reinitialise(): void
     {
-        if (null === $this->enveloppe->mur_collection()->find($mur_id)) {
-            throw new \InvalidArgumentException("Mur $mur_id not found");
-        }
-        if (null === $this->enveloppe->plancher_haut_collection()->find($plancher_id)) {
-            if (null === $this->enveloppe->plancher_bas_collection()->find($plancher_id)) {
-                throw new \InvalidArgumentException("Plancher $plancher_id not found");
-            }
-        }
-        $this->mur_id = $mur_id;
-        $this->plancher_id = $plancher_id;
-        $this->refend_id = null;
-        $this->ouverture_id = null;
-        $this->type_liaison = TypeLiaison::PLANCHER_BAS_MUR;
-        return $this;
+        $this->performance = null;
     }
 
-    public function set_liaison_plancher_intermediaire_mur(Id $plancher_id, Id $mur_id): self
+    public function controle(): void
     {
-        if (null === $this->enveloppe->mur_collection()->find($mur_id)) {
-            throw new \InvalidArgumentException("Mur $mur_id not found");
-        }
-        if (null === $this->enveloppe->plancher_intermediaire_collection()->find($plancher_id)) {
-            throw new \InvalidArgumentException("Plancher intermédiaire $plancher_id not found");
-        }
-        $this->mur_id = $mur_id;
-        $this->plancher_id = $plancher_id;
-        $this->refend_id = null;
-        $this->ouverture_id = null;
-        $this->type_liaison = TypeLiaison::PLANCHER_INTERMEDIAIRE_MUR;
-        return $this;
+        Assert::positif($this->longueur);
+        Assert::positif($this->kpt);
     }
 
-    public function set_liaison_plancher_haut_mur(Id $mur_id, Id $plancher_id): self
+    public function calcule_performance(MoteurPerformance $moteur): self
     {
-        if (null === $this->enveloppe->mur_collection()->find($mur_id)) {
-            throw new \InvalidArgumentException("Mur $mur_id not found");
-        }
-        if (null === $this->enveloppe->plancher_haut_collection()->find($plancher_id)) {
-            throw new \InvalidArgumentException("Plancher haut $plancher_id not found");
-        }
-        $this->mur_id = $mur_id;
-        $this->plancher_id = $plancher_id;
-        $this->refend_id = null;
-        $this->ouverture_id = null;
-        $this->type_liaison = TypeLiaison::PLANCHER_HAUT_MUR;
-        return $this;
-    }
-
-    public function set_liaison_refend_mur(Id $refend_id, Id $mur_id): self
-    {
-        if (null === $this->enveloppe->mur_collection()->find($mur_id)) {
-            throw new \InvalidArgumentException("Mur $mur_id not found");
-        }
-        if (null === $this->enveloppe->refend_collection()->find($refend_id)) {
-            throw new \InvalidArgumentException("Refend $refend_id not found");
-        }
-        $this->mur_id = $mur_id;
-        $this->refend_id = $refend_id;
-        $this->plancher_id = null;
-        $this->ouverture_id = null;
-        $this->type_liaison = TypeLiaison::REFEND_MUR;
-        return $this;
-    }
-
-    public function set_liaison_menuiserie_mur(Id $ouverture_id, Id $mur_id): self
-    {
-        if (null === $this->enveloppe->mur_collection()->find($mur_id)) {
-            throw new \InvalidArgumentException("Mur $mur_id not found");
-        }
-        if (null === $this->enveloppe->paroi_collection()->search_ouverture()->find($ouverture_id)) {
-            throw new \InvalidArgumentException("Ouverture $ouverture_id not found");
-        }
-        $this->mur_id = $mur_id;
-        $this->ouverture_id = $ouverture_id;
-        $this->plancher_id = null;
-        $this->refend_id = null;
-        $this->type_liaison = TypeLiaison::MENUISERIE_MUR;
+        $this->performance = $moteur->calcule_performance($this);
         return $this;
     }
 
@@ -125,24 +65,100 @@ final class PontThermique
         return $this->enveloppe;
     }
 
-    public function mur_id(): ?Id
+    public function mur(): Mur
     {
-        return $this->mur_id;
+        return $this->enveloppe->parois()->murs()->find(id: $this->liaison->mur_id);
     }
 
-    public function plancher_id(): ?Id
+    /**
+     * TODO: Définir l'état d'isolation par défaut des planchers bas à isolation répartie
+     */
+    public function type_isolation_mur(): TypeIsolation
     {
-        return $this->plancher_id;
+        if (false === $this->mur()->est_isole())
+            return TypeIsolation::NON_ISOLE;
+        if (false === $this->mur()->isolation()->type_isolation->inconnu())
+            return TypeIsolation::from($this->mur()->isolation()->type_isolation->value);
+
+        return TypeIsolation::ITI;
     }
 
-    public function ouverture_id(): ?Id
+    public function plancher_bas(): ?PlancherBas
     {
-        return $this->ouverture_id;
+        return $this->liaison->plancher_id ? $this->enveloppe->parois()->planchers_bas()->find(id: $this->liaison->plancher_id) : null;
     }
 
-    public function refend_id(): ?Id
+    /**
+     * TODO: Définir l'état d'isolation par défaut des planchers bas à isolation répartie
+     */
+    public function type_isolation_plancher_bas(): ?TypeIsolation
     {
-        return $this->refend_id;
+        if ($this->liaison->type !== TypeLiaison::PLANCHER_BAS_MUR)
+            return null;
+        if (false === $this->plancher_bas()->est_isole())
+            return TypeIsolation::NON_ISOLE;
+        if (false === $this->plancher_bas()->isolation()->type_isolation->inconnu())
+            return TypeIsolation::from($this->plancher_bas()->isolation()->type_isolation->value);
+        return TypeIsolation::ITE;
+    }
+
+    public function plancher_haut(): ?PlancherHaut
+    {
+        return $this->liaison->plancher_id ? $this->enveloppe->parois()->planchers_hauts()->find(id: $this->liaison->plancher_id) : null;
+    }
+
+    public function type_isolation_plancher_haut(): ?TypeIsolation
+    {
+        if ($this->liaison->type !== TypeLiaison::PLANCHER_BAS_MUR)
+            return null;
+        if (false === $this->plancher_haut()->est_isole())
+            return TypeIsolation::NON_ISOLE;
+        if (false === $this->plancher_haut()->isolation()->type_isolation->inconnu())
+            return TypeIsolation::from($this->plancher_haut()->isolation()->type_isolation->value);
+        return TypeIsolation::ITE;
+    }
+
+    public function baie(): ?Baie
+    {
+        return $this->liaison->ouverture_id ? $this->enveloppe->parois()->baies()->find(id: $this->liaison->ouverture_id) : null;
+    }
+
+    public function porte(): ?Porte
+    {
+        return $this->liaison->ouverture_id ? $this->enveloppe->parois()->portes()->find(id: $this->liaison->ouverture_id) : null;
+    }
+
+    public function type_pose_ouverture(): ?TypePose
+    {
+        if ($this->liaison->type !== TypeLiaison::MENUISERIE_MUR)
+            return null;
+        if (null !== $this->baie()?->caracteristique()->menuiserie?->type_pose)
+            return TypePose::from($this->baie()->caracteristique()->menuiserie->type_pose->value);
+        if (null !== $this->porte()?->caracteristique()->type_pose)
+            return TypePose::from($this->porte()->caracteristique()->type_pose->value);
+        return null;
+    }
+
+    public function presence_retour_isolation(): ?bool
+    {
+        if ($this->liaison->type !== TypeLiaison::MENUISERIE_MUR)
+            return null;
+        if (null !== $this->baie()?->caracteristique()->menuiserie?->presence_retour_isolation)
+            return $this->baie()?->caracteristique()->menuiserie?->presence_retour_isolation;
+        if (null !== $this->porte()?->caracteristique()->presence_retour_isolation)
+            return $this->porte()->caracteristique()->presence_retour_isolation;
+        return false;
+    }
+
+    public function largeur_dormant(): ?int
+    {
+        if ($this->liaison->type !== TypeLiaison::MENUISERIE_MUR)
+            return null;
+        if (null !== $this->baie()?->caracteristique()->menuiserie->largeur_dormant)
+            return $this->baie()->caracteristique()->menuiserie->largeur_dormant;
+        if (null !== $this->porte()?->caracteristique()->largeur_dormant)
+            return $this->porte()->caracteristique()->largeur_dormant;
+        return 50;
     }
 
     public function description(): string
@@ -150,23 +166,23 @@ final class PontThermique
         return $this->description;
     }
 
-    public function type_liaison(): TypeLiaison
+    public function liaison(): Liaison
     {
-        return $this->type_liaison;
+        return $this->liaison;
     }
 
-    public function longueur(): Longueur
+    public function longueur(): float
     {
         return $this->longueur;
     }
 
-    public function valeur(): ?Kpt
+    public function kpt(): ?float
     {
-        return $this->valeur;
+        return $this->kpt;
     }
 
-    public function pont_thermique_partiel(): bool
+    public function performance(): ?Performance
     {
-        return $this->pont_thermique_partiel;
+        return $this->performance;
     }
 }

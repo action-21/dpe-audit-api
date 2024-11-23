@@ -4,21 +4,23 @@ namespace App\Domain\Lnc\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum NatureMenuiserie: int implements Enum
+enum NatureMenuiserie: string implements Enum
 {
-    case POLYCARBONATE = 1;
-    case BOIS = 2;
-    case BOIS_METAL = 3;
-    case PVC = 4;
-    case METAL_AVEC_RUPTEUR_PONT_THERMIQUE = 5;
-    case METAL_SANS_RUPTEUR_PONT_THERMIQUE = 6;
+    case BOIS = 'BOIS';
+    case BOIS_METAL = 'BOIS_METAL';
+    case PVC = 'PVC';
+    case METAL = 'METAL';
 
-    public static function scope(): string
+    public static function from_tv_coef_transparence_ets_id(int $id): ?self
     {
-        return 'local non chauffé . baie . nature de la menuiserie';
+        return match ($id) {
+            2, 3, 4, 5, 6 => self::BOIS,
+            7, 8, 9, 10, 11 => self::PVC,
+            12, 13, 14, 15, 16, 17, 18, 19, 20, 21 => self::METAL,
+        };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -26,17 +28,10 @@ enum NatureMenuiserie: int implements Enum
     public function lib(): string
     {
         return match ($this) {
-            self::POLYCARBONATE => 'Polycarbonate',
             self::BOIS => 'Bois',
             self::BOIS_METAL => 'Bois/métal',
             self::PVC => 'PVC',
-            self::METAL_AVEC_RUPTEUR_PONT_THERMIQUE => 'Métal avec rupture de pont thermique',
-            self::METAL_SANS_RUPTEUR_PONT_THERMIQUE => 'Métal sans rupture de pont thermique'
+            self::METAL => 'Métal',
         };
-    }
-
-    public function type_vitrage_requis(): bool
-    {
-        return $this !== self::POLYCARBONATE;
     }
 }

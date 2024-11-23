@@ -2,9 +2,9 @@
 
 namespace App\Database\Local\Ecs;
 
+use App\Domain\Ecs\Data\{Cr, CrRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Ecs\Enum\TypeGenerateur;
-use App\Domain\Ecs\Table\{Cr, CrRepository};
+use App\Domain\Ecs\Enum\{LabelGenerateur, TypeGenerateur};
 
 final class XMLCrRepository implements CrRepository
 {
@@ -12,18 +12,14 @@ final class XMLCrRepository implements CrRepository
 
     public static function table(): string
     {
-        return 'ecs.generateur.cr.xml';
+        return 'ecs.cr';
     }
 
-    public function find(int $id): ?Cr
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
-    }
-
-    public function find_by(TypeGenerateur $type_generateur, float $volume_stockage): ?Cr
+    public function find_by(TypeGenerateur $type_generateur, int $volume_stockage, ?LabelGenerateur $label_generateur,): ?Cr
     {
         $record = $this->createQuery()
-            ->and(\sprintf('type_generateur_id = "%s"', $type_generateur->id()))
+            ->and('type_generateur', $type_generateur->id())
+            ->and('label_generateur', $label_generateur?->id(), true)
             ->andCompareTo('volume_stockage', $volume_stockage)
             ->getOne();
         return $record ? $this->to($record) : null;
@@ -31,9 +27,6 @@ final class XMLCrRepository implements CrRepository
 
     protected function to(XMLTableElement $record): Cr
     {
-        return new Cr(
-            id: $record->id(),
-            cr: (float) $record->cr,
-        );
+        return new Cr(cr: (float) $record->cr,);
     }
 }

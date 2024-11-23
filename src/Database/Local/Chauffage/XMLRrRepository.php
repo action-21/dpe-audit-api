@@ -3,8 +3,8 @@
 namespace App\Database\Local\Chauffage;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Chauffage\Enum\{TypeDistribution, TypeEmission, TypeGenerateur, TypeInstallation};
-use App\Domain\Chauffage\Table\{Rr, RrRepository};
+use App\Domain\Chauffage\Data\{Rr, RrRepository};
+use App\Domain\Chauffage\Enum\{LabelGenerateur, TypeEmission, TypeGenerateur};
 
 final class XMLRrRepository implements RrRepository
 {
@@ -12,35 +12,30 @@ final class XMLRrRepository implements RrRepository
 
     public static function table(): string
     {
-        return 'chauffage.emission.rr.xml';
-    }
-
-    public function find(int $id): ?Rr
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
+        return 'chauffage.rr';
     }
 
     public function find_by(
-        TypeInstallation $type_installation,
         TypeEmission $type_emission,
-        TypeDistribution $type_distribution,
         TypeGenerateur $type_generateur,
-    ): ?Rr
-    {
+        ?LabelGenerateur $label_generateur,
+        ?bool $reseau_collectif,
+        ?bool $presence_robinet_thermostatique,
+        ?bool $presence_regulation_terminale,
+    ): ?Rr {
         $record = $this->createQuery()
-            ->and(\sprintf('type_emission_id = "%s" or type_emission_id=""', $type_emission->id()))
-            ->and(\sprintf('type_distribution_id = "%s" or type_distribution_id = ""', $type_distribution->id()))
-            ->and(\sprintf('type_generateur_id = "%s" or type_generateur_id = ""', $type_generateur->id()))
-            ->and(\sprintf('installation_collective = "%s" or installation_collective = ""', (int) $type_installation->installation_collective()))
+            ->and('type_emission', $type_emission->value)
+            ->and('type_generateur', $type_generateur->value, true)
+            ->and('label_generateur', $label_generateur?->value, true)
+            ->and('reseau_collectif', $reseau_collectif, true)
+            ->and('presence_robinet_thermostatique', $presence_robinet_thermostatique, true)
+            ->and('presence_regulation_terminale', $presence_regulation_terminale, true)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
-    public function to(XMLTableElement $record): Rr
+    public function to(XMLTableElement $element): Rr
     {
-        return new Rr(
-            id: $record->id(),
-            rr: (float) $record->rr,
-        );
+        return new Rr(rr: $element->get('rr')->floatval(),);
     }
 }

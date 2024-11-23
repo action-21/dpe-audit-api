@@ -4,20 +4,20 @@ namespace App\Domain\Common\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum Mois: int implements Enum
+enum Mois: string implements Enum
 {
-    case JANVIER = 1;
-    case FEVRIER = 2;
-    case MARS = 3;
-    case AVRIL = 4;
-    case MAI = 5;
-    case JUIN = 6;
-    case JUILLET = 7;
-    case AOUT = 8;
-    case SEPTEMBRE = 9;
-    case OCTOBRE = 10;
-    case NOVEMBRE = 11;
-    case DECEMBRE = 12;
+    case JANVIER = '01';
+    case FEVRIER = '02';
+    case MARS = '03';
+    case AVRIL = '04';
+    case MAI = '05';
+    case JUIN = '06';
+    case JUILLET = '07';
+    case AOUT = '08';
+    case SEPTEMBRE = '09';
+    case OCTOBRE = '10';
+    case NOVEMBRE = '11';
+    case DECEMBRE = '12';
 
     /**
      * Nombre de jours dans l'année
@@ -29,7 +29,12 @@ enum Mois: int implements Enum
      */
     public final const NOMBRE_JOURS_OCCUPATION = 358;
 
-    public function id(): int
+    public static function reduce(\Closure $func, mixed $initial = 0): mixed
+    {
+        return array_reduce(self::cases(), $func, $initial);
+    }
+
+    public function id(): string
     {
         return $this->value;
     }
@@ -52,67 +57,10 @@ enum Mois: int implements Enum
         };
     }
 
-    public static function from_iso(string $mois): self
-    {
-        return match ($mois) {
-            '01' => self::JANVIER,
-            '02' => self::FEVRIER,
-            '03' => self::MARS,
-            '04' => self::AVRIL,
-            '05' => self::MAI,
-            '06' => self::JUIN,
-            '07' => self::JUILLET,
-            '08' => self::AOUT,
-            '09' => self::SEPTEMBRE,
-            '10' => self::OCTOBRE,
-            '11' => self::NOVEMBRE,
-            '12' => self::DECEMBRE,
-        };
-    }
-
-    public function to_iso(): string
-    {
-        return match ($this) {
-            self::JANVIER => '01',
-            self::FEVRIER => '02',
-            self::MARS => '03',
-            self::AVRIL => '04',
-            self::MAI => '05',
-            self::JUIN => '06',
-            self::JUILLET => '07',
-            self::AOUT => '08',
-            self::SEPTEMBRE => '09',
-            self::OCTOBRE => '10',
-            self::NOVEMBRE => '11',
-            self::DECEMBRE => '12',
-        };
-    }
-
     /**
-     * Nombre de jours dans le mois j
+     * Nombre de jours d'occupation sur le mois
      */
-    public function jours(): int
-    {
-        return match ($this) {
-            self::JANVIER => 31,
-            self::FEVRIER => 28,
-            self::MARS => 31,
-            self::AVRIL => 30,
-            self::MAI => 31,
-            self::JUIN => 30,
-            self::JUILLET => 31,
-            self::AOUT => 31,
-            self::SEPTEMBRE => 30,
-            self::OCTOBRE => 31,
-            self::NOVEMBRE => 30,
-            self::DECEMBRE => 31,
-        };
-    }
-
-    /**
-     * Nj,j - Nombre de jours d'occupation sur le mois j
-     */
-    public function jours_occupation(): int
+    public function nj(): int
     {
         return match ($this) {
             self::JANVIER => 31,
@@ -128,5 +76,13 @@ enum Mois: int implements Enum
             self::NOVEMBRE => 30,
             self::DECEMBRE => 24,
         };
+    }
+
+    /**
+     * Nombre d'heures d'occupation sur le mois
+     */
+    public function nh(): int
+    {
+        return $this->nj() * 24;
     }
 }

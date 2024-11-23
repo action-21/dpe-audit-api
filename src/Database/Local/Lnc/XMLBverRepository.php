@@ -3,9 +3,8 @@
 namespace App\Database\Local\Lnc;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Batiment\Enum\ZoneClimatique;
-use App\Domain\Common\Enum\Orientation;
-use App\Domain\Lnc\Table\{BVer, BVerCollection, BVerRepository};
+use App\Domain\Common\Enum\{Orientation, ZoneClimatique};
+use App\Domain\Lnc\Data\{BVer, BVerCollection, BVerRepository};
 
 final class XMLBverRepository implements BVerRepository
 {
@@ -13,24 +12,15 @@ final class XMLBverRepository implements BVerRepository
 
     public static function table(): string
     {
-        return 'lnc.bver.xml';
+        return 'lnc.bver';
     }
 
-    public function search(int $id): BVerCollection
+    public function search_by(ZoneClimatique $zone_climatique): BVerCollection
     {
         return new BVerCollection(\array_map(
-            fn (XMLTableElement $record): BVer => $this->to($record),
-            $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getMany(),
-        ));
-    }
-
-    public function search_by(ZoneClimatique $zone_climatique, bool $isolation_aiu): BVerCollection
-    {
-        return new BVerCollection(\array_map(
-            fn (XMLTableElement $record): Bver => $this->to($record),
+            fn(XMLTableElement $record): Bver => $this->to($record),
             $this->createQuery()
-                ->and(\sprintf('zone_climatique = "%s"', $zone_climatique->code()))
-                ->and(\sprintf('isolation_aiu = "%s"', (int) $isolation_aiu))
+                ->and('zone_climatique', $zone_climatique->code())
                 ->getMany()
         ));
     }
@@ -38,8 +28,8 @@ final class XMLBverRepository implements BVerRepository
     public function to(XMLTableElement $record): BVer
     {
         return new BVer(
-            id: $record->id(),
             orientation: Orientation::from((string) $record->orientation),
+            isolation_paroi: (bool) $record->isolation_paroi,
             bver: (float) $record->bver
         );
     }

@@ -2,9 +2,9 @@
 
 namespace App\Domain\Enveloppe;
 
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\Type\Id;
 
 interface EnveloppeRepository
 {
-    public function find(Id $id, bool $eager = false): ?Enveloppe;
+    public function find(Id $audit_id): ?Enveloppe;
 }

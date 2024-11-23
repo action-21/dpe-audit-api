@@ -3,9 +3,9 @@
 namespace App\Database\Local\Chauffage;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Batiment\Enum\ZoneClimatique;
+use App\Domain\Chauffage\Data\{Scop, ScopRepository};
 use App\Domain\Chauffage\Enum\{TypeEmission, TypeGenerateur};
-use App\Domain\Chauffage\Table\{Scop, ScopRepository};
+use App\Domain\Common\Enum\ZoneClimatique;
 
 final class XMLScopRepository implements ScopRepository
 {
@@ -13,36 +13,29 @@ final class XMLScopRepository implements ScopRepository
 
     public static function table(): string
     {
-        return 'chauffage.generateur.scop.xml';
-    }
-
-    public function find(int $id): ?Scop
-    {
-        return ($record = $this->createQuery()->and(\sprintf('@id = "%s"', $id))->getOne()) ? $this->to($record) : null;
+        return 'chauffage.scop';
     }
 
     public function find_by(
         ZoneClimatique $zone_climatique,
         TypeGenerateur $type_generateur,
-        ?TypeEmission $type_emission,
-        ?int $anne_installation_generateur,
+        TypeEmission $type_emission,
+        int $annee_installation_generateur,
     ): ?Scop {
         $record = $this->createQuery()
-            ->and(\sprintf('zone_climatique = "%s"', $zone_climatique->lib()))
-            ->and(\sprintf('type_generateur_id = "%s"', $type_generateur->id()))
-            ->and(\sprintf('plancher_chauffant = "%s" or plancher_chauffant = ""', (int) ($type_emission === TypeEmission::PLANCHER_CHAUFFANT)))
-            ->and(\sprintf('plafond_chauffant = "%s" or plafond_chauffant = ""', (int) ($type_emission === TypeEmission::PLAFOND_CHAUFFANT)))
-            ->andCompareTo('annee_installation_generateur', $anne_installation_generateur)
+            ->and('zone_climatique', $zone_climatique->code())
+            ->and('type_generateur', $type_generateur->value)
+            ->and('type_emission', $type_emission->value)
+            ->andCompareTo('annee_installation_generateur', $annee_installation_generateur)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
 
-    public function to(XMLTableElement $record): Scop
+    public function to(XMLTableElement $element): Scop
     {
         return new Scop(
-            id: $record->id(),
-            cop: ($value = $record->cop) ? (float) $value : null,
-            scop: ($value = $record->scop) ? (float) $value : null,
+            scop: $element->get('scop')->floatval(),
+            cop: $element->get('cop')->floatval(),
         );
     }
 }

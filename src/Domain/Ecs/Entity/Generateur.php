@@ -2,223 +2,272 @@
 
 namespace App\Domain\Ecs\Entity;
 
-use App\Domain\Common\ValueObject\Id;
-use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur, TypeInstallation, UsageGenerateur};
-use App\Domain\Ecs\InstallationEcs;
-use App\Domain\Ecs\ValueObject\{AnneeInstallation, Cop, Performance, PuissanceNominale, PuissanceVeilleuse, QP0, Rpn, Stockage};
+use App\Domain\Common\Service\Assert;
+use App\Domain\Common\Type\Id;
+use App\Domain\Ecs\Ecs;
+use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur, TypeGenerateur, UsageEcs};
+use App\Domain\Ecs\Service\{MoteurPerformance, MoteurPerte};
+use App\Domain\Ecs\ValueObject\{Performance, PerteCollection, Signaletique};
+use App\Domain\Simulation\Simulation;
 
 final class Generateur
 {
+    private CategorieGenerateur $categorie;
+
+    private ?Performance $performance = null;
+    private ?PerteCollection $pertes_generation = null;
+    private ?PerteCollection $pertes_stockage = null;
+
     public function __construct(
         private readonly Id $id,
-        private readonly InstallationEcs $installation,
+        private readonly Ecs $ecs,
+        private ?Id $generateur_mixte_id,
         private ?Id $reseau_chaleur_id,
         private string $description,
-        private bool $position_volume_chauffe,
-        private TypeGenerateur $type_generateur,
-        private UsageGenerateur $usage,
+        private TypeGenerateur $type,
         private EnergieGenerateur $energie,
-        private Stockage $stockage,
-        private Performance $performance,
-        private ?AnneeInstallation $annee_installation,
-    ) {
+        private int $volume_stockage,
+        private bool $position_volume_chauffe,
+        private bool $generateur_collectif,
+        private Signaletique $signaletique,
+        private ?int $annee_installation,
+    ) {}
+
+    private function pre_update(bool $dereference_generateur_mixte = true, bool $dereference_reseau_chaleur = true): void
+    {
+        $this->signaletique = new Signaletique();
+        $this->volume_stockage = 0;
+        $this->generateur_mixte_id = $dereference_generateur_mixte ? null : $this->generateur_mixte_id;
+        $this->reseau_chaleur_id = $dereference_reseau_chaleur ? null : $this->reseau_chaleur_id;
     }
 
-    public static function create_reseau_chaleur(
-        InstallationEcs $installation,
-        string $description,
-        TypeGenerateur $type_generateur,
-        UsageGenerateur $usage,
-        Stockage $stockage,
-        ?Id $reseau_chaleur_id,
-        ?AnneeInstallation $annee_installation,
-    ): self {
-        return (new self(
-            id: Id::create(),
-            installation: $installation,
-            reseau_chaleur_id: $reseau_chaleur_id,
-            description: $description,
-            position_volume_chauffe: false,
-            type_generateur: $type_generateur,
-            usage: $usage,
-            energie: EnergieGenerateur::RESEAU_CHAUFFAGE_URBAIN,
-            stockage: $stockage,
-            performance: new Performance(),
-            annee_installation: $annee_installation,
-        ))->set_reseau_chaleur(
-            type_generateur: $type_generateur,
-            reseau_chaleur_id: $reseau_chaleur_id,
-        );
+    private function post_update(): void
+    {
+        $this->determine_categorie();
+        $this->reinitialise();
+        $this->controle();
     }
 
-    public static function create_chauffe_eau_thermodynamique(
-        InstallationEcs $installation,
-        string $description,
-        TypeGenerateur $type_generateur,
-        EnergieGenerateur $energie,
-        UsageGenerateur $usage,
-        Stockage $stockage,
-        bool $position_volume_chauffe,
-        ?AnneeInstallation $annee_installation,
-        ?Cop $cop,
+    public function set_chaudiere(
+        TypeGenerateur\TypeChaudiere $type,
+        EnergieGenerateur\EnergieChaudiere $energie,
+        Signaletique\Chaudiere $signaletique,
+        int $volume_stockage,
     ): self {
-        return (new self(
-            id: Id::create(),
-            installation: $installation,
-            reseau_chaleur_id: null,
-            description: $description,
-            position_volume_chauffe: $position_volume_chauffe,
-            type_generateur: $type_generateur,
-            usage: $usage,
-            energie: $energie,
-            stockage: $stockage,
-            performance: new Performance(),
-            annee_installation: $annee_installation,
-        ))->set_chauffe_eau_thermodynamique(
-            type_generateur: $type_generateur,
-            position_volume_chauffe: $position_volume_chauffe,
-            cop: $cop
-        );
-    }
-
-    public static function create_generateur_combustion(
-        InstallationEcs $installation,
-        string $description,
-        TypeGenerateur $type_generateur,
-        EnergieGenerateur $energie,
-        UsageGenerateur $usage,
-        Stockage $stockage,
-        bool $position_volume_chauffe,
-        ?bool $presence_ventouse,
-        ?AnneeInstallation $annee_installation,
-        ?PuissanceNominale $pn = null,
-        ?Rpn $rpn = null,
-        ?QP0 $qp0 = null,
-        ?PuissanceVeilleuse $pveilleuse = null,
-    ): self {
-        return (new self(
-            id: Id::create(),
-            installation: $installation,
-            reseau_chaleur_id: null,
-            description: $description,
-            position_volume_chauffe: $position_volume_chauffe,
-            type_generateur: $type_generateur,
-            usage: $usage,
-            energie: $energie,
-            stockage: $stockage,
-            performance: new Performance(),
-            annee_installation: $annee_installation,
-        ))->set_generateur_combustion(
-            type_generateur: $type_generateur,
-            energie: $energie,
-            position_volume_chauffe: $position_volume_chauffe,
-            presence_ventouse: $presence_ventouse,
-            pn: $pn,
-            rpn: $rpn,
-            qp0: $qp0,
-            pveilleuse: $pveilleuse,
-        );
-    }
-
-    public function update(
-        string $description,
-        UsageGenerateur $usage,
-        Stockage $stockage,
-        ?AnneeInstallation $annee_installation,
-    ): self {
-        $this->description = $description;
-        $this->usage = $usage;
-        $this->stockage = $stockage;
-        $this->annee_installation = $annee_installation;
-        $this->controle_coherence();
+        $this->pre_update(dereference_generateur_mixte: false);
+        $this->type = $type->to();
+        $this->energie = $energie->to();
+        $this->signaletique = $signaletique;
+        $this->volume_stockage = $volume_stockage;
+        $this->post_update();
         return $this;
     }
 
-    public function set_reseau_chaleur(TypeGenerateur $type_generateur, ?Id $reseau_chaleur_id): self
+    public function set_chaudiere_electrique(
+        Signaletique\ChaudiereElectrique $signaletique,
+        int $volume_stockage,
+    ): self {
+        $this->pre_update(dereference_generateur_mixte: false);
+        $this->type = TypeGenerateur::CHAUDIERE_STANDARD;
+        $this->energie = EnergieGenerateur::ELECTRICITE;
+        $this->signaletique = $signaletique;
+        $this->volume_stockage = $volume_stockage;
+        $this->post_update();
+        return $this;
+    }
+
+    public function set_chaudiere_multi_batiment(EnergieGenerateur\EnergieChaudiereMultiBatiment $energie,): self
     {
-        if (false === $type_generateur->reseau_chaleur()) {
-            throw new \DomainException('Le type de générateur n\'est pas un réseau de chaleur');
-        }
-        if ($reseau_chaleur_id && $type_generateur === TypeGenerateur::RESEAU_CHALEUR_NON_REPERTORIE_OU_INCONNU) {
-            throw new \DomainException('L\'identifiant du réseau de chaleur ne doit pas être renseigné pour un type de générateur non répertorié ou inconnu');
-        }
-        $this->reseau_chaleur_id = $reseau_chaleur_id;
-        $this->type_generateur = $reseau_chaleur_id ? $type_generateur : TypeGenerateur::RESEAU_CHALEUR_NON_REPERTORIE_OU_INCONNU;
-        $this->position_volume_chauffe = false;
-        $this->energie = EnergieGenerateur::RESEAU_CHAUFFAGE_URBAIN;
-        $this->performance = new Performance();
-        $this->controle_coherence();
+        $this->pre_update(dereference_generateur_mixte: false);
+        $this->type = TypeGenerateur::CHAUDIERE_MULTI_BATIMENT;
+        $this->energie = $energie->to();
+        $this->generateur_collectif = true;
+        $this->post_update();
+        return $this;
+    }
+
+    public function set_poele_bouilleur(
+        EnergieGenerateur\EnergiePoeleBouilleur $energie,
+        Signaletique\Combustion $signaletique,
+        int $volume_stockage,
+    ): self {
+        $this->pre_update(dereference_generateur_mixte: false);
+        $this->type = TypeGenerateur::POELE_BOUILLEUR;
+        $this->energie = $energie->to();
+        $this->signaletique = $signaletique;
+        $this->volume_stockage = $volume_stockage;
+        $this->post_update();
+        return $this;
+    }
+
+    public function set_pac_multi_batiment(): self
+    {
+        $this->pre_update(dereference_generateur_mixte: false);
+        $this->type = TypeGenerateur::PAC_MULTI_BATIMENT;
+        $this->energie = EnergieGenerateur::ELECTRICITE;
+        $this->generateur_collectif = true;
+        $this->post_update();
+        return $this;
+    }
+
+    public function set_pac_double_service(
+        Signaletique\Thermodynamique $signaletique,
+        int $volume_stockage,
+    ): self {
+        $this->pre_update(dereference_generateur_mixte: false);
+        $this->type = TypeGenerateur::PAC_DOUBLE_SERVICE;
+        $this->energie = EnergieGenerateur::ELECTRICITE;
+        $this->signaletique = $signaletique;
+        $this->volume_stockage = $volume_stockage;
+        $this->post_update();
         return $this;
     }
 
     public function set_chauffe_eau_thermodynamique(
-        TypeGenerateur $type_generateur,
-        bool $position_volume_chauffe,
-        ?Cop $cop = null
+        TypeGenerateur\TypeChauffeEauThermodynamique $type,
+        Signaletique\Thermodynamique $signaletique,
+        int $volume_stockage,
     ): self {
-        if (false === $type_generateur->chauffe_eau_thermodynamique()) {
-            throw new \DomainException('Le type de générateur n\'est pas un chauffe-eau thermodynamique');
-        }
-        $this->type_generateur = $type_generateur;
-        $this->position_volume_chauffe = $position_volume_chauffe;
-        $this->performance = new Performance(cop: $cop);
-        $this->reseau_chaleur_id = null;
+        $this->pre_update();
+        $this->type = $type->to();
         $this->energie = EnergieGenerateur::ELECTRICITE;
-        $this->controle_coherence();
+        $this->signaletique = $signaletique;
+        $this->volume_stockage = $volume_stockage;
+        $this->post_update();
         return $this;
     }
 
-    public function set_generateur_combustion(
-        TypeGenerateur $type_generateur,
-        EnergieGenerateur $energie,
-        bool $position_volume_chauffe,
-        ?bool $presence_ventouse,
-        ?PuissanceNominale $pn = null,
-        ?Rpn $rpn = null,
-        ?QP0 $qp0 = null,
-        ?PuissanceVeilleuse $pveilleuse = null,
+    public function set_chauffe_eau_electrique(
+        TypeGenerateur\TypeChauffeEauElectrique $type,
+        Signaletique\Electrique $signaletique,
+        int $volume_stockage,
     ): self {
-        if (false === $type_generateur->generateur_combustion()) {
-            throw new \DomainException('Le type de générateur n\'est pas un générateur de combustion');
-        }
-        if (false === $energie->combustible()) {
-            throw new \DomainException('L\'énergie du générateur n\'est pas un combustible');
-        }
-        $this->type_generateur = $type_generateur;
-        $this->position_volume_chauffe = $position_volume_chauffe;
-        $this->performance = new Performance(...[$presence_ventouse, $pn, $rpn, $qp0, $pveilleuse, null]);
-        $this->energie = $energie;
-        $this->reseau_chaleur_id = null;
-        $this->controle_coherence();
+        $this->pre_update();
+        $this->type = $volume_stockage === 0 ? TypeGenerateur::CHAUFFE_EAU_INSTANTANE : $type->to();
+        $this->energie = EnergieGenerateur::ELECTRICITE;
+        $this->signaletique = $signaletique;
+        $this->volume_stockage = $volume_stockage;
+        $this->post_update();
         return $this;
     }
 
-    public function controle_coherence(): void
+    public function set_chauffe_eau_electrique_instantane(Signaletique\Electrique $signaletique,): self
     {
-        $energie_applicable = EnergieGenerateur::cases_by_type_generateur($this->type_generateur);
-        $usage_applicable = UsageGenerateur::cases_by_type_generateur($this->type_generateur);
+        $this->pre_update();
+        $this->type = TypeGenerateur::CHAUFFE_EAU_INSTANTANE;
+        $this->energie = EnergieGenerateur::ELECTRICITE;
+        $this->signaletique = $signaletique;
+        $this->post_update();
+        return $this;
+    }
 
-        if (\count($energie_applicable) === 1) {
-            $this->energie = \reset($energie_applicable);
-        }
-        if (\count($usage_applicable) === 1) {
-            $this->usage = \reset($usage_applicable);
-        }
-        if (!\in_array($this->installation->type_installation(), TypeInstallation::cases_by_type_generateur($this->type_generateur))) {
-            throw new \DomainException('Le type de générateur sélectionné n\'est pas applicable au type d\'installation');
-        }
-        if (!\in_array($this->energie, $energie_applicable)) {
-            throw new \DomainException('L\'énergie du générateur n\'est pas applicable pour le type de générateur sélectionné');
-        }
-        if (!\in_array($this->usage, $usage_applicable)) {
-            throw new \DomainException('L\'usage du générateur n\'est pas applicable pour le type de générateur sélectionné');
-        }
-        if (null === $this->annee_installation && AnneeInstallation::is_requis_by_type_generateur($this->type_generateur)) {
-            throw new \DomainException('L\'année d\'installation du générateur est requise.');
-        }
-        if ($this->annee_installation && $this->annee_installation->valeur() < $this->installation()->logement()->batiment()->annee_construction()->valeur()) {
-            throw new \DomainException('L\'année d\'installation du générateur est antérieure à l\'année de construction du bâtiment.');
-        }
+    public function set_chauffe_eau_instantane(
+        EnergieGenerateur\EnergieChauffeEauInstantane $energie,
+        Signaletique\Combustion $signaletique,
+    ): self {
+        $this->pre_update();
+        $this->type = TypeGenerateur::CHAUFFE_EAU_INSTANTANE;
+        $this->energie = $energie->to();
+        $this->signaletique = $signaletique;
+        $this->post_update();
+        return $this;
+    }
+
+    public function set_accumulateur(
+        TypeGenerateur\TypeAccumulateur $type,
+        EnergieGenerateur\EnergieAccumulateur $energie,
+        Signaletique\Combustion $signaletique,
+        int $volume_stockage,
+    ): self {
+        $this->pre_update();
+        $this->type = $volume_stockage === 0 ? TypeGenerateur::CHAUFFE_EAU_INSTANTANE : $type->to();
+        $this->energie = $energie->to();
+        $this->signaletique = $signaletique;
+        $this->volume_stockage = $volume_stockage;
+        $this->post_update();
+        return $this;
+    }
+
+    public function set_reseau_chaleur(): self
+    {
+        $this->pre_update();
+        $this->type = TypeGenerateur::RESEAU_CHALEUR;
+        $this->energie = EnergieGenerateur::RESEAU_CHALEUR;
+        $this->generateur_collectif = true;
+        $this->post_update();
+        return $this;
+    }
+
+    public function set_systeme_collectif_defaut(): self
+    {
+        $this->pre_update();
+        $this->type = TypeGenerateur::SYSTEME_COLLECTIF_PAR_DEFAUT;
+        $this->energie = EnergieGenerateur::FIOUL;
+
+        $this->generateur_collectif = true;
+        $this->post_update();
+        return $this;
+    }
+
+    public function update(
+        string $description,
+        bool $position_volume_chauffe,
+        bool $generateur_collectif,
+        ?int $annee_installation,
+    ): self {
+        $this->description = $description;
+        $this->annee_installation = $annee_installation;
+
+        $this->position_volume_chauffe = match (true) {
+            $this->categorie === CategorieGenerateur::CHAUDIERE_MULTI_BATIMENT => false,
+            $this->categorie === CategorieGenerateur::PAC_MULTI_BATIMENT => false,
+            $this->categorie === CategorieGenerateur::RESEAU_CHALEUR => false,
+            default => $position_volume_chauffe,
+        };
+        $this->generateur_collectif = match (true) {
+            $this->categorie === CategorieGenerateur::CHAUDIERE_MULTI_BATIMENT => true,
+            $this->categorie === CategorieGenerateur::PAC_MULTI_BATIMENT => true,
+            $this->categorie === CategorieGenerateur::RESEAU_CHALEUR => true,
+            $this->type === TypeGenerateur::SYSTEME_COLLECTIF_PAR_DEFAUT => true,
+            default => $generateur_collectif,
+        };
+
+        $this->post_update();
+        return $this;
+    }
+
+    public function determine_categorie(): self
+    {
+        $this->categorie = CategorieGenerateur::determine(type: $this->type, energie: $this->energie);
+        return $this;
+    }
+
+    public function controle(): void
+    {
+        Assert::positif_ou_zero($this->volume_stockage);
+        Assert::annee($this->annee_installation);
+        Assert::superieur_ou_egal_a($this->annee_installation, $this->ecs->audit()->annee_construction_batiment());
+        $this->signaletique?->controle();
+    }
+
+    public function reinitialise(): void
+    {
+        $this->performance = null;
+        $this->pertes_generation = null;
+        $this->pertes_stockage = null;
+    }
+
+    public function calcule_performance(MoteurPerformance $moteur, Simulation $simulation): self
+    {
+        $this->performance = $moteur->calcule_performance($this, $simulation);
+        return $this;
+    }
+
+    public function calcule_pertes(MoteurPerte $moteur, Simulation $simulation): self
+    {
+        $this->pertes_generation = $moteur->calcule_pertes_generation($this, $simulation);
+        $this->pertes_stockage = $moteur->calcule_pertes_stockage_generateur($this, $simulation);
+        return $this;
     }
 
     public function id(): Id
@@ -226,9 +275,9 @@ final class Generateur
         return $this->id;
     }
 
-    public function installation(): InstallationEcs
+    public function ecs(): Ecs
     {
-        return $this->installation;
+        return $this->ecs;
     }
 
     public function description(): string
@@ -236,24 +285,14 @@ final class Generateur
         return $this->description;
     }
 
-    public function reseau_chaleur_id(): ?\Stringable
+    public function categorie(): CategorieGenerateur
     {
-        return $this->reseau_chaleur_id;
+        return $this->categorie;
     }
 
-    public function position_volume_chauffe(): bool
+    public function type(): TypeGenerateur
     {
-        return $this->position_volume_chauffe;
-    }
-
-    public function type_generateur(): TypeGenerateur
-    {
-        return $this->type_generateur;
-    }
-
-    public function usage(): UsageGenerateur
-    {
-        return $this->usage;
+        return $this->type;
     }
 
     public function energie(): EnergieGenerateur
@@ -261,18 +300,94 @@ final class Generateur
         return $this->energie;
     }
 
-    public function stockage(): Stockage
+    public function signaletique(): Signaletique
     {
-        return $this->stockage;
+        return $this->signaletique;
     }
 
-    public function performance(): Performance
+    public function usage(): UsageEcs
+    {
+        return $this->generateur_mixte_id ? UsageEcs::CHAUFFAGE_ECS : UsageEcs::ECS;
+    }
+
+    public function annee_installation(): ?int
+    {
+        return $this->annee_installation;
+    }
+
+    public function position_volume_chauffe(): bool
+    {
+        return $this->position_volume_chauffe;
+    }
+
+    public function generateur_collectif(): bool
+    {
+        return $this->generateur_collectif;
+    }
+
+    public function volume_stockage(): int
+    {
+        return $this->volume_stockage;
+    }
+
+    public function reseau_chaleur_id(): ?Id
+    {
+        return $this->reseau_chaleur_id;
+    }
+
+    public function reference_reseau_chaleur(Id $reseau_chaleur_id): self
+    {
+        if ($this->categorie === CategorieGenerateur::RESEAU_CHALEUR) {
+            $this->reseau_chaleur_id = $reseau_chaleur_id;
+            $this->reinitialise();
+        }
+        return $this;
+    }
+
+    public function dereference_reseau_chaleur(): self
+    {
+        $this->reseau_chaleur_id = null;
+        $this->reinitialise();
+        return $this;
+    }
+
+    public function generateur_mixte_id(): ?Id
+    {
+        return $this->generateur_mixte_id;
+    }
+
+    public function reference_generateur_mixte(Id $generateur_mixte_id): self
+    {
+        if (false === \in_array($this->categorie, [
+            CategorieGenerateur::ACCUMULATEUR,
+            CategorieGenerateur::CHAUFFE_EAU_ELECTRIQUE,
+            CategorieGenerateur::CHAUFFE_EAU_INSTANTANE,
+            CategorieGenerateur::CHAUFFE_EAU_THERMODYNAMIQUE,
+        ])) $this->generateur_mixte_id = $generateur_mixte_id;
+
+        $this->reinitialise();
+        return $this;
+    }
+
+    public function dereference_generateur_mixte(): self
+    {
+        $this->generateur_mixte_id = null;
+        $this->reinitialise();
+        return $this;
+    }
+
+    public function performance(): ?Performance
     {
         return $this->performance;
     }
 
-    public function annee_installation(): ?AnneeInstallation
+    public function pertes_generation(): ?PerteCollection
     {
-        return $this->annee_installation;
+        return $this->pertes_generation;
+    }
+
+    public function pertes_stockage(): ?PerteCollection
+    {
+        return $this->pertes_stockage;
     }
 }

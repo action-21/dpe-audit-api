@@ -2,119 +2,99 @@
 
 namespace App\Domain\PlancherBas;
 
-use App\Domain\Common\ValueObject\{Entier, Id};
+use App\Domain\Common\Type\Id;
+use App\Domain\Enveloppe\Entity\{Paroi, ParoiCollection};
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Lnc\Lnc;
-use App\Domain\Paroi\{ParoiOpaque, TypeParoi};
-use App\Domain\PlancherBas\Enum\{Mitoyennete, TypeIsolation};
-use App\Domain\PlancherBas\ValueObject\{Caracteristique, Isolation,};
+use App\Domain\PlancherBas\Enum\{EtatIsolation, Mitoyennete};
+use App\Domain\PlancherBas\Service\{MoteurPerformance, MoteurSurfaceDeperditive};
+use App\Domain\PlancherBas\ValueObject\{Caracteristique, Performance, Isolation, Position};
+use App\Domain\Simulation\Simulation;
 
-/**
- * Plancher bas donnant sur l'extérieur ou sur un local non chauffé
- */
-final class PlancherBas implements ParoiOpaque
+final class PlancherBas implements Paroi
 {
+    private ?Performance $performance = null;
+    private ?float $surface_deperditive = null;
+
     public function __construct(
         private readonly Id $id,
         private readonly Enveloppe $enveloppe,
         private string $description,
-        private Mitoyennete $mitoyennete,
+        private Position $position,
         private Caracteristique $caracteristique,
         private Isolation $isolation,
-        private ?Lnc $local_non_chauffe = null,
-    ) {
-    }
-
-    public function create(
-        Enveloppe $enveloppe,
-        string $description,
-        Mitoyennete $mitoyennete,
-        Caracteristique $caracteristique,
-        Isolation $isolation,
-        ?Lnc $local_non_chauffe = null,
-    ): self {
-        $entity = new self(
-            id: Id::create(),
-            enveloppe: $enveloppe,
-            description: $description,
-            caracteristique: $caracteristique,
-            isolation: $isolation,
-            mitoyennete: $mitoyennete,
-            local_non_chauffe: $local_non_chauffe,
-        );
-        return $local_non_chauffe
-            ? $entity->set_local_non_chauffe(entity: $local_non_chauffe)
-            : $entity->set_mitoyennete(mitoyennete: $mitoyennete);
-    }
+    ) {}
 
     public function update(
         string $description,
+        Position $position,
         Caracteristique $caracteristique,
         Isolation $isolation,
     ): self {
         $this->description = $description;
+        $this->position = $position;
         $this->caracteristique = $caracteristique;
         $this->isolation = $isolation;
-        $this->controle_coherence();
+        $this->controle();
+        $this->reinitialise();
         return $this;
     }
 
-    public function set_local_non_chauffe(Lnc $entity): static
+    public function controle(): void
     {
-        $this->local_non_chauffe = $entity;
-        $this->mitoyennete = Mitoyennete::LOCAL_NON_CHAUFFE;
-        $this->controle_coherence();
+        $this->caracteristique->controle($this);
+        $this->isolation->controle($this);
+        $this->position->controle();
+    }
+
+    public function reinitialise(): void
+    {
+        $this->performance = null;
+        $this->surface_deperditive = null;
+    }
+
+    public function calcule_surface_deperditive(MoteurSurfaceDeperditive $moteur): self
+    {
+        $this->surface_deperditive = $moteur->calcule_surface_deperditive($this);
         return $this;
     }
 
-    public function set_mitoyennete(Mitoyennete $mitoyennete): static
+    public function calcule_performance(MoteurPerformance $moteur, Simulation $simulation): self
     {
-        $this->mitoyennete = $mitoyennete;
-        $this->local_non_chauffe = null;
-        $this->controle_coherence();
+        $this->performance = $moteur->calcule_performance($this, $simulation);
         return $this;
     }
 
-    public function controle_coherence(): void
-    {
-        $type_isolation_cases = TypeIsolation::cases_by_type_plancher_bas($this->caracteristique->type_plancher_bas);
-        if (\count($type_isolation_cases) === 1) {
-            $this->isolation = Isolation::create(
-                type_isolation: \reset($type_isolation_cases),
-                annnee_isolation: $this->isolation->annnee_isolation,
-                epaisseur_isolant: $this->isolation->epaisseur_isolant,
-                resistance_thermique: $this->isolation->resistance_thermique,
-            );
-        }
-        if ($this->local_non_chauffe & false === $this->local_non_chauffe->type_lnc()->type_paroi_applicable($this->type_paroi())) {
-            throw new \DomainException('Type de local non chauffé non applicable');
-        }
-        if ($this->mitoyennete = Mitoyennete::LOCAL_NON_CHAUFFE && null === $this->local_non_chauffe) {
-            throw new \DomainException('Local non chauffé non défini');
-        }
-        if (!\in_array($this->isolation->type_isolation, $type_isolation_cases)) {
-            throw new \DomainException('Type d\'isolation non applicable');
-        }
-        if ($this->isolation->annnee_isolation?->valeur() && $this->isolation->annnee_isolation->valeur() < $this->enveloppe->batiment()->annee_construction()->valeur()) {
-            throw new \DomainException('Année d\'isolation antérieure à l\'année de construction');
-        }
-    }
-
-    /** @inheritdoc */
     public function id(): Id
     {
         return $this->id;
     }
 
-    /** @inheritdoc */
     public function enveloppe(): Enveloppe
     {
         return $this->enveloppe;
     }
 
+    public function local_non_chauffe(): ?Lnc
+    {
+        return $this->position->local_non_chauffe_id
+            ? $this->enveloppe->locaux_non_chauffes()->find(id: $this->position->local_non_chauffe_id)
+            : null;
+    }
+
     public function description(): string
     {
         return $this->description;
+    }
+
+    public function position(): Position
+    {
+        return $this->position;
+    }
+
+    public function mitoyennete(): Mitoyennete
+    {
+        return $this->position->mitoyennete;
     }
 
     public function caracteristique(): Caracteristique
@@ -127,80 +107,51 @@ final class PlancherBas implements ParoiOpaque
         return $this->isolation;
     }
 
-    /** @inheritdoc */
-    public function local_non_chauffe(): ?Lnc
-    {
-        return $this->local_non_chauffe;
-    }
-
-    /** @inheritdoc */
-    public function mitoyennete(): Mitoyennete
-    {
-        return $this->mitoyennete;
-    }
-
-    /** @inheritdoc */
-    public function type_paroi(): TypeParoi
-    {
-        return TypeParoi::PLANCHER_BAS;
-    }
-
-    /** @inheritdoc */
-    public function surface(): float
-    {
-        return $this->caracteristique->surface->valeur();
-    }
-
-    /** @inheritdoc */
-    public function surface_deperditive(): float
-    {
-        return $this->surface() - $this->enveloppe->paroi_collection()->search_ouverture()->search_by_paroi_opaque($this)->surface_deperditive();
-    }
-
-    /** @inheritdoc */
-    public function paroi_lourde(): bool
-    {
-        return $this->caracteristique->inertie->lourde();
-    }
-
-    /** @inheritdoc */
-    public function orientation(): ?Entier
+    public function orientation(): ?float
     {
         return null;
     }
 
-    /** @inheritdoc */
+    public function baies(): ParoiCollection
+    {
+        return $this->enveloppe->parois()->baies()->filter_by_paroi(id: $this->id);
+    }
+
+    public function portes(): ParoiCollection
+    {
+        return $this->enveloppe->parois()->portes()->filter_by_paroi(id: $this->id);
+    }
+
+    public function performance(): ?Performance
+    {
+        return $this->performance;
+    }
+
+    public function surface_deperditive(): ?float
+    {
+        return $this->surface_deperditive;
+    }
+
+    public function annee_construction_defaut(): int
+    {
+        return $this->caracteristique->annee_construction ?? $this->enveloppe->audit()->annee_construction_batiment();
+    }
+
+    public function est_lourd(): bool
+    {
+        return $this->caracteristique->inertie->est_lourde() ?? true;
+    }
+
     public function est_isole(): bool
     {
-        return (bool) $this->type_isolation_defaut()->est_isole();
+        return $this->isolation()->etat_isolation_defaut(
+            annee_construction: $this->annee_construction_defaut(),
+            mitoyennete: $this->mitoyennete(),
+        ) === EtatIsolation::ISOLE;
     }
 
-    /** @inheritdoc */
-    public function facade(): bool
+    public function b(): ?float
     {
-        return false;
-    }
-
-    /**
-     * Type d'isolation par défaut
-     */
-    public function type_isolation_defaut(): TypeIsolation
-    {
-        return $this->isolation->type_isolation->defaut(
-            mitoyennete: $this->mitoyennete,
-            annee_construction: $this->enveloppe->batiment()->annee_construction()->valeur(),
-        );
-    }
-
-    /**
-     * Année d'isolation par défaut
-     */
-    public function annnee_isolation_defaut(): ?int
-    {
-        if (false === $this->isolation->type_isolation->est_isole()) {
-            return null;
-        }
-        return $this->isolation->annnee_isolation?->valeur()
-            ?? $this->enveloppe->batiment()->annee_construction()->annee_isolation_defaut();
+        return $this->performance?->b;
     }
 }

@@ -4,13 +4,20 @@ namespace App\Domain\Common\Collection;
 
 class ArrayCollection implements Collection
 {
-    public function __construct(protected array $elements = [])
-    {
-    }
+    public function __construct(protected array $elements = []) {}
 
     protected function createFrom(array $elements): static
     {
         return new static($elements);
+    }
+
+    public static function fromCollections(self ...$collections): static
+    {
+        $collection = [];
+        foreach ($collections as $item) {
+            $collection = \array_merge($collection, $item->values());
+        }
+        return new static($collection);
     }
 
     public function count(): int
@@ -23,14 +30,14 @@ class ArrayCollection implements Collection
         return $this->elements;
     }
 
-    public function first(): mixed
+    public function first(): ?object
     {
-        return reset($this->elements);
+        return $this->count() ? reset($this->elements) : null;
     }
 
-    public function last(): mixed
+    public function last(): ?object
     {
-        return end($this->elements);
+        return $this->count() ? end($this->elements) : null;
     }
 
     public function key(): string|int|null
@@ -73,6 +80,20 @@ class ArrayCollection implements Collection
         return false;
     }
 
+    public function usort(\Closure $p): static
+    {
+        $elements = [...$this->elements];
+
+        usort($elements, $p);
+
+        return new static($elements);
+    }
+
+    public function slice(int $offset, ?int $length): static
+    {
+        return new static(\array_slice($this->elements, $offset, $length));
+    }
+
     public function filter(\Closure $p): static
     {
         return $this->createFrom(array_filter($this->elements, $p, ARRAY_FILTER_USE_BOTH));
@@ -83,9 +104,24 @@ class ArrayCollection implements Collection
         return $this->createFrom(array_map($func, $this->elements));
     }
 
-    public function reduce(\Closure $func, $initial = null): mixed
+    public function walk(\Closure $func): static
+    {
+        array_walk($this->elements, $func);
+        return $this;
+    }
+
+    public function reduce(\Closure $func, mixed $initial = 0): mixed
     {
         return array_reduce($this->elements, $func, $initial);
+    }
+
+    public function merge(?self ...$collections): static
+    {
+        $collection = $this->elements;
+        foreach ($collections as $item) {
+            $collection = \array_merge($collection, $item ? $item->values() : []);
+        }
+        return new static($collection);
     }
 
     public function findFirst(\Closure $p): mixed
@@ -106,48 +142,6 @@ class ArrayCollection implements Collection
     public function toArray(): array
     {
         return $this->elements;
-    }
-
-    /**
-     * @ihneritdoc
-     */
-    public function offsetExists(mixed $offset): bool
-    {
-        return $this->containsKey($offset);
-    }
-
-    /**
-     * @ihneritdoc
-     */
-    public function offsetGet(mixed $offset): mixed
-    {
-        return $this->get($offset);
-    }
-
-    /**
-     * @ihneritdoc
-     */
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        if ($offset === null) {
-            $this->add($value);
-            return;
-        }
-        if (\is_int($offset) || \is_string($offset)) {
-            $this->set($offset, $value);
-            return;
-        }
-    }
-
-    /**
-     * @ihneritdoc
-     */
-    public function offsetUnset(mixed $offset): void
-    {
-        if (\is_int($offset) || \is_string($offset)) {
-            $this->remove($offset);
-            return;
-        }
     }
 
     public function indexOf($element): string|int|false
@@ -175,19 +169,7 @@ class ArrayCollection implements Collection
         $this->elements[] = $element;
     }
 
-    public function remove(string|int $key): mixed
-    {
-        if (!isset($this->elements[$key]) && !array_key_exists($key, $this->elements)) {
-            return null;
-        }
-
-        $removed = $this->elements[$key];
-        unset($this->elements[$key]);
-
-        return $removed;
-    }
-
-    public function removeElement(mixed $element)
+    public function remove(mixed $element): bool
     {
         $key = array_search($element, $this->elements, true);
 

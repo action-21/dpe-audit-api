@@ -3,41 +3,76 @@
 namespace App\Domain\Lnc;
 
 use App\Domain\Enveloppe\Enveloppe;
-use App\Domain\Common\ValueObject\Id;
-use App\Domain\Lnc\Entity\{Baie, BaieCollection, ParoiCollection, ParoiOpaque, ParoiOpaqueCollection};
+use App\Domain\Common\Enum\ZoneClimatique;
+use App\Domain\Common\Type\Id;
+use App\Domain\Lnc\Entity\{Baie, BaieCollection, Paroi, ParoiCollection};
 use App\Domain\Lnc\Enum\TypeLnc;
+use App\Domain\Lnc\Service\{MoteurEnsoleillement, MoteurPerformance, MoteurSurfaceDeperditive};
+use App\Domain\Lnc\ValueObject\{EnsoleillementCollection, Performance};
 
-/**
- * Local non chauffé
- */
 final class Lnc
 {
+    private ?float $aiu = null;
+    private ?float $aue = null;
+    private ?bool $isolation_aiu = null;
+    private ?bool $isolation_aue = null;
+    private ?Performance $performance = null;
+    private ?EnsoleillementCollection $ensoleillement = null;
+
     public function __construct(
         private readonly Id $id,
         private readonly Enveloppe $enveloppe,
         private string $description,
-        private TypeLnc $type_lnc,
-        private BaieCollection $baie_collection,
-        private ParoiOpaqueCollection $paroi_opaque_collection,
-    ) {
-    }
+        private TypeLnc $type,
+        private ParoiCollection $parois,
+        private BaieCollection $baies,
+    ) {}
 
-    public static function create(Enveloppe $enveloppe, string $description, TypeLnc $type_lnc): self
-    {
-        return new self(
-            id: Id::create(),
-            enveloppe: $enveloppe,
-            description: $description,
-            type_lnc: $type_lnc,
-            baie_collection: new BaieCollection,
-            paroi_opaque_collection: new ParoiOpaqueCollection,
-        );
-    }
-
-    public function update(string $description, TypeLnc $type_lnc): self
+    public function update(string $description, TypeLnc $type): self
     {
         $this->description = $description;
-        $this->type_lnc = $type_lnc;
+        $this->type = $type;
+        return $this;
+    }
+
+    public function controle(): void
+    {
+        $this->parois->controle();
+        $this->baies->controle();
+    }
+
+    public function reinitialise(): void
+    {
+        $this->aiu = null;
+        $this->aue = null;
+        $this->isolation_aiu = null;
+        $this->isolation_aue = null;
+        $this->performance = null;
+        $this->ensoleillement = null;
+        $this->parois->reinitialise();
+        $this->baies->reinitialise();
+    }
+
+    public function calcule_surface_deperditive(MoteurSurfaceDeperditive $moteur): self
+    {
+        $this->parois->calcule_surface_deperditive($moteur);
+        $this->aiu = $moteur->calcule_aiu($this);
+        $this->aue = $moteur->calcule_aue($this);
+        $this->isolation_aiu = $moteur->calcule_isolation_aiu($this);
+        $this->isolation_aue = $moteur->calcule_isolation_aue($this);
+        return $this;
+    }
+
+    public function calcule_performance(MoteurPerformance $moteur): self
+    {
+        $this->performance = $moteur->calcule_performance($this);
+        return $this;
+    }
+
+    public function calcule_ensoleillement(MoteurEnsoleillement $moteur): self
+    {
+        $this->baies->calcule_ensoleillement($moteur);
+        $this->ensoleillement = $moteur->calcule_ensoleillement($this);
         return $this;
     }
 
@@ -51,96 +86,84 @@ final class Lnc
         return $this->enveloppe;
     }
 
-    public function description(): ?string
+    public function description(): string
     {
         return $this->description;
     }
 
-    public function isolation_aiu(): bool
+    public function type(): TypeLnc
     {
-        return $this->enveloppe->paroi_collection()->search_by_local_non_chauffe($this)->est_isole();
+        return $this->type;
     }
 
-    public function isolation_aue(): bool
+    public function est_ets(): bool
     {
-        return $this->paroi_collection()->isolation();
+        return $this->type === TypeLnc::ESPACE_TAMPON_SOLARISE;
     }
 
-    /**
-     * Somme des surfaces des parois qui donnent sur des locaux chauffés
-     */
-    public function surface_aiu(): float
+    public function est_combles(): bool
     {
-        return $this->enveloppe->paroi_collection()->search_by_local_non_chauffe($this)->surface_deperditive();
+        return \in_array($this->type, [
+            TypeLnc::COMBLE_FORTEMENT_VENTILE,
+            TypeLnc::COMBLE_FAIBLEMENT_VENTILE,
+            TypeLnc::COMBLE_TRES_FAIBLEMENT_VENTILE
+        ]);
     }
 
-    /**
-     * Somme des surfaces des parois qui donnent sur l'extérieur ou en contact avec le sol (paroi enterrée, terre-plein)
-     */
-    public function surface_aue(): float
+    public function baies(): BaieCollection
     {
-        return $this->paroi_collection()->surface();
-    }
-
-    public function type_lnc(): TypeLnc
-    {
-        return $this->type_lnc;
-    }
-
-    /**
-     * Espace tampon solarisé
-     */
-    public function ets(): bool
-    {
-        return $this->type_lnc() === TypeLnc::ESPACE_TAMPON_SOLARISE;
-    }
-
-    public function paroi_collection(): ParoiCollection
-    {
-        return new ParoiCollection([...$this->paroi_opaque_collection->values(), ...$this->baie_collection->values()]);
-    }
-
-    public function baie_collection(): BaieCollection
-    {
-        return $this->baie_collection;
-    }
-
-    public function get_baie(Id $id): ?Baie
-    {
-        return $this->baie_collection->find($id);
+        return $this->baies;
     }
 
     public function add_baie(Baie $entity): self
     {
-        $this->baie_collection->add($entity);
+        $this->baies->add($entity);
         return $this;
     }
 
-    public function remove_baie(Baie $entity): self
+    public function parois(): ParoiCollection
     {
-        $this->baie_collection->removeElement($entity);
+        return $this->parois;
+    }
+
+    public function add_paroi(Paroi $entity): self
+    {
+        $this->parois->add($entity);
         return $this;
     }
 
-    public function paroi_opaque_collection(): ParoiOpaqueCollection
+    public function zone_climatique(): ZoneClimatique
     {
-        return $this->paroi_opaque_collection;
+        return $this->enveloppe->audit()->zone_climatique();
     }
 
-    public function get_paroi_opaque(Id $id): ?ParoiOpaque
+    public function performance(): ?Performance
     {
-        return $this->paroi_opaque_collection->find($id);
+        return $this->performance;
     }
 
-    public function add_paroi_opaque(ParoiOpaque $entity): self
+    public function ensoleillement(): ?EnsoleillementCollection
     {
-        $this->paroi_opaque_collection->add($entity);
-        return $this;
+        return $this->ensoleillement;
     }
 
-    public function remove_paroi_opaque(ParoiOpaque $entity): self
+    public function aue(): ?float
     {
-        $this->paroi_opaque_collection->removeElement($entity);
-        return $this;
+        return $this->aue;
+    }
+
+    public function aiu(): ?float
+    {
+        return $this->aiu;
+    }
+
+    public function isolation_aue(): ?bool
+    {
+        return $this->isolation_aue;
+    }
+
+    public function isolation_aiu(): ?bool
+    {
+        return $this->isolation_aiu;
     }
 }

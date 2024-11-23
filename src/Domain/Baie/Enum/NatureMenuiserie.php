@@ -4,36 +4,26 @@ namespace App\Domain\Baie\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum NatureMenuiserie: int implements Enum
+enum NatureMenuiserie: string implements Enum
 {
-    case BRIQUE_VERRE = 1;
-    case POLYCARBONATE = 2;
-    case BOIS = 3;
-    case BOIS_METAL = 4;
-    case PVC = 5;
-    case METAL_AVEC_RUPTEUR_PONT_THERMIQUE = 6;
-    case METAL_SANS_RUPTEUR_PONT_THERMIQUE = 7;
+    case BOIS = 'BOIS';
+    case BOIS_METAL = 'BOIS_METAL';
+    case PVC = 'PVC';
+    case METAL = 'METAL';
 
-    public static function from_enum_type_materiaux_menuiserie_id(int $id): self
+    public static function from_enum_type_materiaux_menuiserie_id(int $id): ?self
     {
-        return self::from($id);
-    }
-
-    /** @return array<self> */
-    public static function cases_by_type_baie(TypeBaie $type_baie): array
-    {
-        return match ($type_baie) {
-            TypeBaie::BRIQUE_VERRE_PLEINE, TypeBaie::BRIQUE_VERRE_CREUSE => [
-                self::BRIQUE_VERRE,
-            ],
-            TypeBaie::POLYCARBONATE => [
-                self::POLYCARBONATE,
-            ],
-            default => self::cases(),
+        return match ($id) {
+            1, 2 => null,
+            3 => self::BOIS,
+            4 => self::BOIS_METAL,
+            5 => self::PVC,
+            6 => self::METAL,
+            7 => self::METAL,
         };
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -41,13 +31,26 @@ enum NatureMenuiserie: int implements Enum
     public function lib(): string
     {
         return match ($this) {
-            self::BRIQUE_VERRE => 'Brique de Verre',
-            self::POLYCARBONATE => 'Polycarbonate',
             self::BOIS => 'Bois',
             self::BOIS_METAL => 'Bois/métal',
             self::PVC => 'PVC',
-            self::METAL_AVEC_RUPTEUR_PONT_THERMIQUE => 'Métal avec rupture de pont thermique',
-            self::METAL_SANS_RUPTEUR_PONT_THERMIQUE => 'Métal sans rupture de pont thermique'
+            self::METAL => 'Métal',
+        };
+    }
+
+    /**
+     * @return TypeVitrage[]
+     */
+    public function types_vitrage_applicables(): array
+    {
+        return match ($this) {
+            default => [
+                TypeVitrage::SIMPLE_VITRAGE,
+                TypeVitrage::DOUBLE_VITRAGE,
+                TypeVitrage::DOUBLE_VITRAGE_FE,
+                TypeVitrage::TRIPLE_VITRAGE,
+                TypeVitrage::TRIPLE_VITRAGE_FE,
+            ],
         };
     }
 }

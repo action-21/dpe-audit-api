@@ -1,0 +1,831 @@
+qvarep_conv:
+  - type_ventilation: OUVERTURE_FENETRES
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.2
+  - type_ventilation: ENTREES_AIR_HAUTES_ET_BASSES
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2.23
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.97
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.65
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.5
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.32
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.5
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.44
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.16
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.59
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.53
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.22
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.36
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.24
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.09
+  - type_ventilation: VMC_BASSE_PRESSION_AUTOREGLABLE
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.97
+  - type_ventilation: VMC_BASSE_PRESSION_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.3
+  - type_ventilation: VMC_BASSE_PRESSION_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.24
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: INDIVIDUEL
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.6
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: INDIVIDUEL
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.26
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: COLLECTIF
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.75
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: COLLECTIF
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.46
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 1.65
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 1.32
+  - type_ventilation: VENTILATION_NATURELLE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 2.23
+  - type_ventilation: VENTILATION_NATURELLE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 2.23
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 1.52
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 1.33
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 1.17
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 1.52
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 1.33
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 1.17
+  - type_ventilation: VENTILATION_MECANIQUE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2.24
+  - type_ventilation: VENTILATION_MECANIQUE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.97
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 0.99
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 0.79
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.36
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.16
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.97
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.65
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.5
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.32
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.97
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.65
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.5
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.32
+qvasouf_conv:
+  - type_ventilation: OUVERTURE_FENETRES
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.2
+  - type_ventilation: ENTREES_AIR_HAUTES_ET_BASSES
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_BASSE_PRESSION_AUTOREGLABLE
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_BASSE_PRESSION_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_BASSE_PRESSION_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: INDIVIDUEL
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.6
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: INDIVIDUEL
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.26
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: COLLECTIF
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.75
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: COLLECTIF
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.46
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 1.65
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 1.32
+  - type_ventilation: VENTILATION_NATURELLE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 0
+  - type_ventilation: VENTILATION_NATURELLE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 0
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 0
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 0
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 0
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 0
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 0
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 0
+  - type_ventilation: VENTILATION_MECANIQUE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VENTILATION_MECANIQUE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 0.99
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 0.79
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.36
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0.16
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+smea_conv:
+  - type_ventilation: OUVERTURE_FENETRES
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: ENTREES_AIR_HAUTES_ET_BASSES
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 4
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_AUTOREGLABLE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_GAZ
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.5
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.5
+  - type_ventilation: VMC_SIMPLE_FLUX_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.5
+  - type_ventilation: VMC_BASSE_PRESSION_AUTOREGLABLE
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_BASSE_PRESSION_HYGROREGLABLE_TYPE_A
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMC_BASSE_PRESSION_HYGROREGLABLE_TYPE_B
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 1.5
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: INDIVIDUEL
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: INDIVIDUEL
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: COLLECTIF
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: COLLECTIF
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMC_DOUBLE_FLUX
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VENTILATION_NATURELLE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 4
+  - type_ventilation: VENTILATION_NATURELLE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: null
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 3
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 3
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 3
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: false
+    resultat: 3
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2000
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 2
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 2
+  - type_ventilation: VENTILATION_HYBRIDE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: true
+    resultat: 2
+  - type_ventilation: VENTILATION_MECANIQUE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 4
+  - type_ventilation: VENTILATION_MECANIQUE_SUR_CONDUIT
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 4
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: false
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2012
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: PUIT_CLIMATIQUE
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: true
+    presence_entree_air_hygroreglable: null
+    resultat: 0
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMI
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 1981
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 1982
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 2001
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2
+  - type_ventilation: VMR
+    type_installation: null
+    annee_installation: 2013
+    presence_echangeur: null
+    presence_entree_air_hygroreglable: null
+    resultat: 2

@@ -2,51 +2,25 @@
 
 namespace App\Database\Opendata\PlancherHaut;
 
-use App\Database\Opendata\{XMLElement, XMLReaderIterator};
-use App\Domain\Common\Enum\Orientation;
-use App\Domain\Common\Identifier\Reference;
-use App\Domain\PlancherHaut\Enum\Inertie;
-use App\Domain\PlancherHaut\ValueObject\{Caracteristique, Surface, Uph, Uph0};
-use App\Domain\Paroi\Enum\{PeriodeIsolation, TypeIsolation};
-use App\Domain\Paroi\ValueObject\{AnneeIsolation, EpaisseurIsolant, Isolation, OrientationParoi, ResistanceIsolant};
-use App\Domain\PlancherHaut\Enum\Mitoyennete;
-use App\Domain\PlancherHaut\Enum\TypePlancherHaut;
+use App\Database\Opendata\XMLReaderIterator;
+use App\Domain\Common\Type\Id;
+use App\Domain\PlancherHaut\Enum\{EtatIsolation, Inertie, Mitoyennete, TypeIsolation, TypePlancherHaut};
 
 final class XMLPlancherHautReader extends XMLReaderIterator
 {
-    public function id(): \Stringable
+    public function id(): Id
     {
-        return Reference::create($this->reference());
-    }
-
-    public function reference(): string
-    {
-        return $this->get()->findOneOrError('.//reference')->getValue();
-    }
-
-    public function reference_lnc(): ?string
-    {
-        return $this->get()->findOne('.//reference_lnc')?->getValue();
+        return Id::from($this->reference());
     }
 
     public function description(): string
     {
-        return $this->get()->findOne('.//description')?->getValue() ?? "Plancher haut non décrit";
+        return $this->xml()->findOne('.//description')?->strval() ?? 'Plancher haut non décrit';
     }
 
-    public function surface_aue(): ?float
+    public function mitoyennete(): Mitoyennete
     {
-        return ($value = $this->get()->findOne('.//surface_aue')?->getValue()) ? (float) $value : null;
-    }
-
-    public function enum_type_adjacence_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_adjacence_id')->getValue();
-    }
-
-    public function enum_type_plancher_haut_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_plancher_haut_id')->getValue();
+        return Mitoyennete::from_type_adjacence_id($this->enum_type_adjacence_id());
     }
 
     public function type_plancher_haut(): TypePlancherHaut
@@ -54,147 +28,101 @@ final class XMLPlancherHautReader extends XMLReaderIterator
         return TypePlancherHaut::from_enum_type_plancher_haut_id($this->enum_type_plancher_haut_id());
     }
 
-    public function surface_paroi_opaque(): Surface
-    {
-        return Surface::from($this->get()->findOneOrError('.//surface_paroi_opaque')->getValue());
-    }
-
-    public function enum_type_isolation_id(): int
-    {
-        return (int) $this->get()->findOneOrError('.//enum_type_isolation_id')->getValue();
-    }
-
-    public function type_isolation(): TypeIsolation
-    {
-        return TypeIsolation::from_enum_type_isolation_id($this->enum_type_isolation_id());
-    }
-
-    public function enum_periode_isolation_id(): ?int
-    {
-        return ($value = $this->get()->findOne('.//enum_periode_isolation_id')?->getValue()) ? (int) $value : null;
-    }
-
-    public function periode_isolation(): ?PeriodeIsolation
-    {
-        return $this->enum_periode_isolation_id() ? PeriodeIsolation::from_enum_periode_isolation_id($this->enum_periode_isolation_id()) : null;
-    }
-
-    public function epaisseur_isolation(): ?EpaisseurIsolant
-    {
-        return ($value = $this->get()->findOne('.//epaisseur_isolation')?->getValue()) ? EpaisseurIsolant::from((float) $value * 10) : null;
-    }
-
-    public function resistance_isolation(): ?ResistanceIsolant
-    {
-        return ($value = $this->get()->findOne('.//resistance_isolation')?->getValue()) ? ResistanceIsolant::from((float) $value) : null;
-    }
-
-    public function uph0_saisi(): ?Uph0
-    {
-        return ($value = $this->get()->findOne('.//ph0_saisi')?->getValue()) ? Uph0::from((float) $value) : null;
-    }
-
-    public function uph_saisi(): ?Uph
-    {
-        return ($value = $this->get()->findOne('.//ph_saisi')?->getValue()) ? Uph::from((float) $value) : null;
-    }
-
-    // Données déduites
-
-    public function mitoyennete(): Mitoyennete
-    {
-        return Mitoyennete::from_type_adjacence_id($this->enum_type_adjacence_id());
-    }
-
-    public function orientation(): ?OrientationParoi
+    public function surface(): float
     {
         $reference = $this->reference();
-        foreach ($this->get()->search('//baie_vitree_collection/baie_vitree') as $xml) {
-            if ($reference !== $xml->findOne('.//reference_paroi')?->getValue()) {
-                continue;
-            }
-            if (null === $enum_orientation_id = $xml->findOne('.//enum_orientation_id')?->getValue()) {
-                continue;
-            }
-            return ($orientation = Orientation::try_from_enum_orientation_id((int) $enum_orientation_id))
-                ? OrientationParoi::from($orientation->to_azimut())
-                : null;
-        }
-        return null;
-    }
+        $surface = $this->xml()->findOneOrError('.//surface_paroi_opaque')->floatval();
 
-    public function surface_paroi_totale(): Surface
-    {
-        $reference = $this->reference();
-        $surface = $this->surface_paroi_opaque()->valeur();
-
-        foreach ($this->get()->search('//baie_vitree_collection/baie_vitree') as $item) {
-            if ($item->findOne('.//reference_paroi')?->getValue() !== $reference) {
-                continue;
-            }
-            $surface += (float) $item->findOneOrError('.//surface_totale_baie')->getValue();
+        foreach ($this->xml()->baie_collection() as $item) {
+            if ($item->findOne('.//reference_paroi')?->strval() === $reference)
+                $surface += $item->findOneOrError('.//surface_totale_baie')->floatval();
         }
-        foreach ($this->get()->search('//porte_collection/porte') as $item) {
-            if ($item->findOne('.//reference_paroi')?->getValue() !== $reference) {
-                continue;
-            }
-            $surface += (float) $item->findOneOrError('.//surface_porte')->getValue();
+        foreach ($this->xml()->porte_collection() as $item) {
+            if ($item->findOne('.//reference_paroi')?->strval() === $reference)
+                $surface += $item->findOneOrError('.//surface_porte')->floatval();
         }
-        return Surface::from($surface);
+        return $surface;
     }
 
     public function inertie(): Inertie
     {
-        return (bool)(int) $this->get()->findOneOrError('//inertie_plancher_haut_lourd')->getValue() ? Inertie::LOURDE : Inertie::LEGERE;
+        return $this->xml()->findOneOrError('//inertie_plancher_haut_lourd')->boolval() ? Inertie::LOURDE : Inertie::LEGERE;
     }
 
-    public function annee_isolation(): ?AnneeIsolation
+    public function etat_isolation(): EtatIsolation
     {
-        return $this->periode_isolation() ? AnneeIsolation::from($this->periode_isolation()->to_int()) : null;
+        return EtatIsolation::from_enum_type_isolation_id($this->enum_type_isolation_id());
     }
 
-    public function caracteristique(): Caracteristique
+    public function type_isolation(): ?TypeIsolation
     {
-        return new Caracteristique(
-            surface: $this->surface_paroi_totale(),
-            type_plancher_haut: $this->type_plancher_haut(),
-            inertie: $this->inertie(),
-            uph0: $this->uph0_saisi(),
-            uph: $this->uph_saisi(),
-        );
+        return TypeIsolation::from_enum_type_isolation_id($this->enum_type_isolation_id());
     }
 
-    public function isolation(): Isolation
+    public function annee_isolation(): ?int
     {
-        return new Isolation(
-            type_isolation: $this->type_isolation(),
-            annnee_isolation: $this->annee_isolation(),
-            epaisseur_isolant: $this->epaisseur_isolation(),
-            resistance_thermique: $this->resistance_isolation(),
-        );
+        return $this->xml()->findOne('.//enum_periode_isolation_id')?->annee_isolation();
+    }
+
+    public function epaisseur_isolation(): ?int
+    {
+        return ($value = $this->xml()->findOne('.//epaisseur_isolation')?->intval()) ? $value * 10 : null;
+    }
+
+    public function resistance_isolation(): ?float
+    {
+        return $this->xml()->findOne('.//resistance_isolation')?->floatval();
+    }
+
+    public function uph0_saisi(): ?float
+    {
+        return $this->xml()->findOne('.//uph0_saisi')?->floatval();
+    }
+
+    public function uph_saisi(): ?float
+    {
+        return $this->xml()->findOne('.//uph_saisi')?->floatval();
+    }
+
+    public function reference(): string
+    {
+        return $this->xml()->findOneOrError('.//reference')->strval();
+    }
+
+    public function enum_type_adjacence_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_adjacence_id')->intval();
+    }
+
+    public function enum_orientation_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_orientation_id')->intval();
+    }
+
+    public function enum_type_plancher_haut_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_plancher_haut_id')->intval();
+    }
+
+    public function enum_type_isolation_id(): int
+    {
+        return $this->xml()->findOneOrError('.//enum_type_isolation_id')->intval();
     }
 
     // Données intermédiaires
 
-    public function uph0(): ?Uph0
+    public function uph0(): ?float
     {
-        return ($value = $this->get()->findOne('.//uph0')?->getValue()) ? Uph0::from((float) $value) : null;
+        return $this->xml()->findOne('.//uph0')?->floatval();
     }
 
-    public function uph(): Uph
+    public function uph(): float
     {
-        return Uph::from((float) $this->get()->findOneOrError('.//uph')->getValue());
+        return $this->xml()->findOneOrError('.//uph')->floatval();
     }
 
     public function b(): float
     {
-        return (float) $this->get()->findOneOrError('.//b')->getValue();
-    }
-
-    public function read(XMLElement $xml): self
-    {
-        $xml = $xml->findOneOfOrError(['/audit/logement_collection//logement[.//enum_scenario_id="0"]', '/dpe/logement']);
-        $this->array = $xml->findMany('.//plancher_haut_collection//plancher_haut');
-        return $this;
+        return $this->xml()->findOneOrError('.//b')->floatval();
     }
 }

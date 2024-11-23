@@ -2,14 +2,12 @@
 
 namespace App\Services\ExpressionResolver;
 
-use App\Domain\Common\ExpressionResolver;
+use App\Domain\Common\Service\ExpressionResolver;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class SymfonyExpressionResolver implements ExpressionResolver
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function evalue(string $expression, array $variables = []): float|false
     {

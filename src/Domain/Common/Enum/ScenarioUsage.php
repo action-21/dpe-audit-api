@@ -4,12 +4,12 @@ namespace App\Domain\Common\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum ScenarioUsage: int implements Enum
+enum ScenarioUsage: string implements Enum
 {
-    case CONVENTIONNEL = 1;
-    case DEPENSIER = 2;
+    case CONVENTIONNEL = 'CONVENTIONNEL';
+    case DEPENSIER = 'DEPENSIER';
 
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }

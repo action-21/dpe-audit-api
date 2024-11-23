@@ -5,10 +5,19 @@ namespace App\Database\Opendata;
 abstract class XMLReaderIterator implements \Iterator
 {
     /** @var XMLElement[] */
-    protected array $array = [];
-    protected int $position = 0;
+    private array $array = [];
+    private int $position = 0;
 
-    public function get(): XMLElement
+    /**
+     * @param XMLElement[] $xml
+     */
+    public function read(array $xml): static
+    {
+        $this->array = $xml;
+        return $this;
+    }
+
+    public function xml(): XMLElement
     {
         return $this->array[$this->position];
     }
@@ -36,5 +45,10 @@ abstract class XMLReaderIterator implements \Iterator
     public function valid(): bool
     {
         return isset($this->array[$this->position]);
+    }
+
+    public function count(): int
+    {
+        return \count($this->array);
     }
 }

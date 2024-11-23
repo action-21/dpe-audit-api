@@ -2,98 +2,47 @@
 
 namespace App\Domain\Baie\ValueObject;
 
-use App\Domain\Baie\Enum\{NatureGazLame, TypeBaie, TypeFermeture, NatureMenuiserie, TypePose, TypeVitrage};
+use App\Domain\Baie\Baie;
+use App\Domain\Baie\Enum\{TypeBaie, TypeFermeture};
+use App\Domain\Baie\Enum\TypeBaie\{Fenetre, ParoiVitree, PorteFenetre};
+use App\Domain\Common\Service\Assert;
 
 final class Caracteristique
 {
     public function __construct(
-        public readonly bool $presence_joint,
-        public readonly bool $presence_retour_isolation,
-        public readonly Surface $surface,
-        public readonly LargeurDormant $largeur_dormant,
-        public readonly TypeBaie $type_baie,
-        public readonly TypePose $type_pose,
-        public readonly NatureMenuiserie $nature_menuiserie,
-        public readonly InclinaisonVitrage $inclinaison_vitrage,
+        public readonly TypeBaie $type,
+        public readonly float $surface,
+        public readonly float $inclinaison,
         public readonly TypeFermeture $type_fermeture,
-        public readonly ?TypeVitrage $type_vitrage,
-        public readonly ?EpaisseurLameAir $epaisseur_lame,
-        public readonly ?NatureGazLame $nature_gaz_lame,
-        public readonly ?Ug $ug = null,
-        public readonly ?Uw $uw = null,
-        public readonly ?Ujn $ujn = null,
-        public readonly ?Sw $sw = null,
-    ) {
-    }
+        public readonly bool $presence_protection_solaire,
+        public readonly ?int $annee_installation,
+        public readonly ?bool $presence_soubassement = null,
+        public readonly ?Menuiserie $menuiserie = null,
+        public readonly ?float $ug = null,
+        public readonly ?float $uw = null,
+        public readonly ?float $ujn = null,
+        public readonly ?float $sw = null,
+    ) {}
 
-    public static function create(
-        bool $presence_joint,
-        bool $presence_retour_isolation,
-        Surface $surface,
-        LargeurDormant $largeur_dormant,
-        TypeBaie $type_baie,
-        NatureMenuiserie $nature_menuiserie,
-        InclinaisonVitrage $inclinaison_vitrage,
+    public static function create_paroi_vitree(
+        ParoiVitree $type,
+        float $surface,
+        int $inclinaison,
         TypeFermeture $type_fermeture,
-        TypeVitrage $type_vitrage,
-        ?TypePose $type_pose = null,
-        ?EpaisseurLameAir $epaisseur_lame,
-        ?NatureGazLame $nature_gaz_lame,
-        ?Ug $ug = null,
-        ?Uw $uw = null,
-        ?Ujn $ujn = null,
-        ?Sw $sw = null,
+        bool $presence_protection_solaire,
+        ?int $annee_installation,
+        ?float $ug,
+        ?float $uw,
+        ?float $ujn,
+        ?float $sw,
     ): self {
-        $cases_nature_menuiserie = NatureMenuiserie::cases_by_type_baie($type_baie);
-        $cases_type_pose = TypePose::cases_by_type_baie($type_baie);
-        $cases_type_vitrage = TypeVitrage::cases_by_nature_menuiserie($nature_menuiserie);
-
-        if (\count($cases_nature_menuiserie) === 1) {
-            $nature_menuiserie = \reset($cases_nature_menuiserie);
-        }
-        if (\count($cases_type_vitrage) === 1) {
-            $type_vitrage = \reset($cases_type_vitrage);
-        }
-        if (\count($cases_type_pose) === 1) {
-            $type_pose = \reset($cases_type_pose);
-        }
-        if (\count($cases_type_pose) === 0) {
-            $type_pose = null;
-        }
-        if (false === NatureGazLame::is_applicable_by_type_vitrage($type_vitrage)) {
-            $nature_gaz_lame = null;
-        }
-        if (false === EpaisseurLameAir::is_requis_by_type_vitrage($type_vitrage)) {
-            $epaisseur_lame = null;
-        }
-        if ($type_fermeture === TypeFermeture::SANS_FERMETURE) {
-            $ujn = null;
-        }
-        if (!\in_array($type_pose, $cases_type_pose)) {
-            throw new \InvalidArgumentException("Le type de pose n'est pas applicable à la baie");
-        }
-        if (!\in_array($type_vitrage, $cases_type_vitrage)) {
-            throw new \InvalidArgumentException("Le type de vitrage n'est pas applicable à la baie");
-        }
-        if (null === $nature_gaz_lame && NatureGazLame::is_requis_by_type_vitrage($type_vitrage)) {
-            throw new \InvalidArgumentException("La nature du gaz de la lame d'air est requise pour ce type de vitrage");
-        }
-        if (null === $epaisseur_lame && EpaisseurLameAir::is_requis_by_type_vitrage($type_vitrage)) {
-            throw new \InvalidArgumentException("L'épaisseur de la lame d'air est requise pour ce type de vitrage");
-        }
         return new self(
+            type: $type->type_baie(),
             surface: $surface,
-            presence_joint: $presence_joint,
-            presence_retour_isolation: $presence_retour_isolation,
-            largeur_dormant: $largeur_dormant,
-            type_baie: $type_baie,
-            type_pose: $type_pose,
-            nature_menuiserie: $nature_menuiserie,
-            inclinaison_vitrage: $inclinaison_vitrage,
+            inclinaison: $inclinaison,
             type_fermeture: $type_fermeture,
-            type_vitrage: $type_vitrage,
-            epaisseur_lame: $epaisseur_lame,
-            nature_gaz_lame: $nature_gaz_lame,
+            presence_protection_solaire: $presence_protection_solaire,
+            annee_installation: $annee_installation,
             ug: $ug,
             uw: $uw,
             ujn: $ujn,
@@ -101,11 +50,74 @@ final class Caracteristique
         );
     }
 
-    public function epaisseur_lame_air(): float
+    public static function create_fenetre(
+        Fenetre $type,
+        float $surface,
+        int $inclinaison,
+        TypeFermeture $type_fermeture,
+        bool $presence_protection_solaire,
+        Menuiserie $menuiserie,
+        ?int $annee_installation,
+        ?float $ug,
+        ?float $uw,
+        ?float $ujn,
+        ?float $sw,
+    ): self {
+        return new self(
+            type: $type->type_baie(),
+            surface: $surface,
+            inclinaison: $inclinaison,
+            type_fermeture: $type_fermeture,
+            presence_protection_solaire: $presence_protection_solaire,
+            menuiserie: $menuiserie,
+            annee_installation: $annee_installation,
+            ug: $ug,
+            uw: $uw,
+            ujn: $ujn,
+            sw: $sw,
+        );
+    }
+
+    public static function create_porte_fenetre(
+        PorteFenetre $type,
+        float $surface,
+        int $inclinaison,
+        TypeFermeture $type_fermeture,
+        bool $presence_soubassement,
+        bool $presence_protection_solaire,
+        Menuiserie $menuiserie,
+        ?int $annee_installation,
+        ?float $ug,
+        ?float $uw,
+        ?float $ujn,
+        ?float $sw,
+    ): self {
+        return new self(
+            type: $type->type_baie(),
+            surface: $surface,
+            inclinaison: $inclinaison,
+            type_fermeture: $type_fermeture,
+            presence_soubassement: $presence_soubassement,
+            presence_protection_solaire: $presence_protection_solaire,
+            menuiserie: $menuiserie,
+            annee_installation: $annee_installation,
+            ug: $ug,
+            uw: $uw,
+            ujn: $ujn,
+            sw: $sw,
+        );
+    }
+
+    public function controle(Baie $entity): void
     {
-        if ($this->epaisseur_lame) {
-            return $this->epaisseur_lame->valeur();
-        }
-        return $this->type_vitrage->epaisseur_lame_air_applicable() ? 6 : 0;
+        Assert::positif($this->surface);
+        Assert::inclinaison($this->inclinaison);
+        Assert::positif($this->ug);
+        Assert::positif($this->uw);
+        Assert::positif($this->ujn);
+        Assert::positif($this->sw);
+        Assert::annee($this->annee_installation);
+        Assert::superieur_ou_egal_a($this->annee_installation, $entity->enveloppe()->annee_construction_batiment());
+        $this->menuiserie?->controle();
     }
 }

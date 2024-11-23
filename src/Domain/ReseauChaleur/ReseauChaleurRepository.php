@@ -2,7 +2,7 @@
 
 namespace App\Domain\ReseauChaleur;
 
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\Type\Id;
 
 interface ReseauChaleurRepository
 {

@@ -4,35 +4,40 @@ namespace App\Domain\PlancherBas\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-/**
- * Type de plancher bas
- * 
- * TODO: renomage des énumérations
- */
-enum TypePlancherBas: int implements Enum
+enum TypePlancherBas: string implements Enum
 {
-    case INCONNU = 1;
-    case PLANCHER_AVEC_OU_SANS_REMPLISSAGE = 2;
-    case PLANCHER_ENTRE_SOLIVES_METALLIQUES = 3;
-    case PLANCHER_ENTRE_SOLIVES_BOIS = 4;
-    case PLANCHER_BOIS_SUR_SOLIVES_METALLIQUES = 5;
-    case BARDEAUX_ET_REMPLISSAGE = 6;
-    case VOUTAINS_SUR_SOLIVES_METALLIQUES = 7;
-    case VOUTAINS_BRIQUES_OU_MOELLONS = 8;
-    case DALLE_BETON = 9;
-    case PLANCHER_BOIS_SUR_SOLIVES_BOIS = 10;
-    case PLANCHER_LOURD_TYPE_ENTREVOUS_TERRE_CUITE_OU_POUTRELLES_BETON = 11;
-    case PLANCHER_ENTREVOUS_ISOLANT = 12;
-    /** @deprecated*/
-    case AUTRES = 13;
+    case INCONNU = 'INCONNU';
+    case PLANCHER_AVEC_OU_SANS_REMPLISSAGE = 'PLANCHER_AVEC_OU_SANS_REMPLISSAGE';
+    case PLANCHER_ENTRE_SOLIVES_METALLIQUES = 'PLANCHER_ENTRE_SOLIVES_METALLIQUES';
+    case PLANCHER_ENTRE_SOLIVES_BOIS = 'PLANCHER_ENTRE_SOLIVES_BOIS';
+    case PLANCHER_BOIS_SUR_SOLIVES_METALLIQUES = 'PLANCHER_BOIS_SUR_SOLIVES_METALLIQUES';
+    case BARDEAUX_ET_REMPLISSAGE = 'BARDEAUX_ET_REMPLISSAGE';
+    case VOUTAINS_SUR_SOLIVES_METALLIQUES = 'VOUTAINS_SUR_SOLIVES_METALLIQUES';
+    case VOUTAINS_BRIQUES_OU_MOELLONS = 'VOUTAINS_BRIQUES_OU_MOELLONS';
+    case DALLE_BETON = 'DALLE_BETON';
+    case PLANCHER_BOIS_SUR_SOLIVES_BOIS = 'PLANCHER_BOIS_SUR_SOLIVES_BOIS';
+    case PLANCHER_LOURD_TYPE_ENTREVOUS_TERRE_CUITE_OU_POUTRELLES_BETON = 'PLANCHER_LOURD_TYPE_ENTREVOUS_TERRE_CUITE_OU_POUTRELLES_BETON';
+    case PLANCHER_ENTREVOUS_ISOLANT = 'PLANCHER_ENTREVOUS_ISOLANT';
 
-    public static function from_enum_type_plancher_bas_id(int $id): self
+    public static function from_enum_type_plancher_bas_id(int $type_plancher_bas_id): self
     {
-        return self::from($id);
+        return match ($type_plancher_bas_id) {
+            1 => self::INCONNU,
+            2 => self::PLANCHER_AVEC_OU_SANS_REMPLISSAGE,
+            3 => self::PLANCHER_ENTRE_SOLIVES_METALLIQUES,
+            4 => self::PLANCHER_ENTRE_SOLIVES_BOIS,
+            5 => self::PLANCHER_BOIS_SUR_SOLIVES_METALLIQUES,
+            6 => self::BARDEAUX_ET_REMPLISSAGE,
+            7 => self::VOUTAINS_SUR_SOLIVES_METALLIQUES,
+            8 => self::VOUTAINS_BRIQUES_OU_MOELLONS,
+            9 => self::DALLE_BETON,
+            10 => self::PLANCHER_BOIS_SUR_SOLIVES_BOIS,
+            11 => self::PLANCHER_LOURD_TYPE_ENTREVOUS_TERRE_CUITE_OU_POUTRELLES_BETON,
+            12 => self::PLANCHER_ENTREVOUS_ISOLANT,
+        };
     }
 
-    /** @inheritdoc */
-    public function id(): int
+    public function id(): string
     {
         return $this->value;
     }
@@ -52,7 +57,6 @@ enum TypePlancherBas: int implements Enum
             self::PLANCHER_BOIS_SUR_SOLIVES_BOIS => 'Plancher bois sur solives bois',
             self::PLANCHER_LOURD_TYPE_ENTREVOUS_TERRE_CUITE_OU_POUTRELLES_BETON => 'Plancher lourd type entrevous terre-cuite, poutrelles béton',
             self::PLANCHER_ENTREVOUS_ISOLANT => 'Plancher à entrevous isolant',
-            self::AUTRES => 'Autre type de plancher non répertorié',
         };
     }
 }
