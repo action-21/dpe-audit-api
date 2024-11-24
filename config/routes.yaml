@@ -1,2 +1,3 @@
 controllers:
+    resource: ../src/Kernel.php
     type: attribute

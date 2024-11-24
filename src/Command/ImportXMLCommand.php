@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use App\Application\Simulation\View\Simulation as View;
 use App\Database\Opendata\Audit\XMLAuditTransformer;
 use App\Database\Opendata\Chauffage\XMLChauffageTransformer;
 use App\Database\Opendata\Eclairage\XMLEclairageTransformer;
@@ -13,8 +12,6 @@ use App\Database\Opendata\Refroidissement\XMLRefroidissementTransformer;
 use App\Database\Opendata\Ventilation\XMLVentilationTransformer;
 use App\Database\Opendata\Visite\XMLVisiteTransformer;
 use App\Database\Opendata\XMLElement;
-use App\Domain\Common\Enum\ScenarioUsage;
-use App\Domain\Ecs\Enum\TypePerte;
 use App\Domain\Simulation\{SimulationFactory, SimulationService};
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -89,8 +86,6 @@ class ImportXMLCommand extends Command
 
             $output->writeln("Simulation in {$timer->f} ms");
 
-            $view = View::from($simulation);
-            dump($view->bilan);
             //dump($view->enveloppe->performance););
             //dump($simulation->audit()->occupation());
             //dump($simulation->chauffage()->besoins()->besoins(scenario: ScenarioUsage::CONVENTIONNEL));

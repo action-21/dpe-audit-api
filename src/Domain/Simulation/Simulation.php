@@ -5,6 +5,7 @@ namespace App\Domain\Simulation;
 use App\Domain\Audit\Audit;
 use App\Domain\Chauffage\Chauffage;
 use App\Domain\Common\Enum\ZoneClimatique;
+use App\Domain\Common\Type\Id;
 use App\Domain\Eclairage\Eclairage;
 use App\Domain\Ecs\Ecs;
 use App\Domain\Enveloppe\Enveloppe;
@@ -21,6 +22,7 @@ final class Simulation
     private ?Bilan $bilan = null;
 
     public function __construct(
+        private readonly Id $id,
         private Audit $audit,
         private Enveloppe $enveloppe,
         private Chauffage $chauffage,
@@ -67,6 +69,11 @@ final class Simulation
         $this->performances = $moteur->calcule_performance($this);
         $this->bilan = $moteur->calcule_bilan($this);
         return $this;
+    }
+
+    public function id(): Id
+    {
+        return $this->id;
     }
 
     public function audit(): Audit

@@ -40,6 +40,7 @@ final class SimulationFactory
         $eclairage = $this->eclairage_repository->find($id);
 
         return new Simulation(
+            id: Id::create(),
             audit: $audit,
             enveloppe: $enveloppe,
             chauffage: $chauffage,
@@ -64,6 +65,7 @@ final class SimulationFactory
         Eclairage $eclairage,
     ): Simulation {
         return new Simulation(
+            id: Id::create(),
             audit: $audit,
             enveloppe: $enveloppe,
             chauffage: $chauffage,
