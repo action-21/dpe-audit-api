@@ -3,36 +3,16 @@
 > [!IMPORTANT]
 > Ce dépôt est une base de code du projet accessible [ici](https://github.com/action-21/reno-audit).
 
-## Roadmap
+## Installation
 
-- Enveloppe
-  - [x] Modélisation
-  - [x] Calcul
-  - [x] Documentation
-- Ventilation
-  - [x] Modélisation
-  - [x] Calcul
-  - [x] Documentation
-- Chauffage
-  - [x] Modélisation
-  - [x] Calcul
-  - [] Documentation
-- Eau chaude sanitaire
-  - [x] Modélisation
-  - [x] Calcul
-  - [x] Documentation
-- Refroidissement
-  - [x] Modélisation
-  - [x] Calcul
-  - [x] Documentation
-- Eclairage
-  - [x] Modélisation
-  - [x] Calcul
-  - [x] Documentation
-- Production
-  - [x] Modélisation
-  - [] Calcul
-  - [] Documentation
+```
+git clone https://github.com/action-21/reno-audit-api
+cd reno-audit-api
+composer install
+symfony server:start
+```
+
+## Tests
 
 ### Tests end-to-end
 
@@ -73,14 +53,16 @@ L'ensemble des calculs intermédiaires de la méthode conventionnelle est intég
 Les tests sont écrits pour chaque moteur de calcul au format yaml dans le dossier /etc/calculs :
 
 ```
-# /etc/calculs/baie.ensoleillement.yaml
-
-tests:
-  sse:
-    - test: Un test unitaire de la fonction sse
-      resultat: 0.56
-      surface: 2
-      sw: 0.5
-      fe: 0.8
-      c1: 0.7
+# /etc/calculs/ventilation.yaml
+performance:
+  debit:
+    - type_systeme: VENTILATION_NATURELLE
+      mode_extraction: null
+      mode_insufflation: HYGROREGLABLE
+      presence_echangeur: null
+      systeme_collectif: null
+      annee_installation: 1900
+      qvarep_conv: 2.23
+      qvasouf_conv: 0
+      smea_conv: 3
 ```

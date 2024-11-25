@@ -15,11 +15,11 @@ final class XMLEerRepository implements EerRepository
         return 'refroidissement.eer';
     }
 
-    public function find_by(ZoneClimatique $zone_climatique, int $annee_installation): ?Eer
+    public function find_by(ZoneClimatique $zone_climatique, int $annee_installation_generateur): ?Eer
     {
         $record = $this->createQuery()
             ->and('zone_climatique', $zone_climatique->code())
-            ->andCompareTo('annee_installation', $annee_installation)
+            ->andCompareTo('annee_installation_generateur', $annee_installation_generateur)
             ->getOne();
         return $record ? $this->to($record) : null;
     }

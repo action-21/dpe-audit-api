@@ -3,28 +3,30 @@
 namespace App\Tests\Calcul;
 
 use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Refroidissement\Service\MoteurPerformanceGenerateur;
+use App\Domain\Refroidissement\Service\MoteurPerformance;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Yaml\Yaml;
 
 final class RefroidissementTest extends KernelTestCase
 {
-    public function testPerformanceGenerateur(): void
+    #[DataProvider('eerProvider')]
+    public function testEer(string $zone_climatique, int $annee_installation_generateur, ?float $seer_saisi, float $eer,): void
     {
         self::bootKernel();
         $container = static::getContainer();
-        /** @var MoteurPerformanceGenerateur */
-        $moteur = $container->get(MoteurPerformanceGenerateur::class);
+        /** @var MoteurPerformance */
+        $moteur = $container->get(MoteurPerformance::class);
 
-        $tests = Yaml::parseFile('etc/calculs/refroidissement.performance_generateur.yaml');
+        $this->assertEquals($moteur->eer(
+            zone_climatique: ZoneClimatique::from($zone_climatique),
+            annee_installation_generateur: $annee_installation_generateur,
+            seer_saisi: $seer_saisi,
+        ), $eer);
+    }
 
-        foreach ($tests['eer'] as $test) {
-            $resultat = $moteur->eer(
-                zone_climatique: ZoneClimatique::from($test['zone_climatique']),
-                annee_installation_generateur: $test['annee_installation_generateur'],
-                seer_saisi: $test['seer_saisi'] ?? null,
-            );
-            $this->assertEquals($resultat, $test['resultat']);
-        }
+    public static function eerProvider(): array
+    {
+        return Yaml::parseFile('etc/calculs/refroidissement.yaml')['performance']['eer'];
     }
 }

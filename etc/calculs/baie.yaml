@@ -1,0 +1,14 @@
+performance:
+  b:
+    - test: Un test unitaire de la fonction b
+      resultat: 0
+      mitoyennete: LOCAL_CHAUFFE
+      b_lnc: null
+ensoleillement:
+  sse:
+    - test: Un test unitaire de la fonction sse
+      resultat: 0.56
+      surface: 2
+      sw: 0.5
+      fe: 0.8
+      c1: 0.7

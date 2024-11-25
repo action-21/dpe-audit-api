@@ -1,0 +1,102 @@
+performance:
+  eer:
+    - zone_climatique: H1a
+      annee_installation_generateur: 2007
+      seer_saisi: null
+      eer: 3.6
+    - zone_climatique: H1a
+      annee_installation_generateur: 2014
+      seer_saisi: null
+      eer: 6.175
+    - zone_climatique: H1a
+      annee_installation_generateur: 2015
+      seer_saisi: null
+      eer: 6.365
+    - zone_climatique: H1b
+      annee_installation_generateur: 2007
+      seer_saisi: null
+      eer: 3.6
+    - zone_climatique: H1b
+      annee_installation_generateur: 2014
+      seer_saisi: null
+      eer: 6.175
+    - zone_climatique: H1b
+      annee_installation_generateur: 2015
+      seer_saisi: null
+      eer: 6.365
+    - zone_climatique: H1c
+      annee_installation_generateur: 2007
+      seer_saisi: null
+      eer: 3.6
+    - zone_climatique: H1c
+      annee_installation_generateur: 2014
+      seer_saisi: null
+      eer: 6.175
+    - zone_climatique: H1c
+      annee_installation_generateur: 2015
+      seer_saisi: null
+      eer: 6.365
+    - zone_climatique: H2a
+      annee_installation_generateur: 2007
+      seer_saisi: null
+      eer: 3.6
+    - zone_climatique: H2a
+      annee_installation_generateur: 2014
+      seer_saisi: null
+      eer: 6.175
+    - zone_climatique: H2a
+      annee_installation_generateur: 2015
+      seer_saisi: null
+      eer: 6.365
+    - zone_climatique: H2b
+      annee_installation_generateur: 2007
+      seer_saisi: null
+      eer: 3.6
+    - zone_climatique: H2b
+      annee_installation_generateur: 2014
+      seer_saisi: null
+      eer: 6.175
+    - zone_climatique: H2b
+      annee_installation_generateur: 2015
+      seer_saisi: null
+      eer: 6.365
+    - zone_climatique: H2c
+      annee_installation_generateur: 2007
+      seer_saisi: null
+      eer: 3.6
+    - zone_climatique: H2c
+      annee_installation_generateur: 2014
+      seer_saisi: null
+      eer: 6.175
+    - zone_climatique: H2c
+      annee_installation_generateur: 2015
+      seer_saisi: null
+      eer: 6.365
+    - zone_climatique: H2d
+      annee_installation_generateur: 2007
+      seer_saisi: null
+      eer: 3.6
+    - zone_climatique: H2d
+      annee_installation_generateur: 2014
+      seer_saisi: null
+      eer: 6.175
+    - zone_climatique: H2d
+      annee_installation_generateur: 2015
+      seer_saisi: null
+      eer: 6.365
+    - zone_climatique: H3
+      annee_installation_generateur: 2007
+      seer_saisi: null
+      eer: 3.25
+    - zone_climatique: H3
+      annee_installation_generateur: 2014
+      seer_saisi: null
+      eer: 5.415
+    - zone_climatique: H3
+      annee_installation_generateur: 2015
+      seer_saisi: null
+      eer: 7.125
+    - zone_climatique: H3
+      annee_installation_generateur: 2015
+      seer_saisi: 10
+      eer: 9

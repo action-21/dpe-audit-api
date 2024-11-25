@@ -25,12 +25,12 @@ final class MoteurPerformance
      */
     public function eer(ZoneClimatique $zone_climatique, int $annee_installation_generateur, ?float $seer_saisi): float
     {
-        if ($seer_saisi)
-            return $seer_saisi * 0.95;
+        if (0 < $seer_saisi)
+            return $seer_saisi * 0.9;
 
         if (null === $data = $this->eer_repository->find_by(
             zone_climatique: $zone_climatique,
-            annee_installation_generateur: $annee_installation_generateur
+            annee_installation_generateur: $annee_installation_generateur,
         )) throw new \DomainException('Valeur forfaitaire EER non trouvé');
 
         return $data->eer;
