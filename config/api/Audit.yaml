@@ -1,0 +1,8 @@
+resources:
+  App\Domain\Audit\Audit:
+    shortName: Audit
+    operations:
+      get_audit:
+        class: ApiPlatform\Metadata\Get
+        uriTemplate: /audit/{id}
+        output: App\Api\Audit\Resource\AuditResource

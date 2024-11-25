@@ -1,0 +1,7 @@
+resources:
+  App\Domain\Ecs\Ecs:
+    operations:
+      ecs.get:
+        class: ApiPlatform\Metadata\Get
+        uriTemplate: /audit/{id}/ecs
+        output: App\Api\Ecs\Resource\EcsResource

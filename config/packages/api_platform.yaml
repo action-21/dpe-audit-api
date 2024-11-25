@@ -4,10 +4,13 @@ api_platform:
     show_webby: false
     mapping:
         paths:
-            - '%kernel.project_dir%/src/Api'
+            - "%kernel.project_dir%/config/api"
+    formats:
+        json:
+            mime_types: ["application/json"]
     defaults:
         stateless: true
         normalization_context:
             skip_null_values: false
         cache_headers:
-            vary: ['Content-Type', 'Authorization', 'Origin']
+            vary: ["Content-Type", "Authorization", "Origin"]

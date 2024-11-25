@@ -1,0 +1,7 @@
+resources:
+  App\Domain\Simulation\Simulation:
+    operations:
+      simulation.get:
+        class: ApiPlatform\Metadata\Get
+        uriTemplate: /audit/{id}/simulation
+        output: App\Api\Simulation\Resource\SimulationResource

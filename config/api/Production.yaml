@@ -1,0 +1,7 @@
+resources:
+  App\Domain\Production\Production:
+    operations:
+      production.get:
+        class: ApiPlatform\Metadata\Get
+        uriTemplate: /audit/{id}/production
+        output: App\Api\Production\Resource\ProductionResource

@@ -1,0 +1,7 @@
+resources:
+  App\Domain\Visite\Visite:
+    operations:
+      visite.get:
+        class: ApiPlatform\Metadata\Get
+        uriTemplate: /audit/{id}/visite
+        output: App\Api\Visite\Resource\VisiteResource

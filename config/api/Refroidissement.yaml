@@ -1,0 +1,7 @@
+resources:
+  App\Domain\Refroidissement\Refroidissement:
+    operations:
+      refroidissement.get:
+        class: ApiPlatform\Metadata\Get
+        uriTemplate: /audit/{id}/refroidissement
+        output: App\Api\Refroidissement\Resource\RefroidissementResource

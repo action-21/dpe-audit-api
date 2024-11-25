@@ -1,0 +1,5 @@
+App\Api\Simulation\Resource\SimulationResource:
+  attributes:
+    audit:
+      identifier: true
+    

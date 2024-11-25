@@ -1,0 +1,7 @@
+resources:
+  App\Domain\Enveloppe\Enveloppe:
+    operations:
+      enveloppe.get:
+        class: ApiPlatform\Metadata\Get
+        uriTemplate: /audit/{id}/enveloppe
+        output: App\Api\Enveloppe\Resource\EnveloppeResource
