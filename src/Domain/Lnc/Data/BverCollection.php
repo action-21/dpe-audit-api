@@ -20,7 +20,7 @@ final class BverCollection extends ArrayCollection
      */
     public function filter_by_orientations(array $orientations): self
     {
-        return $this->filter(fn(Bver $item): bool => in_array($item->orientation, $orientations, true));
+        return $this->filter(fn(Bver $item): bool => \in_array($item->orientation, $orientations, true));
     }
 
     private function moyenne(): float

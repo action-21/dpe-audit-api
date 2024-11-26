@@ -1,0 +1,1795 @@
+performance:
+  uvue:
+    - type_local_non_chauffe: GARAGE
+      uvue: 3
+    - type_local_non_chauffe: CELLIER
+      uvue: 3
+    - type_local_non_chauffe: COMBLE_FORTEMENT_VENTILE
+      uvue: 9
+    - type_local_non_chauffe: COMBLE_FAIBLEMENT_VENTILE
+      uvue: 3
+    - type_local_non_chauffe: COMBLE_TRES_FAIBLEMENT_VENTILE
+      uvue: 0.3
+    - type_local_non_chauffe: CIRCULATION_SANS_OUVERTURE_EXTERIEURE
+      uvue: 0
+    - type_local_non_chauffe: CIRCULATION_AVEC_OUVERTURE_EXTERIEURE
+      uvue: 0.3
+    - type_local_non_chauffe: CIRCULATION_AVEC_BOUCHE_OU_GAINE_DESENFUMAGE_OUVERTE
+      uvue: 3
+    - type_local_non_chauffe: HALL_ENTREE_AVEC_FERMETURE_AUTOMATIQUE
+      uvue: 0.3
+    - type_local_non_chauffe: HALL_ENTREE_SANS_FERMETURE_AUTOMATIQUE
+      uvue: 3
+    - type_local_non_chauffe: GARAGE_COLLECTIF
+      uvue: 3
+    - type_local_non_chauffe: AUTRES
+      uvue: 3
+    - type_local_non_chauffe: ESPACE_TAMPON_SOLARISE
+      uvue: 3
+  b:
+    - uvue: 0
+      aiu: 10
+      aue: 80
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 0
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 0
+      aiu: 10
+      aue: 16
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 0
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.85
+    - uvue: 0
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.85
+    - uvue: 0
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.8
+    - uvue: 0
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.75
+    - uvue: 0
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.7
+    - uvue: 0
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.65
+    - uvue: 0
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.65
+    - uvue: 0
+      aiu: 10
+      aue: 2
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.55
+    - uvue: 0
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.45
+    - uvue: 0
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.4
+    - uvue: 0
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.35
+    - uvue: 0
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.2
+    - uvue: 0
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.1
+    - uvue: 0.3
+      aiu: 10
+      aue: 80
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 0.3
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 0.3
+      aiu: 10
+      aue: 16
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 0.3
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 0.3
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 0.3
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.8
+    - uvue: 0.3
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.8
+    - uvue: 0.3
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.75
+    - uvue: 0.3
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.75
+    - uvue: 0.3
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.7
+    - uvue: 0.3
+      aiu: 10
+      aue: 2
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.6
+    - uvue: 0.3
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.55
+    - uvue: 0.3
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.5
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.4
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.25
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.15
+    - uvue: 3
+      aiu: 10
+      aue: 80
+      isolation_aiu: true
+      isolation_aue: false
+      b: 1
+    - uvue: 3
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 3
+      aiu: 10
+      aue: 16
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 3
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 3
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 3
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 3
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.85
+    - uvue: 3
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.85
+    - uvue: 3
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.8
+    - uvue: 3
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.8
+    - uvue: 3
+      aiu: 10
+      aue: 2
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.7
+    - uvue: 3
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.65
+    - uvue: 3
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.6
+    - uvue: 3
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.5
+    - uvue: 3
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.35
+    - uvue: 3
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.2
+    - uvue: 9
+      aiu: 10
+      aue: 80
+      isolation_aiu: true
+      isolation_aue: false
+      b: 1
+    - uvue: 9
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: true
+      isolation_aue: false
+      b: 1
+    - uvue: 9
+      aiu: 10
+      aue: 16
+      isolation_aiu: true
+      isolation_aue: false
+      b: 1
+    - uvue: 9
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 2
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.85
+    - uvue: 9
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.8
+    - uvue: 9
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.75
+    - uvue: 9
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.7
+    - uvue: 9
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.5
+    - uvue: 9
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: true
+      isolation_aue: false
+      b: 0.3
+    - uvue: 0
+      aiu: 10
+      aue: 80
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.8
+    - uvue: 0
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.65
+    - uvue: 0
+      aiu: 10
+      aue: 16
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.55
+    - uvue: 0
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.5
+    - uvue: 0
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.45
+    - uvue: 0
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.35
+    - uvue: 0
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.3
+    - uvue: 0
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.25
+    - uvue: 0
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.2
+    - uvue: 0
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.2
+    - uvue: 0
+      aiu: 10
+      aue: 2
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.15
+    - uvue: 0
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.1
+    - uvue: 0
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.1
+    - uvue: 0
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0
+    - uvue: 0.3
+      aiu: 10
+      aue: 80
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.85
+    - uvue: 0.3
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.75
+    - uvue: 0.3
+      aiu: 10
+      aue: 16
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.65
+    - uvue: 0.3
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.55
+    - uvue: 0.3
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.5
+    - uvue: 0.3
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.4
+    - uvue: 0.3
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.35
+    - uvue: 0.3
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.3
+    - uvue: 0.3
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.3
+    - uvue: 0.3
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.25
+    - uvue: 0.3
+      aiu: 10
+      aue: 2
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.2
+    - uvue: 0.3
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.15
+    - uvue: 0.3
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.1
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.1
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.05
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0
+    - uvue: 3
+      aiu: 10
+      aue: 80
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.9
+    - uvue: 3
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.8
+    - uvue: 3
+      aiu: 10
+      aue: 16
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.75
+    - uvue: 3
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.7
+    - uvue: 3
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.65
+    - uvue: 3
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.5
+    - uvue: 3
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.45
+    - uvue: 3
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.4
+    - uvue: 3
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.4
+    - uvue: 3
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.35
+    - uvue: 3
+      aiu: 10
+      aue: 2
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.25
+    - uvue: 3
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.2
+    - uvue: 3
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.2
+    - uvue: 3
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.15
+    - uvue: 3
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.05
+    - uvue: 3
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.05
+    - uvue: 9
+      aiu: 10
+      aue: 80
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 16
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.85
+    - uvue: 9
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.8
+    - uvue: 9
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.8
+    - uvue: 9
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.7
+    - uvue: 9
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.65
+    - uvue: 9
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.6
+    - uvue: 9
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.55
+    - uvue: 9
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.5
+    - uvue: 9
+      aiu: 10
+      aue: 2
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.4
+    - uvue: 9
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.35
+    - uvue: 9
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.3
+    - uvue: 9
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.25
+    - uvue: 9
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.15
+    - uvue: 9
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: false
+      isolation_aue: false
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 80
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.35
+    - uvue: 0
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.2
+    - uvue: 0
+      aiu: 10
+      aue: 16
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.15
+    - uvue: 0
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.15
+    - uvue: 0
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.1
+    - uvue: 0
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 2
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 0
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 0
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 0
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 0
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 0
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 0.3
+      aiu: 10
+      aue: 80
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.5
+    - uvue: 0.3
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.35
+    - uvue: 0.3
+      aiu: 10
+      aue: 16
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.25
+    - uvue: 0.3
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.2
+    - uvue: 0.3
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.15
+    - uvue: 0.3
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.1
+    - uvue: 0.3
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.1
+    - uvue: 0.3
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.1
+    - uvue: 0.3
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0.3
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0.3
+      aiu: 10
+      aue: 2
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0.3
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0.3
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 3
+      aiu: 10
+      aue: 80
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.85
+    - uvue: 3
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.7
+    - uvue: 3
+      aiu: 10
+      aue: 16
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.65
+    - uvue: 3
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.55
+    - uvue: 3
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.5
+    - uvue: 3
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.4
+    - uvue: 3
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.35
+    - uvue: 3
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.3
+    - uvue: 3
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.25
+    - uvue: 3
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.25
+    - uvue: 3
+      aiu: 10
+      aue: 2
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.2
+    - uvue: 3
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.15
+    - uvue: 3
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.1
+    - uvue: 3
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.1
+    - uvue: 3
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 3
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0
+    - uvue: 9
+      aiu: 10
+      aue: 80
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 16
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.85
+    - uvue: 9
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.8
+    - uvue: 9
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.75
+    - uvue: 9
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.65
+    - uvue: 9
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.6
+    - uvue: 9
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.55
+    - uvue: 9
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.5
+    - uvue: 9
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.45
+    - uvue: 9
+      aiu: 10
+      aue: 2
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.35
+    - uvue: 9
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.3
+    - uvue: 9
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.25
+    - uvue: 9
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.2
+    - uvue: 9
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.1
+    - uvue: 9
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: false
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 80
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.8
+    - uvue: 0
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.65
+    - uvue: 0
+      aiu: 10
+      aue: 16
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.55
+    - uvue: 0
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.5
+    - uvue: 0
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.45
+    - uvue: 0
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.35
+    - uvue: 0
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.3
+    - uvue: 0
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.25
+    - uvue: 0
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.2
+    - uvue: 0
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.2
+    - uvue: 0
+      aiu: 10
+      aue: 2
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.15
+    - uvue: 0
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.1
+    - uvue: 0
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.1
+    - uvue: 0
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0
+    - uvue: 0.3
+      aiu: 10
+      aue: 80
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.9
+    - uvue: 0.3
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.8
+    - uvue: 0.3
+      aiu: 10
+      aue: 16
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.7
+    - uvue: 0.3
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.65
+    - uvue: 0.3
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.6
+    - uvue: 0.3
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.45
+    - uvue: 0.3
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.4
+    - uvue: 0.3
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.35
+    - uvue: 0.3
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.35
+    - uvue: 0.3
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.3
+    - uvue: 0.3
+      aiu: 10
+      aue: 2
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.25
+    - uvue: 0.3
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.2
+    - uvue: 0.3
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.15
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.1
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.05
+    - uvue: 0.3
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.05
+    - uvue: 3
+      aiu: 10
+      aue: 80
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.95
+    - uvue: 3
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.95
+    - uvue: 3
+      aiu: 10
+      aue: 16
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.9
+    - uvue: 3
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.9
+    - uvue: 3
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.9
+    - uvue: 3
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.8
+    - uvue: 3
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.8
+    - uvue: 3
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.75
+    - uvue: 3
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.7
+    - uvue: 3
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.7
+    - uvue: 3
+      aiu: 10
+      aue: 2
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.6
+    - uvue: 3
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.55
+    - uvue: 3
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.45
+    - uvue: 3
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.4
+    - uvue: 3
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.25
+    - uvue: 3
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.1
+    - uvue: 9
+      aiu: 10
+      aue: 80
+      isolation_aiu: true
+      isolation_aue: true
+      b: 1
+    - uvue: 9
+      aiu: 10
+      aue: 26.7
+      isolation_aiu: true
+      isolation_aue: true
+      b: 1
+    - uvue: 9
+      aiu: 10
+      aue: 16
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 11.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 8.9
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 6.2
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.95
+    - uvue: 9
+      aiu: 10
+      aue: 4.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 3.6
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 3.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.9
+    - uvue: 9
+      aiu: 10
+      aue: 2.7
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.85
+    - uvue: 9
+      aiu: 10
+      aue: 2
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.8
+    - uvue: 9
+      aiu: 10
+      aue: 1.4
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.75
+    - uvue: 9
+      aiu: 10
+      aue: 1.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.7
+    - uvue: 9
+      aiu: 10
+      aue: 0.6
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.65
+    - uvue: 9
+      aiu: 10
+      aue: 0.3
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.45
+    - uvue: 9
+      aiu: 10
+      aue: 0.1
+      isolation_aiu: true
+      isolation_aue: true
+      b: 0.3
+  bver:
+    - zone_climatique: H1a
+      orientation: SUD
+      isolation_paroi: true
+      bver: 0.58
+    - zone_climatique: H1a
+      orientation: SUD
+      isolation_paroi: false
+      bver: 0.55
+    - zone_climatique: H1a
+      orientation: NORD
+      isolation_paroi: true
+      bver: 0.95
+    - zone_climatique: H1a
+      orientation: NORD
+      isolation_paroi: false
+      bver: 0.85
+    - zone_climatique: H1a
+      orientation: EST
+      isolation_paroi: true
+      bver: 0.63
+    - zone_climatique: H1a
+      orientation: EST
+      isolation_paroi: false
+      bver: 0.6
+    - zone_climatique: H1a
+      orientation: OUEST
+      isolation_paroi: true
+      bver: 0.63
+    - zone_climatique: H1a
+      orientation: OUEST
+      isolation_paroi: false
+      bver: 0.6
+    - zone_climatique: H2a
+      orientation: SUD
+      isolation_paroi: true
+      bver: 0.57
+    - zone_climatique: H2a
+      orientation: SUD
+      isolation_paroi: false
+      bver: 0.55
+    - zone_climatique: H2a
+      orientation: NORD
+      isolation_paroi: true
+      bver: 0.95
+    - zone_climatique: H2a
+      orientation: NORD
+      isolation_paroi: false
+      bver: 0.85
+    - zone_climatique: H2a
+      orientation: EST
+      isolation_paroi: true
+      bver: 0.6
+    - zone_climatique: H2a
+      orientation: EST
+      isolation_paroi: false
+      bver: 0.58
+    - zone_climatique: H2a
+      orientation: OUEST
+      isolation_paroi: true
+      bver: 0.6
+    - zone_climatique: H2a
+      orientation: OUEST
+      isolation_paroi: false
+      bver: 0.58
+    - zone_climatique: H3
+      orientation: SUD
+      isolation_paroi: true
+      bver: 0.48
+    - zone_climatique: H3
+      orientation: SUD
+      isolation_paroi: false
+      bver: 0.55
+    - zone_climatique: H3
+      orientation: NORD
+      isolation_paroi: true
+      bver: 0.95
+    - zone_climatique: H3
+      orientation: NORD
+      isolation_paroi: false
+      bver: 0.85
+    - zone_climatique: H3
+      orientation: EST
+      isolation_paroi: true
+      bver: 0.53
+    - zone_climatique: H3
+      orientation: EST
+      isolation_paroi: false
+      bver: 0.53
+    - zone_climatique: H3
+      orientation: OUEST
+      isolation_paroi: true
+      bver: 0.53
+    - zone_climatique: H3
+      orientation: OUEST
+      isolation_paroi: false
+      bver: 0.53
+
+ensoleillement:
+  t:
+    - type_baie: POLYCARBONATE
+      nature_menuiserie: null
+      presence_rupteur_pont_thermique: null
+      type_vitrage: null
+      t: 0.4
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS
+      presence_rupteur_pont_thermique:
+      type_vitrage: SIMPLE_VITRAGE
+      t: 0.62
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS
+      presence_rupteur_pont_thermique:
+      type_vitrage: DOUBLE_VITRAGE
+      t: 0.55
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS
+      presence_rupteur_pont_thermique:
+      type_vitrage: DOUBLE_VITRAGE_FE
+      t: 0.48
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS
+      presence_rupteur_pont_thermique:
+      type_vitrage: TRIPLE_VITRAGE
+      t: 0.49
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS
+      presence_rupteur_pont_thermique:
+      type_vitrage: TRIPLE_VITRAGE_FE
+      t: 0.44
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS_METAL
+      presence_rupteur_pont_thermique:
+      type_vitrage: SIMPLE_VITRAGE
+      t: 0.62
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS_METAL
+      presence_rupteur_pont_thermique:
+      type_vitrage: DOUBLE_VITRAGE
+      t: 0.55
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS_METAL
+      presence_rupteur_pont_thermique:
+      type_vitrage: DOUBLE_VITRAGE_FE
+      t: 0.48
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS_METAL
+      presence_rupteur_pont_thermique:
+      type_vitrage: TRIPLE_VITRAGE
+      t: 0.49
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: BOIS_METAL
+      presence_rupteur_pont_thermique:
+      type_vitrage: TRIPLE_VITRAGE_FE
+      t: 0.44
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: PVC
+      presence_rupteur_pont_thermique:
+      type_vitrage: SIMPLE_VITRAGE
+      t: 0.5
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: PVC
+      presence_rupteur_pont_thermique:
+      type_vitrage: DOUBLE_VITRAGE
+      t: 0.45
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: PVC
+      presence_rupteur_pont_thermique:
+      type_vitrage: DOUBLE_VITRAGE_FE
+      t: 0.39
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: PVC
+      presence_rupteur_pont_thermique:
+      type_vitrage: TRIPLE_VITRAGE
+      t: 0.4
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: PVC
+      presence_rupteur_pont_thermique:
+      type_vitrage: TRIPLE_VITRAGE_FE
+      t: 0.36
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: true
+      type_vitrage: SIMPLE_VITRAGE
+      t: 0.63
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: true
+      type_vitrage: DOUBLE_VITRAGE
+      t: 0.56
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: true
+      type_vitrage: DOUBLE_VITRAGE_FE
+      t: 0.48
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: true
+      type_vitrage: TRIPLE_VITRAGE
+      t: 0.5
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: true
+      type_vitrage: TRIPLE_VITRAGE_FE
+      t: 0.45
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: false
+      type_vitrage: SIMPLE_VITRAGE
+      t: 0.64
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: false
+      type_vitrage: DOUBLE_VITRAGE
+      t: 0.58
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: false
+      type_vitrage: DOUBLE_VITRAGE_FE
+      t: 0.5
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: false
+      type_vitrage: TRIPLE_VITRAGE
+      t: 0.52
+    - type_baie: FENETRE_BATTANTE
+      nature_menuiserie: METAL
+      presence_rupteur_pont_thermique: false
+      type_vitrage: TRIPLE_VITRAGE_FE
+      t: 0.47

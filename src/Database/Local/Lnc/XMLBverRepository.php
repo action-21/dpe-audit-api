@@ -28,9 +28,9 @@ final class XMLBverRepository implements BVerRepository
     public function to(XMLTableElement $record): BVer
     {
         return new BVer(
-            orientation: Orientation::from((string) $record->orientation),
-            isolation_paroi: (bool) $record->isolation_paroi,
-            bver: (float) $record->bver
+            orientation: Orientation::from($record->get('orientation')->strval()),
+            isolation_paroi: $record->get('isolation_paroi')->boolval(),
+            bver: $record->get('bver')->floatval(),
         );
     }
 }

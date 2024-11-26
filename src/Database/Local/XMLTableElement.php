@@ -36,6 +36,6 @@ class XMLTableElement extends \SimpleXMLElement
 
     public function boolval(): ?bool
     {
-        return '' === (string) $this ? null : (bool) $this;
+        return '' === (string) $this ? null : (bool)(int) $this;
     }
 }
