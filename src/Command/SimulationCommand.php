@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Simule les audits stockés localement au format XML',
     hidden: false,
 )]
-class SimulationCommand extends Command
+final class SimulationCommand extends Command
 {
     public final const PATH = '/etc/audits';
 

@@ -37,8 +37,8 @@ On fait tourner le moteur de calcul sur la base d'un échantillon de données is
 
 #### Échantillonage
 
-- 10 échantillons par zone climatique
-- 1 échantillon par période de construction
+- 1 échantillon par zone climatique (8 zones climatiques)
+- 5 échantillons par période de construction (10 périodes de construction)
 - Intervalle de dates d'établissement à 30 jours déterminé aléatoirement pour assurer le renouvellement de l'échantillonage
 
 #### Données de sortie

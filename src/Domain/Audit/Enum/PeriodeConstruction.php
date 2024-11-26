@@ -25,6 +25,22 @@ enum PeriodeConstruction: string implements Enum
     public function lib(): string
     {
         return match ($this) {
+            self::AVANT_1948 => 'Avant 1948',
+            self::ENTRE_1948_1974 => 'Entre 1948 et 1974',
+            self::ENTRE_1975_1977 => 'Entre 1975 et 1977',
+            self::ENTRE_1978_1982 => 'Entre 1978 et 1982',
+            self::ENTRE_1983_1988 => 'Entre 1983 et 1988',
+            self::ENTRE_1989_2000 => 'Entre 1989 et 2000',
+            self::ENTRE_2001_2005 => 'Entre 2001 et 2005',
+            self::ENTRE_2006_2012 => 'Entre 2006 et 2012',
+            self::ENTRE_2013_2021 => 'Entre 2013 et 2021',
+            self::APRES_2021 => 'Après 2021',
+        };
+    }
+
+    public function filter(): string
+    {
+        return match ($this) {
             self::AVANT_1948 => 'avant 1948',
             self::ENTRE_1948_1974 => '1948-1974',
             self::ENTRE_1975_1977 => '1975-1977',
