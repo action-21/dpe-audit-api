@@ -3,7 +3,7 @@
 namespace App\Domain\Eclairage\Service;
 
 use App\Domain\Eclairage\Eclairage;
-use App\Domain\Eclairage\Data\NheclRepository;
+use App\Domain\Eclairage\Data\NhjRepository;
 use App\Domain\Common\Enum\{Energie, Mois, ScenarioUsage, Usage, ZoneClimatique};
 use App\Domain\Common\ValueObject\ConsommationCollection;
 
@@ -14,7 +14,7 @@ final class MoteurConsommation
     // Constante de taux d'utilisation de l'éclairage
     public final const TAUX_UTILISATION = 0.9;
 
-    public function __construct(private NheclRepository $njecl_repository) {}
+    public function __construct(private NhjRepository $njecl_repository) {}
 
     public function calcule_consommations(Eclairage $entity): ConsommationCollection
     {
@@ -32,8 +32,8 @@ final class MoteurConsommation
     {
         $collection = $this->njecl_repository->search_by(zone_climatique: $zone_climatique);
         if (false === $collection->est_valide())
-            throw new \DomainException('Valeur forfaitaire Nhecl non trouvée');
+            throw new \DomainException('Valeur forfaitaire Nhj non trouvée');
 
-        return Mois::reduce(fn(float $carry, Mois $mois): float => $carry += (self::TAUX_UTILISATION * self::PUISSANCE_ECLAIRAGE * $collection->nhecl(mois: $mois) * $mois->nj()) / 1000);
+        return Mois::reduce(fn(float $carry, Mois $mois): float => $carry += (self::TAUX_UTILISATION * self::PUISSANCE_ECLAIRAGE * $collection->nhj(mois: $mois) * $mois->nj()) / 1000);
     }
 }

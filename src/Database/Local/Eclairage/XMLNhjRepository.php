@@ -2,22 +2,22 @@
 
 namespace App\Database\Local\Eclairage;
 
-use App\Domain\Eclairage\Data\{Nhecl, NheclCollection, NheclRepository};
+use App\Domain\Eclairage\Data\{Nhj, NhjCollection, NhjRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
 use App\Domain\Common\Enum\{Mois, ZoneClimatique};
 
-final class XMLEclairageRepository implements NheclRepository
+final class XMLNhjRepository implements NhjRepository
 {
     use XMLTableRepositoryTrait;
 
     public static function table(): string
     {
-        return 'eclairage.nhecl';
+        return 'eclairage.nhj';
     }
 
-    public function search_by(ZoneClimatique $zone_climatique): NheclCollection
+    public function search_by(ZoneClimatique $zone_climatique): NhjCollection
     {
-        return new NheclCollection(\array_map(
+        return new NhjCollection(\array_map(
             fn(XMLTableElement $record) => $this->to($record),
             $this->createQuery()
                 ->and('zone_climatique', $zone_climatique->value)
@@ -25,11 +25,11 @@ final class XMLEclairageRepository implements NheclRepository
         ));
     }
 
-    protected function to(XMLTableElement $record): Nhecl
+    protected function to(XMLTableElement $record): Nhj
     {
-        return new Nhecl(
+        return new Nhj(
             mois: Mois::from($record->get('mois')->strval()),
-            nhecl: $record->get('nhecl')->floatval(),
+            nhj: $record->get('nhj')->floatval(),
         );
     }
 }
