@@ -4,14 +4,9 @@ namespace App\Domain\Common\Type;
 
 use Symfony\Component\Uid\{AbstractUid, Uuid};
 
-final class Id extends AbstractUid
+final class Id
 {
     public function __construct(public readonly string $value) {}
-
-    public static function fromString(string $uid): static
-    {
-        return new self(value: $uid);
-    }
 
     public static function from(string $value): static
     {
@@ -21,6 +16,11 @@ final class Id extends AbstractUid
     public static function create(): static
     {
         return new self(value: Uuid::v7()->toRfc4122());
+    }
+
+    public function compare(Id $id): bool
+    {
+        return $this->value === $id->value;
     }
 
     public static function isValid(string $uid): bool
