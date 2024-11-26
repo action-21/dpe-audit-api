@@ -20,11 +20,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'app:import:local',
-    description: 'Importe des audits XML localement',
+    name: 'app:simulation',
+    description: 'Simule les audits stockés localement au format XML',
     hidden: false,
 )]
-class ImportXMLCommand extends Command
+class SimulationCommand extends Command
 {
     public final const PATH = '/etc/audits';
 

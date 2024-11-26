@@ -16,17 +16,6 @@ final class Isolation
         public readonly ?float $resistance_thermique_isolation = null,
     ) {}
 
-    public function applique_travaux(Travaux $travaux): self
-    {
-        return new self(
-            etat_isolation: EtatIsolation::ISOLE,
-            type_isolation: $travaux->type_isolation->to(),
-            annee_isolation: (new \DateTime())->format('Y'),
-            epaisseur_isolation: $travaux->epaisseur_isolation,
-            resistance_thermique_isolation: $travaux->resistance_thermique_isolation,
-        );
-    }
-
     public static function create_inconnu(): self
     {
         return new self(etat_isolation: EtatIsolation::INCONNU);

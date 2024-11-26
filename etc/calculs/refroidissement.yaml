@@ -1,3 +1,21 @@
+besoin:
+  cin:
+    - inertie: TRES_LOURDE
+      surface_habitable: 100
+      cin: 26000000
+    - inertie: LOURDE
+      surface_habitable: 100
+      cin: 26000000
+    - inertie: MOYENNE
+      surface_habitable: 100
+      cin: 16500000
+    - inertie: LEGERE
+      surface_habitable: 100
+      cin: 11000000
+  t:
+    - gv: 100
+      cin: 360000
+      t: 1
 performance:
   eer:
     - zone_climatique: H1a
@@ -100,3 +118,11 @@ performance:
       annee_installation_generateur: 2015
       seer_saisi: 10
       eer: 9
+dimensionnement:
+  rdim_installation:
+    - surface_installation: 100
+      surface_installations: 200
+      rdim: 0.5
+  rdim_systeme:
+    - systemes: 2
+      rdim: 0.5
