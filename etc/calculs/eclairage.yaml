@@ -1,0 +1,18 @@
+consommation:
+  cecl:
+    - zone_climatique: H1a
+      cecl: 1.89
+    - zone_climatique: H1b
+      cecl: 1.8207
+    - zone_climatique: H1c
+      cecl: 1.85976
+    - zone_climatique: H2a
+      cecl: 1.89
+    - zone_climatique: H2b
+      cecl: 1.92906
+    - zone_climatique: H2c
+      cecl: 1.97316
+    - zone_climatique: H2d
+      cecl: 1.97316
+    - zone_climatique: H3
+      cecl: 1.89756
