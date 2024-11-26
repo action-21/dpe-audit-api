@@ -1,7 +1,10 @@
 # Moteur de calcul de la performance énergétique des logements (PCL) - API
 
-> [!IMPORTANT]
+> [!NOTE]
 > Ce dépôt est une base de code du projet accessible [ici](https://github.com/action-21/reno-audit).
+
+> [!IMPORTANT]
+> Ce projet est en cours de développement.
 
 ## Installation
 
