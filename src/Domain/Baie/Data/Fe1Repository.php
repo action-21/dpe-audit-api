@@ -9,7 +9,7 @@ interface Fe1Repository
 {
     public function find_by(
         TypeMasqueProche $type_masque_proche,
-        float $avancee_masque,
+        ?float $avancee_masque,
         ?Orientation $orientation_baie,
     ): ?Fe1;
 }

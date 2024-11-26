@@ -82,7 +82,7 @@ trait XMLTableRepositoryTrait
             $this->query .= 'row';
 
         if (null === $value)
-            $value = '';
+            $value = '""';
 
         $query = \str_replace(['$attribute', '$value'], [$attribute, $value], '$attribute/@lt = "" or $attribute/@lt > $value');
         $this->query .= "[{$query}]";

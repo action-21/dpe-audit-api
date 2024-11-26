@@ -12,3 +12,157 @@ ensoleillement:
       sw: 0.5
       fe: 0.8
       c1: 0.7
+  fe1:
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: NORD
+      avancee_masque: 0.5
+      fe1: 0.4
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: NORD
+      avancee_masque: 1.5
+      fe1: 0.3
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: NORD
+      avancee_masque: 2.5
+      fe1: 0.2
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: NORD
+      avancee_masque: 4
+      fe1: 0.1
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: SUD
+      avancee_masque: 0.5
+      fe1: 0.5
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: SUD
+      avancee_masque: 1.5
+      fe1: 0.4
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: SUD
+      avancee_masque: 2.5
+      fe1: 0.3
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: SUD
+      avancee_masque: 4
+      fe1: 0.2
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: EST
+      avancee_masque: 0.5
+      fe1: 0.45
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: EST
+      avancee_masque: 1.5
+      fe1: 0.35
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: EST
+      avancee_masque: 2.5
+      fe1: 0.25
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: EST
+      avancee_masque: 4
+      fe1: 0.15
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: OUEST
+      avancee_masque: 0.5
+      fe1: 0.45
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: OUEST
+      avancee_masque: 1.5
+      fe1: 0.35
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: OUEST
+      avancee_masque: 2.5
+      fe1: 0.25
+    - type_masque_proche: FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS
+      orientation_baie: OUEST
+      avancee_masque: 4
+      fe1: 0.15
+    - type_masque_proche: BALCON_OU_AUVENT
+      orientation_baie: null
+      avancee_masque: 0.5
+      fe1: 0.8
+    - type_masque_proche: BALCON_OU_AUVENT
+      orientation_baie: null
+      avancee_masque: 1.5
+      fe1: 0.6
+    - type_masque_proche: BALCON_OU_AUVENT
+      orientation_baie: null
+      avancee_masque: 2.5
+      fe1: 0.5
+    - type_masque_proche: BALCON_OU_AUVENT
+      orientation_baie: null
+      avancee_masque: 4
+      fe1: 0.4
+    - type_masque_proche: PAROI_LATERALE_SANS_OBSTACLE_AU_SUD
+      orientation_baie: null
+      avancee_masque:
+      fe1: 0.7
+    - type_masque_proche: PAROI_LATERALE_AVEC_OBSTACLE_AU_SUD
+      orientation_baie: null
+      avancee_masque:
+      fe1: 0.5
+  fe2:
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: NORD
+      hauteur_masque_alpha: 7.5
+      fe2: 1
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: NORD
+      hauteur_masque_alpha: 22.5
+      fe2: 0.82
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: NORD
+      hauteur_masque_alpha: 45
+      fe2: 0.5
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: NORD
+      hauteur_masque_alpha: 60
+      fe2: 0.3
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: SUD
+      hauteur_masque_alpha: 7.5
+      fe2: 1
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: SUD
+      hauteur_masque_alpha: 22.5
+      fe2: 0.8
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: SUD
+      hauteur_masque_alpha: 45
+      fe2: 0.3
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: SUD
+      hauteur_masque_alpha: 60
+      fe2: 0.1
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: EST
+      hauteur_masque_alpha: 7.5
+      fe2: 1
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: EST
+      hauteur_masque_alpha: 22.5
+      fe2: 0.77
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: EST
+      hauteur_masque_alpha: 45
+      fe2: 0.4
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: EST
+      hauteur_masque_alpha: 60
+      fe2: 0.2
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: OUEST
+      hauteur_masque_alpha: 7.5
+      fe2: 1
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: OUEST
+      hauteur_masque_alpha: 22.5
+      fe2: 0.77
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: OUEST
+      hauteur_masque_alpha: 45
+      fe2: 0.4
+    - type_masque_lointain: HOMOGENE
+      orientation_baie: OUEST
+      hauteur_masque_alpha: 60
+      fe2: 0.2

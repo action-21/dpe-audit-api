@@ -14,8 +14,8 @@ class XMLElement extends \SimpleXMLElement
 
     public function findOne(string $xpath): ?static
     {
-        $result = $this->xpath($xpath);
-        return $result ? $result[0] : null;
+        $result = $this->xpath($xpath)[0] ?? null;
+        return false === empty($result) ? $result : null;
     }
 
     public function findOneOrError(string $xpath): static
@@ -30,8 +30,8 @@ class XMLElement extends \SimpleXMLElement
     {
         foreach ($xpaths as $xpath) {
             $result = $this->xpath($xpath);
-            if ($result = $this->xpath($xpath)) {
-                return $result[0];
+            if ($result = $this->xpath($xpath)[0] ?? null) {
+                return false === empty($result) ? $result : null;
             }
         }
         return null;

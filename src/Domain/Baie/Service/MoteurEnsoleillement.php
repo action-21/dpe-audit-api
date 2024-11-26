@@ -58,8 +58,8 @@ final class MoteurEnsoleillement
         /** @var float[] */
         $fe1_collection = $entity->masques_proches()->map(fn(MasqueProche $item) => $this->fe1(
             type_masque_proche: $item->type_masque(),
+            orientation_baie: $entity->orientation() ? Orientation::from_azimut($entity->orientation()) : null,
             avancee_masque: $item->avancee(),
-            orientation_baie: $entity->orientation(),
         ))->values();
 
         return \count($fe1_collection) ? \min($fe1_collection) : 1;
@@ -72,7 +72,7 @@ final class MoteurEnsoleillement
             ->filter_by_type(TypeMasqueLointain::MASQUE_LOINTAIN_HOMOGENE)
             ->map(fn(MasqueLointain $item) => $this->fe2(
                 type_masque_lointain: $item->type_masque(),
-                orientation_baie: $item->orientation(),
+                orientation_baie: Orientation::from_azimut($item->orientation()),
                 hauteur_masque: $item->hauteur(),
             ))->values();
 
@@ -204,8 +204,8 @@ final class MoteurEnsoleillement
 
     public function fe1(
         TypeMasqueProche $type_masque_proche,
+        ?Orientation $orientation_baie,
         ?float $avancee_masque,
-        ?float $orientation_baie,
     ): float {
         if (null === $fe1 = $this->fe1_repository->find_by(
             type_masque_proche: $type_masque_proche,
@@ -218,12 +218,12 @@ final class MoteurEnsoleillement
 
     public function fe2(
         TypeMasqueLointain $type_masque_lointain,
-        float $orientation_baie,
+        Orientation $orientation_baie,
         float $hauteur_masque,
     ): float {
         if (null === $fe2 = $this->fe2_repository->find_by(
             type_masque_lointain: $type_masque_lointain,
-            orientation_baie: Orientation::from_azimut($orientation_baie),
+            orientation_baie: $orientation_baie,
             hauteur_masque_alpha: $hauteur_masque,
         )) throw new \DomainException('Valeur forfaitaire Fe2 non trouvée');
 

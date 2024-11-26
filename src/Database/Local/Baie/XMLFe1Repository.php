@@ -13,17 +13,17 @@ final class XMLFe1Repository implements Fe1Repository
 
     public static function table(): string
     {
-        return 'masque_proche.fe1';
+        return 'baie.fe1';
     }
 
     public function find_by(
         TypeMasqueProche $type_masque_proche,
-        float $avancee_masque,
+        ?float $avancee_masque,
         ?Orientation $orientation_baie,
     ): ?Fe1 {
         $record = $this->createQuery()
             ->and('type_masque_proche', $type_masque_proche->id())
-            ->and('orientation_baie', $orientation_baie?->id())
+            ->and('orientation_baie', $orientation_baie?->id(), true)
             ->andCompareTo('avancee_masque', $avancee_masque)
             ->getOne();
 

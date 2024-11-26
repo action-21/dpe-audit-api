@@ -87,7 +87,7 @@ class SimulationCommand extends Command
 
             $output->writeln("Simulation in {$timer->f} ms");
             $view = SimulationResource::from($simulation);
-            dump(\json_encode($view));
+            //dump(\json_encode($view));
 
             //dump($view->enveloppe->performance););
             //dump($simulation->audit()->occupation());

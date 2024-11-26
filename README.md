@@ -67,7 +67,7 @@ On fait tourner le moteur de calcul sur la base d'un échantillon de données is
 
 L'ensemble des calculs intermédiaires de la méthode conventionnelle est intégré aux différents moteurs de calcul sous la forme de fonctions simples sans effet de bord afin de faciliter les tests.
 
-Les tests sont écrits pour chaque moteur de calcul au format yaml dans le dossier /etc/calculs :
+Les tests sont écrits pour chaque domaine au format yaml dans le dossier /etc/calculs :
 
 ```
 # /etc/calculs/ventilation.yaml
