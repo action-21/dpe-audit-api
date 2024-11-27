@@ -147,7 +147,6 @@ final class MoteurPerformance
         );
 
         if (0 === $collection->count()) {
-            dd($type_baie, $nature_menuiserie, $presence_soubassement, $presence_rupteur_pont_thermique);
             throw new \DomainException("Valeur forfaitaire Uw non trouvé");
         }
 
