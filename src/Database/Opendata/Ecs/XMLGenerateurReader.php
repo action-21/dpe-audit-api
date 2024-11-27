@@ -28,6 +28,17 @@ final class XMLGenerateurReader extends XMLReaderIterator
         return $this->xml()->findOne('.//reference_generateur_mixte')?->id();
     }
 
+    public function generateur_mixte_readable(): ?bool
+    {
+        if (null === $id = $this->generateur_mixte_id()) {
+            return null;
+        }
+        return $this->xml()->findOneOf([
+            "//generateur_chauffage[reference = '$id->value']",
+            "//generateur_chauffage[reference_generateur_mixte = '$id->value']",
+        ]) !== null;
+    }
+
     public function reseau_chaleur_id(): ?Id
     {
         return $this->xml()->findOne('.//identifiant_reseau_chaleur')?->id();

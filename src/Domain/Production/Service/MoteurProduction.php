@@ -55,7 +55,10 @@ final class MoteurProduction
         if (null === $value = $this->kpv_repository->find_by(
             orientation: $orientation,
             inclinaison: $inclinaison,
-        )) throw new \DomainException("Valeur forfaitaire kpv non trouvée");
+        )) {
+            dd($orientation, $inclinaison);
+            throw new \DomainException("Valeur forfaitaire kpv non trouvée");
+        }
 
         return $value->kpv;
     }
