@@ -57,9 +57,8 @@ final class MoteurBesoin
      */
     public function rbth(float $as, float $ai, float $gv, float $tint, float $nref, ?float $text_clim): float
     {
-        if (null === $text_clim)
-            return 1;
-        return ($as + $ai) / ($gv * ($text_clim - $tint) * $nref);
+        $rbth = $gv * ($text_clim - $tint) * $nref;
+        return $rbth ? ($as + $ai) / $rbth : 0;
     }
 
     /**
