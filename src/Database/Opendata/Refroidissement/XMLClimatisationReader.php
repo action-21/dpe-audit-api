@@ -32,8 +32,9 @@ final class XMLClimatisationReader extends XMLReaderIterator
 
     public function energie_generateur(): EnergieGenerateur
     {
-        $energie = Energie::from_enum_energie_id($this->enum_type_energie_id());
-        return EnergieGenerateur::from($energie->value);
+        return ($value = $this->enum_type_energie_id())
+            ? EnergieGenerateur::from_enum_type_energie_id($value)
+            : EnergieGenerateur::from_enum_type_generateur_fr_id($this->enum_type_generateur_fr_id());
     }
 
     public function surface(): float
@@ -66,9 +67,9 @@ final class XMLClimatisationReader extends XMLReaderIterator
         return $this->xml()->findOneOrError('.//enum_periode_installation_fr_id')->intval();
     }
 
-    public function enum_type_energie_id(): int
+    public function enum_type_energie_id(): ?int
     {
-        return $this->xml()->findOneOrError('.//enum_type_energie_id')->intval();
+        return $this->xml()->findOne('.//enum_type_energie_id')?->intval();
     }
 
     public function eer(): float

@@ -109,7 +109,7 @@ final class PontThermique
 
     public function type_isolation_plancher_haut(): ?TypeIsolation
     {
-        if ($this->liaison->type !== TypeLiaison::PLANCHER_BAS_MUR)
+        if ($this->liaison->type !== TypeLiaison::PLANCHER_HAUT_MUR)
             return null;
         if (false === $this->plancher_haut()->est_isole())
             return TypeIsolation::NON_ISOLE;

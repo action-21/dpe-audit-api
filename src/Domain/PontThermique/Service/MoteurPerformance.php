@@ -2,7 +2,6 @@
 
 namespace App\Domain\PontThermique\Service;
 
-use App\Domain\Common\Error\DomainError;
 use App\Domain\PontThermique\Data\KptRepository;
 use App\Domain\PontThermique\Enum\{TypeIsolation, TypeLiaison, TypePose};
 use App\Domain\PontThermique\PontThermique;
@@ -69,7 +68,7 @@ final class MoteurPerformance
             type_pose_ouverture: $type_pose_ouverture,
             presence_retour_isolation: $presence_retour_isolation,
             largeur_dormant: $largeur_dormant,
-        )) DomainError::valeur_forfaitaire('Kpt');
+        )) throw new \DomainException('Valeur forfaitaire Kpt non trouvée');
 
         return $data->kpt;
     }

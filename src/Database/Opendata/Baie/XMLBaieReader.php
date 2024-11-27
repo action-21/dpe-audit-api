@@ -60,17 +60,12 @@ final class XMLBaieReader extends XMLReaderIterator
 
     public function id(): Id
     {
-        return Id::from($this->reference());
-    }
-
-    public function reference(): string
-    {
-        return $this->xml()->findOneOrError('.//reference')->strval();
+        return $this->xml()->findOneOrError('.//reference')->id();
     }
 
     public function paroi_id(): ?Id
     {
-        return ($value = $this->xml()->findOne('.//reference_paroi')?->strval()) ? Id::from($value) : null;
+        return $this->xml()->findOne('.//reference_paroi')?->id();
     }
 
     public function description(): string

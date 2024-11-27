@@ -86,7 +86,7 @@ final class SimulationCommand extends Command
             $timer = $time->diff(new \DateTime);
 
             $output->writeln("Simulation in {$timer->f} ms");
-            $view = SimulationResource::from($simulation);
+            //$view = SimulationResource::from($simulation);
             //dump(\json_encode($view));
 
             //dump($view->enveloppe->performance););

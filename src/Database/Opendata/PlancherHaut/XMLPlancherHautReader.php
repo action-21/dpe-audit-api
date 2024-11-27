@@ -10,7 +10,7 @@ final class XMLPlancherHautReader extends XMLReaderIterator
 {
     public function id(): Id
     {
-        return Id::from($this->reference());
+        return $this->xml()->findOneOrError('.//reference')->id();
     }
 
     public function description(): string

@@ -2,6 +2,8 @@
 
 namespace App\Database\Opendata;
 
+use App\Domain\Common\Type\Id;
+
 class XMLElement extends \SimpleXMLElement
 {
     public function audit(): static
@@ -76,6 +78,13 @@ class XMLElement extends \SimpleXMLElement
             $results = [...$results, ...$this->findMany($xpath)];
         }
         return $results;
+    }
+
+    public function id(): Id
+    {
+        $value = preg_replace('!\s+!', ' ', $this->strval());
+        $value = \str_replace(' ', '-', $value);
+        return Id::from($value);
     }
 
     public function getValue(): string

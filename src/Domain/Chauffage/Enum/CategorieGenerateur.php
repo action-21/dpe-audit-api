@@ -195,6 +195,7 @@ enum CategorieGenerateur: string implements Enum
             ],
             self::PAC => match ($type_generateur) {
                 TypeGenerateur::PAC_AIR_AIR => [
+                    TypeDistribution::SANS,
                     TypeDistribution::AERAULIQUE,
                     TypeDistribution::FLUIDE_FRIGORIGENE
                 ],

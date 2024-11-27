@@ -10,12 +10,12 @@ final class XMLPorteReader extends XMLReaderIterator
 {
     public function id(): Id
     {
-        return Id::from($this->xml()->findOneOrError('.//reference')->strval());
+        return $this->xml()->findOneOrError('.//reference')->id();
     }
 
     public function paroi_id(): ?Id
     {
-        return ($valeur = $this->xml()->findOne('.//reference_paroi')?->strval()) ? Id::from($valeur) : null;
+        return $this->xml()->findOne('.//reference_paroi')?->id();
     }
 
     public function description(): string

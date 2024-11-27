@@ -10,17 +10,17 @@ final class XMLPontThermiqueReader extends XMLReaderIterator
 {
     public function id(): Id
     {
-        return Id::from($this->reference());
+        return $this->xml()->findOneOrError('.//reference')->id();
     }
 
     public function id_paroi_1(): ?Id
     {
-        return ($value = $this->reference_1()) ? Id::from($value) : null;
+        return $this->xml()->findOne('.//reference_1')?->id();
     }
 
     public function id_paroi_2(): ?Id
     {
-        return ($value = $this->reference_2()) ? Id::from($value) : null;
+        return $this->xml()->findOne('.//reference_2')?->id();
     }
 
     public function description(): string
@@ -46,21 +46,6 @@ final class XMLPontThermiqueReader extends XMLReaderIterator
     public function k_saisi(): ?float
     {
         return $this->xml()->findOne('.//k_saisi')?->floatval();
-    }
-
-    public function reference(): string
-    {
-        return $this->xml()->findOneOrError('.//reference')->strval();
-    }
-
-    public function reference_1(): ?string
-    {
-        return $this->xml()->findOne('.//reference_1')?->strval();
-    }
-
-    public function reference_2(): ?string
-    {
-        return $this->xml()->findOne('.//reference_2')?->strval();
     }
 
     public function enum_type_liaison_id(): string
