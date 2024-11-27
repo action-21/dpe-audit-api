@@ -17,7 +17,7 @@ final class XMLClimatisationReader extends XMLReaderIterator
 
     public function reference(): string
     {
-        return $this->xml()->findOneOrError('.//reference')->strval();
+        return $this->xml()->findOneOrError('.//reference')->id();
     }
 
     public function description(): string

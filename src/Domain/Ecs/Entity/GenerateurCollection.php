@@ -38,6 +38,11 @@ final class GenerateurCollection extends ArrayCollection
         return $this->findFirst(fn(mixed $key, Generateur $item): bool => $item->id()->compare($id));
     }
 
+    public function find_generateur_mixte(Id $id): ?Generateur
+    {
+        return $this->findFirst(fn(mixed $key, Generateur $item): bool => $item->id()->compare($id) || $item->generateur_mixte_id()?->compare($id) ?? false);
+    }
+
     public function pertes(): PerteCollection
     {
         return $this->reduce(fn(PerteCollection $collection, Generateur $item): PerteCollection => $collection->merge(

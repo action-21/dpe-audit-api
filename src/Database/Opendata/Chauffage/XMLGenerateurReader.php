@@ -19,22 +19,17 @@ final class XMLGenerateurReader extends XMLReaderIterator
 
     public function id(): Id
     {
-        return Id::from($this->reference());
+        return $this->xml()->findOneOrError('.//reference')->id();
     }
 
     public function generateur_mixte_id(): ?Id
     {
-        return ($valeur = $this->reference_generateur_mixte()) ? Id::from($valeur) : null;
+        return $this->xml()->findOne('.//reference_generateur_mixte')?->id();
     }
 
     public function reseau_chaleur_id(): ?Id
     {
-        return ($valeur = $this->identifiant_reseau_chaleur()) ? Id::from($valeur) : null;
-    }
-
-    public function reference(): string
-    {
-        return $this->xml()->findOneOrError('.//reference')->strval();
+        return $this->xml()->findOne('.//identifiant_reseau_chaleur')?->id();
     }
 
     public function description(): string
@@ -277,16 +272,6 @@ final class XMLGenerateurReader extends XMLReaderIterator
     public function priorite_generateur_cascade(): ?bool
     {
         return $this->xml()->findOne('.//priorite_generateur_cascade')?->intval();
-    }
-
-    public function reference_generateur_mixte(): ?string
-    {
-        return $this->xml()->findOne('.//reference_generateur_mixte')?->strval();
-    }
-
-    public function identifiant_reseau_chaleur(): ?string
-    {
-        return $this->xml()->findOne('.//identifiant_reseau_chaleur')?->strval();
     }
 
     public function n_radiateurs_gaz(): ?int

@@ -16,6 +16,7 @@ use App\Database\Opendata\XMLElement;
 use App\Domain\Simulation\{SimulationFactory, SimulationService};
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -47,9 +48,14 @@ final class SimulationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $search = $input->getArgument('numero_dpe') ? $input->getArgument('numero_dpe') . '.xml' : null;
+
         foreach (scandir($this->projectDir . self::PATH) as $filename) {
             $path = $this->projectDir . self::PATH . '/' . $filename;
             if (!\is_file($path)) {
+                continue;
+            }
+            if ($search && $filename !== $search) {
                 continue;
             }
             $output->writeln("Processing {$filename}...");
@@ -112,5 +118,10 @@ final class SimulationCommand extends Command
             $output->writeln("Done");
         }
         return Command::SUCCESS;
+    }
+
+    protected function configure(): void
+    {
+        $this->addArgument('numero_dpe', InputArgument::OPTIONAL, 'Numéro de DPE ?');
     }
 }

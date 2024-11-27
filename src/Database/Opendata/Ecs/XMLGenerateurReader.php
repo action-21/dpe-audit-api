@@ -20,17 +20,17 @@ final class XMLGenerateurReader extends XMLReaderIterator
 
     public function id(): Id
     {
-        return Id::from($this->xml()->findOneOrError('.//reference')->strval());
+        return $this->xml()->findOneOrError('.//reference')->id();
     }
 
     public function generateur_mixte_id(): ?Id
     {
-        return ($value = $this->xml()->findOne('.//reference_generateur_mixte')) ? Id::from($value->strval()) : null;
+        return $this->xml()->findOne('.//reference_generateur_mixte')?->id();
     }
 
     public function reseau_chaleur_id(): ?Id
     {
-        return ($value = $this->xml()->findOne('.//identifiant_reseau_chaleur')) ? Id::from($value->strval()) : null;
+        return $this->xml()->findOne('.//identifiant_reseau_chaleur')?->id();
     }
 
     public function description(): string

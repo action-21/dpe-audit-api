@@ -65,7 +65,7 @@ final class MoteurPerformance
         $pch = 0;
 
         if ($entity->generateur_mixte_id()) {
-            if (null === $generateur_mixte = $simulation->chauffage()->generateurs()->find(id: $entity->generateur_mixte_id()))
+            if (null === $generateur_mixte = $simulation->chauffage()->generateurs()->find_generateur_mixte(id: $entity->generateur_mixte_id()))
                 throw new \InvalidArgumentException('Générateur mixte non trouvé');
 
             $pch = $this->moteur_dimensionnement_chauffage->calcule_pch(
@@ -97,7 +97,9 @@ final class MoteurPerformance
             type_chaudiere: $type_chaudiere,
             annee_installation: $annee_installation,
             pdim: $pdim,
-        )) throw new \InvalidArgumentException('Valeur forfaitaire Pn non trouvée');
+        )) throw new \DomainException('Valeur forfaitaire Pn non trouvée');
+
+        dump($data->pn);
 
         return $this->expression_resolver->evalue(
             expression: $data->pn,

@@ -69,7 +69,7 @@ final class MoteurPerformance
         $pecs = 0;
 
         if ($entity->generateur_mixte_id()) {
-            if (null === $generateur_mixte = $simulation->ecs()->generateurs()->find(id: $entity->generateur_mixte_id()))
+            if (null === $generateur_mixte = $simulation->ecs()->generateurs()->find_generateur_mixte(id: $entity->generateur_mixte_id()))
                 throw new \InvalidArgumentException('Générateur mixte non trouvé');
 
             $pecs = $this->moteur_dimensionnement_ecs->calcule_pecs(

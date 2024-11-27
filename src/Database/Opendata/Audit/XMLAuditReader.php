@@ -14,7 +14,7 @@ final class XMLAuditReader extends XMLReader
 {
     public function id(): Id
     {
-        return $this->reference() ? Id::from($this->reference()) : Id::create();
+        return $this->xml()->findOneOf(['//numero_dpe', '//reference_interne_projet'])?->id() ?? Id::create();
     }
 
     public function audit_batiment_id(): ?Id

@@ -46,12 +46,7 @@ final class XMLInstallationReader extends XMLReaderIterator
 
     public function id(): Id
     {
-        return Id::from($this->reference());
-    }
-
-    public function reference(): string
-    {
-        return $this->xml()->findOneOrError('.//reference')->strval();
+        return $this->xml()->findOneOrError('.//reference')->id();
     }
 
     public function description(): string
