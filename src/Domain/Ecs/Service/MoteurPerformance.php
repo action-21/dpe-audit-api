@@ -99,8 +99,6 @@ final class MoteurPerformance
             pdim: $pdim,
         )) throw new \DomainException('Valeur forfaitaire Pn non trouvée');
 
-        dump($data->pn);
-
         return $this->expression_resolver->evalue(
             expression: $data->pn,
             variables: ['pdim' => $pdim],
@@ -174,7 +172,10 @@ final class MoteurPerformance
             energie_generateur: $energie_generateur,
             annee_installation_generateur: $annee_installation,
             pn: $pn,
-        )) throw new \DomainException("Valeurs forfaitaires de combustion non trouvées");
+        )) {
+            dd($type_generateur, $energie_generateur, $annee_installation, $pn);
+            throw new \DomainException("Valeurs forfaitaires de combustion non trouvées");
+        }
 
         $e = $presence_ventouse ? 1.75 : 2.5;
         $f = $presence_ventouse ? -0.55 : -0.8;

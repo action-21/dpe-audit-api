@@ -75,12 +75,12 @@ final class XMLGenerateurReader extends XMLReaderIterator
 
     public function type(): TypeGenerateur
     {
-        return TypeGenerateur::from_enum_type_generateur_ecs_id($this->enum_type_generateur_ecs_id());
+        return TypeGenerateur::from_enum_type_generateur_ecs_id($this->xml()->findOneOrError('.//enum_type_generateur_ecs_id')->intval());
     }
 
     public function energie(): EnergieGenerateur
     {
-        return EnergieGenerateur::from_enum_type_energie_id($this->enum_type_energie_id());
+        return EnergieGenerateur::from_enum_type_energie_id($this->xml()->findOneOrError('.//enum_type_energie_id')->intval());
     }
 
     public function annee_installation(): ?int
