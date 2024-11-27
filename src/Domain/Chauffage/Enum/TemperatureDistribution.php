@@ -6,16 +6,16 @@ use App\Domain\Common\Enum\Enum;
 
 enum TemperatureDistribution: string implements Enum
 {
-    case BASSE_TEMPERATURE = 'BASSE_TEMPERATURE';
-    case MOYENNE_TEMPERATURE = 'MOYENNE_TEMPERATURE';
-    case HAUTE_TEMPERATURE = 'HAUTE_TEMPERATURE';
+    case BASSE = 'BASSE';
+    case MOYENNE = 'MOYENNE';
+    case HAUTE = 'HAUTE';
 
     public static function from_enum_temp_distribution_ch_id(int $id): self
     {
         return match ($id) {
-            2 => self::BASSE_TEMPERATURE,
-            3 => self::MOYENNE_TEMPERATURE,
-            4 => self::HAUTE_TEMPERATURE,
+            2 => self::BASSE,
+            3 => self::MOYENNE,
+            4 => self::HAUTE,
         };
     }
 
@@ -27,9 +27,9 @@ enum TemperatureDistribution: string implements Enum
     public function lib(): string
     {
         return match ($this) {
-            self::BASSE_TEMPERATURE => 'Basse',
-            self::MOYENNE_TEMPERATURE => 'Moyenne',
-            self::HAUTE_TEMPERATURE => 'Haute'
+            self::BASSE => 'Basse',
+            self::MOYENNE => 'Moyenne',
+            self::HAUTE => 'Haute'
         };
     }
 
@@ -39,9 +39,9 @@ enum TemperatureDistribution: string implements Enum
     public function chute_nominale_temperature(): float
     {
         return match ($this) {
-            self::BASSE_TEMPERATURE => 7.5,
-            self::MOYENNE_TEMPERATURE => 7.5,
-            self::HAUTE_TEMPERATURE => 15,
+            self::BASSE => 7.5,
+            self::MOYENNE => 7.5,
+            self::HAUTE => 15,
         };
     }
 }
