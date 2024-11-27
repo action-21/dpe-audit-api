@@ -6,6 +6,7 @@ use App\Domain\Audit\Audit;
 use App\Domain\Common\Type\Id;
 use App\Domain\Production\Entity\{PanneauPhotovoltaique, PanneauPhotovoltaiqueCollection};
 use App\Domain\Production\Service\MoteurProduction;
+use App\Domain\Simulation\Simulation;
 
 /**
  * @see App\Domain\Audit\Audit::production()
@@ -35,9 +36,9 @@ final class Production
         $this->panneaux_photovoltaiques->reinitialise();
     }
 
-    public function calcule_production(MoteurProduction $moteur): self
+    public function calcule_production(MoteurProduction $moteur, Simulation $simulation): self
     {
-        $this->panneaux_photovoltaiques->calcule_production($moteur);
+        $this->panneaux_photovoltaiques->calcule_production($moteur, $simulation);
         return $this;
     }
 

@@ -50,7 +50,7 @@ final class SimulationService
         // 8. Eclairage
         $this->eclairage_service->calcule($entity->eclairage());
         // 9. Production
-        $this->production_service->calcule_production($entity->production());
+        $this->production_service->calcule_production($entity->production(), $entity);
         // 10. Performances
         $entity->calcule_performance($this->moteur_performance);
 

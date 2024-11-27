@@ -82,7 +82,9 @@ class XMLElement extends \SimpleXMLElement
 
     public function id(): Id
     {
-        $value = preg_replace('!\s+!', ' ', $this->strval());
+        $value = \trim($this->strval());
+        $value = \strtolower($value);
+        $value = \preg_replace('!\s+!', ' ', $value);
         $value = \str_replace(' ', '-', $value);
         return Id::from($value);
     }

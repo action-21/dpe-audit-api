@@ -6,6 +6,7 @@ use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\Type\Id;
 use App\Domain\Production\Service\MoteurProduction;
 use App\Domain\Production\ValueObject\ProductionPhotovoltaiqueCollection;
+use App\Domain\Simulation\Simulation;
 
 /**
  * @property PanneauPhotovoltaique[] $elements
@@ -22,9 +23,9 @@ final class PanneauPhotovoltaiqueCollection extends ArrayCollection
         return $this->walk(fn(PanneauPhotovoltaique $item) => $item->reinitialise());
     }
 
-    public function calcule_production(MoteurProduction $moteur): self
+    public function calcule_production(MoteurProduction $moteur, Simulation $simulation): self
     {
-        return $this->walk(fn(PanneauPhotovoltaique $item) => $item->calcule_production($moteur));
+        return $this->walk(fn(PanneauPhotovoltaique $item) => $item->calcule_production($moteur, $simulation));
     }
 
     public function find(Id $id): ?PanneauPhotovoltaique

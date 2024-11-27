@@ -7,7 +7,7 @@ use App\Domain\Common\Enum\Enum;
 enum Mitoyennete: string implements Enum
 {
     case EXTERIEUR = 'EXTERIEUR';
-    case ENTERRE = 'PAROI_ENTERREE';
+    case ENTERRE = 'ENTERRE';
     case VIDE_SANITAIRE = 'VIDE_SANITAIRE';
     case TERRE_PLEIN = 'TERRE_PLEIN';
     case SOUS_SOL_NON_CHAUFFE = 'SOUS_SOL_NON_CHAUFFE';

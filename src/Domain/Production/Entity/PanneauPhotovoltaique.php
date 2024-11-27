@@ -7,6 +7,7 @@ use App\Domain\Common\Type\Id;
 use App\Domain\Production\Production;
 use App\Domain\Production\Service\MoteurProduction;
 use App\Domain\Production\ValueObject\ProductionPhotovoltaiqueCollection;
+use App\Domain\Simulation\Simulation;
 
 final class PanneauPhotovoltaique
 {
@@ -48,9 +49,9 @@ final class PanneauPhotovoltaique
         $this->productions = null;
     }
 
-    public function calcule_production(MoteurProduction $moteur): self
+    public function calcule_production(MoteurProduction $moteur, Simulation $simulation): self
     {
-        $this->productions = $moteur->calcule_production_photovoltaique($this);
+        $this->productions = $moteur->calcule_production_photovoltaique($this, $simulation);
         return $this;
     }
 

@@ -6,6 +6,7 @@ use App\Domain\Common\Enum\Mois;
 use App\Domain\Production\Data\KpvRepository;
 use App\Domain\Production\Entity\PanneauPhotovoltaique;
 use App\Domain\Production\ValueObject\{ProductionPhotovoltaique, ProductionPhotovoltaiqueCollection};
+use App\Domain\Simulation\Simulation;
 
 final class MoteurProduction
 {
@@ -15,7 +16,7 @@ final class MoteurProduction
 
     public function __construct(private KpvRepository $kpv_repository) {}
 
-    public function calcule_production_photovoltaique(PanneauPhotovoltaique $entity): ProductionPhotovoltaiqueCollection
+    public function calcule_production_photovoltaique(PanneauPhotovoltaique $entity, Simulation $simulation): ProductionPhotovoltaiqueCollection
     {
         $collection = [];
         $surface_capteurs = $this->surface_capteurs(
@@ -29,10 +30,10 @@ final class MoteurProduction
 
         foreach (Mois::cases() as $mois) {
             $ppv = $this->ppv(
-                surface_habitable: $entity->production()->audit()->surface_habitable_reference(),
+                surface_habitable: $simulation->surface_habitable_reference(),
                 kpv: $kpv,
                 surface_capteurs: $surface_capteurs,
-                epv: $entity->production()->audit()->situation()->epv(mois: $mois),
+                epv: $simulation->audit()->situation()->epv(mois: $mois),
             );
             $collection[] = ProductionPhotovoltaique::create(mois: $mois, ppv: $ppv);
         }
