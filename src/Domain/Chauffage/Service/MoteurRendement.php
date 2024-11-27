@@ -28,7 +28,7 @@ final class MoteurRendement
         $fch = $this->calcule_fch($entity);
 
         foreach (ScenarioUsage::cases() as $scenario) {
-            $ich = $this->calcule_ich(entity: $entity, scenario: $scenario, rg: $rg, re: $re, rd: $rd, rr: $rr);
+            $ich = $this->calcule_ich(entity: $entity, simulation: $simulation, scenario: $scenario, rg: $rg, re: $re, rd: $rd, rr: $rr);
             $collection[] = Rendement::create(scenario: $scenario, fch: $fch, i0: $i0, int: $int, ich: $ich, rg: $rg, rd: $rd, re: $re, rr: $rr,);
         }
         return new RendementCollection($collection);
@@ -44,9 +44,9 @@ final class MoteurRendement
         );
     }
 
-    public function calcule_ich(Systeme $entity, ScenarioUsage $scenario, ?float &$rg, ?float &$rd, ?float &$re, ?float &$rr,): float
+    public function calcule_ich(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario, ?float &$rg, ?float &$rd, ?float &$re, ?float &$rr,): float
     {
-        $rg = $this->moteur_rendement_generation->calcule_rendement_generation($entity, $scenario);
+        $rg = $this->moteur_rendement_generation->calcule_rendement_generation($entity, $simulation, $scenario);
         $rd = $this->moteur_rendement_distribution->calcule_rendement_distribution($entity);
         $re = $this->moteur_rendement_emission->calcule_rendement_emission($entity);
         $rr = $this->moteur_rendement_regulation->calcule_rendement_regulation($entity);

@@ -6,6 +6,7 @@ use App\Domain\Chauffage\Data\RgRepository;
 use App\Domain\Chauffage\Entity\Systeme;
 use App\Domain\Chauffage\Enum\{CategorieGenerateur, EnergieGenerateur, LabelGenerateur, TypeGenerateur};
 use App\Domain\Common\Enum\{ScenarioUsage, ZoneClimatique};
+use App\Domain\Simulation\Simulation;
 
 final class MoteurRendementGeneration
 {
@@ -14,13 +15,13 @@ final class MoteurRendementGeneration
         private RgRepository $rg_repository,
     ) {}
 
-    public function calcule_rendement_generation(Systeme $entity, ScenarioUsage $scenario): ?float
+    public function calcule_rendement_generation(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario): ?float
     {
         if ($rg = $this->calcule_rendement_generation_thermodynamique($entity))
             return $rg;
-        if ($rg = $this->calcule_rendement_generation_combustion($entity, $scenario))
+        if ($rg = $this->calcule_rendement_generation_combustion($entity, $simulation, $scenario))
             return $rg;
-        if ($rg = $this->calcule_rendement_generation_hybride($entity, $scenario))
+        if ($rg = $this->calcule_rendement_generation_hybride($entity, $simulation, $scenario))
             return $rg;
 
         return $this->rg(
@@ -38,23 +39,23 @@ final class MoteurRendementGeneration
             : null;
     }
 
-    public function calcule_rendement_generation_combustion(Systeme $entity, ScenarioUsage $scenario): ?float
+    public function calcule_rendement_generation_combustion(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario): ?float
     {
         if (false === $entity->generateur()->categorie()->combustion())
             return null;
 
-        $service = ($this->moteur_rendement_generation_combustion)($entity, $scenario);
+        $service = ($this->moteur_rendement_generation_combustion)($entity, $simulation, $scenario);
         return $service->calcule_rendement_generation();
     }
 
-    public function calcule_rendement_generation_hybride(Systeme $entity, ScenarioUsage $scenario): ?float
+    public function calcule_rendement_generation_hybride(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario): ?float
     {
         if (false === $this->rg_pac_hybride_applicable($entity->generateur()->categorie()))
             return null;
 
         return $this->rg_pac_hybride(
             zone_climatique: $entity->chauffage()->audit()->zone_climatique(),
-            rg_chaudiere: $this->calcule_rendement_generation_combustion($entity, $scenario),
+            rg_chaudiere: $this->calcule_rendement_generation_combustion($entity, $simulation, $scenario),
             rg_pac: $this->calcule_rendement_generation_thermodynamique($entity),
         );
     }
