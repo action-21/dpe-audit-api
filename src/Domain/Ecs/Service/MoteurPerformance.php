@@ -101,7 +101,7 @@ final class MoteurPerformance
 
         return $this->expression_resolver->evalue(
             expression: $data->pn,
-            variables: ['pdim' => $pdim],
+            variables: ['Pdim' => $pdim],
         );
     }
 
