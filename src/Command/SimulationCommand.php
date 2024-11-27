@@ -48,6 +48,8 @@ final class SimulationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $counter = 0;
+        $success = 0;
         $search = $input->getArgument('numero_dpe') ? $input->getArgument('numero_dpe') . '.xml' : null;
 
         foreach (scandir($this->projectDir . self::PATH) as $filename) {
@@ -58,19 +60,26 @@ final class SimulationCommand extends Command
             if ($search && $filename !== $search) {
                 continue;
             }
+            $counter++;
             $output->writeln("Processing {$filename}...");
-
             $time = new \DateTime();
-            $xml = \simplexml_load_file($path, XMLElement::class);
-            $audit = $this->xml_audit_transformer->transform($xml);
-            $enveloppe = $this->xml_enveloppe_transformer->transform($xml);
-            $chauffage = $this->xml_chauffage_transformer->transform($xml);
-            $ecs = $this->xml_ecs_transformer->transform($xml);
-            $refroidissement = $this->xml_refroidissement_transformer->transform($xml);
-            $ventilation = $this->xml_ventilation_transformer->transform($xml);
-            $eclairage = $this->xml_eclairage_transformer->transform($xml);
-            $production = $this->xml_production_transformer->transform($xml);
-            $visite = $this->xml_visite_transformer->transform($xml);
+
+            try {
+                $xml = \simplexml_load_file($path, XMLElement::class);
+                $audit = $this->xml_audit_transformer->transform($xml);
+                $enveloppe = $this->xml_enveloppe_transformer->transform($xml);
+                $chauffage = $this->xml_chauffage_transformer->transform($xml);
+                $ecs = $this->xml_ecs_transformer->transform($xml);
+                $refroidissement = $this->xml_refroidissement_transformer->transform($xml);
+                $ventilation = $this->xml_ventilation_transformer->transform($xml);
+                $eclairage = $this->xml_eclairage_transformer->transform($xml);
+                $production = $this->xml_production_transformer->transform($xml);
+                $visite = $this->xml_visite_transformer->transform($xml);
+                $success++;
+            } catch (\Throwable $th) {
+                $output->writeln("Failed to transform {$filename}");
+                continue;
+            }
 
             $simulation = $this->simulation_factory->build(
                 audit: $audit,
@@ -117,6 +126,7 @@ final class SimulationCommand extends Command
             //$audit->controle();
             $output->writeln("Done");
         }
+        $output->writeln("{$success}/{$counter} audits processed");
         return Command::SUCCESS;
     }
 

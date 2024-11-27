@@ -20,6 +20,10 @@ final class XMLPorteTransformer
         foreach ($this->reader_iterator->read($root->porte_collection()) as $reader) {
             $lnc = null === $reader->paroi_id() ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
 
+            if ($reader->paroi_id() && null === $enveloppe->parois()->get($reader->paroi_id())) {
+                throw new \RuntimeException("Paroi {$reader->paroi_id()} non trouvée pour la porte {$reader->id()}");
+            }
+
             for ($i = 1; $i <= $reader->quantite(); $i++) {
                 $entity = new Porte(
                     id: $reader->id(),

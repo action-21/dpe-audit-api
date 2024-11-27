@@ -80,7 +80,10 @@ final class MoteurPerformance
             nature_menuiserie: $nature_menuiserie,
             taux_vitrage: $taux_vitrage,
             type_vitrage: $type_vitrage
-        )) DomainError::valeur_forfaitaire('Uporte');
+        )) {
+            dd($presence_sas, $etat_isolation, $nature_menuiserie, $taux_vitrage, $type_vitrage);
+            throw new \DomainException('Valeur forfaitaire Uporte non trouvée');
+        }
 
         return $data->u;
     }
@@ -92,9 +95,11 @@ final class MoteurPerformance
     {
         if (null !== $b_lnc)
             return $b_lnc;
-        if (null === $valeur = $this->b_repository->find_by(mitoyennete: $mitoyennete))
-            DomainError::valeur_forfaitaire('b');
 
-        return $valeur->b;
+        if (null === $data = $this->b_repository->find_by(mitoyennete: $mitoyennete)) {
+            throw new \DomainException('Valeur forfaitaire b non trouvée');
+        }
+
+        return $data->b;
     }
 }
