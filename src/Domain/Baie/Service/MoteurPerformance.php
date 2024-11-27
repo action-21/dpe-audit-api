@@ -146,8 +146,10 @@ final class MoteurPerformance
             presence_rupteur_pont_thermique: $presence_rupteur_pont_thermique,
         );
 
-        if (0 === $collection->count())
+        if (0 === $collection->count()) {
+            dd($type_baie, $nature_menuiserie, $presence_soubassement, $presence_rupteur_pont_thermique);
             throw new \DomainException("Valeur forfaitaire Uw non trouvé");
+        }
 
         if (1 === $collection->count())
             return $collection->first()->uw;
