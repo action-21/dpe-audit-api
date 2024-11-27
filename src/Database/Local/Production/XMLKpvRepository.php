@@ -17,8 +17,8 @@ final class XMLKpvRepository implements KpvRepository
     public function find_by(float $orientation, float $inclinaison): ?Kpv
     {
         $record = $this->createQuery()
-            ->andCompareTo('orientation', $orientation)
-            ->andCompareTo('inclinaison', $inclinaison)
+            ->andCompareTo('orientation_pv', $orientation)
+            ->andCompareTo('inclinaison_pv', $inclinaison)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
