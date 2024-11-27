@@ -18,9 +18,7 @@ final class XMLMurTransformer
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): MurCollection
     {
-        $this->reader_iterator = $this->reader_iterator->read($root->mur_collection());
-
-        foreach ($this->reader_iterator as $reader) {
+        foreach ($this->reader_iterator->read($root->mur_collection()) as $reader) {
             $lnc = $this->lnc_transformer->transform($reader->xml(), $enveloppe);
 
             $entity = new Mur(

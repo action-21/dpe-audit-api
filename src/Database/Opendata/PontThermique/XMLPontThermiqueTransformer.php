@@ -14,9 +14,7 @@ final class XMLPontThermiqueTransformer
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): PontThermiqueCollection
     {
-        $this->reader = $this->reader->read($root->pont_thermique_collection());
-
-        foreach ($this->reader as $reader) {
+        foreach ($this->reader->read($root->pont_thermique_collection()) as $reader) {
             if (null === $reader->id_paroi_1() || null === $reader->id_paroi_2())
                 continue;
 

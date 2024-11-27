@@ -17,9 +17,7 @@ final class XMLPlancherHautTransformer
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): PlancherHautCollection
     {
-        $this->reader_iterator = $this->reader_iterator->read($root->plancher_haut_collection());
-
-        foreach ($this->reader_iterator as $reader) {
+        foreach ($this->reader_iterator->read($root->plancher_haut_collection()) as $reader) {
             $lnc = $this->lnc_transformer->transform($reader->xml(), $enveloppe);
 
             $entity = new PlancherHaut(

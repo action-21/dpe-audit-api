@@ -49,7 +49,7 @@ final class MoteurEnsoleillement
             presence_rupteur_pont_thermique: $entity->menuiserie()->presence_rupteur_pont_thermique,
         );
 
-        return EnsoleillementCollection::create(function (Mois $mois) use ($t, $c1_collection, $entity) {
+        return EnsoleillementBaieCollection::create(function (Mois $mois) use ($t, $c1_collection, $entity) {
             return EnsoleillementBaie::create(
                 mois: $mois,
                 fe: ($fe = $this->fe()),

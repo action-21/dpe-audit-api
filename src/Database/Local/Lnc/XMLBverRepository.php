@@ -4,7 +4,7 @@ namespace App\Database\Local\Lnc;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
 use App\Domain\Common\Enum\{Orientation, ZoneClimatique};
-use App\Domain\Lnc\Data\{BVer, BVerCollection, BVerRepository};
+use App\Domain\Lnc\Data\{BVer, BverCollection, BVerRepository};
 
 final class XMLBverRepository implements BVerRepository
 {
@@ -15,9 +15,9 @@ final class XMLBverRepository implements BVerRepository
         return 'lnc.bver';
     }
 
-    public function search_by(ZoneClimatique $zone_climatique): BVerCollection
+    public function search_by(ZoneClimatique $zone_climatique): BverCollection
     {
-        return new BVerCollection(\array_map(
+        return new BverCollection(\array_map(
             fn(XMLTableElement $record): Bver => $this->to($record),
             $this->createQuery()
                 ->and('zone_climatique', $zone_climatique->code())

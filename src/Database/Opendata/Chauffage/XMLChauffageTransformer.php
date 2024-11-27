@@ -13,8 +13,6 @@ final class XMLChauffageTransformer
         private ChauffageFactory $factory,
         private XMLAuditTransformer $audit_transformer,
         private XMLInstallationReader $installation_reader,
-        private XMLEmetteurReader $emetteur_reader,
-        private XMLGenerateurReader $generateur_reader,
     ) {}
 
     public function transform(XMLElement $root): Chauffage
@@ -63,20 +61,24 @@ final class XMLChauffageTransformer
 
     private function set_emetteurs(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($this->emetteur_reader->read($root->emetteur_chauffage_collection()) as $emetteur_reader) {
-            if (false === $emetteur_reader->apply())
-                continue;
+        foreach ($this->installation_reader->read($root->installation_chauffage_collection()) as $installation_reader) {
+            foreach ($installation_reader->read_emetteurs() as $emetteur_reader) {
+                if (false === $emetteur_reader->apply())
+                    continue;
+                if ($chauffage->emetteurs()->find(id: $emetteur_reader->id()))
+                    continue;
 
-            $emetteur = new Emetteur(
-                id: $emetteur_reader->id(),
-                chauffage: $chauffage,
-                description: $emetteur_reader->description(),
-                type: $emetteur_reader->type_emetteur(),
-                temperature_distribution: $emetteur_reader->temperature_distribution(),
-                presence_robinet_thermostatique: $emetteur_reader->presence_robinet_thermostatique(),
-                annee_installation: $emetteur_reader->annee_installation(),
-            );
-            $chauffage->add_emetteur($emetteur);
+                $emetteur = new Emetteur(
+                    id: $emetteur_reader->id(),
+                    chauffage: $chauffage,
+                    description: $emetteur_reader->description(),
+                    type: $emetteur_reader->type_emetteur(),
+                    temperature_distribution: $emetteur_reader->temperature_distribution(),
+                    presence_robinet_thermostatique: $emetteur_reader->presence_robinet_thermostatique(),
+                    annee_installation: $emetteur_reader->annee_installation(),
+                );
+                $chauffage->add_emetteur($emetteur);
+            }
         }
     }
 

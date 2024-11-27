@@ -67,8 +67,8 @@ final class MoteurPerformance
      */
     public function bver(ZoneClimatique $zone_climatique, array $orientations): BverCollection
     {
-        $collection = $this
-            ->bver_repository->search_by(zone_climatique: $zone_climatique)
+        $collection = $this->bver_repository
+            ->search_by(zone_climatique: $zone_climatique)
             ->filter_by_orientations(orientations: $orientations);
 
         if ($collection->count() === 0)

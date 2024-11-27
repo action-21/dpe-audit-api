@@ -55,7 +55,7 @@ final class BaieCollection extends ArrayCollection
 
     public function filter_by_orientation(Orientation $orientation): self
     {
-        return $this->filter(fn(Baie $item): bool => $item->position()->orientation?->enum() === $orientation);
+        return $this->filter(fn(Baie $item): bool => $item->position()->orientation && Orientation::from_azimut($item->position()->orientation) === $orientation);
     }
 
     public function filter_by_inclinaison(bool $est_verticale): self
@@ -91,13 +91,13 @@ final class BaieCollection extends ArrayCollection
     public function aue(?bool $isolation = null): float
     {
         $collection = $isolation === null ? $this : $this->filter_by_isolation($isolation);
-        return $collection->reduce(fn(float $carry, Paroi $item): float => $carry += $item->aue());
+        return $collection->reduce(fn(float $carry, Baie $item): float => $carry += $item->aue());
     }
 
     public function aiu(?bool $isolation = null): float
     {
         $collection = $isolation === null ? $this : $this->filter_by_isolation($isolation);
-        return $collection->reduce(fn(float $carry, Paroi $item): float => $carry += $item->aiu());
+        return $collection->reduce(fn(float $carry, Baie $item): float => $carry += $item->aiu());
     }
 
     public function isolation_aue(): bool

@@ -13,7 +13,6 @@ final class XMLEcsTransformer
         private EcsFactory $factory,
         private XMLAuditTransformer $audit_transformer,
         private XMLInstallationReader $installation_reader,
-        private XMLGenerateurReader $generateur_reader,
     ) {}
 
     public function transform(XMLElement $root): Ecs

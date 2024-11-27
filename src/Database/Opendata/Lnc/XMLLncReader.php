@@ -4,7 +4,7 @@ namespace App\Database\Opendata\Lnc;
 
 use App\Database\Opendata\{XMLElement, XMLReader};
 use App\Domain\Common\Type\Id;
-use App\Domain\Lnc\Enum\{EtatIsolation, Mitoyennete, NatureMenuiserie, TypeBaie, TypeLnc, TypeVitrage};
+use App\Domain\Lnc\Enum\{EtatIsolation, NatureMenuiserie, TypeBaie, TypeLnc, TypeVitrage};
 
 /**
  * Les locaux non chauffés sont reconstruits depuis chaque paroi
@@ -25,7 +25,7 @@ final class XMLLncReader extends XMLReader
 
     public function ets(): XMLElement
     {
-        return $this->xml()->findOneOrError('//ets/donnee_entree/reference/' . $this->reference_lnc());
+        return $this->xml()->findOneOrError("//ets[.//donnee_entree/reference = '{$this->reference_lnc()}']");
     }
 
     public function id(): Id
@@ -105,7 +105,17 @@ final class XMLLncReader extends XMLReader
 
     public function surface_aue(): float
     {
-        return $this->xml()->findOneOrError('.//surface_aue')->floatval();
+        return $this->xml()->findOne('.//surface_aue')?->floatval() ?? 0;
+    }
+
+    public function surface_aiu(): float
+    {
+        return $this->xml()->findOneOfOrError([
+            './/surface_aiu',
+            './/surface_paroi_opaque',
+            './/surface_totale_baie',
+            './/surface_porte',
+        ])->floatval();
     }
 
     /**
@@ -140,10 +150,5 @@ final class XMLLncReader extends XMLReader
             './/surface_totale_baie',
             './/surface_porte',
         ])->floatval();
-    }
-
-    public function surface_aiu(): float
-    {
-        return $this->xml()->findOneOrError('.//surface_aiu')->floatval();
     }
 }
