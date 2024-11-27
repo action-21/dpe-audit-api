@@ -14,7 +14,7 @@ final class Caracteristique
         public readonly float $surface,
         public readonly float $inclinaison,
         public readonly TypeFermeture $type_fermeture,
-        public readonly bool $presence_protection_solaire,
+        public readonly ?bool $presence_protection_solaire,
         public readonly ?int $annee_installation,
         public readonly ?bool $presence_soubassement = null,
         public readonly ?Menuiserie $menuiserie = null,

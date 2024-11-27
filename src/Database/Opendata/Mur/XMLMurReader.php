@@ -40,12 +40,12 @@ final class XMLMurReader extends XMLReaderIterator
 
     public function presence_enduit_isolant(): bool
     {
-        return $this->enduit_isolant_paroi_ancienne();
+        return $this->xml()->findOne('.//enduit_isolant_paroi_ancienne')?->boolval() ?? false;
     }
 
     public function paroi_ancienne(): bool
     {
-        return $this->enduit_isolant_paroi_ancienne();
+        return $this->xml()->findOne('.//paroi_ancienne')?->boolval() ?? false;
     }
 
     public function epaisseur(): ?float
@@ -135,11 +135,6 @@ final class XMLMurReader extends XMLReaderIterator
     public function enum_type_doublage_id(): int
     {
         return $this->xml()->findOneOrError('.//enum_type_doublage_id')->intval();
-    }
-
-    public function enduit_isolant_paroi_ancienne(): bool
-    {
-        return $this->xml()->findOneOrError('.//enduit_isolant_paroi_ancienne')->boolval();
     }
 
     public function enum_type_isolation_id(): int

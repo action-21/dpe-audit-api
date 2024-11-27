@@ -85,7 +85,7 @@ final class XMLPorteReader extends XMLReaderIterator
 
     public function presence_joint(): bool
     {
-        return $this->xml()->findOneOrError('.//presence_joint')->boolval();
+        return $this->xml()->findOne('.//presence_joint')?->boolval() ?? false;
     }
 
     public function u_saisi(): ?float

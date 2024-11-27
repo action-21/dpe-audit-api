@@ -208,9 +208,9 @@ final class XMLBaieReader extends XMLReaderIterator
         return $this->enum_type_materiaux_menuiserie_id() === 6 ? true : false;
     }
 
-    public function presence_protection_solaire(): bool
+    public function presence_protection_solaire(): ?bool
     {
-        return $this->xml()->findOneOrError('.//presence_protection_solaire_hors_fermeture')->boolval();
+        return $this->xml()->findOne('.//presence_protection_solaire_hors_fermeture')?->boolval();
     }
 
     public function presence_retour_isolation(): bool
@@ -220,7 +220,7 @@ final class XMLBaieReader extends XMLReaderIterator
 
     public function presence_joint(): bool
     {
-        return $this->xml()->findOneOrError('.//presence_joint')->boolval();
+        return $this->xml()->findOne('.//presence_joint')?->boolval() ?? false;
     }
 
     public function largeur_dormant(): int

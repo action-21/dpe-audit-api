@@ -252,7 +252,7 @@ final class MoteurPerformance
             annee_construction: $annee_construction,
             presence_joints_menuiserie: $presence_joints_menuiseries,
             isolation_murs_plafonds: $isolation_murs_plafonds,
-        ));
+        )) throw new \DomainException('Valeur forfaitaire Q4PaConv non trouvée');
 
         return $valeur->q4pa_conv;
     }
