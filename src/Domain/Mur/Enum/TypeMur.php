@@ -119,4 +119,17 @@ enum TypeMur: string implements Enum
             self::OSSATURE_BOIS_AVEC_REMPLISSAGE_ISOLANT => 10,
         };
     }
+
+    public function pont_thermique_negligeable(): bool
+    {
+        return \in_array($this, [
+            self::BOIS_RONDIN,
+            self::PAN_BOIS_SANS_REMPLISSAGE,
+            self::PAN_BOIS_AVEC_REMPLISSAGE,
+            self::CLOISON_PLATRE,
+            self::OSSATURE_BOIS_AVEC_REMPLISSAGE_ISOLANT,
+            self::OSSATURE_BOIS_AVEC_REMPLISSAGE_TOUT_VENANT,
+            self::OSSATURE_BOIS_SANS_REMPLISSAGE,
+        ]);
+    }
 }

@@ -72,4 +72,9 @@ enum TypeBaie: string implements Enum
     {
         return \in_array($this, [self::PORTE_FENETRE_COULISSANTE, self::PORTE_FENETRE_BATTANTE]);
     }
+
+    public function pont_thermique_negligeable(): bool
+    {
+        return \in_array($this, [self::BRIQUE_VERRE_PLEINE, self::BRIQUE_VERRE_CREUSE]);
+    }
 }

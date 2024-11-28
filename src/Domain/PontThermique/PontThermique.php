@@ -3,6 +3,7 @@
 namespace App\Domain\PontThermique;
 
 use App\Domain\Baie\Baie;
+use App\Domain\Common\Enum\Enum;
 use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Enveloppe;
@@ -154,11 +155,18 @@ final class PontThermique
     {
         if ($this->liaison->type !== TypeLiaison::MENUISERIE_MUR)
             return null;
-        if (null !== $this->baie()?->caracteristique()->menuiserie->largeur_dormant)
+        if (null !== $this->baie()?->caracteristique()->menuiserie?->largeur_dormant)
             return $this->baie()->caracteristique()->menuiserie->largeur_dormant;
         if (null !== $this->porte()?->caracteristique()->largeur_dormant)
             return $this->porte()->caracteristique()->largeur_dormant;
         return 50;
+    }
+
+    public function type_baie(): ?Enum
+    {
+        return $this->liaison->type === TypeLiaison::MENUISERIE_MUR
+            ? $this->baie()?->caracteristique()->type
+            : null;
     }
 
     public function description(): string

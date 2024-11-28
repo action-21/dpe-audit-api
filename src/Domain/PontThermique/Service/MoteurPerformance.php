@@ -13,6 +13,9 @@ final class MoteurPerformance
 
     public function calcule_performance(PontThermique $entity): Performance
     {
+        if ($this->pont_thermique_negligeable($entity))
+            return Performance::create(kpt: 0, pt: 0);
+
         $kpt = $this->kpt(
             type_liaison: $entity->liaison()->type,
             type_isolation_mur: $entity->type_isolation_mur(),
@@ -29,6 +32,22 @@ final class MoteurPerformance
         );
 
         return Performance::create(kpt: $kpt, pt: $pt);
+    }
+
+    public function pont_thermique_negligeable(PontThermique $entity): bool
+    {
+        if ($entity->mur()->caracteristique()->type->pont_thermique_negligeable())
+            return true;
+        if ($entity->liaison()->type === TypeLiaison::PLANCHER_BAS_MUR) {
+            return $entity->plancher_bas()?->caracteristique()->type->pont_thermique_negligeable() ?? false;
+        }
+        if ($entity->liaison()->type === TypeLiaison::PLANCHER_HAUT_MUR) {
+            return $entity->plancher_haut()?->caracteristique()->type->pont_thermique_negligeable() ?? false;
+        }
+        if ($entity->liaison()->type === TypeLiaison::MENUISERIE_MUR) {
+            return $entity->baie()?->caracteristique()->type->pont_thermique_negligeable() ?? false;
+        }
+        return false;
     }
 
     /**

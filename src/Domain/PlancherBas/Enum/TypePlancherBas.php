@@ -59,4 +59,13 @@ enum TypePlancherBas: string implements Enum
             self::PLANCHER_ENTREVOUS_ISOLANT => 'Plancher à entrevous isolant',
         };
     }
+
+    public function pont_thermique_negligeable(): bool
+    {
+        return \in_array($this, [
+            self::BARDEAUX_ET_REMPLISSAGE,
+            self::PLANCHER_BOIS_SUR_SOLIVES_BOIS,
+            self::PLANCHER_BOIS_SUR_SOLIVES_METALLIQUES,
+        ]);
+    }
 }
