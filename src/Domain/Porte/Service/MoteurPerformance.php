@@ -80,10 +80,7 @@ final class MoteurPerformance
             nature_menuiserie: $nature_menuiserie,
             taux_vitrage: $taux_vitrage,
             type_vitrage: $type_vitrage
-        )) {
-            dd($presence_sas, $etat_isolation, $nature_menuiserie, $taux_vitrage, $type_vitrage);
-            throw new \DomainException('Valeur forfaitaire Uporte non trouvée');
-        }
+        )) throw new \DomainException('Valeur forfaitaire Uporte non trouvée');
 
         return $data->u;
     }
