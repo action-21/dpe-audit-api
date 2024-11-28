@@ -119,7 +119,7 @@ final class Baie implements Paroi
 
     public function presence_joint_menuiserie(): bool
     {
-        return $this->caracteristique->menuiserie?->presence_joint ?? $this->double_fenetre?->menuiserie?->presence_joint;
+        return ($this->caracteristique->menuiserie?->presence_joint ?? $this->double_fenetre?->menuiserie?->presence_joint) ?? false;
     }
 
     public function est_isole(): bool

@@ -58,7 +58,7 @@ final class MoteurEnsoleillement
         /** @var float[] */
         $fe1_collection = $entity->masques_proches()->map(fn(MasqueProche $item) => $this->fe1(
             type_masque_proche: $item->type_masque(),
-            orientation_baie: $entity->orientation() ? Orientation::from_azimut($entity->orientation()) : null,
+            orientation_baie: null !== $entity->orientation() ? Orientation::from_azimut($entity->orientation()) : null,
             avancee_masque: $item->avancee(),
         ))->values();
 

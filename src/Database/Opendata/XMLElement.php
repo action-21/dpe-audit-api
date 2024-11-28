@@ -101,12 +101,12 @@ class XMLElement extends \SimpleXMLElement
 
     public function floatval(): float
     {
-        return (float) $this;
+        return (float) $this->getValue();
     }
 
     public function intval(): int
     {
-        return (int) $this;
+        return (int) $this->getValue();
     }
 
     public function boolval(): bool

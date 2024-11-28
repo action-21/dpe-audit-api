@@ -93,7 +93,7 @@
     </row>
     <row>
         <type_batiment>IMMEUBLE</type_batiment>
-        <annee_construction gt="" gte="1975" lt="" lte="1977" />
+        <annee_construction gt="" gte="1975" lt="" lte="2012" />
         <presence_joints_menuiserie></presence_joints_menuiserie>
         <isolation_murs_plafonds></isolation_murs_plafonds>
         <q4pa_conv>1.5</q4pa_conv>
