@@ -87,7 +87,6 @@ final class MoteurRendementGenerationCombustion
             $pmfou += $this->pmfou($tch->taux_charge());
             $pmcons += $this->pmcons($tch->taux_charge());
         }
-
         $rg_pcs = $pmfou / ($pmcons + 0.45 * $this->qp0 + $this->pveilleuse);
         return $rg_pcs * $this->energie_generateur->to()->coefficient_conversion_pcs();
     }
@@ -260,8 +259,8 @@ final class MoteurRendementGenerationCombustion
     {
         $Pn = $this->pn;
         $QP0 = $this->qp0;
-        $Rpn = $this->rpn * 100;
-        $Rpint = $this->rpint * 100;
+        $Rpn = $this->rpn;
+        $Rpint = $this->rpint;
 
         if ($this->categorie_generateur === CategorieGenerateur::CHAUDIERE_STANDARD) {
             if ($x == 30) {
