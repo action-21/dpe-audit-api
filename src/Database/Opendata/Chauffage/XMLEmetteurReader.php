@@ -10,7 +10,8 @@ final class XMLEmetteurReader extends XMLReaderIterator
 {
     public function apply(): bool
     {
-        return null !== TypeEmetteur::from_type_emission_distribution_id($this->enum_type_emission_distribution_id());
+        return null !== TypeEmetteur::from_type_emission_distribution_id($this->enum_type_emission_distribution_id())
+            && null !== TemperatureDistribution::from_enum_temp_distribution_ch_id($this->enum_temp_distribution_ch_id());
     }
 
     public function id(): Id

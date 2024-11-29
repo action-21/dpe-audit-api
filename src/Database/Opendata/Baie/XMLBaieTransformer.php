@@ -16,7 +16,8 @@ final class XMLBaieTransformer
     public function transform(XMLElement $root, Enveloppe $enveloppe): BaieCollection
     {
         foreach ($root->read_baies() as $reader) {
-            $lnc = null === $reader->paroi_id() ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
+            $paroi_id = $reader->paroi_id() ? $enveloppe->parois()->get($reader->paroi_id())?->id() : null;
+            $lnc = null === $paroi_id ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
 
             for ($i = 1; $i <= $reader->nb_baie(); $i++) {
                 $entity = new Baie(
@@ -24,7 +25,7 @@ final class XMLBaieTransformer
                     enveloppe: $enveloppe,
                     description: $reader->description(),
                     position: new Position(
-                        paroi_id: $reader->paroi_id(),
+                        paroi_id: $paroi_id,
                         local_non_chauffe_id: $lnc?->id(),
                         mitoyennete: $reader->mitoyennete(),
                         orientation: $reader->orientation(),

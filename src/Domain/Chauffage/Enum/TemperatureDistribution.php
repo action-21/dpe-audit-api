@@ -10,12 +10,13 @@ enum TemperatureDistribution: string implements Enum
     case MOYENNE = 'MOYENNE';
     case HAUTE = 'HAUTE';
 
-    public static function from_enum_temp_distribution_ch_id(int $id): self
+    public static function from_enum_temp_distribution_ch_id(int $id): ?self
     {
         return match ($id) {
             2 => self::BASSE,
             3 => self::MOYENNE,
             4 => self::HAUTE,
+            default => null,
         };
     }
 

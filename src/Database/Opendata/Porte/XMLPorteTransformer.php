@@ -15,11 +15,8 @@ final class XMLPorteTransformer
     public function transform(XMLElement $root, Enveloppe $enveloppe): PorteCollection
     {
         foreach ($root->read_portes() as $reader) {
-            $lnc = null === $reader->paroi_id() ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
-
-            if ($reader->paroi_id() && null === $enveloppe->parois()->get($reader->paroi_id())) {
-                throw new \RuntimeException("Paroi {$reader->paroi_id()} non trouvée pour la porte {$reader->id()}");
-            }
+            $paroi_id = $reader->paroi_id() ? $enveloppe->parois()->get($reader->paroi_id())?->id() : null;
+            $lnc = null === $paroi_id ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
 
             for ($i = 1; $i <= $reader->quantite(); $i++) {
                 $entity = new Porte(
@@ -41,7 +38,7 @@ final class XMLPorteTransformer
                         u: $reader->u_saisi(),
                     ),
                     position: new Position(
-                        paroi_id: $reader->paroi_id(),
+                        paroi_id: $paroi_id,
                         local_non_chauffe_id: $lnc?->id(),
                         mitoyennete: $reader->mitoyennete(),
                     ),
