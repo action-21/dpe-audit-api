@@ -260,8 +260,8 @@ final class MoteurRendementGenerationCombustion
     {
         $Pn = $this->pn;
         $QP0 = $this->qp0;
-        $Rpn = $this->rpn;
-        $Rpint = $this->rpint;
+        $Rpn = $this->rpn * 100;
+        $Rpint = $this->rpint * 100;
 
         if ($this->categorie_generateur === CategorieGenerateur::CHAUDIERE_STANDARD) {
             if ($x == 30) {

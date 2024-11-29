@@ -12,7 +12,6 @@ final class XMLChauffageTransformer
     public function __construct(
         private ChauffageFactory $factory,
         private XMLAuditTransformer $audit_transformer,
-        private XMLInstallationReader $installation_reader,
     ) {}
 
     public function transform(XMLElement $root): Chauffage
@@ -29,7 +28,7 @@ final class XMLChauffageTransformer
 
     private function set_generateurs(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($this->installation_reader->read($root->installation_chauffage_collection()) as $installation_reader) {
+        foreach ($root->read_installations_chauffage() as $installation_reader) {
             $installation_collective = $installation_reader->installation_collective();
 
             foreach ($installation_reader->read_generateurs() as $generateur_reader) {
@@ -37,7 +36,7 @@ final class XMLChauffageTransformer
                     continue;
                 if ($chauffage->generateurs()->find(id: $generateur_reader->id()))
                     continue;
-                if ($generateur_reader->generateur_mixte_id() && false === $generateur_reader->generateur_mixte_readable())
+                if ($generateur_reader->generateur_mixte_id() && false === $generateur_reader->generateur_mixte_exists())
                     throw new \RuntimeException("Generateur mixte {$generateur_reader->generateur_mixte_id()} non accessible");
 
                 $generateur = new Generateur(
@@ -63,7 +62,7 @@ final class XMLChauffageTransformer
 
     private function set_emetteurs(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($this->installation_reader->read($root->installation_chauffage_collection()) as $installation_reader) {
+        foreach ($root->read_installations_chauffage() as $installation_reader) {
             foreach ($installation_reader->read_emetteurs() as $emetteur_reader) {
                 if (false === $emetteur_reader->apply())
                     continue;
@@ -86,7 +85,7 @@ final class XMLChauffageTransformer
 
     private function set_installations(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($this->installation_reader->read($root->installation_chauffage_collection()) as $installation_reader) {
+        foreach ($root->read_installations_chauffage() as $installation_reader) {
             $installation = new Installation(
                 id: $installation_reader->id(),
                 chauffage: $chauffage,
@@ -122,6 +121,8 @@ final class XMLChauffageTransformer
                 foreach ($installation_reader->read_emetteurs() as $emetteur_reader) {
                     if (false === $emetteur_reader->apply())
                         continue;
+                    if ($emetteur_reader->enum_lien_generateur_emetteur_id() !== $generateur_reader->enum_lien_generateur_emetteur_id())
+                        continue;
                     if (null === $emetteur = $chauffage->emetteurs()->find(id: $emetteur_reader->id()))
                         throw new \RuntimeException("Emetteur {$emetteur_reader->id()} non trouvé");
 
@@ -136,7 +137,7 @@ final class XMLChauffageTransformer
 
     private function set_installations_sdb(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($this->installation_reader->read($root->installation_chauffage_collection()) as $installation_reader) {
+        foreach ($root->read_installations_chauffage() as $installation_reader) {
             if (false === $installation_reader->has_appoint_electrique_sdb())
                 continue;
 

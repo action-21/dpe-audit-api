@@ -109,7 +109,6 @@ final class MoteurDimensionnement
                 $rdim += $this->calcule_dimensionnement($systeme, $simulation);
             }
         }
-
         return $this->pch(
             gv: $gv,
             tbase: $tbase,

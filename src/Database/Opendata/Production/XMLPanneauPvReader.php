@@ -5,7 +5,7 @@ namespace App\Database\Opendata\Production;
 use App\Database\Opendata\XMLReaderIterator;
 use App\Domain\Common\Type\Id;
 
-final class XMLPaneauPvReader extends XMLReaderIterator
+final class XMLPanneauPvReader extends XMLReaderIterator
 {
     public function apply(): bool
     {

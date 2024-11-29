@@ -10,14 +10,11 @@ use App\Domain\PlancherHaut\ValueObject\{Caracteristique, Isolation, Position};
 
 final class XMLPlancherHautTransformer
 {
-    public function __construct(
-        private XMLPlancherHautReader $reader_iterator,
-        private XMLLncTransformer $lnc_transformer,
-    ) {}
+    public function __construct(private XMLLncTransformer $lnc_transformer,) {}
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): PlancherHautCollection
     {
-        foreach ($this->reader_iterator->read($root->plancher_haut_collection()) as $reader) {
+        foreach ($root->read_planchers_hauts() as $reader) {
             $lnc = $this->lnc_transformer->transform($reader->xml(), $enveloppe);
 
             $entity = new PlancherHaut(

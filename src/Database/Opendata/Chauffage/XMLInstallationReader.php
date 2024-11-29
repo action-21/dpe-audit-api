@@ -15,24 +15,23 @@ final class XMLInstallationReader extends XMLReaderIterator
     private ?XMLGenerateurReader $generateur_collection = null;
     private ?XMLEmetteurReader $emetteur_collection = null;
 
-    public function __construct(
-        private XMLGenerateurReader $generateur_reader,
-        private XMLEmetteurReader $emetteur_reader,
-    ) {}
-
     public function read_generateurs(): XMLGenerateurReader
     {
-        if (null === $this->generateur_collection)
-            $this->generateur_collection = $this->generateur_reader->read($this->xml()->findMany('.//generateur_chauffage_collection/generateur_chauffage'));
-
+        if (null === $this->generateur_collection) {
+            $this->generateur_collection = XMLGenerateurReader::from(
+                $this->xml()->findMany('.//generateur_chauffage_collection/generateur_chauffage')
+            );
+        }
         return $this->generateur_collection;
     }
 
     public function read_emetteurs(): XMLEmetteurReader
     {
-        if (null === $this->emetteur_collection)
-            $this->emetteur_collection = $this->emetteur_reader->read($this->xml()->findMany('.//emetteur_chauffage_collection/emetteur_chauffage'));
-
+        if (null === $this->emetteur_collection) {
+            $this->emetteur_collection = XMLEmetteurReader::from(
+                $this->xml()->findMany('.//emetteur_chauffage_collection/emetteur_chauffage')
+            );
+        }
         return $this->emetteur_collection;
     }
 

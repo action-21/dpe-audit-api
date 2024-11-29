@@ -13,7 +13,6 @@ final class XMLRefroidissementTransformer
     public function __construct(
         private RefroidissementFactory $factory,
         private XMLAuditTransformer $audit_transformer,
-        private XMLClimatisationReader $reader
     ) {}
 
     public function transform(XMLElement $root): Refroidissement
@@ -28,7 +27,7 @@ final class XMLRefroidissementTransformer
 
     private function set_generateurs(XMLElement $root, Refroidissement $refroidissement): void
     {
-        foreach ($this->reader->read($root->climatisation_collection()) as $reader) {
+        foreach ($root->read_climatisations() as $reader) {
             $generateur = new Generateur(
                 id: $reader->id(),
                 refroidissement: $refroidissement,
@@ -44,7 +43,7 @@ final class XMLRefroidissementTransformer
 
     private function set_installations(XMLElement $root, Refroidissement $refroidissement): void
     {
-        foreach ($this->reader->read($root->climatisation_collection()) as $reader) {
+        foreach ($root->read_climatisations() as $reader) {
             if (null === $generateur = $refroidissement->generateurs()->find(id: $reader->id()))
                 throw new \RuntimeException("Le générateur {$reader->id()} n'a pas été trouvé.");
 

@@ -12,7 +12,6 @@ final class XMLEcsTransformer
     public function __construct(
         private EcsFactory $factory,
         private XMLAuditTransformer $audit_transformer,
-        private XMLInstallationReader $installation_reader,
     ) {}
 
     public function transform(XMLElement $root): Ecs
@@ -30,7 +29,7 @@ final class XMLEcsTransformer
      */
     private function set_generateurs(XMLElement $root, Ecs $ecs): void
     {
-        foreach ($this->installation_reader->read($root->installation_ecs_collection()) as $installation_reader) {
+        foreach ($root->read_installations_ecs() as $installation_reader) {
             $installation_collective = $installation_reader->installation_collective();
 
             foreach ($installation_reader->read_generateurs() as $generateur_reader) {
@@ -38,7 +37,7 @@ final class XMLEcsTransformer
                     continue;
                 if ($ecs->generateurs()->find(id: $generateur_reader->id()))
                     continue;
-                if ($generateur_reader->generateur_mixte_id() && false === $generateur_reader->generateur_mixte_readable())
+                if ($generateur_reader->generateur_mixte_id() && false === $generateur_reader->generateur_mixte_exists())
                     throw new \RuntimeException("Generateur mixte {$generateur_reader->generateur_mixte_id()} non accessible");
 
                 $generateur = new Generateur(
@@ -67,7 +66,7 @@ final class XMLEcsTransformer
      */
     private function set_installations(XMLElement $root, Ecs $ecs): void
     {
-        foreach ($this->installation_reader->read($root->installation_ecs_collection()) as $installation_reader) {
+        foreach ($root->read_installations_ecs() as $installation_reader) {
             $installation = new Installation(
                 id: $installation_reader->id(),
                 ecs: $ecs,

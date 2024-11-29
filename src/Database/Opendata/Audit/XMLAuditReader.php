@@ -41,6 +41,7 @@ final class XMLAuditReader extends XMLReader
     public function batiment(): Batiment
     {
         return Batiment::create(
+            type_batiment: $this->type_batiment(),
             annee_construction: $this->annee_construction(),
             altitude: $this->altitude(),
             logements: $this->nombre_appartement() ?? 1,

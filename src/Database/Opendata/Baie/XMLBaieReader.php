@@ -14,18 +14,11 @@ final class XMLBaieReader extends XMLReaderIterator
     private ?XMLMasqueLointainHomogeneReader $masque_lointain_homogene = null;
     private ?XMLMasqueLointainNonHomogeneReader $masque_lointain_non_homogene_collection = null;
 
-    public function __construct(
-        private XMLDoubleFenetreReader $double_fenetre_reader,
-        private XMLMasqueProcheReader $masque_proche_reader,
-        private XMLMasqueLointainHomogeneReader $masque_lointain_homogene_reader,
-        private XMLMasqueLointainNonHomogeneReader $masque_lointain_non_homogene_reader,
-    ) {}
-
     public function read_double_fenetre(): ?XMLDoubleFenetreReader
     {
         if (null === $this->double_fenetre) {
             $xml = $this->xml()->findOne('.//baie_vitree_double_fenetre');
-            $this->double_fenetre = $xml ? $this->double_fenetre_reader->read($xml) : null;
+            $this->double_fenetre = $xml ? XMLDoubleFenetreReader::from($xml) : null;
         }
         return $this->double_fenetre;
     }
@@ -33,7 +26,7 @@ final class XMLBaieReader extends XMLReaderIterator
     public function read_masque_proche(): ?XMLMasqueProcheReader
     {
         if (null === $this->masque_proche) {
-            $reader = $this->masque_proche_reader->read($this->xml());
+            $reader = XMLMasqueProcheReader::from($this->xml());
             $this->masque_proche = $reader->apply() ? $reader : null;
         }
         return $this->masque_proche;
@@ -42,7 +35,7 @@ final class XMLBaieReader extends XMLReaderIterator
     public function read_masque_lointain_homogene(): ?XMLMasqueLointainHomogeneReader
     {
         if (null === $this->masque_lointain_homogene) {
-            $reader = $this->masque_lointain_homogene_reader->read($this->xml());
+            $reader = XMLMasqueLointainHomogeneReader::from($this->xml());
             $this->masque_lointain_homogene = $reader->apply() ? $reader : null;
         }
         return $this->masque_lointain_homogene;
@@ -51,7 +44,7 @@ final class XMLBaieReader extends XMLReaderIterator
     public function read_masque_lointain_non_homogene(): XMLMasqueLointainNonHomogeneReader
     {
         if (null === $this->masque_lointain_non_homogene_collection) {
-            $this->masque_lointain_non_homogene_collection = $this->masque_lointain_non_homogene_reader->read(
+            $this->masque_lointain_non_homogene_collection = XMLMasqueLointainNonHomogeneReader::from(
                 $this->xml()->findMany('.//masque_lointain_non_homogene')
             );
         }

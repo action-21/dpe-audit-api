@@ -10,11 +10,9 @@ use App\Domain\PontThermique\ValueObject\Liaison;
 
 final class XMLPontThermiqueTransformer
 {
-    public function __construct(private XMLPontThermiqueReader $reader) {}
-
     public function transform(XMLElement $root, Enveloppe $enveloppe): PontThermiqueCollection
     {
-        foreach ($this->reader->read($root->pont_thermique_collection()) as $reader) {
+        foreach ($root->read_ponts_thermiques() as $reader) {
             if (null === $reader->id_paroi_1() || null === $reader->id_paroi_2())
                 continue;
 

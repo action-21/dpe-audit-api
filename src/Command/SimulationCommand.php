@@ -13,7 +13,7 @@ use App\Database\Opendata\Refroidissement\XMLRefroidissementTransformer;
 use App\Database\Opendata\Ventilation\XMLVentilationTransformer;
 use App\Database\Opendata\Visite\XMLVisiteTransformer;
 use App\Database\Opendata\XMLElement;
-use App\Domain\Simulation\{SimulationFactory, SimulationService};
+use App\Domain\Simulation\{Simulation, SimulationFactory, SimulationService};
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -50,6 +50,7 @@ final class SimulationCommand extends Command
     {
         $counter = 0;
         $success = 0;
+        $rapport = $this->buildRapport();
         $search = $input->getArgument('numero_dpe') ? $input->getArgument('numero_dpe') . '.xml' : null;
 
         foreach (scandir($this->projectDir . self::PATH) as $filename) {
@@ -77,6 +78,7 @@ final class SimulationCommand extends Command
                 $visite = $this->xml_visite_transformer->transform($xml);
                 $success++;
             } catch (\Throwable $th) {
+                throw $th;
                 $output->writeln("Failed to transform {$filename}");
                 continue;
             }
@@ -98,36 +100,44 @@ final class SimulationCommand extends Command
 
             $time = new \DateTime();
             $this->simulation_service->calcule($simulation);
+            $view = SimulationResource::from($simulation);
+            $this->setRapport($xml, $simulation, $rapport);
             $timer = $time->diff(new \DateTime);
 
             $output->writeln("Simulation in {$timer->f} ms");
-            //$view = SimulationResource::from($simulation);
-            //dump(\json_encode($view));
-
-            //dump($view->enveloppe->performance););
-            //dump($simulation->audit()->occupation());
-            //dump($simulation->chauffage()->besoins()->besoins(scenario: ScenarioUsage::CONVENTIONNEL));
-            //dump($simulation->chauffage()->consommations()->consommations(scenario: ScenarioUsage::CONVENTIONNEL));
-            //dump(\json_encode($view->chauffage));
-            //dump($view->performances);
-            //dump($audit->refroidissement()->besoin());
-            //dump($audit->refroidissement()->consommation());
-            //dump($view->occupation);
-            //dump($view->enveloppe->apport);
-            //dump($view->enveloppe->permeabilite);
-            //dump($view->enveloppe->performance);
-            //dump($view->enveloppe->murs);
-            //dump($view->enveloppe->planchers_bas);
-            //dump($view->enveloppe->planchers_hauts);
-            //dump($view->enveloppe->baies);
-            //dump($view->enveloppe->portes);
-            //dump($view->enveloppe->locaux_non_chauffes);
-
-            //$audit->controle();
             $output->writeln("Done");
         }
         $output->writeln("{$success}/{$counter} audits processed");
+        dump(\json_encode($rapport));
         return Command::SUCCESS;
+    }
+
+    protected function setRapport(XMLElement $xml, Simulation $simulation, array &$rapport): void
+    {
+        $rapport['gv'][] = [$xml->read_enveloppe()->deperdition_enveloppe(), $simulation->enveloppe()->performance()->gv];
+        $rapport['dp_murs'][] = [$xml->read_enveloppe()->deperdition_mur(), $simulation->enveloppe()->parois()->murs()->dp()];
+        $rapport['dp_pb'][] = [$xml->read_enveloppe()->deperdition_plancher_bas(), $simulation->enveloppe()->parois()->planchers_bas()->dp()];
+        $rapport['dp_ph'][] = [$xml->read_enveloppe()->deperdition_plancher_haut(), $simulation->enveloppe()->parois()->planchers_hauts()->dp()];
+        $rapport['dp_baies'][] = [$xml->read_enveloppe()->deperdition_baie(), $simulation->enveloppe()->parois()->baies()->dp()];
+        $rapport['dp_portes'][] = [$xml->read_enveloppe()->deperdition_porte(), $simulation->enveloppe()->parois()->portes()->dp()];
+        $rapport['pt'][] = [$xml->read_enveloppe()->deperdition_pont_thermique(), $simulation->enveloppe()->performance()->pt];
+        $rapport['dr'][] = [$xml->read_enveloppe()->deperdition_renouvellement_air(), $simulation->enveloppe()->performance()->dr];
+        $rapport['hperm'][] = [$xml->read_enveloppe()->hperm(), $simulation->enveloppe()->permeabilite()->hperm];
+        $rapport['hvent'][] = [$xml->read_enveloppe()->hvent(), $simulation->enveloppe()->permeabilite()->hvent];
+    }
+
+    protected function buildRapport(): array
+    {
+        return [
+            'dp_murs' => [],
+            'dp_pb' => [],
+            'dp_ph' => [],
+            'dp_portes' => [],
+            'dp_baies' => [],
+            'pt' => [],
+            'dr' => [],
+            'gv' => [],
+        ];
     }
 
     protected function configure(): void

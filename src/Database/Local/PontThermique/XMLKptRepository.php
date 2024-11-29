@@ -25,7 +25,7 @@ final class XMLKptRepository implements KptRepository
         ?int $largeur_dormant,
     ): ?Kpt {
         if ($largeur_dormant) {
-            $valeurs = [5, 10];
+            $valeurs = [50, 100];
             \usort($valeurs, fn(int $a, int $b): int => \abs(($a - $largeur_dormant)) - \abs(($b - $largeur_dormant)));
             $largeur_dormant = $valeurs[0];
         }

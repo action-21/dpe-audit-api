@@ -4,7 +4,12 @@ namespace App\Database\Opendata;
 
 abstract class XMLReader
 {
-    private XMLElement $xml;
+    public function __construct(private XMLElement $xml) {}
+
+    public static function from(XMLElement $xml): static
+    {
+        return new static($xml);
+    }
 
     public function read(XMLElement $xml): static
     {

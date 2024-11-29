@@ -86,7 +86,7 @@ final class MoteurPerformance
             e: $this->e($entity->exposition()),
             f: $this->f($entity->exposition()),
             qvasouf_conv: $qvasouf_conv,
-            qvarep_conv: $qvasouf_conv,
+            qvarep_conv: $qvarep_conv,
             hauteur_sous_plafond: $entity->audit()->hauteur_sous_plafond_reference(),
             surface_habitable: $entity->audit()->surface_habitable_reference(),
         );
@@ -190,8 +190,7 @@ final class MoteurPerformance
         float $surface_habitable,
     ): float {
         $qvinf = $hauteur_sous_plafond * $surface_habitable * $n50 * $e;
-        $qvinf /= 1 + $e / $f * \pow(($qvasouf_conv - $qvarep_conv) / ($hauteur_sous_plafond * $n50), 2);
-
+        $qvinf /= 1 + ($f / $e) * \pow(($qvasouf_conv - $qvarep_conv) / ($hauteur_sous_plafond * $n50), 2);
         return $qvinf;
     }
 

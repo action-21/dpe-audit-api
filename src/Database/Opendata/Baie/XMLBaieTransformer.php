@@ -11,14 +11,11 @@ use App\Domain\Enveloppe\Enveloppe;
 
 final class XMLBaieTransformer
 {
-    public function __construct(
-        private XMLBaieReader $reader_iterator,
-        private XMLLncTransformer $lnc_transformer,
-    ) {}
+    public function __construct(private XMLLncTransformer $lnc_transformer,) {}
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): BaieCollection
     {
-        foreach ($this->reader_iterator->read($root->baie_collection()) as $reader) {
+        foreach ($root->read_baies() as $reader) {
             $lnc = null === $reader->paroi_id() ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
 
             for ($i = 1; $i <= $reader->nb_baie(); $i++) {

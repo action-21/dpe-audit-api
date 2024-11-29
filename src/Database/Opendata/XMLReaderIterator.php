@@ -4,9 +4,18 @@ namespace App\Database\Opendata;
 
 abstract class XMLReaderIterator implements \Iterator
 {
-    /** @var XMLElement[] */
-    private array $array = [];
     private int $position = 0;
+
+    public function __construct(
+        /** @var XMLElement[] */
+        private array $array = [],
+    ) {}
+
+    /** @param XMLElement[] $xml */
+    public static function from(array $xml): static
+    {
+        return new static($xml);
+    }
 
     /**
      * @param XMLElement[] $xml

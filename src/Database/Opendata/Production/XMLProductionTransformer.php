@@ -12,7 +12,6 @@ final class XMLProductionTransformer
     public function __construct(
         private ProductionFactory $factory,
         private XMLAuditTransformer $audit_transformer,
-        private XMLPaneauPvReader $reader
     ) {}
 
     public function transform(XMLElement $root): Production
@@ -26,7 +25,7 @@ final class XMLProductionTransformer
 
     private function set_panneaux_photovoltaiques(XMLElement $root, Production $production): void
     {
-        foreach ($this->reader->read($root->panneaux_pv_collection()) as $reader) {
+        foreach ($root->read_panneaux_pv() as $reader) {
             if (false === $reader->apply())
                 continue;
 

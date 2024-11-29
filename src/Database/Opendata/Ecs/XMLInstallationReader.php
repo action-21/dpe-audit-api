@@ -11,15 +11,13 @@ final class XMLInstallationReader extends XMLReaderIterator
 {
     private ?XMLGenerateurReader $generateur_collection = null;
 
-    public function __construct(
-        private XMLGenerateurReader $generateur_reader,
-    ) {}
-
     public function read_generateurs(): XMLGenerateurReader
     {
-        if (null === $this->generateur_collection)
-            $this->generateur_collection = $this->generateur_reader->read($this->xml()->findMany('.//generateur_ecs_collection/generateur_ecs'));
-
+        if (null === $this->generateur_collection) {
+            $this->generateur_collection = XMLGenerateurReader::from(
+                $this->xml()->findMany('.//generateur_ecs_collection/generateur_ecs')
+            );
+        }
         return $this->generateur_collection;
     }
 

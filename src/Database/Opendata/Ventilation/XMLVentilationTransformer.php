@@ -12,7 +12,6 @@ final class XMLVentilationTransformer
     public function __construct(
         private VentilationFactory $factory,
         private XMLAuditTransformer $audit_transformer,
-        private XMLVentilationReader $reader,
     ) {}
 
     public function transform(XMLElement $root): Ventilation
@@ -27,7 +26,7 @@ final class XMLVentilationTransformer
 
     private function set_generateurs(XMLElement $root, Ventilation $ventilation): void
     {
-        foreach ($this->reader->read($root->ventilation_collection()) as $reader) {
+        foreach ($root->read_ventilations() as $reader) {
             if (null === $type_generateur = $reader->type_generateur())
                 continue;
 
@@ -47,7 +46,7 @@ final class XMLVentilationTransformer
 
     private function set_installations(XMLElement $root, Ventilation $ventilation): void
     {
-        foreach ($this->reader->read($root->ventilation_collection()) as $reader) {
+        foreach ($root->read_ventilations() as $reader) {
             $entity = new Installation(
                 id: $reader->id(),
                 ventilation: $ventilation,

@@ -7,13 +7,9 @@ use App\Domain\Audit\Audit;
 
 final class XMLAuditTransformer
 {
-    public function __construct(
-        private XMLAuditReader $reader,
-    ) {}
-
     public function transform(XMLElement $root): Audit
     {
-        $reader = $this->reader->read($root);
+        $reader = $root->read_audit();
         $audit = new Audit(
             id: $reader->id(),
             date_creation: $reader->date_etablissement(),

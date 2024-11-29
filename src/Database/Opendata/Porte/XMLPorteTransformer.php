@@ -10,14 +10,11 @@ use App\Domain\Porte\ValueObject\{Caracteristique, Position};
 
 final class XMLPorteTransformer
 {
-    public function __construct(
-        private XMLPorteReader $reader_iterator,
-        private XMLLncTransformer $lnc_transformer,
-    ) {}
+    public function __construct(private XMLLncTransformer $lnc_transformer,) {}
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): PorteCollection
     {
-        foreach ($this->reader_iterator->read($root->porte_collection()) as $reader) {
+        foreach ($root->read_portes() as $reader) {
             $lnc = null === $reader->paroi_id() ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
 
             if ($reader->paroi_id() && null === $enveloppe->parois()->get($reader->paroi_id())) {

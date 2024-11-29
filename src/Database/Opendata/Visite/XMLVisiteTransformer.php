@@ -14,7 +14,6 @@ final class XMLVisiteTransformer
     public function __construct(
         private VisiteFactory $factory,
         private XMLAuditTransformer $audit_transformer,
-        private XMLLogementReader $logement_reader
     ) {}
 
     public function transform(XMLElement $root): Visite
@@ -22,7 +21,7 @@ final class XMLVisiteTransformer
         $audit = $this->audit_transformer->transform($root);
         $visite = $this->factory->build($audit);
 
-        foreach ($this->logement_reader->read($root->logement_visite_collection()) as $reader) {
+        foreach ($root->read_logements_visites() as $reader) {
             $logement = new Logement(
                 id: $reader->id(),
                 visite: $visite,

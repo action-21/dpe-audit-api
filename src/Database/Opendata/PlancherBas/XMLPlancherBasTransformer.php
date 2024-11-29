@@ -10,14 +10,11 @@ use App\Domain\PlancherBas\ValueObject\{Caracteristique, Isolation, Position};
 
 final class XMLPlancherBasTransformer
 {
-    public function __construct(
-        private XMLPlancherBasReader $reader_iterator,
-        private XMLLncTransformer $lnc_transformer,
-    ) {}
+    public function __construct(private XMLLncTransformer $lnc_transformer,) {}
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): PlancherBasCollection
     {
-        foreach ($this->reader_iterator->read($root->plancher_bas_collection()) as $reader) {
+        foreach ($root->read_planchers_bas() as $reader) {
             $lnc = $this->lnc_transformer->transform($reader->xml(), $enveloppe);
 
             $entity = new PlancherBas(

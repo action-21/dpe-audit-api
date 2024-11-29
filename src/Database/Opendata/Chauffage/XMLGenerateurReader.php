@@ -27,15 +27,20 @@ final class XMLGenerateurReader extends XMLReaderIterator
         return $this->xml()->findOne('.//reference_generateur_mixte')?->id();
     }
 
-    public function generateur_mixte_readable(): ?bool
+    public function generateur_mixte_exists(): ?bool
     {
         if (null === $id = $this->generateur_mixte_id()) {
             return null;
         }
-        return $this->xml()->findOneOf([
-            "//generateur_ecs[reference = '$id->value']",
-            "//generateur_ecs[reference_generateur_mixte = '$id->value']",
-        ]) !== null;
+        foreach ($this->xml()->etat_initial()->findMany('.//generateur_ecs') as $item) {
+            if ($item->findOne('.//reference')?->id()->compare($id)) {
+                return true;
+            }
+            if ($item->findOne('.//reference_generateur_mixte')?->id()->compare($id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function reseau_chaleur_id(): ?Id

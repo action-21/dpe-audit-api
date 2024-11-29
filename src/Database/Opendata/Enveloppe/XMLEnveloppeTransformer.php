@@ -15,7 +15,6 @@ use App\Domain\Enveloppe\{Enveloppe, EnveloppeFactory};
 final class XMLEnveloppeTransformer
 {
     public function __construct(
-        private XMLEnveloppeReader $reader,
         private XMLMurTransformer $mur_transformer,
         private XMLPlancherBasTransformer $plancher_bas_transformer,
         private XMLPlancherHautTransformer $plancher_haut_transformer,
@@ -28,8 +27,8 @@ final class XMLEnveloppeTransformer
 
     public function transform(XMLElement $root): Enveloppe
     {
-        $reader = $this->reader->read($root);
         $audit = $this->audit_transformer->transform($root);
+        $reader = $root->read_enveloppe();
 
         $enveloppe = $this->factory->build(
             audit: $audit,

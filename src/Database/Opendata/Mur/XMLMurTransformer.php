@@ -5,20 +5,16 @@ namespace App\Database\Opendata\Mur;
 use App\Database\Opendata\Lnc\XMLLncTransformer;
 use App\Database\Opendata\XMLElement;
 use App\Domain\Enveloppe\Enveloppe;
-use App\Domain\Mur\Mur;
-use App\Domain\Mur\MurCollection;
+use App\Domain\Mur\{Mur, MurCollection};
 use App\Domain\Mur\ValueObject\{Caracteristique, Isolation, Position};
 
 final class XMLMurTransformer
 {
-    public function __construct(
-        private XMLMurReader $reader_iterator,
-        private XMLLncTransformer $lnc_transformer,
-    ) {}
+    public function __construct(private XMLLncTransformer $lnc_transformer,) {}
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): MurCollection
     {
-        foreach ($this->reader_iterator->read($root->mur_collection()) as $reader) {
+        foreach ($root->read_murs() as $reader) {
             $lnc = $this->lnc_transformer->transform($reader->xml(), $enveloppe);
 
             $entity = new Mur(

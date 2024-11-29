@@ -3,10 +3,25 @@
 namespace App\Database\Opendata;
 
 use App\Domain\Common\Type\Id;
+use App\Database\Opendata\Audit\XMLAuditReader;
+use App\Database\Opendata\Baie\XMLBaieReader;
+use App\Database\Opendata\Chauffage\XMLInstallationReader as XMLInstallationChauffageReader;
+use App\Database\Opendata\Ecs\XMLInstallationReader as XMLInstallationEcsReader;
+use App\Database\Opendata\Enveloppe\XMLEnveloppeReader;
+use App\Database\Opendata\Lnc\XMLLncReader;
+use App\Database\Opendata\Mur\XMLMurReader;
+use App\Database\Opendata\PlancherBas\XMLPlancherBasReader;
+use App\Database\Opendata\PlancherHaut\XMLPlancherHautReader;
+use App\Database\Opendata\PontThermique\XMLPontThermiqueReader;
+use App\Database\Opendata\Porte\XMLPorteReader;
+use App\Database\Opendata\Production\XMLPanneauPvReader;
+use App\Database\Opendata\Refroidissement\XMLClimatisationReader;
+use App\Database\Opendata\Ventilation\XMLVentilationReader;
+use App\Database\Opendata\Visite\XMLLogementReader;
 
 class XMLElement extends \SimpleXMLElement
 {
-    public function audit(): static
+    public function etat_initial(): static
     {
         return $this->findOneOfOrError([
             '/audit/logement_collection//logement[.//enum_scenario_id="0"]',
@@ -84,8 +99,7 @@ class XMLElement extends \SimpleXMLElement
     {
         $value = \trim($this->strval());
         $value = \strtolower($value);
-        $value = \preg_replace('!\s+!', ' ', $value);
-        $value = \str_replace(' ', '-', $value);
+        $value = \preg_replace('/\s/', '', $value);
         return Id::from($value);
     }
 
@@ -157,103 +171,82 @@ class XMLElement extends \SimpleXMLElement
         return (int) (new \DateTimeImmutable($date))->format('Y');
     }
 
-    /** @return self[] */
-    public function logement_visite_collection(): array
-    {
-        return $this->audit()->findMany('.//logement_visite_collection//logement_visite');
-    }
-
     /** @return static[] */
     public function ets_collection(): array
     {
-        return $this->audit()->findMany('.//ets_collection//ets');
+        return $this->etat_initial()->findMany('.//ets_collection//ets');
     }
 
-    /** @return static[] */
-    public function mur_collection(): array
+    public function read_audit(): XMLAuditReader
     {
-        return $this->audit()->findMany('.//mur_collection//mur');
+        return XMLAuditReader::from($this->etat_initial());
     }
 
-    /** @return static[] */
-    public function plancher_bas_collection(): array
+    public function read_enveloppe(): XMLEnveloppeReader
     {
-        return $this->audit()->findMany('.//plancher_bas_collection//plancher_bas');
+        return XMLEnveloppeReader::from($this->etat_initial());
     }
 
-    /** @return static[] */
-    public function plancher_haut_collection(): array
+    public function read_logements_visites(): XMLLogementReader
     {
-        return $this->audit()->findMany('.//plancher_haut_collection//plancher_haut');
+        return XMLLogementReader::from($this->etat_initial()->findMany('.//logement_visite_collection//logement_visite'));
     }
 
-    /** @return static[] */
-    public function baie_collection(): array
+    public function read_murs(): XMLMurReader
     {
-        return $this->audit()->findMany('.//baie_vitree_collection//baie_vitree');
+        return XMLMurReader::from($this->etat_initial()->findMany('.//mur_collection//mur'));
     }
 
-    /** @return static[] */
-    public function porte_collection(): array
+    public function read_planchers_bas(): XMLPlancherBasReader
     {
-        return $this->audit()->findMany('.//porte_collection//porte');
+        return XMLPlancherBasReader::from($this->etat_initial()->findMany('.//plancher_bas_collection//plancher_bas'));
     }
 
-    /** @return static[] */
-    public function pont_thermique_collection(): array
+    public function read_planchers_hauts(): XMLPlancherHautReader
     {
-        return $this->audit()->findMany('.//pont_thermique_collection//pont_thermique');
+        return XMLPlancherHautReader::from($this->etat_initial()->findMany('.//plancher_haut_collection//plancher_haut'));
+    }
+
+    public function read_baies(): XMLBaieReader
+    {
+        return XMLBaieReader::from($this->etat_initial()->findMany('.//baie_vitree_collection//baie_vitree'));
+    }
+
+    public function read_portes(): XMLPorteReader
+    {
+        return XMLPorteReader::from($this->etat_initial()->findMany('.//porte_collection//porte'));
+    }
+
+    public function read_ponts_thermiques(): XMLPontThermiqueReader
+    {
+        return XMLPontThermiqueReader::from($this->etat_initial()->findMany('.//pont_thermique_collection//pont_thermique'));
     }
 
     /**
      * TODO: identifier les installations par appartement dans le cas d'un Audit-DPE immeuble
-     * 
-     * @return static[]
      */
-    public function ventilation_collection(): array
+    public function read_ventilations(): XMLVentilationReader
     {
-        return $this->audit()->findMany('.//ventilation_collection//ventilation');
+        return XMLVentilationReader::from($this->etat_initial()->findMany('.//ventilation_collection//ventilation'));
     }
 
-    /** @return static[] */
-    public function climatisation_collection(): array
+    public function read_climatisations(): XMLClimatisationReader
     {
-        return $this->audit()->findMany('.//climatisation_collection//climatisation');
+        return XMLClimatisationReader::from($this->etat_initial()->findMany('.//climatisation_collection//climatisation'));
     }
 
-    /** @return static[] */
-    public function installation_chauffage_collection(): array
+    public function read_installations_chauffage(): XMLInstallationChauffageReader
     {
-        return $this->audit()->findMany('.//installation_chauffage_collection//installation_chauffage');
+        return XMLInstallationChauffageReader::from($this->etat_initial()->findMany('.//installation_chauffage_collection//installation_chauffage'));
     }
 
-    /** @return static[] */
-    public function generateur_chauffage_collection(): array
+    public function read_installations_ecs(): XMLInstallationEcsReader
     {
-        return $this->audit()->findMany('.//generateur_chauffage_collection//generateur_chauffage');
+        return XMLInstallationEcsReader::from($this->etat_initial()->findMany('.//installation_ecs_collection//installation_ecs'));
     }
 
-    /** @return static[] */
-    public function emetteur_chauffage_collection(): array
+    public function read_panneaux_pv(): XMLPanneauPvReader
     {
-        return $this->audit()->findMany('.//emetteur_chauffage_collection//emetteur_chauffage');
-    }
-
-    /** @return static[] */
-    public function installation_ecs_collection(): array
-    {
-        return $this->audit()->findMany('.//installation_ecs_collection//installation_ecs');
-    }
-
-    /** @return static[] */
-    public function generateur_ecs_collection(): array
-    {
-        return $this->audit()->findMany('.//generateur_ecs_collection//generateur_ecs');
-    }
-
-    /** @return static[] */
-    public function panneaux_pv_collection(): array
-    {
-        return $this->audit()->findMany('.//panneaux_pv_collection//panneaux_pv');
+        return XMLPanneauPvReader::from($this->etat_initial()->findMany('.//panneaux_pv_collection//panneaux_pv'));
     }
 }
