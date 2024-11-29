@@ -329,12 +329,16 @@ final class XMLGenerateurReader extends XMLReaderIterator
 
     public function rpn(): ?float
     {
-        return $this->xml()->findOne('.//rpn')?->floatval();
+        $value = $this->xml()->findOne('.//rpn')?->floatval();
+        $value = $value && $value <= 2 ? $value * 100 : $value;
+        return $value;
     }
 
     public function rpint(): ?float
     {
-        return $this->xml()->findOne('.//rpint')?->floatval();
+        $value = $this->xml()->findOne('.//rpint')?->floatval();
+        $value = $value && $value <= 2 ? $value * 100 : $value;
+        return $value;
     }
 
     public function rendement_generation(): ?float
