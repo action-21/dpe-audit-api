@@ -41,9 +41,9 @@ final class ImportCommand extends Command
                     'query' => [
                         'Date_établissement_DPE_gte' => $random_date,
                         'Version_DPE_in' => '2.2,2.3,2.4',
-                        'Type_bâtiment' => 'maison',
-                        'Zone_climatique_' => $zone_climatique->value,
-                        'Période_construction' => $periode_construction->filter(),
+                        'Type_bâtiment_eq' => 'maison',
+                        'Zone_climatique__eq' => $zone_climatique->value,
+                        'Période_construction_eq' => $periode_construction->filter(),
                         'size' => $size,
                         'sort' => 'Date_établissement_DPE',
                         'select' => 'N°DPE',
@@ -67,27 +67,6 @@ final class ImportCommand extends Command
             }
         }
         return Command::SUCCESS;
-    }
-
-    protected function random_page(ZoneClimatique $zone_climatique, PeriodeConstruction $periode_construction, int $size): ?int
-    {
-        $response = $this->client->request('GET', self::BASE_URL, [
-            'query' => [
-                'Version_DPE_in' => '2.2,2.3,2.4',
-                'Type_bâtiment' => 'maison',
-                'Zone_climatique_' => $zone_climatique->value,
-                'Période_construction' => $periode_construction->filter(),
-                'size' => $size,
-                'select' => 'N°DPE',
-            ],
-        ]);
-        if ($response->getStatusCode() !== 200) {
-            return null;
-        }
-        $total = $response->toArray()['total'];
-        $last_page = $total / $size;
-
-        return \rand(1, $last_page);
     }
 
     /**
