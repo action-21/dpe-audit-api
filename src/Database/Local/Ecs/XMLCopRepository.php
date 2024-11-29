@@ -24,7 +24,7 @@ final class XMLCopRepository implements CopRepository
         $record = $this->createQuery()
             ->and('zone_climatique', $zone_climatique->code())
             ->and('type_generateur', $type_generateur->id())
-            ->andCompareTo('annee_installation', $annee_installation)
+            ->andCompareTo('annee_installation_generateur', $annee_installation)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
