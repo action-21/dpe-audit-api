@@ -13,8 +13,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'app:import:audit',
-    description: 'Importe aléatoirement des audits depuis l\observatoire DPE',
+    name: 'app:audit:import',
+    description: 'Importe aléatoirement des audits depuis l\'observatoire DPE-Audit',
     hidden: false,
 )]
 final class ImportCommand extends Command

@@ -21,7 +21,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'app:simulation',
+    name: 'app:audit:simulation',
     description: 'Simule les audits stockés localement au format XML',
     hidden: false,
 )]
