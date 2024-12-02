@@ -39,7 +39,7 @@ final class XMLLncTransformer
     private function set_baies(XMLLncReader $reader, Lnc $entity): void
     {
         if (null === $ets_reader = $reader->read_ets())
-            throw new \RuntimeException('Ets not found');
+            throw new \DomainException('Ets not found', 404);
 
         foreach ($ets_reader->read_baies() as $baie_reader) {
             $entity->add_baie(new Baie(

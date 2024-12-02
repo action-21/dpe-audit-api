@@ -17,7 +17,7 @@ final class SymfonyExpressionResolver implements ExpressionResolver
     public function prepare(string $expression): string
     {
         $expression = \str_replace('^', ' ** ', $expression);
-        $expression = \str_replace('logPn', 'log(Pn)', $expression);
+        $expression = \str_replace('logPn', 'log(Pn, 10)', $expression);
         $expression = \str_replace('Pn', "data['Pn']", $expression);
         $expression = \str_replace('E', "data['E']", $expression);
         $expression = \str_replace('F', "data['F']", $expression);

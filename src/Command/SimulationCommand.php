@@ -79,9 +79,11 @@ final class SimulationCommand extends Command
                 $visite = $this->xml_visite_transformer->transform($xml);
                 $success++;
             } catch (\Throwable $th) {
+                if ($th->getCode() !== 500) {
+                    $output->writeln("Failed to transform {$filename}");
+                    continue;
+                }
                 throw $th;
-                $output->writeln("Failed to transform {$filename}");
-                continue;
             }
 
             $simulation = $this->simulation_factory->build(
