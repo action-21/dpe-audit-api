@@ -26,6 +26,7 @@ enum TypeSysteme: string implements Enum
             16, 17, 18 => self::VMC_BASSE_PRESSION,
             19, 20, 21, 22, 23, 24 => self::VMC_DOUBLE_FLUX,
             26, 27, 28, 29, 30, 31 => self::VENTILATION_HYBRIDE,
+            32, 33 => self::VENTILATION_MECANIQUE,
             35, 36, 37, 38 => self::PUIT_CLIMATIQUE,
         };
     }
