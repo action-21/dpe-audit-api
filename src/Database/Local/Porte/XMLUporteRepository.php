@@ -27,6 +27,7 @@ final class XMLUporteRepository implements UporteRepository
             ->and('isolation', $isolation->id(), true)
             ->and('nature_menuiserie', $nature_menuiserie->id(), true)
             ->and('type_vitrage', $type_vitrage?->id(), true)
+            ->and('taux_vitrage', $taux_vitrage, true)
             ->andCompareTo('taux_vitrage', $taux_vitrage)
             ->getOne();
         return $record ? $this->to($record) : null;

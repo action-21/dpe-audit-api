@@ -50,7 +50,7 @@ final class SimulationCommand extends Command
     {
         $counter = 0;
         $success = 0;
-        $rapport = $this->buildRapport();
+        $rapport = [];
         $search = $input->getArgument('numero_dpe') ? $input->getArgument('numero_dpe') . '.xml' : null;
 
         foreach (scandir($this->projectDir . self::PATH) as $filename) {
@@ -124,20 +124,6 @@ final class SimulationCommand extends Command
         $rapport['dr'][] = [$xml->read_enveloppe()->deperdition_renouvellement_air(), $simulation->enveloppe()->performance()->dr];
         $rapport['hperm'][] = [$xml->read_enveloppe()->hperm(), $simulation->enveloppe()->permeabilite()->hperm];
         $rapport['hvent'][] = [$xml->read_enveloppe()->hvent(), $simulation->enveloppe()->permeabilite()->hvent];
-    }
-
-    protected function buildRapport(): array
-    {
-        return [
-            'dp_murs' => [],
-            'dp_pb' => [],
-            'dp_ph' => [],
-            'dp_portes' => [],
-            'dp_baies' => [],
-            'pt' => [],
-            'dr' => [],
-            'gv' => [],
-        ];
     }
 
     protected function configure(): void

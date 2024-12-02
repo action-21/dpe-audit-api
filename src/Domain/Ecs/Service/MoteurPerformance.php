@@ -135,10 +135,7 @@ final class MoteurPerformance
             zone_climatique: $zone_climatique,
             type_generateur: $type_generateur,
             annee_installation: $annee_installation,
-        )) {
-            dd($zone_climatique, $type_generateur, $annee_installation);
-            throw new \DomainException("Valeur forfaitaire COP non trouvée");
-        }
+        )) throw new \DomainException("Valeur forfaitaire COP non trouvée");
 
         return $data->cop;
     }

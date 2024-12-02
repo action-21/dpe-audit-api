@@ -48,7 +48,7 @@ final class XMLPorteReader extends XMLReaderIterator
         return match ($this->enum_type_porte_id()) {
             2, 6, 11 => 15,
             3, 7, 12 => 45,
-            8, 10 => 30,
+            4, 8, 10 => 30,
             default => 0,
         };
     }
