@@ -19,7 +19,7 @@ final class XMLLncReader extends XMLReader
     public function read_ets(): ?XMLEtsReader
     {
         $id = $this->xml()->findOneOfOrError(['.//reference_lnc', './/reference'])->id();
-        foreach ($this->xml()->etat_initial()->findManyOrError('.//ets_collection//ets') as $item) {
+        foreach ($this->xml()->etat_initial()->findMany('.//ets_collection//ets') as $item) {
             if ($item->findOneOrError('./donnee_entree/reference')->id()->compare($id)) {
                 return XMLEtsReader::from($item);
             }

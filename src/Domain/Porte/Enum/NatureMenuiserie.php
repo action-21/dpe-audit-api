@@ -18,7 +18,7 @@ enum NatureMenuiserie: string implements Enum
             1, 2, 3, 4 => self::BOIS,
             5, 6, 7, 8 => self::PVC,
             9, 10, 11, 12 => self::METAL,
-            13, 14, 15 => self::INCONNU,
+            13, 14, 15, 16 => self::INCONNU,
         };
     }
 

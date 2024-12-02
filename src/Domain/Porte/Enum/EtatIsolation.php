@@ -15,7 +15,7 @@ enum EtatIsolation: string implements Enum
         return match ($type_porte_id) {
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 => self::NON_ISOLE,
             13, 15 => self::ISOLE,
-            14 => self::INCONNU,
+            14, 16 => self::INCONNU,
         };
     }
 

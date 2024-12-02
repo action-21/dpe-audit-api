@@ -15,7 +15,7 @@ enum TypeVitrage: string implements Enum
         return match ($type_porte_id) {
             2, 3, 6, 7, 10, 11 => self::SIMPLE_VITRAGE,
             4, 8, 12, 15 => self::DOUBLE_VITRAGE,
-            1, 5, 9, 13, 14 => null,
+            1, 5, 9, 13, 14, 16 => null,
         };
     }
 

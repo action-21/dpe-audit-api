@@ -29,6 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class SimulationCommand extends Command
 {
     public final const PATH = '/etc/audits';
+    public final const OUTPUT = '/var/output';
 
     public function __construct(
         private string $projectDir,
@@ -53,6 +54,8 @@ final class SimulationCommand extends Command
         $success = 0;
         $rapport = [];
         $search = $input->getArgument('numero_dpe') ? $input->getArgument('numero_dpe') . '.xml' : null;
+        $time = new \DateTime();
+        $output->writeln("Processing...");
 
         foreach (scandir($this->projectDir . self::PATH) as $filename) {
             $path = $this->projectDir . self::PATH . '/' . $filename;
@@ -63,8 +66,6 @@ final class SimulationCommand extends Command
                 continue;
             }
             $counter++;
-            $output->writeln("Processing {$filename}...");
-            $time = new \DateTime();
 
             try {
                 $xml = \simplexml_load_file($path, XMLElement::class);
@@ -79,11 +80,10 @@ final class SimulationCommand extends Command
                 $visite = $this->xml_visite_transformer->transform($xml);
                 $success++;
             } catch (\Throwable $th) {
-                if ($th->getCode() !== 500) {
-                    $output->writeln("Failed to transform {$filename}");
-                    continue;
+                if ($th->getCode() !== 400) {
+                    $output->writeln("error file {$filename}");
+                    throw $th;
                 }
-                throw $th;
             }
 
             $simulation = $this->simulation_factory->build(
@@ -97,21 +97,15 @@ final class SimulationCommand extends Command
                 production: $production,
                 visite: $visite,
             );
-            $timer = $time->diff(new \DateTime);
-
-            $output->writeln("Parsed in {$timer->f} ms");
-
-            $time = new \DateTime();
             $this->simulation_service->calcule($simulation);
             $view = SimulationResource::from($simulation);
             $this->setRapport($xml, $simulation, $rapport);
-            $timer = $time->diff(new \DateTime);
-
-            $output->writeln("Simulation in {$timer->f} ms");
-            $output->writeln("Done");
         }
-        $output->writeln("{$success}/{$counter} audits processed");
-        dump(\json_encode($rapport));
+        $timer = $time->diff(new \DateTime);
+        $output->writeln("{$success}/{$counter} audits processed in {$timer->f} ms");
+        $output = $this->projectDir . self::OUTPUT . '/rapport.json';
+        file_put_contents($output, json_encode($rapport));
+
         return Command::SUCCESS;
     }
 

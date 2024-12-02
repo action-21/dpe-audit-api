@@ -73,6 +73,7 @@ final class Systeme
         $this->reseau?->controle();
 
         if (false === \in_array($this->type_distribution, $this->categorie()->types_distribution(type_generateur: $this->generateur->type()))) {
+            dd($this->type_distribution, $this->generateur->type(), $this->generateur->categorie());
             throw new \InvalidArgumentException('Type de distribution incompatible');
         }
 

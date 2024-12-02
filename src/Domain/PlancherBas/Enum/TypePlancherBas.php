@@ -34,6 +34,7 @@ enum TypePlancherBas: string implements Enum
             10 => self::PLANCHER_BOIS_SUR_SOLIVES_BOIS,
             11 => self::PLANCHER_LOURD_TYPE_ENTREVOUS_TERRE_CUITE_OU_POUTRELLES_BETON,
             12 => self::PLANCHER_ENTREVOUS_ISOLANT,
+            13 => self::INCONNU,
         };
     }
 
