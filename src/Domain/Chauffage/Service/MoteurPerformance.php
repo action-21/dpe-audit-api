@@ -197,7 +197,7 @@ final class MoteurPerformance
             type_chaudiere: $type_chaudiere,
             annee_installation: $annee_installation,
             pdim: $pdim,
-        )) throw new \InvalidArgumentException('Valeur forfaitaire Pn non trouvée');
+        )) throw new \DomainException('Valeur forfaitaire Pn non trouvée');
 
         return $this->expression_resolver->evalue(
             expression: $data->pn,

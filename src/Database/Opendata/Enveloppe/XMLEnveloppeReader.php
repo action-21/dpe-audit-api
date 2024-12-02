@@ -136,13 +136,10 @@ final class XMLEnveloppeReader extends XMLReader
         return $this->xml()->findOneOrError('//apport_et_besoin/apport_interne_ch')->floatval();
     }
 
-    public function fraction_apport_gratuit_ch(): float
+    public function fraction_apport_gratuit_ch(bool $scenario_depensier = false): float
     {
-        return $this->xml()->findOneOrError('//apport_et_besoin/fraction_apport_gratuit_ch')->floatval();
-    }
-
-    public function fraction_apport_gratuit_depensier_ch(): float
-    {
-        return $this->xml()->findOneOrError('//apport_et_besoin/fraction_apport_gratuit_depensier_ch')->floatval();
+        return $scenario_depensier
+            ? $this->xml()->findOneOrError('//apport_et_besoin/fraction_apport_gratuit_depensier_ch')->floatval()
+            : $this->xml()->findOneOrError('//apport_et_besoin/fraction_apport_gratuit_ch')->floatval();
     }
 }

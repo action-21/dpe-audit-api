@@ -33,11 +33,8 @@ final class XMLGenerateurReader extends XMLReaderIterator
         if (null === $id = $this->generateur_mixte_id()) {
             return null;
         }
-        foreach ($this->xml()->etat_initial()->findMany('.//generateur_chauffage') as $item) {
-            if ($item->findOne('.//reference')?->id()->compare($id)) {
-                return true;
-            }
-            if ($item->findOne('.//reference_generateur_mixte')?->id()->compare($id)) {
+        foreach ($this->xml()->etat_initial()->read_chauffage()->read_generateurs() as $item) {
+            if ($item->id()->compare($id) || $item->generateur_mixte_id()?->compare($id) ?? false) {
                 return true;
             }
         }

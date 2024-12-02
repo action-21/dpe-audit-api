@@ -21,13 +21,19 @@ final class ApportCollection extends ArrayCollection
         return new self($collection);
     }
 
-    public function f(ScenarioUsage $scenario, Mois $mois): float
+    public function f(ScenarioUsage $scenario, ?Mois $mois = null): float
     {
+        $f = 0;
         foreach ($this->elements as $item) {
-            if ($item->scenario === $scenario && $item->mois === $mois)
+            if ($item->scenario !== $scenario) {
+                continue;
+            }
+            if ($mois && $item->mois === $mois) {
                 return $item->f;
+            }
+            $f += $item->f * $item->mois->nj();
         }
-        return 0;
+        return $f / Mois::reduce(fn(int $carry, Mois $item) => $carry += $item->nj());
     }
 
     public function apports(ScenarioUsage $scenario, ?Mois $mois = null): float
