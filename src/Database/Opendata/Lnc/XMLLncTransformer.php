@@ -12,13 +12,9 @@ use App\Domain\Lnc\ValueObject\{Menuiserie, Position};
 
 final class XMLLncTransformer
 {
-    public function __construct(
-        private XMLLncReader $reader,
-    ) {}
-
     public function transform(XMLElement $paroi, Enveloppe $enveloppe): ?Lnc
     {
-        $reader = $this->reader->read($paroi);
+        $reader = XMLLncReader::from($paroi);
 
         if (false == $reader->apply())
             return null;
@@ -42,22 +38,25 @@ final class XMLLncTransformer
 
     private function set_baies(XMLLncReader $reader, Lnc $entity): void
     {
-        foreach ($reader->read_baies() as $baie_reader) {
+        if (null === $ets_reader = $reader->read_ets())
+            throw new \RuntimeException('Ets not found');
+
+        foreach ($ets_reader->read_baies() as $baie_reader) {
             $entity->add_baie(new Baie(
                 id: $baie_reader->id(),
                 local_non_chauffe: $entity,
                 description: $baie_reader->description(),
-                type: $reader->type_baie(),
+                type: $ets_reader->type_baie(),
                 surface: $baie_reader->surface_totale(),
                 inclinaison: $baie_reader->inclinaison(),
                 position: Position::create(
                     orientation: $baie_reader->orientation(),
                     mitoyennete: $baie_reader->mitoyennete(),
                 ),
-                menuiserie: $reader->type_baie() !== TypeBaie::POLYCARBONATE ? new Menuiserie(
-                    nature_menuiserie: $reader->nature_menuiserie(),
-                    type_vitrage: $reader->type_vitrage(),
-                    presence_rupteur_pont_thermique: $reader->presence_rupteur_pont_thermique(),
+                menuiserie: $ets_reader->type_baie() !== TypeBaie::POLYCARBONATE ? new Menuiserie(
+                    nature_menuiserie: $ets_reader->nature_menuiserie(),
+                    type_vitrage: $ets_reader->type_vitrage(),
+                    presence_rupteur_pont_thermique: $ets_reader->presence_rupteur_pont_thermique(),
                 ) : null
             ));
         }

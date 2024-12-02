@@ -31,7 +31,11 @@ final class XMLOpendataRepository
             unlink($temp);
             throw new \RuntimeException('Failed to open the zip file');
         }
-        $content = $zip->getFromIndex(0);
+        if (false === $content = $zip->getFromIndex(0)) {
+            $zip->close();
+            unlink($temp);
+            throw new \RuntimeException('Failed to extract the XML file');
+        }
         $xml = \simplexml_load_string($content, XMLElement::class);
         static::$cache[$id->value] = $xml;
 

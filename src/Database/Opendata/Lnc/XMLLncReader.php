@@ -2,35 +2,39 @@
 
 namespace App\Database\Opendata\Lnc;
 
-use App\Database\Opendata\{XMLElement, XMLReader};
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
-use App\Domain\Lnc\Enum\{EtatIsolation, NatureMenuiserie, TypeBaie, TypeLnc, TypeVitrage};
+use App\Domain\Lnc\Enum\{EtatIsolation, TypeLnc};
 
 /**
  * Les locaux non chauffés sont reconstruits depuis chaque paroi
  */
 final class XMLLncReader extends XMLReader
 {
-    public function __construct(private XMLBaieReader $baie_reader) {}
+    private ?XMLEtsReader $ets_reader = null;
 
     public function apply(): bool
     {
         return TypeLnc::from_type_adjacence_id($this->enum_type_adjacence_id()) !== null;
     }
 
-    public function read_baies(): XMLBaieReader
+    public function read_ets(): ?XMLEtsReader
     {
-        return $this->baie_reader->read($this->ets()->findMany('.//baie_ets_collection/baie_ets'));
-    }
-
-    public function ets(): XMLElement
-    {
-        return $this->xml()->findOneOrError("//ets[.//donnee_entree/reference = '{$this->reference_lnc()}']");
+        if (null === $this->ets_reader) {
+            $id = $this->xml()->findOneOfOrError(['.//reference_lnc', './/reference'])->id();
+            foreach ($this->xml()->etat_initial()->findManyOrError('.//ets_collection//ets') as $item) {
+                if ($item->findOneOrError('./donnee_entree/reference')->id()->compare($id)) {
+                    $this->ets_reader = XMLEtsReader::from($item);
+                    break;
+                }
+            }
+        }
+        return $this->ets_reader;
     }
 
     public function id(): Id
     {
-        return Id::create();
+        return $this->xml()->findOne('.//reference_lnc')?->id() ?? Id::create();
     }
 
     public function description(): string
@@ -41,30 +45,6 @@ final class XMLLncReader extends XMLReader
     public function type_lnc(): TypeLnc
     {
         return TypeLnc::from_type_adjacence_id($this->enum_type_adjacence_id());
-    }
-
-    public function type_baie(): TypeBaie
-    {
-        return TypeBaie::from_tv_coef_transparence_ets_id($this->tv_coef_transparence_ets_id());
-    }
-
-    public function nature_menuiserie(): ?NatureMenuiserie
-    {
-        return NatureMenuiserie::from_tv_coef_transparence_ets_id($this->tv_coef_transparence_ets_id());
-    }
-
-    public function type_vitrage(): ?TypeVitrage
-    {
-        return TypeVitrage::from_tv_coef_transparence_ets_id($this->tv_coef_transparence_ets_id());
-    }
-
-    public function presence_rupteur_pont_thermique(): ?bool
-    {
-        return match ($this->tv_coef_transparence_ets_id()) {
-            12, 13, 14, 15, 16 => true,
-            17, 18, 19, 20, 21 => false,
-            default => null,
-        };
     }
 
     public function isolation_paroi_aue(): EtatIsolation
@@ -96,11 +76,6 @@ final class XMLLncReader extends XMLReader
     public function enum_cfg_isolation_lnc_id(): int
     {
         return $this->xml()->findOneOrError('.//enum_cfg_isolation_lnc_id')->intval();
-    }
-
-    public function tv_coef_transparence_ets_id(): int
-    {
-        return $this->ets()->findOneOrError('.//tv_coef_transparence_ets_id')->intval();
     }
 
     public function surface_aue(): float

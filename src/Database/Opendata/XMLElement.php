@@ -95,6 +95,7 @@ class XMLElement extends \SimpleXMLElement
         $value = \preg_replace('/(#\d+)/', '', $value);
         $value = \str_replace('generateur:', '', $value);
         $value = \str_replace('emetteur:', '', $value);
+        $value = \str_replace('ets:', '', $value);
         $value = \preg_replace('/\s/', '', $value);
         return Id::from($value);
     }
@@ -165,12 +166,6 @@ class XMLElement extends \SimpleXMLElement
     {
         $date = $this->findOneOfOrError(['//date_etablissement_audit', '//date_etablissement_dpe'])->strval();
         return (int) (new \DateTimeImmutable($date))->format('Y');
-    }
-
-    /** @return static[] */
-    public function ets_collection(): array
-    {
-        return $this->etat_initial()->findMany('.//ets_collection//ets');
     }
 
     public function read_audit(): XMLAuditReader
