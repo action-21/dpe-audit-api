@@ -49,7 +49,7 @@ final class XMLEcsTransformer
                     generateur_collectif: $installation_collective,
                     signaletique: $generateur_reader->signaletique(),
                     annee_installation: $generateur_reader->annee_installation(),
-                    generateur_mixte_id: $generateur_reader->generateur_mixte_id(),
+                    generateur_mixte_id: $generateur_reader->match_generateur_mixte(),
                     reseau_chaleur_id: $generateur_reader->reseau_chaleur_id(),
                 );
                 $generateur->determine_categorie();

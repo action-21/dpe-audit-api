@@ -29,7 +29,12 @@ final class XMLGenerateurReader extends XMLReaderIterator
 
     public function generateur_mixte_id(): ?Id
     {
-        if (null === $id = $this->xml()->findOne('.//reference_generateur_mixte')?->id()) {
+        return $this->xml()->findOne('.//reference_generateur_mixte')?->id();
+    }
+
+    public function match_generateur_mixte(): ?Id
+    {
+        if (null === $id = $this->generateur_mixte_id()) {
             return null;
         }
         foreach ($this->xml()->etat_initial()->read_ecs()->read_generateurs() as $item) {
@@ -46,7 +51,7 @@ final class XMLGenerateurReader extends XMLReaderIterator
                 return Id::from($item->generateur_mixte_reference());
             }
         }
-        throw new \RuntimeException("Générateur mixte {$id->value} non trouvé");
+        throw new \RuntimeException("Générateur mixte {$id->value} non trouvé", 400);
     }
 
     public function generateur_mixte_reference(): ?string

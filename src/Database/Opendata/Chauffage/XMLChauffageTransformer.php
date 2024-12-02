@@ -40,7 +40,7 @@ final class XMLChauffageTransformer
                 $generateur = new Generateur(
                     id: $generateur_reader->id(),
                     chauffage: $chauffage,
-                    generateur_mixte_id: $generateur_reader->generateur_mixte_id(),
+                    generateur_mixte_id: $generateur_reader->match_generateur_mixte(),
                     reseau_chaleur_id: $generateur_reader->reseau_chaleur_id(),
                     description: $generateur_reader->description(),
                     type: $generateur_reader->type_generateur(),

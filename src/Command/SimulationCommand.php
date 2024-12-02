@@ -55,7 +55,6 @@ final class SimulationCommand extends Command
         $rapport = [];
         $search = $input->getArgument('numero_dpe') ? $input->getArgument('numero_dpe') . '.xml' : null;
         $time = new \DateTime();
-        $output->writeln("Processing...");
 
         foreach (scandir($this->projectDir . self::PATH) as $filename) {
             $path = $this->projectDir . self::PATH . '/' . $filename;
@@ -65,6 +64,7 @@ final class SimulationCommand extends Command
             if ($search && $filename !== $search) {
                 continue;
             }
+            $output->writeln("Processing {$filename}...");
             $counter++;
 
             try {

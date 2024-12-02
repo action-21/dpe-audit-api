@@ -36,6 +36,9 @@ final class XMLPontThermiqueTransformer
                     ?? $enveloppe->parois()->portes()->find($reader->id_paroi_2())
                 );
             }
+            if (null === $mur) {
+                dd($reader->id_paroi_1(), $reader->id_paroi_2());
+            }
             $liaison = match ($reader->type_liaison()) {
                 TypeLiaison::PLANCHER_BAS_MUR => Liaison::create_liaison_plancher_bas_mur(
                     mur_id: $mur->id(),

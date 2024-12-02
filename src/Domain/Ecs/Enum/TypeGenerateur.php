@@ -24,7 +24,7 @@ enum TypeGenerateur: string implements Enum
     case BALLON_ELECTRIQUE_VERTICAL = 'BALLON_ELECTRIQUE_VERTICAL';
     case CHAUFFE_EAU_INSTANTANE = 'CHAUFFE_EAU_INSTANTANE';
 
-    public static function from_enum_type_generateur_ecs_id(int $id): self
+    public static function from_enum_type_generateur_ecs_id(int $id): ?self
     {
         return match ($id) {
             1 => self::CET_AIR_AMBIANT,
@@ -155,6 +155,7 @@ enum TypeGenerateur: string implements Enum
             132 => self::PAC_DOUBLE_SERVICE,
             133 => self::PAC_DOUBLE_SERVICE,
             134 => self::CHAUDIERE_MULTI_BATIMENT,
+            default => null,
         };
     }
 
