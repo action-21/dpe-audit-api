@@ -38,7 +38,6 @@ final class XMLMasqueLointainHomogeneReader extends XMLReader
         };
     }
 
-
     public function tv_coef_masque_lointain_homogene_id(): ?int
     {
         return $this->xml()->findOne('.//tv_coef_masque_lointain_homogene_id')?->intval();

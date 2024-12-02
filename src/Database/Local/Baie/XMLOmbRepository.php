@@ -33,6 +33,6 @@ final class XMLOmbRepository implements OmbRepository
 
     public function to(XMLTableElement $record): Omb
     {
-        return new Omb(omb: (float) $record->omb);
+        return new Omb(omb: $record->get('omb')->floatval());
     }
 }
