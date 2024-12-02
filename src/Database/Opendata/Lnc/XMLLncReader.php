@@ -135,11 +135,11 @@ final class XMLLncReader extends XMLReader
         if ($value = $this->xml()->findOne('.//surface_paroi_opaque')?->floatval()) {
             $reference = $this->xml()->findOneOrError('.//reference')->strval();
 
-            foreach ($this->xml()->read_baies() as $item) {
+            foreach ($this->xml()->read_enveloppe()->read_baies() as $item) {
                 if ($item->xml()->findOne('.//reference_paroi')?->strval() === $reference)
                     $value += $item->xml()->findOneOrError('.//surface_totale_baie')->floatval();
             }
-            foreach ($this->xml()->read_portes() as $item) {
+            foreach ($this->xml()->read_enveloppe()->read_portes() as $item) {
                 if ($item->xml()->findOne('.//reference_paroi')?->strval() === $reference)
                     $value += $item->xml()->findOneOrError('.//surface_porte')->floatval();
             }

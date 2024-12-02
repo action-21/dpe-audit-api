@@ -15,7 +15,7 @@ final class XMLBaieTransformer
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): BaieCollection
     {
-        foreach ($root->read_baies() as $reader) {
+        foreach ($root->read_enveloppe()->read_baies() as $reader) {
             $paroi_id = $reader->paroi_id() ? $enveloppe->parois()->get($reader->paroi_id())?->id() : null;
             $lnc = null === $paroi_id ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
 

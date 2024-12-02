@@ -29,7 +29,7 @@ final class XMLEcsTransformer
      */
     private function set_generateurs(XMLElement $root, Ecs $ecs): void
     {
-        foreach ($root->read_installations_ecs() as $installation_reader) {
+        foreach ($root->read_ecs()->read_installations() as $installation_reader) {
             $installation_collective = $installation_reader->installation_collective();
 
             foreach ($installation_reader->read_generateurs() as $generateur_reader) {
@@ -66,7 +66,7 @@ final class XMLEcsTransformer
      */
     private function set_installations(XMLElement $root, Ecs $ecs): void
     {
-        foreach ($root->read_installations_ecs() as $installation_reader) {
+        foreach ($root->read_ecs()->read_installations() as $installation_reader) {
             $installation = new Installation(
                 id: $installation_reader->id(),
                 ecs: $ecs,

@@ -39,11 +39,11 @@ final class XMLPlancherBasReader extends XMLReaderIterator
         $reference = $this->reference();
         $surface = $this->xml()->findOneOrError('.//surface_paroi_opaque')->floatval();
 
-        foreach ($this->xml()->read_baies() as $item) {
+        foreach ($this->xml()->read_enveloppe()->read_baies() as $item) {
             if ($item->xml()->findOne('.//reference_paroi')?->strval() === $reference)
                 $surface += $item->xml()->findOneOrError('.//surface_totale_baie')->floatval();
         }
-        foreach ($this->xml()->read_portes() as $item) {
+        foreach ($this->xml()->read_enveloppe()->read_portes() as $item) {
             if ($item->xml()->findOne('.//reference_paroi')?->strval() === $reference)
                 $surface += $item->xml()->findOneOrError('.//surface_porte')->floatval();
         }

@@ -12,7 +12,7 @@ final class XMLPontThermiqueTransformer
 {
     public function transform(XMLElement $root, Enveloppe $enveloppe): PontThermiqueCollection
     {
-        foreach ($root->read_ponts_thermiques() as $reader) {
+        foreach ($root->read_enveloppe()->read_ponts_thermiques() as $reader) {
             if (null === $reader->id_paroi_1() || null === $reader->id_paroi_2())
                 continue;
 

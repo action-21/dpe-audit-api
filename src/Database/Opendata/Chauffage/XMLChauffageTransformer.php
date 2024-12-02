@@ -28,7 +28,7 @@ final class XMLChauffageTransformer
 
     private function set_generateurs(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($root->read_installations_chauffage() as $installation_reader) {
+        foreach ($root->read_chauffage()->read_installations() as $installation_reader) {
             $installation_collective = $installation_reader->installation_collective();
 
             foreach ($installation_reader->read_generateurs() as $generateur_reader) {
@@ -62,7 +62,7 @@ final class XMLChauffageTransformer
 
     private function set_emetteurs(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($root->read_installations_chauffage() as $installation_reader) {
+        foreach ($root->read_chauffage()->read_installations() as $installation_reader) {
             foreach ($installation_reader->read_emetteurs() as $emetteur_reader) {
                 if (false === $emetteur_reader->apply())
                     continue;
@@ -85,7 +85,7 @@ final class XMLChauffageTransformer
 
     private function set_installations(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($root->read_installations_chauffage() as $installation_reader) {
+        foreach ($root->read_chauffage()->read_installations() as $installation_reader) {
             $installation = new Installation(
                 id: $installation_reader->id(),
                 chauffage: $chauffage,
@@ -137,7 +137,7 @@ final class XMLChauffageTransformer
 
     private function set_installations_sdb(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($root->read_installations_chauffage() as $installation_reader) {
+        foreach ($root->read_chauffage()->read_installations() as $installation_reader) {
             if (false === $installation_reader->has_appoint_electrique_sdb())
                 continue;
 

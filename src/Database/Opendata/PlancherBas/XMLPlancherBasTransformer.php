@@ -14,7 +14,7 @@ final class XMLPlancherBasTransformer
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): PlancherBasCollection
     {
-        foreach ($root->read_planchers_bas() as $reader) {
+        foreach ($root->read_enveloppe()->read_planchers_bas() as $reader) {
             $lnc = $this->lnc_transformer->transform($reader->xml(), $enveloppe);
 
             $entity = new PlancherBas(

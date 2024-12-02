@@ -25,7 +25,7 @@ final class XMLProductionTransformer
 
     private function set_panneaux_photovoltaiques(XMLElement $root, Production $production): void
     {
-        foreach ($root->read_panneaux_pv() as $reader) {
+        foreach ($root->read_production()->read_panneaux_photovoltaiques() as $reader) {
             if (false === $reader->apply())
                 continue;
 

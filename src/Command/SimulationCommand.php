@@ -13,6 +13,7 @@ use App\Database\Opendata\Refroidissement\XMLRefroidissementTransformer;
 use App\Database\Opendata\Ventilation\XMLVentilationTransformer;
 use App\Database\Opendata\Visite\XMLVisiteTransformer;
 use App\Database\Opendata\XMLElement;
+use App\Domain\Common\Enum\ScenarioUsage;
 use App\Domain\Simulation\{Simulation, SimulationFactory, SimulationService};
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -124,6 +125,15 @@ final class SimulationCommand extends Command
         $rapport['dr'][] = [$xml->read_enveloppe()->deperdition_renouvellement_air(), $simulation->enveloppe()->performance()->dr];
         $rapport['hperm'][] = [$xml->read_enveloppe()->hperm(), $simulation->enveloppe()->permeabilite()->hperm];
         $rapport['hvent'][] = [$xml->read_enveloppe()->hvent(), $simulation->enveloppe()->permeabilite()->hvent];
+
+        $rapport['besoin_ch'][] = [$xml->read_chauffage()->besoin_ch(), $simulation->chauffage()->besoins()->besoins(scenario: ScenarioUsage::CONVENTIONNEL)];
+        $rapport['besoin_ch_depensier'][] = [$xml->read_chauffage()->besoin_ch(scenario_depensier: true), $simulation->chauffage()->besoins()->besoins(scenario: ScenarioUsage::DEPENSIER)];
+
+        $rapport['besoin_ecs'][] = [$xml->read_ecs()->besoin_ecs(), $simulation->ecs()->besoins()->besoins(scenario: ScenarioUsage::CONVENTIONNEL)];
+        $rapport['besoin_ecs_depensier'][] = [$xml->read_ecs()->besoin_ecs(scenario_depensier: true), $simulation->ecs()->besoins()->besoins(scenario: ScenarioUsage::DEPENSIER)];
+
+        $rapport['besoin_fr'][] = [$xml->read_refroidissement()->besoin_fr(), $simulation->refroidissement()->besoins()->besoins(scenario: ScenarioUsage::CONVENTIONNEL)];
+        $rapport['besoin_fr_depensier'][] = [$xml->read_refroidissement()->besoin_fr(scenario_depensier: true), $simulation->refroidissement()->besoins()->besoins(scenario: ScenarioUsage::DEPENSIER)];
     }
 
     protected function configure(): void

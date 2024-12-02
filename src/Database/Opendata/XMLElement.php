@@ -4,18 +4,11 @@ namespace App\Database\Opendata;
 
 use App\Domain\Common\Type\Id;
 use App\Database\Opendata\Audit\XMLAuditReader;
-use App\Database\Opendata\Baie\XMLBaieReader;
-use App\Database\Opendata\Chauffage\XMLInstallationReader as XMLInstallationChauffageReader;
-use App\Database\Opendata\Ecs\XMLInstallationReader as XMLInstallationEcsReader;
+use App\Database\Opendata\Chauffage\XMLChauffageReader;
+use App\Database\Opendata\Ecs\XMLEcsReader;
 use App\Database\Opendata\Enveloppe\XMLEnveloppeReader;
-use App\Database\Opendata\Lnc\XMLLncReader;
-use App\Database\Opendata\Mur\XMLMurReader;
-use App\Database\Opendata\PlancherBas\XMLPlancherBasReader;
-use App\Database\Opendata\PlancherHaut\XMLPlancherHautReader;
-use App\Database\Opendata\PontThermique\XMLPontThermiqueReader;
-use App\Database\Opendata\Porte\XMLPorteReader;
-use App\Database\Opendata\Production\XMLPanneauPvReader;
-use App\Database\Opendata\Refroidissement\XMLClimatisationReader;
+use App\Database\Opendata\Production\XMLProductionReader;
+use App\Database\Opendata\Refroidissement\XMLRefroidissementReader;
 use App\Database\Opendata\Ventilation\XMLVentilationReader;
 use App\Database\Opendata\Visite\XMLLogementReader;
 
@@ -187,39 +180,29 @@ class XMLElement extends \SimpleXMLElement
         return XMLEnveloppeReader::from($this->etat_initial());
     }
 
+    public function read_chauffage(): XMLChauffageReader
+    {
+        return XMLChauffageReader::from($this->etat_initial());
+    }
+
+    public function read_ecs(): XMLEcsReader
+    {
+        return XMLEcsReader::from($this->etat_initial());
+    }
+
+    public function read_refroidissement(): XMLRefroidissementReader
+    {
+        return XMLRefroidissementReader::from($this->etat_initial());
+    }
+
+    public function read_production(): XMLProductionReader
+    {
+        return XMLProductionReader::from($this->etat_initial());
+    }
+
     public function read_logements_visites(): XMLLogementReader
     {
         return XMLLogementReader::from($this->etat_initial()->findMany('.//logement_visite_collection//logement_visite'));
-    }
-
-    public function read_murs(): XMLMurReader
-    {
-        return XMLMurReader::from($this->etat_initial()->findMany('.//mur_collection//mur'));
-    }
-
-    public function read_planchers_bas(): XMLPlancherBasReader
-    {
-        return XMLPlancherBasReader::from($this->etat_initial()->findMany('.//plancher_bas_collection//plancher_bas'));
-    }
-
-    public function read_planchers_hauts(): XMLPlancherHautReader
-    {
-        return XMLPlancherHautReader::from($this->etat_initial()->findMany('.//plancher_haut_collection//plancher_haut'));
-    }
-
-    public function read_baies(): XMLBaieReader
-    {
-        return XMLBaieReader::from($this->etat_initial()->findMany('.//baie_vitree_collection//baie_vitree'));
-    }
-
-    public function read_portes(): XMLPorteReader
-    {
-        return XMLPorteReader::from($this->etat_initial()->findMany('.//porte_collection//porte'));
-    }
-
-    public function read_ponts_thermiques(): XMLPontThermiqueReader
-    {
-        return XMLPontThermiqueReader::from($this->etat_initial()->findMany('.//pont_thermique_collection//pont_thermique'));
     }
 
     /**
@@ -228,25 +211,5 @@ class XMLElement extends \SimpleXMLElement
     public function read_ventilations(): XMLVentilationReader
     {
         return XMLVentilationReader::from($this->etat_initial()->findMany('.//ventilation_collection//ventilation'));
-    }
-
-    public function read_climatisations(): XMLClimatisationReader
-    {
-        return XMLClimatisationReader::from($this->etat_initial()->findMany('.//climatisation_collection//climatisation'));
-    }
-
-    public function read_installations_chauffage(): XMLInstallationChauffageReader
-    {
-        return XMLInstallationChauffageReader::from($this->etat_initial()->findMany('.//installation_chauffage_collection//installation_chauffage'));
-    }
-
-    public function read_installations_ecs(): XMLInstallationEcsReader
-    {
-        return XMLInstallationEcsReader::from($this->etat_initial()->findMany('.//installation_ecs_collection//installation_ecs'));
-    }
-
-    public function read_panneaux_pv(): XMLPanneauPvReader
-    {
-        return XMLPanneauPvReader::from($this->etat_initial()->findMany('.//panneaux_pv_collection//panneaux_pv'));
     }
 }

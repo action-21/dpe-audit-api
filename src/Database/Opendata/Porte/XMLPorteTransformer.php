@@ -14,7 +14,7 @@ final class XMLPorteTransformer
 
     public function transform(XMLElement $root, Enveloppe $enveloppe): PorteCollection
     {
-        foreach ($root->read_portes() as $reader) {
+        foreach ($root->read_enveloppe()->read_portes() as $reader) {
             $paroi_id = $reader->paroi_id() ? $enveloppe->parois()->get($reader->paroi_id())?->id() : null;
             $lnc = null === $paroi_id ? $this->lnc_transformer->transform($reader->xml(), $enveloppe) : null;
 

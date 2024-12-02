@@ -3,10 +3,47 @@
 namespace App\Database\Opendata\Enveloppe;
 
 use App\Database\Opendata\XMLReader;
+use App\Database\Opendata\Baie\XMLBaieReader;
+use App\Database\Opendata\Lnc\XMLLncReader;
+use App\Database\Opendata\Mur\XMLMurReader;
+use App\Database\Opendata\PlancherBas\XMLPlancherBasReader;
+use App\Database\Opendata\PlancherHaut\XMLPlancherHautReader;
+use App\Database\Opendata\PontThermique\XMLPontThermiqueReader;
+use App\Database\Opendata\Porte\XMLPorteReader;
 use App\Domain\Enveloppe\Enum\Exposition;
 
 final class XMLEnveloppeReader extends XMLReader
 {
+    public function read_murs(): XMLMurReader
+    {
+        return XMLMurReader::from($this->xml()->findMany('.//mur_collection//mur'));
+    }
+
+    public function read_planchers_bas(): XMLPlancherBasReader
+    {
+        return XMLPlancherBasReader::from($this->xml()->findMany('.//plancher_bas_collection//plancher_bas'));
+    }
+
+    public function read_planchers_hauts(): XMLPlancherHautReader
+    {
+        return XMLPlancherHautReader::from($this->xml()->findMany('.//plancher_haut_collection//plancher_haut'));
+    }
+
+    public function read_baies(): XMLBaieReader
+    {
+        return XMLBaieReader::from($this->xml()->findMany('.//baie_vitree_collection//baie_vitree'));
+    }
+
+    public function read_portes(): XMLPorteReader
+    {
+        return XMLPorteReader::from($this->xml()->findMany('.//porte_collection//porte'));
+    }
+
+    public function read_ponts_thermiques(): XMLPontThermiqueReader
+    {
+        return XMLPontThermiqueReader::from($this->xml()->findMany('.//pont_thermique_collection//pont_thermique'));
+    }
+
     public function plusieurs_facade_exposee(): bool
     {
         return $this->xml()->findOneOrError('//plusieurs_facade_exposee')->getValue();
