@@ -92,6 +92,17 @@ class XMLElement extends \SimpleXMLElement
     {
         $value = \trim($this->strval());
         $value = \strtolower($value);
+        $value = \str_replace('generateur:', '', $value);
+        $value = \str_replace('emetteur:', '', $value);
+        $value = \str_replace('ets:', '', $value);
+        $value = \preg_replace('/\s/', '', $value);
+        return Id::from($value);
+    }
+
+    public function reference(): string
+    {
+        $value = \trim($this->strval());
+        $value = \strtolower($value);
         $value = \preg_replace('/(#\d+)/', '', $value);
         $value = \str_replace('generateur:', '', $value);
         $value = \str_replace('emetteur:', '', $value);

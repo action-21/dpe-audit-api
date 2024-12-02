@@ -37,8 +37,6 @@ final class XMLEcsTransformer
                     continue;
                 if ($ecs->generateurs()->find(id: $generateur_reader->id()))
                     continue;
-                if ($generateur_reader->generateur_mixte_id() && false === $generateur_reader->generateur_mixte_exists())
-                    throw new \RuntimeException("Generateur mixte {$generateur_reader->generateur_mixte_id()} non accessible");
 
                 $generateur = new Generateur(
                     id: $generateur_reader->id(),
