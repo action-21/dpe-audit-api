@@ -8,14 +8,9 @@ use App\Domain\Lnc\Enum\{NatureMenuiserie, TypeBaie, TypeVitrage};
 
 final class XMLEtsReader extends XMLReader
 {
-    private ?XMLBaieReader $baies = null;
-
     public function read_baies(): XMLBaieReader
     {
-        if (null === $this->baies) {
-            $this->baies = XMLBaieReader::from($this->xml()->findManyOrError('.//baie_ets_collection/baie_ets'));
-        }
-        return $this->baies;
+        return XMLBaieReader::from($this->xml()->findManyOrError('.//baie_ets_collection/baie_ets'));
     }
 
     public function id(): Id

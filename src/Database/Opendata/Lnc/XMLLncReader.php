@@ -11,8 +11,6 @@ use App\Domain\Lnc\Enum\{EtatIsolation, TypeLnc};
  */
 final class XMLLncReader extends XMLReader
 {
-    private ?XMLEtsReader $ets_reader = null;
-
     public function apply(): bool
     {
         return TypeLnc::from_type_adjacence_id($this->enum_type_adjacence_id()) !== null;
@@ -20,16 +18,13 @@ final class XMLLncReader extends XMLReader
 
     public function read_ets(): ?XMLEtsReader
     {
-        if (null === $this->ets_reader) {
-            $id = $this->xml()->findOneOfOrError(['.//reference_lnc', './/reference'])->id();
-            foreach ($this->xml()->etat_initial()->findManyOrError('.//ets_collection//ets') as $item) {
-                if ($item->findOneOrError('./donnee_entree/reference')->id()->compare($id)) {
-                    $this->ets_reader = XMLEtsReader::from($item);
-                    break;
-                }
+        $id = $this->xml()->findOneOfOrError(['.//reference_lnc', './/reference'])->id();
+        foreach ($this->xml()->etat_initial()->findManyOrError('.//ets_collection//ets') as $item) {
+            if ($item->findOneOrError('./donnee_entree/reference')->id()->compare($id)) {
+                return XMLEtsReader::from($item);
             }
         }
-        return $this->ets_reader;
+        return null;
     }
 
     public function id(): Id

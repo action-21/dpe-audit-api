@@ -9,16 +9,11 @@ use App\Domain\Ecs\ValueObject\{Reseau, Solaire};
 
 final class XMLInstallationReader extends XMLReaderIterator
 {
-    private ?XMLGenerateurReader $generateur_collection = null;
-
     public function read_generateurs(): XMLGenerateurReader
     {
-        if (null === $this->generateur_collection) {
-            $this->generateur_collection = XMLGenerateurReader::from(
-                $this->xml()->findMany('.//generateur_ecs_collection/generateur_ecs')
-            );
-        }
-        return $this->generateur_collection;
+        return XMLGenerateurReader::from(
+            $this->xml()->findMany('.//generateur_ecs_collection/generateur_ecs')
+        );
     }
 
     public function id(): Id

@@ -44,9 +44,9 @@ final class MoteurEnsoleillement
         );
         $t = $this->t(
             type_baie: $entity->type(),
-            nature_menuiserie: $entity->menuiserie()->nature_menuiserie,
-            type_vitrage: $entity->menuiserie()->type_vitrage,
-            presence_rupteur_pont_thermique: $entity->menuiserie()->presence_rupteur_pont_thermique,
+            nature_menuiserie: $entity->menuiserie()?->nature_menuiserie,
+            type_vitrage: $entity->menuiserie()?->type_vitrage,
+            presence_rupteur_pont_thermique: $entity->menuiserie()?->presence_rupteur_pont_thermique,
         );
 
         return EnsoleillementBaieCollection::create(function (Mois $mois) use ($t, $c1_collection, $entity) {

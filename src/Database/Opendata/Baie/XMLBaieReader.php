@@ -9,46 +9,30 @@ use App\Domain\Common\Type\Id;
 
 final class XMLBaieReader extends XMLReaderIterator
 {
-    private ?XMLDoubleFenetreReader $double_fenetre = null;
-    private ?XMLMasqueProcheReader $masque_proche = null;
-    private ?XMLMasqueLointainHomogeneReader $masque_lointain_homogene = null;
-    private ?XMLMasqueLointainNonHomogeneReader $masque_lointain_non_homogene_collection = null;
-
     public function read_double_fenetre(): ?XMLDoubleFenetreReader
     {
-        if (null === $this->double_fenetre) {
-            $xml = $this->xml()->findOne('.//baie_vitree_double_fenetre');
-            $this->double_fenetre = $xml ? XMLDoubleFenetreReader::from($xml) : null;
-        }
-        return $this->double_fenetre;
+        return ($xml = $this->xml()->findOne('.//baie_vitree_double_fenetre'))
+            ? XMLDoubleFenetreReader::from($xml)
+            : null;
     }
 
     public function read_masque_proche(): ?XMLMasqueProcheReader
     {
-        if (null === $this->masque_proche) {
-            $reader = XMLMasqueProcheReader::from($this->xml());
-            $this->masque_proche = $reader->apply() ? $reader : null;
-        }
-        return $this->masque_proche;
+        $reader = XMLMasqueProcheReader::from($this->xml());
+        return $reader->apply() ? $reader : null;
     }
 
     public function read_masque_lointain_homogene(): ?XMLMasqueLointainHomogeneReader
     {
-        if (null === $this->masque_lointain_homogene) {
-            $reader = XMLMasqueLointainHomogeneReader::from($this->xml());
-            $this->masque_lointain_homogene = $reader->apply() ? $reader : null;
-        }
-        return $this->masque_lointain_homogene;
+        $reader = XMLMasqueLointainHomogeneReader::from($this->xml());
+        return $reader->apply() ? $reader : null;
     }
 
     public function read_masque_lointain_non_homogene(): XMLMasqueLointainNonHomogeneReader
     {
-        if (null === $this->masque_lointain_non_homogene_collection) {
-            $this->masque_lointain_non_homogene_collection = XMLMasqueLointainNonHomogeneReader::from(
-                $this->xml()->findMany('.//masque_lointain_non_homogene')
-            );
-        }
-        return $this->masque_lointain_non_homogene_collection;
+        return XMLMasqueLointainNonHomogeneReader::from(
+            $this->xml()->findMany('.//masque_lointain_non_homogene')
+        );
     }
 
     public function id(): Id

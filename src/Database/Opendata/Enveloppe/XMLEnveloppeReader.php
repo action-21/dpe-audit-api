@@ -4,7 +4,6 @@ namespace App\Database\Opendata\Enveloppe;
 
 use App\Database\Opendata\XMLReader;
 use App\Database\Opendata\Baie\XMLBaieReader;
-use App\Database\Opendata\Lnc\XMLLncReader;
 use App\Database\Opendata\Mur\XMLMurReader;
 use App\Database\Opendata\PlancherBas\XMLPlancherBasReader;
 use App\Database\Opendata\PlancherHaut\XMLPlancherHautReader;

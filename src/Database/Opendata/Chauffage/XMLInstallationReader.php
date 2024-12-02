@@ -3,36 +3,24 @@
 namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\XMLReaderIterator;
-use App\Domain\Chauffage\Enum\IsolationReseau;
-use App\Domain\Chauffage\Enum\TypeDistribution;
-use App\Domain\Chauffage\ValueObject\Regulation;
-use App\Domain\Chauffage\ValueObject\Reseau;
-use App\Domain\Chauffage\ValueObject\Solaire;
+use App\Domain\Chauffage\Enum\{IsolationReseau, TypeDistribution};
+use App\Domain\Chauffage\ValueObject\{Regulation, Reseau, Solaire};
 use App\Domain\Common\Type\Id;
 
 final class XMLInstallationReader extends XMLReaderIterator
 {
-    private ?XMLGenerateurReader $generateur_collection = null;
-    private ?XMLEmetteurReader $emetteur_collection = null;
-
     public function read_generateurs(): XMLGenerateurReader
     {
-        if (null === $this->generateur_collection) {
-            $this->generateur_collection = XMLGenerateurReader::from(
-                $this->xml()->findMany('.//generateur_chauffage_collection/generateur_chauffage')
-            );
-        }
-        return $this->generateur_collection;
+        return XMLGenerateurReader::from(
+            $this->xml()->findMany('.//generateur_chauffage_collection/generateur_chauffage')
+        );
     }
 
     public function read_emetteurs(): XMLEmetteurReader
     {
-        if (null === $this->emetteur_collection) {
-            $this->emetteur_collection = XMLEmetteurReader::from(
-                $this->xml()->findMany('.//emetteur_chauffage_collection/emetteur_chauffage')
-            );
-        }
-        return $this->emetteur_collection;
+        return XMLEmetteurReader::from(
+            $this->xml()->findMany('.//emetteur_chauffage_collection/emetteur_chauffage')
+        );
     }
 
     /**
