@@ -13,14 +13,80 @@ final class XMLPontThermiqueReader extends XMLReaderIterator
         return $this->xml()->findOneOrError('.//reference')->id();
     }
 
-    public function id_paroi_1(): ?Id
+    public function reference(): string
     {
-        return $this->xml()->findOne('.//reference_1')?->id();
+        return $this->xml()->findOneOrError('.//reference')->reference();
     }
 
-    public function id_paroi_2(): ?Id
+    public function reference_1(): ?string
     {
-        return $this->xml()->findOne('.//reference_2')?->id();
+        return $this->xml()->findOne('.//reference_1')?->reference();
+    }
+
+    public function reference_2(): ?string
+    {
+        return $this->xml()->findOne('.//reference_2')?->reference();
+    }
+
+    public function mur_id(): Id
+    {
+        foreach ($this->xml()->read_enveloppe()->read_murs() as $item) {
+            if ($this->reference_1() && $item->match($this->reference_1())) {
+                return $item->id();
+            }
+            if ($this->reference_2() && $item->match($this->reference_2())) {
+                return $item->id();
+            }
+        }
+        throw new \DomainException("Mur non trouvé pour le pont thermique {$this->reference()}", 400);
+    }
+
+    public function plancher_id(): ?Id
+    {
+        if (!\in_array($this->type_liaison(), [TypeLiaison::PLANCHER_BAS_MUR, TypeLiaison::PLANCHER_HAUT_MUR])) {
+            return null;
+        }
+        foreach ($this->xml()->read_enveloppe()->read_planchers_bas() as $item) {
+            if ($this->reference_1() && $item->match($this->reference_1())) {
+                return $item->id();
+            }
+            if ($this->reference_2() && $item->match($this->reference_2())) {
+                return $item->id();
+            }
+        }
+        foreach ($this->xml()->read_enveloppe()->read_planchers_hauts() as $item) {
+            if ($this->reference_1() && $item->match($this->reference_1())) {
+                return $item->id();
+            }
+            if ($this->reference_2() && $item->match($this->reference_2())) {
+                return $item->id();
+            }
+        }
+        throw new \DomainException("Plancher non trouvé pour le pont thermique {$this->reference()}", 400);
+    }
+
+    public function ouverture_id(): ?Id
+    {
+        if (!\in_array($this->type_liaison(), [TypeLiaison::MENUISERIE_MUR])) {
+            return null;
+        }
+        foreach ($this->xml()->read_enveloppe()->read_baies() as $item) {
+            if ($this->reference_1() && $item->match($this->reference_1())) {
+                return $item->id();
+            }
+            if ($this->reference_2() && $item->match($this->reference_2())) {
+                return $item->id();
+            }
+        }
+        foreach ($this->xml()->read_enveloppe()->read_portes() as $item) {
+            if ($this->reference_1() && $item->match($this->reference_1())) {
+                return $item->id();
+            }
+            if ($this->reference_2() && $item->match($this->reference_2())) {
+                return $item->id();
+            }
+        }
+        throw new \DomainException("Menuiserie non trouvée pour le pont thermique {$this->reference()}", 400);
     }
 
     public function description(): string

@@ -17,6 +17,24 @@ final class XMLGenerateurReader extends XMLReaderIterator
         return false === \in_array($this->enum_type_generateur_ch_id(), [145, 146, 147, 162, 163, 164, 165, 166, 167, 168, 169, 170]);
     }
 
+    public function match(string $reference): bool
+    {
+        $patterns = [
+            $this->reference(),
+            $this->generateur_mixte_reference(),
+            \preg_replace('/(#\d+)/', '', $this->reference()),
+            \preg_replace('/(#\d+)/', '', $this->generateur_mixte_reference()),
+            $this->xml()->findOne('.//description')?->reference(),
+        ];
+
+        foreach ($patterns as $p) {
+            if ($p === $reference) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function id(): Id
     {
         return $this->xml()->findOneOrError('.//reference')->id();
@@ -34,24 +52,15 @@ final class XMLGenerateurReader extends XMLReaderIterator
 
     public function match_generateur_mixte(): ?Id
     {
-        if (null === $id = $this->generateur_mixte_id()) {
+        if (null === $reference = $this->generateur_mixte_reference()) {
             return null;
         }
         foreach ($this->xml()->etat_initial()->read_ecs()->read_generateurs() as $item) {
-            if ($id->compare($item->id())) {
-                return $id;
-            }
-            if ($item->generateur_mixte_id() && $id->compare($item->generateur_mixte_id())) {
-                return $id;
-            }
-            if ($item->reference() === $this->generateur_mixte_reference()) {
+            if ($item->match($reference)) {
                 return $item->id();
             }
-            if ($item->generateur_mixte_reference() === $this->generateur_mixte_reference()) {
-                return Id::from($item->generateur_mixte_reference());
-            }
         }
-        throw new \RuntimeException("Générateur mixte {$id->value} non trouvé", 400);
+        throw new \RuntimeException("Générateur mixte {$reference} non trouvé");
     }
 
     public function generateur_mixte_reference(): ?string

@@ -13,6 +13,8 @@ final class XMLLncReader extends XMLReader
 {
     public function apply(): bool
     {
+        if ($this->enum_cfg_isolation_lnc_id() === 1)
+            return false;
         return TypeLnc::from_type_adjacence_id($this->enum_type_adjacence_id()) !== null;
     }
 
@@ -53,8 +55,8 @@ final class XMLLncReader extends XMLReader
     public function isolation_paroi_aiu(): EtatIsolation
     {
         return match ($this->enum_cfg_isolation_lnc_id()) {
-            2, 3 => EtatIsolation::NON_ISOLE,
-            4, 5 => EtatIsolation::ISOLE,
+            2, 3, 9, 10, 11 => EtatIsolation::NON_ISOLE,
+            4, 5, 6, 7, 8 => EtatIsolation::ISOLE,
         };
     }
 
@@ -68,9 +70,9 @@ final class XMLLncReader extends XMLReader
         return $this->xml()->findOneOrError('.//enum_type_adjacence_id')->intval();
     }
 
-    public function enum_cfg_isolation_lnc_id(): int
+    public function enum_cfg_isolation_lnc_id(): ?int
     {
-        return $this->xml()->findOneOrError('.//enum_cfg_isolation_lnc_id')->intval();
+        return $this->xml()->findOne('.//enum_cfg_isolation_lnc_id')?->intval();
     }
 
     public function surface_aue(): float

@@ -13,52 +13,30 @@ final class XMLPontThermiqueTransformer
     public function transform(XMLElement $root, Enveloppe $enveloppe): PontThermiqueCollection
     {
         foreach ($root->read_enveloppe()->read_ponts_thermiques() as $reader) {
-            if (null === $reader->id_paroi_1() || null === $reader->id_paroi_2())
-                continue;
+            $mur_id = $reader->mur_id();
+            $plancher_id = $reader->plancher_id();
+            $ouverture_id = $reader->ouverture_id();
 
-            $mur = null;
-            $plancher = null;
-            $ouverture = null;
-
-            if ($reader->id_paroi_1()) {
-                $mur = $enveloppe->parois()->murs()->find($reader->id_paroi_1());
-                $plancher = $enveloppe->parois()->planchers_bas()->find($reader->id_paroi_1());
-                $plancher = $plancher ?? $enveloppe->parois()->planchers_hauts()->find($reader->id_paroi_1());
-                $ouverture = $enveloppe->parois()->baies()->find($reader->id_paroi_1())
-                    ?? $enveloppe->parois()->portes()->find($reader->id_paroi_1());
-            }
-            if ($reader->id_paroi_2()) {
-                $mur = $mur ?? $enveloppe->parois()->murs()->find($reader->id_paroi_2());
-                $plancher = $plancher ?? $enveloppe->parois()->planchers_bas()->find($reader->id_paroi_2());
-                $plancher = $plancher ?? $enveloppe->parois()->planchers_hauts()->find($reader->id_paroi_2());
-                $ouverture = $ouverture ?? (
-                    $enveloppe->parois()->baies()->find($reader->id_paroi_2())
-                    ?? $enveloppe->parois()->portes()->find($reader->id_paroi_2())
-                );
-            }
-            if (null === $mur) {
-                dd($reader->id_paroi_1(), $reader->id_paroi_2());
-            }
             $liaison = match ($reader->type_liaison()) {
                 TypeLiaison::PLANCHER_BAS_MUR => Liaison::create_liaison_plancher_bas_mur(
-                    mur_id: $mur->id(),
-                    plancher_bas_id: $plancher->id(),
+                    mur_id: $mur_id,
+                    plancher_bas_id: $plancher_id,
                 ),
                 TypeLiaison::PLANCHER_INTERMEDIAIRE_MUR => Liaison::create_liaison_plancher_intermediaire_mur(
-                    mur_id: $mur->id(),
+                    mur_id: $mur_id,
                     pont_thermique_partiel: $reader->pont_thermique_partiel()
                 ),
                 TypeLiaison::PLANCHER_HAUT_MUR => Liaison::create_liaison_plancher_haut_mur(
-                    mur_id: $mur->id(),
-                    plancher_haut_id: $plancher->id(),
+                    mur_id: $mur_id,
+                    plancher_haut_id: $plancher_id,
                 ),
                 TypeLiaison::REFEND_MUR => Liaison::create_liaison_refend_mur(
-                    mur_id: $mur->id(),
+                    mur_id: $mur_id,
                     pont_thermique_partiel: $reader->pont_thermique_partiel()
                 ),
                 TypeLiaison::MENUISERIE_MUR => Liaison::create_liaison_menuiserie_mur(
-                    mur_id: $mur->id(),
-                    ouverture_id: $ouverture->id(),
+                    mur_id: $mur_id,
+                    ouverture_id: $ouverture_id,
                 ),
             };
             $entity = new PontThermique(

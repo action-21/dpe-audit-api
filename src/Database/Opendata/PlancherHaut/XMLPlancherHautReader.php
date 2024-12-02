@@ -8,9 +8,19 @@ use App\Domain\PlancherHaut\Enum\{EtatIsolation, Inertie, Mitoyennete, TypeIsola
 
 final class XMLPlancherHautReader extends XMLReaderIterator
 {
+    public function match(string $reference): bool
+    {
+        return $reference === $this->reference() || $reference === $this->xml()->findOne('.//description')?->reference();
+    }
+
     public function id(): Id
     {
         return $this->xml()->findOneOrError('.//reference')->id();
+    }
+
+    public function reference(): string
+    {
+        return $this->xml()->findOneOrError('.//reference')->reference();
     }
 
     public function description(): string
@@ -20,7 +30,9 @@ final class XMLPlancherHautReader extends XMLReaderIterator
 
     public function mitoyennete(): Mitoyennete
     {
-        return Mitoyennete::from_type_adjacence_id($this->enum_type_adjacence_id());
+        return $this->enum_cfg_isolation_lnc_id() === 1
+            ? Mitoyennete::LOCAL_NON_ACCESSIBLE
+            : Mitoyennete::from_type_adjacence_id($this->enum_type_adjacence_id());
     }
 
     public function type_plancher_haut(): TypePlancherHaut
@@ -84,14 +96,14 @@ final class XMLPlancherHautReader extends XMLReaderIterator
         return $this->xml()->findOne('.//uph_saisi')?->floatval();
     }
 
-    public function reference(): string
-    {
-        return $this->xml()->findOneOrError('.//reference')->strval();
-    }
-
     public function enum_type_adjacence_id(): int
     {
         return $this->xml()->findOneOrError('.//enum_type_adjacence_id')->intval();
+    }
+
+    public function enum_cfg_isolation_lnc_id(): ?int
+    {
+        return $this->xml()->findOne('.//enum_cfg_isolation_lnc_id')?->intval();
     }
 
     public function enum_orientation_id(): int

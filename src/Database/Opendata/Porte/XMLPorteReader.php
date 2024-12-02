@@ -8,9 +8,19 @@ use App\Domain\Porte\Enum\{EtatIsolation, Mitoyennete, NatureMenuiserie, TypePos
 
 final class XMLPorteReader extends XMLReaderIterator
 {
+    public function match(string $reference): bool
+    {
+        return $reference === $this->reference() || $reference === $this->xml()->findOne('.//description')?->reference();
+    }
+
     public function id(): Id
     {
         return $this->xml()->findOneOrError('.//reference')->id();
+    }
+
+    public function reference(): string
+    {
+        return $this->xml()->findOneOrError('.//reference')->reference();
     }
 
     public function paroi_id(): ?Id
@@ -25,7 +35,9 @@ final class XMLPorteReader extends XMLReaderIterator
 
     public function mitoyennete(): Mitoyennete
     {
-        return Mitoyennete::from_type_adjacence_id($this->xml()->findOneOrError('.//enum_type_adjacence_id')->intval());
+        return $this->enum_cfg_isolation_lnc_id() === 1
+            ? Mitoyennete::LOCAL_NON_ACCESSIBLE
+            : Mitoyennete::from_type_adjacence_id($this->enum_type_adjacence_id());
     }
 
     public function isolation(): EtatIsolation
@@ -96,6 +108,11 @@ final class XMLPorteReader extends XMLReaderIterator
     public function enum_type_adjacence_id(): int
     {
         return $this->xml()->findOneOrError('.//enum_type_adjacence_id')->intval();
+    }
+
+    public function enum_cfg_isolation_lnc_id(): ?int
+    {
+        return $this->xml()->findOne('.//enum_cfg_isolation_lnc_id')?->intval();
     }
 
     public function enum_type_porte_id(): int

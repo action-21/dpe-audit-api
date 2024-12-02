@@ -20,9 +20,9 @@ enum TypeLnc: string implements Enum
     case GARAGE_COLLECTIF = 'GARAGE_COLLECTIF';
     case AUTRES = 'AUTRES';
 
-    public static function from_type_adjacence_id(int $type_adjacence_id): ?self
+    public static function from_type_adjacence_id(int $id): ?self
     {
-        return match ($type_adjacence_id) {
+        return match ($id) {
             8 => self::GARAGE,
             9 => self::CELLIER,
             10 => self::ESPACE_TAMPON_SOLARISE,
