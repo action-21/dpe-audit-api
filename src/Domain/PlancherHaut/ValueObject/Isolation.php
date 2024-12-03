@@ -2,9 +2,8 @@
 
 namespace App\Domain\PlancherHaut\ValueObject;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\PlancherHaut\Enum\{EtatIsolation, TypeIsolation};
-use App\Domain\PlancherHaut\PlancherHaut;
+use Webmozart\Assert\Assert;
 
 final class Isolation
 {
@@ -32,6 +31,10 @@ final class Isolation
         ?int $epaisseur_isolation,
         ?float $resistance_thermique_isolation,
     ): self {
+        Assert::lessThanEq($annee_isolation, (int) \date('Y'));
+        Assert::greaterThan($epaisseur_isolation, 0);
+        Assert::greaterThan($resistance_thermique_isolation, 0);
+
         return new self(
             etat_isolation: EtatIsolation::ISOLE,
             type_isolation: $type_isolation,
@@ -39,14 +42,6 @@ final class Isolation
             epaisseur_isolation: $epaisseur_isolation,
             resistance_thermique_isolation: $resistance_thermique_isolation,
         );
-    }
-
-    public function controle(PlancherHaut $entity): void
-    {
-        Assert::annee($this->annee_isolation);
-        Assert::positif($this->epaisseur_isolation);
-        Assert::positif($this->resistance_thermique_isolation);
-        Assert::superieur_ou_egal_a($this->annee_isolation, $entity->annee_construction_defaut());
     }
 
     public function etat_isolation_defaut(int $annee_construction): EtatIsolation

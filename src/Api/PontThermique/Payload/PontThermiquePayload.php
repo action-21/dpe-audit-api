@@ -10,7 +10,9 @@ final class PontThermiquePayload
         #[Assert\Uuid]
         public string $id,
         public string $description,
+        #[Assert\Positive]
         public float $longueur,
+        #[Assert\Valid]
         public LiaisonPlancherBasMurPayload|LiaisonPlancherIntermediaireMurPayload|LiaisonPlancherHautMurPayload|LiaisonRefendMurPayload|LiaisonMenuiserieMurPayload $liaison,
         #[Assert\Positive]
         public ?float $kpt,

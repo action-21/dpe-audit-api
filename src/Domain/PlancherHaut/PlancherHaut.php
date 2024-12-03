@@ -10,6 +10,7 @@ use App\Domain\PlancherHaut\Enum\{Categorie, EtatIsolation, Mitoyennete};
 use App\Domain\PlancherHaut\Service\{MoteurPerformance, MoteurSurfaceDeperditive};
 use App\Domain\PlancherHaut\ValueObject\{Caracteristique, Performance, Isolation, Position};
 use App\Domain\Simulation\Simulation;
+use Webmozart\Assert\Assert;
 
 final class PlancherHaut implements Paroi
 {
@@ -32,21 +33,19 @@ final class PlancherHaut implements Paroi
         Caracteristique $caracteristique,
         Isolation $isolation,
     ): self {
+        Assert::greaterThanEq($caracteristique->annee_construction, $this->enveloppe->annee_construction_batiment());
+        Assert::greaterThanEq($caracteristique->annee_renovation, $this->enveloppe->annee_construction_batiment());
+
         $this->description = $description;
         $this->position = $position;
         $this->caracteristique = $caracteristique;
         $this->isolation = $isolation;
-        $this->controle();
+
         $this->reinitialise();
         return $this;
     }
 
-    public function controle(): void
-    {
-        $this->caracteristique->controle($this);
-        $this->isolation->controle($this);
-        $this->position->controle();
-    }
+    public function controle(): void {}
 
     public function initialise(): self
     {
