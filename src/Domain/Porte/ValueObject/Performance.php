@@ -2,8 +2,8 @@
 
 namespace App\Domain\Porte\ValueObject;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Porte\Enum\EtatPerformance;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -16,9 +16,9 @@ final class Performance
 
     public static function create(float $u, float $b, float $dp): self
     {
-        Assert::positif($u);
-        Assert::positif_ou_zero($b);
-        Assert::positif_ou_zero($dp);
+        Assert::greaterThanEq($u, 0);
+        Assert::greaterThanEq($b, 0);
+        Assert::greaterThanEq($dp, 0);
         return new self(u: $u, b: $b, dp: $dp, etat: EtatPerformance::from_uporte(uporte: $u));
     }
 }

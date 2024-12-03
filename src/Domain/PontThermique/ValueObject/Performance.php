@@ -2,7 +2,7 @@
 
 namespace App\Domain\PontThermique\ValueObject;
 
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -13,8 +13,8 @@ final class Performance
 
     public static function create(float $kpt, float $pt): self
     {
-        Assert::positif_ou_zero($kpt);
-        Assert::positif_ou_zero($pt);
+        Assert::greaterThanEq($kpt, 0);
+        Assert::greaterThanEq($pt, 0);
         return new self(kpt: $kpt, pt: $pt);
     }
 }

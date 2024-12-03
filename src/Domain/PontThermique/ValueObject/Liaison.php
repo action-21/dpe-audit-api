@@ -15,12 +15,12 @@ final class Liaison
         public readonly ?Id $ouverture_id = null,
     ) {}
 
-    public static function create_liaison_plancher_bas_mur(Id $mur_id, Id $plancher_bas_id,): self
+    public static function create_liaison_plancher_bas_mur(Id $mur_id, Id $plancher_id,): self
     {
         return new self(
             type: TypeLiaison::PLANCHER_BAS_MUR,
             mur_id: $mur_id,
-            plancher_id: $plancher_bas_id,
+            plancher_id: $plancher_id,
             pont_thermique_partiel: false,
         );
     }
@@ -34,12 +34,12 @@ final class Liaison
         );
     }
 
-    public static function create_liaison_plancher_haut_mur(Id $mur_id, Id $plancher_haut_id,): self
+    public static function create_liaison_plancher_haut_mur(Id $mur_id, Id $plancher_id,): self
     {
         return new self(
             type: TypeLiaison::PLANCHER_HAUT_MUR,
             mur_id: $mur_id,
-            plancher_id: $plancher_haut_id,
+            plancher_id: $plancher_id,
             pont_thermique_partiel: false,
         );
     }

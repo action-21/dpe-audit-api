@@ -4,7 +4,6 @@ namespace App\Domain\PontThermique;
 
 use App\Domain\Baie\Baie;
 use App\Domain\Common\Enum\Enum;
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Mur\Mur;
@@ -14,6 +13,7 @@ use App\Domain\PontThermique\Enum\{TypeIsolation, TypeLiaison, TypePose};
 use App\Domain\PontThermique\Service\MoteurPerformance;
 use App\Domain\PontThermique\ValueObject\{Liaison, Performance};
 use App\Domain\Porte\Porte;
+use Webmozart\Assert\Assert;
 
 final class PontThermique
 {
@@ -30,11 +30,13 @@ final class PontThermique
 
     public function update(string $description, float $longueur, ?float $kpt): self
     {
+        Assert::greaterThan($longueur, 0);
+        Assert::greaterThan($kpt, 0);
+
         $this->description = $description;
         $this->longueur = $longueur;
         $this->kpt = $kpt;
 
-        $this->controle();
         $this->reinitialise();
         return $this;
     }
@@ -44,11 +46,7 @@ final class PontThermique
         $this->performance = null;
     }
 
-    public function controle(): void
-    {
-        Assert::positif($this->longueur);
-        Assert::positif($this->kpt);
-    }
+    public function controle(): void {}
 
     public function calcule_performance(MoteurPerformance $moteur): self
     {
@@ -135,8 +133,8 @@ final class PontThermique
             return null;
         if (null !== $this->baie()?->caracteristique()->menuiserie?->type_pose)
             return TypePose::from($this->baie()->caracteristique()->menuiserie->type_pose->value);
-        if (null !== $this->porte()?->caracteristique()->type_pose)
-            return TypePose::from($this->porte()->caracteristique()->type_pose->value);
+        if (null !== $this->porte()?->caracteristique()->menuiserie->type_pose)
+            return TypePose::from($this->porte()->caracteristique()->menuiserie->type_pose->value);
         return null;
     }
 
@@ -146,8 +144,8 @@ final class PontThermique
             return null;
         if (null !== $this->baie()?->caracteristique()->menuiserie?->presence_retour_isolation)
             return $this->baie()?->caracteristique()->menuiserie?->presence_retour_isolation;
-        if (null !== $this->porte()?->caracteristique()->presence_retour_isolation)
-            return $this->porte()->caracteristique()->presence_retour_isolation;
+        if (null !== $this->porte()?->caracteristique()->menuiserie->presence_retour_isolation)
+            return $this->porte()->caracteristique()->menuiserie->presence_retour_isolation;
         return false;
     }
 
@@ -157,8 +155,8 @@ final class PontThermique
             return null;
         if (null !== $this->baie()?->caracteristique()->menuiserie?->largeur_dormant)
             return $this->baie()->caracteristique()->menuiserie->largeur_dormant;
-        if (null !== $this->porte()?->caracteristique()->largeur_dormant)
-            return $this->porte()->caracteristique()->largeur_dormant;
+        if (null !== $this->porte()?->caracteristique()->menuiserie->largeur_dormant)
+            return $this->porte()->caracteristique()->menuiserie->largeur_dormant;
         return 50;
     }
 

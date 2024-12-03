@@ -5,6 +5,7 @@ namespace App\Domain\PontThermique;
 use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\PontThermique\ValueObject\Liaison;
+use Webmozart\Assert\Assert;
 
 final class PontThermiqueFactory
 {
@@ -16,7 +17,10 @@ final class PontThermiqueFactory
         Liaison $liaison,
         ?float $kpt = null,
     ): PontThermique {
-        $entity =  new PontThermique(
+        Assert::greaterThan($longueur, 0);
+        Assert::greaterThan($kpt, 0);
+
+        return new PontThermique(
             id: $id,
             enveloppe: $enveloppe,
             description: $description,
@@ -24,7 +28,5 @@ final class PontThermiqueFactory
             liaison: $liaison,
             kpt: $kpt,
         );
-        $entity->controle();
-        return $entity;
     }
 }
