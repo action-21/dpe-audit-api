@@ -5,3 +5,8 @@ resources:
         class: ApiPlatform\Metadata\Get
         uriTemplate: /audit/{id}/simulation
         output: App\Api\Simulation\Resource\SimulationResource
+      simulation.post:
+        class: ApiPlatform\Metadata\Post
+        uriTemplate: /audit/simulation
+        input: App\Api\Simulation\Payload\SimulationPayload
+        output: App\Api\Simulation\Resource\SimulationResource
