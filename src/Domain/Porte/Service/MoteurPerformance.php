@@ -30,9 +30,9 @@ final class MoteurPerformance
         $u = $this->uporte(
             presence_sas: $entity->caracteristique()->presence_sas,
             etat_isolation: $entity->caracteristique()->isolation,
-            nature_menuiserie: $entity->caracteristique()->nature_menuiserie,
-            taux_vitrage: $entity->caracteristique()->taux_vitrage,
-            type_vitrage: $entity->caracteristique()->type_vitrage,
+            nature_menuiserie: $entity->caracteristique()->menuiserie->nature_menuiserie,
+            taux_vitrage: $entity->caracteristique()->vitrage->taux_vitrage,
+            type_vitrage: $entity->caracteristique()->vitrage->type_vitrage,
             u_saisi: $entity->caracteristique()->u,
         );
         $dp = $this->dp(

@@ -9,6 +9,7 @@ use App\Domain\Lnc\Lnc;
 use App\Domain\Porte\Enum\Mitoyennete;
 use App\Domain\Porte\Service\MoteurPerformance;
 use App\Domain\Porte\ValueObject\{Caracteristique, Performance, Position};
+use Webmozart\Assert\Assert;
 
 final class Porte implements Paroi
 {
@@ -24,19 +25,16 @@ final class Porte implements Paroi
 
     public function update(string $description, Position $position, Caracteristique $caracteristique): self
     {
+        Assert::greaterThanEq($caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());
+
         $this->description = $description;
         $this->position = $position;
         $this->caracteristique = $caracteristique;
-        $this->controle();
         $this->reinitialise();
         return $this;
     }
 
-    public function controle(): void
-    {
-        $this->caracteristique->controle($this);
-        $this->position->controle();
-    }
+    public function controle(): void {}
 
     public function reinitialise(): void
     {
@@ -66,9 +64,9 @@ final class Porte implements Paroi
 
     public function local_non_chauffe(): ?Lnc
     {
-        if ($this->paroi())
+        if ($this->paroi()) {
             return $this->paroi()->local_non_chauffe();
-
+        }
         return $this->position->local_non_chauffe_id
             ? $this->enveloppe->locaux_non_chauffes()->find(id: $this->position->local_non_chauffe_id)
             : null;

@@ -22,6 +22,12 @@ final class Assert
             throw new \InvalidArgumentException("Valeur {$valeur} différente de {$comparant}");
     }
 
+    public static function different(mixed $valeur, mixed $comparant): void
+    {
+        if ($valeur === $comparant)
+            throw new \InvalidArgumentException("Valeur {$valeur} différente de {$comparant}");
+    }
+
     public static function positif(null|int|float $valeur): void
     {
         if (null !== $valeur && $valeur <= 0)

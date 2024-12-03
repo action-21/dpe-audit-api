@@ -51,7 +51,7 @@ final class PorteCollection extends ArrayCollection implements ParoiCollection
 
     public function filter_by_presence_joint(bool $presence_joint): static
     {
-        return $this->filter(fn(Porte $item): bool => $item->caracteristique()->presence_joint === $presence_joint);
+        return $this->filter(fn(Porte $item): bool => $item->caracteristique()->menuiserie->presence_joint === $presence_joint);
     }
 
     public function surface(): float
