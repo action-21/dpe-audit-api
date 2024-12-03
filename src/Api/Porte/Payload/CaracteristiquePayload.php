@@ -2,7 +2,8 @@
 
 namespace App\Api\Porte\Payload;
 
-use App\Domain\Porte\Enum\{EtatIsolation, NatureMenuiserie, TypePose, TypeVitrage};
+use App\Domain\Porte\Enum\EtatIsolation;
+use App\Domain\Porte\ValueObject\Caracteristique;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class CaracteristiquePayload
@@ -10,19 +11,27 @@ final class CaracteristiquePayload
     public function __construct(
         #[Assert\Positive]
         public float $surface,
-        public EtatIsolation $isolation,
-        public NatureMenuiserie $nature_menuiserie,
-        public TypePose $type_pose,
-        #[Assert\PositiveOrZero]
-        #[Assert\LessThanOrEqual(60)]
-        public int $taux_vitrage,
-        #[Assert\PositiveOrZero]
-        public ?int $largeur_dormant,
         public bool $presence_sas,
-        public bool $presence_joint,
-        public bool $presence_retour_isolation,
+        public EtatIsolation $isolation,
+        #[Assert\Valid]
+        public MenuiseriePayload $menuiserie,
+        #[Assert\Valid]
+        public ?VitragePayload $vitrage,
         public ?int $annee_installation,
-        public ?TypeVitrage $type_vitrage,
+        #[Assert\Positive]
         public ?float $u,
     ) {}
+
+    public function to(): Caracteristique
+    {
+        return Caracteristique::create(
+            surface: $this->surface,
+            presence_sas: $this->presence_sas,
+            isolation: $this->isolation,
+            menuiserie: $this->menuiserie->to(),
+            vitrage: $this->vitrage?->to(),
+            annee_installation: $this->annee_installation,
+            u: $this->u,
+        );
+    }
 }

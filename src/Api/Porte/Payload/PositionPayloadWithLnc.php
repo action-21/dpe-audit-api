@@ -10,11 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class PositionPayloadWithLnc
 {
     public function __construct(
-        #[Assert\NotBlank]
         #[Assert\Uuid]
         public string $local_non_chauffe_id,
-
-        #[Assert\NotBlank]
         #[AppAssert\Orientation]
         public ?float $orientation,
     ) {}

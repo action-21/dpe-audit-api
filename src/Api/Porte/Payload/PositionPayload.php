@@ -10,11 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class PositionPayload
 {
     public function __construct(
-        #[Assert\NotBlank]
         #[Assert\NotEqualTo(Mitoyennete::LOCAL_NON_CHAUFFE)]
         public Mitoyennete $mitoyennete,
-
-        #[Assert\NotBlank]
         #[AppAssert\Orientation]
         public ?float $orientation,
     ) {}

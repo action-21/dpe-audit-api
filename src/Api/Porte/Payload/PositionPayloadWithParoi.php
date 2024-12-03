@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class PositionPayloadWithParoi
 {
     public function __construct(
-        #[Assert\NotBlank]
         #[Assert\Uuid]
         public string $paroi_id,
     ) {}
