@@ -16,6 +16,6 @@ final class Solaire
     public function controle(): void
     {
         Assert::positif_ou_zero($this->fch);
-        Assert::inferieur_ou_egal_a(1, $this->fch);
+        Assert::inferieur_ou_egal_a($this->fch, 1);
     }
 }

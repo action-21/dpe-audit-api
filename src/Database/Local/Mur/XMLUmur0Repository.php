@@ -15,11 +15,14 @@ final class XMLUmur0Repository implements Umur0Repository
         return 'mur.umur0';
     }
 
-    public function search_by(TypeMur $type_mur): Umur0Collection
+    public function search_by(TypeMur $type_mur, int $annee_construction,): Umur0Collection
     {
         return new Umur0Collection(\array_map(
             fn(XMLTableElement $record): Umur0 => $this->to($record),
-            $this->createQuery()->and('type_mur', $type_mur->id())->getMany(),
+            $this->createQuery()
+                ->and('type_mur', $type_mur->id())
+                ->andCompareTo('annee_construction', $annee_construction)
+                ->getMany(),
         ));
     }
 

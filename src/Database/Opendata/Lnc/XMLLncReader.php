@@ -49,6 +49,7 @@ final class XMLLncReader extends XMLReader
         return match ($this->enum_cfg_isolation_lnc_id()) {
             2, 4 => EtatIsolation::NON_ISOLE,
             3, 5 => EtatIsolation::ISOLE,
+            default => EtatIsolation::INCONNU,
         };
     }
 

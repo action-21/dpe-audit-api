@@ -40,6 +40,7 @@ final class MoteurPerformance
         $umur0 = $this->umur0(
             type_mur: $entity->caracteristique()->type,
             epaisseur_mur: $entity->caracteristique()->epaisseur_defaut(),
+            annee_construction: $entity->annee_construction_defaut(),
             type_doublage: $entity->caracteristique()->type_doublage,
             paroi_ancienne: $entity->caracteristique()->paroi_ancienne,
             presence_enduit_isolant: $entity->caracteristique()->presence_enduit_isolant,
@@ -74,6 +75,7 @@ final class MoteurPerformance
     public function umur0(
         TypeMur $type_mur,
         int|float $epaisseur_mur,
+        int $annee_construction,
         TypeDoublage $type_doublage,
         bool $paroi_ancienne,
         bool $presence_enduit_isolant,
@@ -84,7 +86,7 @@ final class MoteurPerformance
 
         // length compris entre 0 et 2
         $collection = $this->u0_repository
-            ->search_by(type_mur: $type_mur)
+            ->search_by(type_mur: $type_mur, annee_construction: $annee_construction)
             ->valeurs_proches(epaisseur: $epaisseur_mur);
 
         if (0 === $collection->count())

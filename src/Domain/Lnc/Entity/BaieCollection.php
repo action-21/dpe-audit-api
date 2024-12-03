@@ -40,7 +40,7 @@ final class BaieCollection extends ArrayCollection
 
     public function filter_by_paroi(Id $id): self
     {
-        return $this->filter(fn(Baie $item): bool => $item->paroi()->id()->compare($id));
+        return $this->filter(fn(Baie $item): bool => $item->paroi()?->id()->compare($id) ?? false);
     }
 
     public function filter_by_mitoyennete(Mitoyennete $mitoyennete): self

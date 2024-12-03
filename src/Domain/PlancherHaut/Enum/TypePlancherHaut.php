@@ -26,7 +26,7 @@ enum TypePlancherHaut: string implements Enum
     public static function from_enum_type_plancher_haut_id(int $type_plancher_haut_id): self
     {
         return match ($type_plancher_haut_id) {
-            1 => self::INCONNU,
+            1, 16 => self::INCONNU,
             2 => self::PLAFOND_AVEC_OU_SANS_REMPLISSAGE,
             3 => self::PLAFOND_ENTRE_SOLIVES_METALLIQUES,
             4 => self::PLAFOND_ENTRE_SOLIVES_BOIS,

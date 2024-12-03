@@ -140,13 +140,13 @@ class XMLElement extends \SimpleXMLElement
         };
     }
 
-    public function inclinaison(): ?float
+    public function inclinaison(): float
     {
         return match ($this->intval()) {
             1 => 15,
             2 => 50,
             3 => 90,
-            4 => null,
+            4 => 0,
         };
     }
 
