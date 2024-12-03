@@ -6,7 +6,6 @@ use App\Database\Opendata\Lnc\XMLLncTransformer;
 use App\Database\Opendata\XMLElement;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Porte\{Porte, PorteCollection};
-use App\Domain\Porte\ValueObject\{Caracteristique, Position};
 
 final class XMLPorteTransformer
 {
@@ -23,24 +22,10 @@ final class XMLPorteTransformer
                     id: $reader->id(),
                     enveloppe: $enveloppe,
                     description: $reader->description(),
-                    caracteristique: new Caracteristique(
-                        surface: $reader->surface(),
-                        isolation: $reader->isolation(),
-                        nature_menuiserie: $reader->nature_menuiserie(),
-                        type_pose: $reader->type_pose(),
-                        taux_vitrage: $reader->taux_vitrage(),
-                        largeur_dormant: $reader->largeur_dormant(),
-                        presence_sas: $reader->presence_sas(),
-                        presence_joint: $reader->presence_joint(),
-                        presence_retour_isolation: $reader->presence_retour_isolation(),
-                        annee_installation: null,
-                        type_vitrage: $reader->type_vitrage(),
-                        u: $reader->u_saisi(),
-                    ),
-                    position: new Position(
+                    caracteristique: $reader->caracteristique(),
+                    position: $reader->position(
                         paroi_id: $paroi_id,
                         local_non_chauffe_id: $lnc?->id(),
-                        mitoyennete: $reader->mitoyennete(),
                     ),
                 );
                 $enveloppe->parois()->portes()->add($entity);
