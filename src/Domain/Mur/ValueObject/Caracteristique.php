@@ -2,9 +2,8 @@
 
 namespace App\Domain\Mur\ValueObject;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Mur\Enum\{Inertie, TypeDoublage, TypeMur};
-use App\Domain\Mur\Mur;
+use Webmozart\Assert\Assert;
 
 final class Caracteristique
 {
@@ -35,6 +34,13 @@ final class Caracteristique
         ?float $u0,
         ?float $u,
     ): self {
+        Assert::greaterThan($surface, 0);
+        Assert::greaterThan($epaisseur, 0);
+        Assert::greaterThan($u0, 0);
+        Assert::greaterThan($u, 0);
+        Assert::lessThanEq($annee_construction, (int) \date('Y'));
+        Assert::lessThanEq($annee_renovation, (int) \date('Y'));
+
         return new self(
             type: $type,
             type_doublage: $type_doublage,
@@ -48,18 +54,6 @@ final class Caracteristique
             u0: $u0,
             u: $u,
         );
-    }
-
-    public function controle(Mur $entity): void
-    {
-        Assert::positif($this->surface);
-        Assert::positif($this->epaisseur);
-        Assert::annee($this->annee_construction);
-        Assert::annee($this->annee_renovation);
-        Assert::positif($this->u0);
-        Assert::positif($this->u);
-        Assert::superieur_ou_egal_a($this->annee_construction, $entity->enveloppe()->annee_construction_batiment());
-        Assert::superieur_ou_egal_a($this->annee_renovation, $entity->enveloppe()->annee_construction_batiment());
     }
 
     public function epaisseur_defaut(): float

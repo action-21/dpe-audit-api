@@ -10,6 +10,7 @@ use App\Domain\Mur\Enum\{EtatIsolation, Mitoyennete};
 use App\Domain\Mur\Service\{MoteurPerformance, MoteurSurfaceDeperditive};
 use App\Domain\Mur\ValueObject\{Caracteristique, Performance, Isolation, Position};
 use App\Domain\Simulation\Simulation;
+use Webmozart\Assert\Assert;
 
 final class Mur implements Paroi
 {
@@ -31,21 +32,19 @@ final class Mur implements Paroi
         Caracteristique $caracteristique,
         Isolation $isolation,
     ): self {
+        Assert::greaterThanEq($caracteristique->annee_construction, $this->enveloppe->annee_construction_batiment());
+        Assert::greaterThanEq($caracteristique->annee_renovation, $this->enveloppe->annee_construction_batiment());
+
         $this->description = $description;
         $this->position = $position;
         $this->caracteristique = $caracteristique;
         $this->isolation = $isolation;
-        $this->controle();
+
         $this->reinitialise();
         return $this;
     }
 
-    public function controle(): void
-    {
-        $this->caracteristique->controle($this);
-        $this->isolation->controle($this);
-        $this->position->controle();
-    }
+    public function controle(): void {}
 
     public function reinitialise(): void
     {

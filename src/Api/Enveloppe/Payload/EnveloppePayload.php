@@ -2,6 +2,7 @@
 
 namespace Api\Enveloppe\Payload;
 
+use App\Api\Mur\Payload\MurPayload;
 use App\Api\PlancherBas\Payload\PlancherBasPayload;
 use App\Api\PlancherHaut\Payload\PlancherHautPayload;
 use App\Api\PontThermique\Payload\PontThermiquePayload;
@@ -11,6 +12,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class EnveloppePayload
 {
     public function __construct(
+        /** @var MurPayload[] */
+        #[Assert\All([new Assert\Type(MurPayload::class)])]
+        #[Assert\Valid]
+        public array $murs = [],
+
         /** @var PlancherBasPayload[] */
         #[Assert\All([new Assert\Type(PlancherBasPayload::class)])]
         #[Assert\Valid]
