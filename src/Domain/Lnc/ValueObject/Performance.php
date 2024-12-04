@@ -2,8 +2,8 @@
 
 namespace App\Domain\Lnc\ValueObject;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Lnc\Data\BverCollection;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -15,14 +15,14 @@ final class Performance
 
     public static function create(float $uvue, float $b): self
     {
-        Assert::positif_ou_zero($uvue);
-        Assert::positif_ou_zero($b);
+        Assert::greaterThanEq($uvue, 0);
+        Assert::greaterThanEq($b, 0);
         return new self(uvue: $uvue, b: $b, bvers: null);
     }
 
     public static function create_ets(BverCollection $bvers): self
     {
-        Assert::non_vide($bvers);
+        Assert::notEmpty($bvers);
         return new self(uvue: null, b: null, bvers: $bvers);
     }
 

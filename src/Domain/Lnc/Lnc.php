@@ -35,11 +35,7 @@ final class Lnc
         return $this;
     }
 
-    public function controle(): void
-    {
-        $this->parois->controle();
-        $this->baies->controle();
-    }
+    public function controle(): void {}
 
     public function reinitialise(): void
     {

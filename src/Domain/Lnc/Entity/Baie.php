@@ -2,13 +2,13 @@
 
 namespace App\Domain\Lnc\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Lnc\Lnc;
 use App\Domain\Lnc\Enum\{EtatIsolation, TypeBaie, TypeLnc};
 use App\Domain\Lnc\Enum\TypeBaie\TypeBaieFenetre;
 use App\Domain\Lnc\Service\{MoteurEnsoleillement, MoteurSurfaceDeperditive};
 use App\Domain\Lnc\ValueObject\{EnsoleillementBaieCollection, Menuiserie, Position};
+use Webmozart\Assert\Assert;
 
 final class Baie
 {
@@ -31,7 +31,6 @@ final class Baie
     {
         $this->type = TypeBaie::POLYCARBONATE;
         $this->menuiserie = null;
-        $this->controle();
         $this->reinitialise();
         return $this;
     }
@@ -40,29 +39,26 @@ final class Baie
     {
         $this->type = $type->to();
         $this->menuiserie = $menuiserie;
-        $this->controle();
         $this->reinitialise();
         return $this;
     }
 
     public function update(string $description, float $surface, float $inclinaison, Position $position,): self
     {
+        Assert::greaterThan($surface, 0);
+        Assert::greaterThanEq($inclinaison, 0);
+        Assert::lessThanEq($inclinaison, 90);
+
         $this->description = $description;
         $this->surface = $surface;
         $this->inclinaison = $inclinaison;
         $this->position = $position;
 
-        $this->controle();
         $this->reinitialise();
         return $this;
     }
 
-    public function controle(): void
-    {
-        Assert::positif($this->surface);
-        Assert::inclinaison($this->inclinaison);
-        $this->position->controle();
-    }
+    public function controle(): void {}
 
     public function reinitialise(): void
     {

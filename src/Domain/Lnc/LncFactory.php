@@ -11,7 +11,7 @@ final class LncFactory
 {
     public function build(Id $id, Enveloppe $enveloppe, string $description, TypeLnc $type): Lnc
     {
-        $entity = new Lnc(
+        return new Lnc(
             id: $id,
             enveloppe: $enveloppe,
             description: $description,
@@ -19,6 +19,5 @@ final class LncFactory
             parois: new ParoiCollection,
             baies: new BaieCollection,
         );
-        return $entity;
     }
 }

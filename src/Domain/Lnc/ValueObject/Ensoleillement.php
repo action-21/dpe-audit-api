@@ -3,7 +3,7 @@
 namespace App\Domain\Lnc\ValueObject;
 
 use App\Domain\Common\Enum\Mois;
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Ensoleillement
 {
@@ -15,8 +15,8 @@ final class Ensoleillement
 
     public static function create(Mois $mois, float $t, float $sst,): self
     {
-        Assert::positif_ou_zero($t);
-        Assert::positif_ou_zero($sst);
+        Assert::greaterThanEq($t, 0);
+        Assert::greaterThanEq($sst, 0);
 
         return new self($mois, $t, $sst);
     }

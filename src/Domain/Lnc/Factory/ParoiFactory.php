@@ -7,6 +7,7 @@ use App\Domain\Lnc\Entity\Paroi;
 use App\Domain\Lnc\Enum\EtatIsolation;
 use App\Domain\Lnc\Lnc;
 use App\Domain\Lnc\ValueObject\Position;
+use Webmozart\Assert\Assert;
 
 final class ParoiFactory
 {
@@ -18,7 +19,11 @@ final class ParoiFactory
         float $surface,
         EtatIsolation $etat_isolation,
     ): Paroi {
-        $entity = new Paroi(
+        Assert::greaterThan($surface, 0);
+        Assert::notNull($position->mitoyennete);
+        Assert::null($position->paroi);
+
+        return new Paroi(
             id: $id,
             local_non_chauffe: $local_non_chauffe,
             description: $description,
@@ -26,7 +31,5 @@ final class ParoiFactory
             surface: $surface,
             etat_isolation: $etat_isolation,
         );
-        $entity->controle();
-        return $entity;
     }
 }

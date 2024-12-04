@@ -2,6 +2,7 @@
 
 namespace App\Api\PlancherHaut\Payload;
 
+use App\Domain\Common\Type\Id;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class PlancherHautPayload
@@ -17,4 +18,9 @@ final class PlancherHautPayload
         #[Assert\Valid]
         public IsolationPayload $isolation,
     ) {}
+
+    public function id(): Id
+    {
+        return Id::from($this->id);
+    }
 }

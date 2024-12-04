@@ -2,13 +2,13 @@
 
 namespace App\Api\Simulation\Payload;
 
-use Api\Enveloppe\Payload\EnveloppePayload;
+use Api\Enveloppe\Payload\CreateEnveloppePayload;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class SimulationPayload
+final class CreateSimulationPayload
 {
     public function __construct(
         #[Assert\Valid]
-        public EnveloppePayload $enveloppe,
+        public CreateEnveloppePayload $enveloppe,
     ) {}
 }

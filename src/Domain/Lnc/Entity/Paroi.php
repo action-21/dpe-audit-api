@@ -2,12 +2,12 @@
 
 namespace App\Domain\Lnc\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Lnc\Enum\{EtatIsolation};
 use App\Domain\Lnc\Lnc;
 use App\Domain\Lnc\Service\MoteurSurfaceDeperditive;
 use App\Domain\Lnc\ValueObject\Position;
+use Webmozart\Assert\Assert;
 
 final class Paroi
 {
@@ -29,21 +29,20 @@ final class Paroi
         float $surface,
         EtatIsolation $etat_isolation,
     ): self {
+        Assert::greaterThan($surface, 0);
+        Assert::notNull($position->mitoyennete);
+        Assert::null($position->paroi);
+
         $this->description = $description;
         $this->position = $position;
         $this->surface = $surface;
         $this->etat_isolation = $etat_isolation;
-        $this->controle();
+
         $this->reinitialise();
         return $this;
     }
 
-    public function controle(): void
-    {
-        Assert::positif($this->surface);
-        Assert::non_null($this->position->mitoyennete);
-        Assert::null($this->position->paroi);
-    }
+    public function controle(): void {}
 
     public function reinitialise(): void
     {
