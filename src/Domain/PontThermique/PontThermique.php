@@ -28,17 +28,6 @@ final class PontThermique
         private ?float $kpt = null,
     ) {}
 
-    public function update(string $description, float $longueur, ?float $kpt): self
-    {
-        $this->description = $description;
-        $this->longueur = $longueur;
-        $this->kpt = $kpt;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function reinitialise(): void
     {
         $this->performance = null;

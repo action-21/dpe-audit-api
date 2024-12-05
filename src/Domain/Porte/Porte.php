@@ -23,17 +23,6 @@ final class Porte implements Paroi
         private Caracteristique $caracteristique,
     ) {}
 
-    public function update(string $description, Position $position, Caracteristique $caracteristique): self
-    {
-        $this->description = $description;
-        $this->position = $position;
-        $this->caracteristique = $caracteristique;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::greaterThanEq($this->caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());

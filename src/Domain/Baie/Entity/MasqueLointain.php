@@ -19,17 +19,6 @@ final class MasqueLointain
         private float $orientation,
     ) {}
 
-    public function update(string $description, TypeMasqueLointain $type_masque, float $hauteur, float $orientation,): self
-    {
-        $this->description = $description;
-        $this->type_masque = $type_masque;
-        $this->hauteur = $hauteur;
-        $this->orientation = $orientation;
-
-        $this->controle();
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::greaterThan($this->hauteur, 0);

@@ -20,37 +20,6 @@ final class Generateur
         private ?int $annee_installation,
     ) {}
 
-    public function set_generateur_centralise(
-        TypeGenerateur\TypeGenerateurCentralise $type,
-        bool $presence_echangeur_thermique,
-        bool $generateur_collectif,
-    ): self {
-        $this->type = $type->to();
-        $this->presence_echangeur_thermique = $presence_echangeur_thermique;
-        $this->generateur_collectif = $generateur_collectif;
-        $this->type_ventilation = TypeVentilation::VENTILATION_MECANIQUE_CENTRALISEE;
-        return $this;
-    }
-
-    public function set_generateur_divise(TypeGenerateur\TypeGenerateurDivise $type,): self
-    {
-        $this->type = $type->to();
-        $this->type_ventilation = TypeVentilation::VENTILATION_MECANIQUE_DIVISEE;
-        $this->presence_echangeur_thermique = false;
-        $this->generateur_collectif = false;
-        return $this;
-    }
-
-    public function update(string $description, ?int $annee_installation): self
-    {
-        $this->description = $description;
-        $this->annee_installation = $annee_installation;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::lessThanEq($this->annee_installation, (int) date('Y'));

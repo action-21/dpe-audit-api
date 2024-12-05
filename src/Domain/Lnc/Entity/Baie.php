@@ -26,34 +26,6 @@ final class Baie
         private ?Menuiserie $menuiserie = null,
     ) {}
 
-    public function set_paroi_polycarbonate(): self
-    {
-        $this->type = TypeBaie::POLYCARBONATE;
-        $this->menuiserie = null;
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function set_fenetre(TypeBaie\TypeBaieFenetre $type, Menuiserie $menuiserie): self
-    {
-        $this->type = $type->to();
-        $this->menuiserie = $menuiserie;
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function update(string $description, float $surface, float $inclinaison, Position $position,): self
-    {
-        $this->description = $description;
-        $this->surface = $surface;
-        $this->inclinaison = $inclinaison;
-        $this->position = $position;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);

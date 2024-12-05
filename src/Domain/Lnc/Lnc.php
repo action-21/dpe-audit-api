@@ -28,13 +28,6 @@ final class Lnc
         private BaieCollection $baies,
     ) {}
 
-    public function update(string $description, TypeLnc $type): self
-    {
-        $this->description = $description;
-        $this->type = $type;
-        return $this;
-    }
-
     public function controle(): void
     {
         $this->parois->controle();

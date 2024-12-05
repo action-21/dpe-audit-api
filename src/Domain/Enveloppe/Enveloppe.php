@@ -3,7 +3,6 @@
 namespace App\Domain\Enveloppe;
 
 use App\Domain\Audit\Audit;
-use App\Domain\Common\Service\Assert;
 use App\Domain\Enveloppe\Entity\{Parois, PlancherIntermediaire, PlancherIntermediaireCollection, Refend, RefendCollection};
 use App\Domain\Enveloppe\Enum\Exposition;
 use App\Domain\Enveloppe\Service\{MoteurApport, MoteurInertie, MoteurPerformance, MoteurSurfaceDeperditive};
@@ -11,6 +10,7 @@ use App\Domain\Enveloppe\ValueObject\{ApportCollection, Inertie, Performance, Pe
 use App\Domain\Lnc\{Lnc, LncCollection};
 use App\Domain\PontThermique\{PontThermique, PontThermiqueCollection};
 use App\Domain\Simulation\Simulation;
+use Webmozart\Assert\Assert;
 
 /**
  * @see App\Domain\Audit\Audit::enveloppe()
@@ -33,19 +33,9 @@ final class Enveloppe
         private PlancherIntermediaireCollection $planchers_intermediaires,
     ) {}
 
-    public function update(Exposition $exposition, ?float $q4pa_conv,): self
-    {
-        $this->exposition = $exposition;
-        $this->q4pa_conv = $q4pa_conv;
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function controle(): void
     {
-        Assert::positif($this->q4pa_conv);
-
+        Assert::greaterThan($this->q4pa_conv, 0);
         $this->locaux_non_chauffes->controle();
         $this->ponts_thermiques->controle();
         $this->refends->controle();
@@ -129,12 +119,6 @@ final class Enveloppe
         return $this;
     }
 
-    public function remove_local_non_chauffe(Lnc $entity): self
-    {
-        $this->locaux_non_chauffes->remove($entity);
-        return $this;
-    }
-
     public function ponts_thermiques(): PontThermiqueCollection
     {
         return $this->ponts_thermiques;
@@ -143,12 +127,6 @@ final class Enveloppe
     public function add_pont_thermique(PontThermique $entity): self
     {
         $this->ponts_thermiques->add($entity);
-        return $this;
-    }
-
-    public function remove_pont_thermique(PontThermique $entity): self
-    {
-        $this->ponts_thermiques->remove($entity);
         return $this;
     }
 
@@ -163,12 +141,6 @@ final class Enveloppe
         return $this;
     }
 
-    public function remove_refend(Refend $entity): self
-    {
-        $this->refends->remove($entity);
-        return $this;
-    }
-
     public function planchers_intermediaires(): PlancherIntermediaireCollection
     {
         return $this->planchers_intermediaires;
@@ -177,12 +149,6 @@ final class Enveloppe
     public function add_plancher_intermediaire(PlancherIntermediaire $entity): self
     {
         $this->planchers_intermediaires->add($entity);
-        return $this;
-    }
-
-    public function remove_plancher_intermediaire(PlancherIntermediaire $entity): self
-    {
-        $this->planchers_intermediaires->remove($entity);
         return $this;
     }
 

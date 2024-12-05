@@ -23,22 +23,6 @@ final class Paroi
         private EtatIsolation $etat_isolation,
     ) {}
 
-    public function update(
-        string $description,
-        Position $position,
-        float $surface,
-        EtatIsolation $etat_isolation,
-    ): self {
-        $this->description = $description;
-        $this->position = $position;
-        $this->surface = $surface;
-        $this->etat_isolation = $etat_isolation;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);

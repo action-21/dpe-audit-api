@@ -28,24 +28,10 @@ final class Baie implements Paroi
         private MasqueLointainCollection $masques_lointains
     ) {}
 
-    public function update(
-        string $description,
-        Position $position,
-        Caracteristique $caracteristique,
-        ?DoubleFenetre $double_fenetre
-    ): self {
-        Assert::greaterThanEq($caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());
-
-        $this->description = $description;
-        $this->position = $position;
-        $this->caracteristique = $caracteristique;
-        $this->double_fenetre = $double_fenetre;
-
-        $this->reinitialise();
-        return $this;
+    public function controle(): void
+    {
+        Assert::greaterThanEq($this->caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());
     }
-
-    public function controle(): void {}
 
     public function reinitialise(): void
     {
@@ -146,12 +132,6 @@ final class Baie implements Paroi
         return $this;
     }
 
-    public function remove_masque_proche(MasqueProche $entity): self
-    {
-        $this->masques_proches->remove($entity);
-        return $this;
-    }
-
     public function masques_lointains(): MasqueLointainCollection
     {
         return $this->masques_lointains;
@@ -162,12 +142,6 @@ final class Baie implements Paroi
         Assert::notNull($this->orientation());
 
         $this->masques_lointains->add($entity);
-        return $this;
-    }
-
-    public function remove_masque_lointain(MasqueLointain $entity): self
-    {
-        $this->masques_lointains->remove($entity);
         return $this;
     }
 

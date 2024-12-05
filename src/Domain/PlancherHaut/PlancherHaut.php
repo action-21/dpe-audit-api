@@ -27,22 +27,6 @@ final class PlancherHaut implements Paroi
         private Isolation $isolation,
     ) {}
 
-    public function update(
-        string $description,
-        Position $position,
-        Caracteristique $caracteristique,
-        Isolation $isolation,
-    ): self {
-        $this->description = $description;
-        $this->position = $position;
-        $this->caracteristique = $caracteristique;
-        $this->isolation = $isolation;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::greaterThanEq($this->caracteristique->annee_construction, $this->enveloppe->annee_construction_batiment());

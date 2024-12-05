@@ -21,14 +21,6 @@ final class Installation
         private SystemeCollection $systemes,
     ) {}
 
-    public function update(float $surface): self
-    {
-        $this->surface = $surface;
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);

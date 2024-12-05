@@ -4,11 +4,10 @@ namespace App\Domain\Ventilation\Entity;
 
 use App\Domain\Common\Type\Id;
 use App\Domain\Common\ValueObject\ConsommationCollection;
-use App\Domain\Ventilation\Enum\{ModeExtraction, ModeInsufflation, TypeSysteme, TypeVentilation};
+use App\Domain\Ventilation\Enum\{ModeExtraction, ModeInsufflation, TypeSysteme};
 use App\Domain\Ventilation\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance};
 use App\Domain\Ventilation\ValueObject\Performance;
 use App\Domain\Ventilation\Ventilation;
-use Webmozart\Assert\Assert;
 
 final class Systeme
 {
@@ -24,51 +23,6 @@ final class Systeme
         private ?ModeExtraction $mode_extraction,
         private ?ModeInsufflation $mode_insufflation,
     ) {}
-
-    public function set_ventilation_naturelle(
-        ?ModeExtraction $mode_extraction,
-        ?ModeInsufflation $mode_insufflation,
-    ): self {
-        $this->mode_extraction = $mode_extraction;
-        $this->mode_insufflation = $mode_insufflation;
-        $this->type = TypeSysteme::VENTILATION_NATURELLE;
-        $this->generateur = null;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function set_ventilation_centralisee(
-        Generateur $generateur,
-        ModeExtraction $mode_extraction,
-        ModeInsufflation $mode_insufflation,
-    ): self {
-        Assert::same($generateur->type_ventilation(), TypeVentilation::VENTILATION_MECANIQUE_CENTRALISEE);
-
-        $this->generateur = $generateur;
-        $this->type = TypeSysteme::from_type_generateur($generateur->type());
-        $this->mode_extraction = $mode_extraction;
-        $this->mode_insufflation = $mode_insufflation;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function set_ventilation_divisee(Generateur $generateur): self
-    {
-        Assert::same($generateur->type_ventilation(), TypeVentilation::VENTILATION_MECANIQUE_DIVISEE);
-
-        $this->generateur = $generateur;
-        $this->type = TypeSysteme::from_type_generateur($generateur->type());
-        $this->mode_extraction = null;
-        $this->mode_insufflation = null;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
 
     public function reinitialise(): void
     {

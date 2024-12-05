@@ -17,28 +17,6 @@ final class MasqueProche
         private ?float $avancee = null,
     ) {}
 
-    public function set_balcon_ou_auvent(TypeMasqueProche\BalconAuvent $type, float $avancee): self
-    {
-        $this->type_masque = $type->to();
-        $this->avancee = $avancee;
-        $this->controle();
-        return $this;
-    }
-
-    public function set_paroi_laterale(TypeMasqueProche\ParoiLaterale $type): self
-    {
-        $this->type_masque = $type->to();
-        $this->avancee = null;
-        $this->controle();
-        return $this;
-    }
-
-    public function update(string $description): self
-    {
-        $this->description = $description;
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::greaterThanEq($this->avancee, 0);
