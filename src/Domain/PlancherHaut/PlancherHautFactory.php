@@ -5,7 +5,6 @@ namespace App\Domain\PlancherHaut;
 use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\PlancherHaut\ValueObject\{Caracteristique, Isolation, Position};
-use Webmozart\Assert\Assert;
 
 final class PlancherHautFactory
 {
@@ -17,10 +16,7 @@ final class PlancherHautFactory
         Caracteristique $caracteristique,
         Isolation $isolation,
     ): PlancherHaut {
-        Assert::greaterThanEq($caracteristique->annee_construction, $enveloppe->annee_construction_batiment());
-        Assert::greaterThanEq($caracteristique->annee_renovation, $enveloppe->annee_construction_batiment());
-
-        return new PlancherHaut(
+        $entity = new PlancherHaut(
             id: $id,
             enveloppe: $enveloppe,
             description: $description,
@@ -28,5 +24,8 @@ final class PlancherHautFactory
             caracteristique: $caracteristique,
             isolation: $isolation,
         );
+        $entity->determine_categorie();
+        $entity->controle();
+        return $entity;
     }
 }

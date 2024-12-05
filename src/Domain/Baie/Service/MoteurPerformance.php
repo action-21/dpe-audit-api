@@ -32,20 +32,20 @@ final class MoteurPerformance
         );
         $ug1 = $this->ug(
             type_baie: $entity->caracteristique()->type,
-            type_vitrage: $entity->caracteristique()->menuiserie?->type_vitrage,
+            type_vitrage: $entity->caracteristique()->vitrage?->type_vitrage,
             inclinaison: $entity->caracteristique()->inclinaison,
-            type_survitrage: $entity->caracteristique()->menuiserie?->survitrage?->type_survitrage,
-            nature_gaz_lame: $entity->caracteristique()->menuiserie?->nature_gaz_lame,
-            epaisseur_lame_air: $entity->caracteristique()->menuiserie?->epaisseur_lame,
+            type_survitrage: $entity->caracteristique()->vitrage?->survitrage?->type_survitrage,
+            nature_gaz_lame: $entity->caracteristique()->vitrage?->nature_gaz_lame,
+            epaisseur_lame_air: $entity->caracteristique()->vitrage?->epaisseur_lame,
             ug_saisi: $entity->caracteristique()->ug,
         );
         $ug2 = $entity->double_fenetre() ? $this->ug(
             type_baie: $entity->double_fenetre()->type,
-            type_vitrage: $entity->double_fenetre()->menuiserie?->type_vitrage,
+            type_vitrage: $entity->double_fenetre()->vitrage?->type_vitrage,
             inclinaison: $entity->caracteristique()->inclinaison,
-            type_survitrage: $entity->double_fenetre()->menuiserie?->survitrage?->type_survitrage,
-            nature_gaz_lame: $entity->double_fenetre()->menuiserie?->nature_gaz_lame,
-            epaisseur_lame_air: $entity->double_fenetre()->menuiserie?->epaisseur_lame,
+            type_survitrage: $entity->double_fenetre()->vitrage?->survitrage?->type_survitrage,
+            nature_gaz_lame: $entity->double_fenetre()->vitrage?->nature_gaz_lame,
+            epaisseur_lame_air: $entity->double_fenetre()->vitrage?->epaisseur_lame,
             ug_saisi: $entity->double_fenetre()->ug,
         ) : null;
         $uw1 = $this->uw(

@@ -2,10 +2,8 @@
 
 namespace App\Domain\Baie\ValueObject;
 
-use App\Domain\Baie\Baie;
 use App\Domain\Baie\Enum\{TypeBaie, TypeFermeture};
-use App\Domain\Baie\Enum\TypeBaie\{Fenetre, ParoiVitree, PorteFenetre};
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Caracteristique
 {
@@ -18,6 +16,7 @@ final class Caracteristique
         public readonly ?int $annee_installation,
         public readonly ?bool $presence_soubassement = null,
         public readonly ?Menuiserie $menuiserie = null,
+        public readonly ?Vitrage $vitrage = null,
         public readonly ?float $ug = null,
         public readonly ?float $uw = null,
         public readonly ?float $ujn = null,
@@ -25,7 +24,7 @@ final class Caracteristique
     ) {}
 
     public static function create_paroi_vitree(
-        ParoiVitree $type,
+        TypeBaie\ParoiVitree $type,
         float $surface,
         int $inclinaison,
         TypeFermeture $type_fermeture,
@@ -36,6 +35,15 @@ final class Caracteristique
         ?float $ujn,
         ?float $sw,
     ): self {
+        Assert::greaterThan($surface, 0);
+        Assert::greaterThanEq($inclinaison, 0);
+        Assert::lessThanEq($inclinaison, 90);
+        Assert::lessThanEq($annee_installation, (int) date('Y'));
+        Assert::greaterThan($ug, 0);
+        Assert::greaterThan($uw, 0);
+        Assert::greaterThan($ujn, 0);
+        Assert::greaterThan($sw, 0);
+
         return new self(
             type: $type->type_baie(),
             surface: $surface,
@@ -51,18 +59,28 @@ final class Caracteristique
     }
 
     public static function create_fenetre(
-        Fenetre $type,
+        TypeBaie\Fenetre $type,
         float $surface,
         int $inclinaison,
         TypeFermeture $type_fermeture,
         bool $presence_protection_solaire,
         Menuiserie $menuiserie,
+        Vitrage $vitrage,
         ?int $annee_installation,
         ?float $ug,
         ?float $uw,
         ?float $ujn,
         ?float $sw,
     ): self {
+        Assert::greaterThan($surface, 0);
+        Assert::greaterThanEq($inclinaison, 0);
+        Assert::lessThanEq($inclinaison, 90);
+        Assert::lessThanEq($annee_installation, (int) date('Y'));
+        Assert::greaterThan($ug, 0);
+        Assert::greaterThan($uw, 0);
+        Assert::greaterThan($ujn, 0);
+        Assert::greaterThan($sw, 0);
+
         return new self(
             type: $type->type_baie(),
             surface: $surface,
@@ -70,6 +88,7 @@ final class Caracteristique
             type_fermeture: $type_fermeture,
             presence_protection_solaire: $presence_protection_solaire,
             menuiserie: $menuiserie,
+            vitrage: $vitrage,
             annee_installation: $annee_installation,
             ug: $ug,
             uw: $uw,
@@ -79,19 +98,29 @@ final class Caracteristique
     }
 
     public static function create_porte_fenetre(
-        PorteFenetre $type,
+        TypeBaie\PorteFenetre $type,
         float $surface,
         int $inclinaison,
         TypeFermeture $type_fermeture,
         bool $presence_soubassement,
         bool $presence_protection_solaire,
         Menuiserie $menuiserie,
+        Vitrage $vitrage,
         ?int $annee_installation,
         ?float $ug,
         ?float $uw,
         ?float $ujn,
         ?float $sw,
     ): self {
+        Assert::greaterThan($surface, 0);
+        Assert::greaterThanEq($inclinaison, 0);
+        Assert::lessThanEq($inclinaison, 90);
+        Assert::lessThanEq($annee_installation, (int) date('Y'));
+        Assert::greaterThan($ug, 0);
+        Assert::greaterThan($uw, 0);
+        Assert::greaterThan($ujn, 0);
+        Assert::greaterThan($sw, 0);
+
         return new self(
             type: $type->type_baie(),
             surface: $surface,
@@ -100,24 +129,12 @@ final class Caracteristique
             presence_soubassement: $presence_soubassement,
             presence_protection_solaire: $presence_protection_solaire,
             menuiserie: $menuiserie,
+            vitrage: $vitrage,
             annee_installation: $annee_installation,
             ug: $ug,
             uw: $uw,
             ujn: $ujn,
             sw: $sw,
         );
-    }
-
-    public function controle(Baie $entity): void
-    {
-        Assert::positif($this->surface);
-        Assert::inclinaison($this->inclinaison);
-        Assert::positif($this->ug);
-        Assert::positif($this->uw);
-        Assert::positif($this->ujn);
-        Assert::positif($this->sw);
-        Assert::annee($this->annee_installation);
-        Assert::superieur_ou_egal_a($this->annee_installation, $entity->enveloppe()->annee_construction_batiment());
-        $this->menuiserie?->controle();
     }
 }

@@ -6,6 +6,7 @@ use App\Domain\Baie\Entity\{MasqueLointainCollection, MasqueProcheCollection};
 use App\Domain\Baie\ValueObject\{Caracteristique, DoubleFenetre, Position};
 use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Enveloppe;
+use Webmozart\Assert\Assert;
 
 final class BaieFactory
 {
@@ -17,7 +18,9 @@ final class BaieFactory
         Caracteristique $caracteristique,
         ?DoubleFenetre $double_fenetre,
     ): Baie {
-        $entity = new Baie(
+        Assert::greaterThanEq($caracteristique->annee_installation, $enveloppe->annee_construction_batiment());
+
+        return new Baie(
             id: $id,
             enveloppe: $enveloppe,
             description: $description,
@@ -27,7 +30,5 @@ final class BaieFactory
             masques_proches: new MasqueProcheCollection(),
             masques_lointains: new MasqueLointainCollection()
         );
-        $entity->controle();
-        return $entity;
     }
 }

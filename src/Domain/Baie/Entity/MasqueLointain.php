@@ -5,8 +5,8 @@ namespace App\Domain\Baie\Entity;
 use App\Domain\Baie\Baie;
 use App\Domain\Baie\Enum\{SecteurChampsVision, TypeMasqueLointain};
 use App\Domain\Common\Enum\Orientation;
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
+use Webmozart\Assert\Assert;
 
 final class MasqueLointain
 {
@@ -25,21 +25,23 @@ final class MasqueLointain
         $this->type_masque = $type_masque;
         $this->hauteur = $hauteur;
         $this->orientation = $orientation;
+
         $this->controle();
         return $this;
     }
 
     public function controle(): void
     {
-        Assert::positif($this->hauteur);
-        Assert::inferieur_a($this->hauteur, 90);
-        Assert::orientation($this->orientation);
-        Assert::non_null($this->baie->orientation());
+        Assert::greaterThan($this->hauteur, 0);
+        Assert::lessThan($this->hauteur, 90);
+        Assert::greaterThanEq($this->orientation, 0);
+        Assert::lessThan($this->orientation, 360);
+        Assert::notNull($this->baie->orientation());
 
         if ($this->type_masque === TypeMasqueLointain::MASQUE_LOINTAIN_HOMOGENE) {
-            Assert::egal(
-                Orientation::from_azimut($this->orientation),
-                Orientation::from_azimut($this->baie->orientation())
+            Assert::same(
+                Orientation::from_azimut($this->orientation)->value,
+                Orientation::from_azimut($this->baie->orientation())->value,
             );
         }
         if ($this->type_masque === TypeMasqueLointain::MASQUE_LOINTAIN_NON_HOMOGENE) {
@@ -48,8 +50,8 @@ final class MasqueLointain
             $borne_superieure = $this->baie->orientation() + 90;
             $borne_superieure = $borne_superieure >= 360 ? $borne_superieure - 360 : $borne_superieure;
 
-            Assert::inferieur_ou_egal_a($borne_inferieure, $this->orientation);
-            Assert::superieur_ou_egal_a($borne_superieure, $this->orientation);
+            Assert::lessThanEq($this->orientation, $borne_inferieure);
+            Assert::greaterThanEq($this->orientation, $borne_superieure);
         }
     }
 
@@ -85,33 +87,6 @@ final class MasqueLointain
 
     public function secteur(): SecteurChampsVision
     {
-        $diff = \abs($this->orientation() - $this->baie->orientation());
-
-        return match (Orientation::from_azimut($this->baie->orientation())) {
-            Orientation::NORD => match (true) {
-                $diff >= -90 && $diff < -45 => SecteurChampsVision::SECTEUR_LATERAL_OUEST,
-                $diff >= -45 && $diff <= 0 => SecteurChampsVision::SECTEUR_CENTRAL_OUEST,
-                $diff >= 0 && $diff <= 45 => SecteurChampsVision::SECTEUR_CENTRAL_EST,
-                $diff > 45 && $diff <= 90 => SecteurChampsVision::SECTEUR_LATERAL_EST,
-            },
-            Orientation::EST => match (true) {
-                $diff >= -90 && $diff < -45 => SecteurChampsVision::SECTEUR_LATERAL_NORD,
-                $diff >= -45 && $diff < 0 => SecteurChampsVision::SECTEUR_CENTRAL_NORD,
-                $diff >= 0 && $diff <= 45 => SecteurChampsVision::SECTEUR_CENTRAL_SUD,
-                $diff > 45 && $diff <= 90 => SecteurChampsVision::SECTEUR_LATERAL_SUD,
-            },
-            Orientation::SUD => match (true) {
-                $diff >= -90 && $diff < -45 => SecteurChampsVision::SECTEUR_LATERAL_EST,
-                $diff >= -45 && $diff <= 0 => SecteurChampsVision::SECTEUR_CENTRAL_EST,
-                $diff >= 0 && $diff <= 45 => SecteurChampsVision::SECTEUR_CENTRAL_OUEST,
-                $diff > 45 && $diff <= 90 => SecteurChampsVision::SECTEUR_LATERAL_OUEST,
-            },
-            Orientation::OUEST => match (true) {
-                $diff >= -90 && $diff < -45 => SecteurChampsVision::SECTEUR_LATERAL_SUD,
-                $diff >= -45 && $diff <= 0 => SecteurChampsVision::SECTEUR_CENTRAL_SUD,
-                $diff > 0 && $diff <= 45 => SecteurChampsVision::SECTEUR_CENTRAL_NORD,
-                $diff > 45 && $diff <= 90 => SecteurChampsVision::SECTEUR_LATERAL_NORD,
-            }
-        };
+        return SecteurChampsVision::determine($this->orientation, $this->baie->orientation());
     }
 }

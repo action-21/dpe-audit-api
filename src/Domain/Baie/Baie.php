@@ -10,6 +10,7 @@ use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Entity\Paroi;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Lnc\Lnc;
+use Webmozart\Assert\Assert;
 
 final class Baie implements Paroi
 {
@@ -33,21 +34,18 @@ final class Baie implements Paroi
         Caracteristique $caracteristique,
         ?DoubleFenetre $double_fenetre
     ): self {
+        Assert::greaterThanEq($caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());
+
         $this->description = $description;
         $this->position = $position;
         $this->caracteristique = $caracteristique;
         $this->double_fenetre = $double_fenetre;
-        $this->controle();
+
         $this->reinitialise();
         return $this;
     }
 
-    public function controle(): void
-    {
-        $this->caracteristique->controle($this);
-        $this->double_fenetre?->controle();
-        $this->position->controle();
-    }
+    public function controle(): void {}
 
     public function reinitialise(): void
     {
@@ -124,7 +122,7 @@ final class Baie implements Paroi
 
     public function est_isole(): bool
     {
-        return $this->caracteristique->menuiserie->type_vitrage->est_isole();
+        return $this->caracteristique->vitrage?->type_vitrage->est_isole() ?? false;
     }
 
     public function surface_deperditive(): float
@@ -161,6 +159,8 @@ final class Baie implements Paroi
 
     public function add_masque_lointain(MasqueLointain $entity): self
     {
+        Assert::notNull($this->orientation());
+
         $this->masques_lointains->add($entity);
         return $this;
     }

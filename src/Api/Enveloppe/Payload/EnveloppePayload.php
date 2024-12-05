@@ -2,6 +2,7 @@
 
 namespace Api\Enveloppe\Payload;
 
+use App\Api\Baie\Payload\BaiePayload;
 use App\Api\Lnc\Payload\LncPayload;
 use App\Api\Mur\Payload\MurPayload;
 use App\Api\PlancherBas\Payload\PlancherBasPayload;
@@ -32,6 +33,11 @@ final class EnveloppePayload
         #[Assert\All([new Assert\Type(PlancherHautPayload::class)])]
         #[Assert\Valid]
         public array $planchers_hauts = [],
+
+        /** @var BaiePayload[] */
+        #[Assert\All([new Assert\Type(BaiePayload::class)])]
+        #[Assert\Valid]
+        public array $baies = [],
 
         /** @var PortePayload[] */
         #[Assert\All([new Assert\Type(PortePayload::class)])]

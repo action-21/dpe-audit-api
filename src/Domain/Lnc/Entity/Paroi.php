@@ -29,20 +29,22 @@ final class Paroi
         float $surface,
         EtatIsolation $etat_isolation,
     ): self {
-        Assert::greaterThan($surface, 0);
-        Assert::notNull($position->mitoyennete);
-        Assert::null($position->paroi);
-
         $this->description = $description;
         $this->position = $position;
         $this->surface = $surface;
         $this->etat_isolation = $etat_isolation;
 
+        $this->controle();
         $this->reinitialise();
         return $this;
     }
 
-    public function controle(): void {}
+    public function controle(): void
+    {
+        Assert::greaterThan($this->surface, 0);
+        Assert::notNull($this->position->mitoyennete);
+        Assert::null($this->position->paroi);
+    }
 
     public function reinitialise(): void
     {

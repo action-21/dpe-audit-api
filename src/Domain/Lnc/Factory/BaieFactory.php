@@ -7,7 +7,6 @@ use App\Domain\Lnc\Entity\Baie;
 use App\Domain\Lnc\Enum\TypeBaie;
 use App\Domain\Lnc\Lnc;
 use App\Domain\Lnc\ValueObject\{Menuiserie, Position};
-use Webmozart\Assert\Assert;
 
 final class BaieFactory
 {
@@ -26,10 +25,6 @@ final class BaieFactory
         float $inclinaison,
         Position $position,
     ): self {
-        Assert::greaterThan($surface, 0);
-        Assert::greaterThanEq($inclinaison, 0);
-        Assert::lessThanEq($inclinaison, 90);
-
         $this->id = $id;
         $this->local_non_chauffe = $local_non_chauffe;
         $this->description = $description;
@@ -41,7 +36,7 @@ final class BaieFactory
 
     private function build(TypeBaie $type, ?Menuiserie $menuiserie = null,): Baie
     {
-        return new Baie(
+        $entity = new Baie(
             id: $this->id,
             local_non_chauffe: $this->local_non_chauffe,
             description: $this->description,
@@ -51,6 +46,9 @@ final class BaieFactory
             type: $type,
             menuiserie: $menuiserie,
         );
+
+        $entity->controle();
+        return $entity;
     }
 
     public function build_paroi_polycarbonate(): Baie

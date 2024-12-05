@@ -6,6 +6,7 @@ use App\Domain\Baie\Baie;
 use App\Domain\Baie\Entity\MasqueLointain;
 use App\Domain\Baie\Enum\TypeMasqueLointain;
 use App\Domain\Common\Type\Id;
+use Webmozart\Assert\Assert;
 
 final class MasqueLointainFactory
 {
@@ -16,6 +17,11 @@ final class MasqueLointainFactory
         float $hauteur,
         float $orientation,
     ): MasqueLointain {
+        Assert::greaterThanEq($hauteur, 0);
+        Assert::lessThan($hauteur, 90);
+        Assert::greaterThanEq($orientation, 0);
+        Assert::lessThan($orientation, 360);
+
         $entity = new MasqueLointain(
             id: Id::create(),
             baie: $baie,

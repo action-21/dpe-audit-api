@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Api\Porte\Payload;
+namespace App\Api\Baie\Payload\Position;
 
 use App\Domain\Common\Type\Id;
-use App\Domain\Porte\ValueObject\Position;
+use App\Domain\Baie\ValueObject\Position;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PositionPayloadWithParoi
+final class PositionWithParoiPayload
 {
     public function __construct(
         #[Assert\Uuid]

@@ -4,8 +4,8 @@ namespace App\Domain\Baie\Entity;
 
 use App\Domain\Baie\Baie;
 use App\Domain\Baie\Enum\TypeMasqueProche;
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
+use Webmozart\Assert\Assert;
 
 final class MasqueProche
 {
@@ -17,29 +17,18 @@ final class MasqueProche
         private ?float $avancee = null,
     ) {}
 
-    public function set_create_fond_balcon_ou_fond_flanc_loggias(float $avancee): self
+    public function set_balcon_ou_auvent(TypeMasqueProche\BalconAuvent $type, float $avancee): self
     {
-        $this->type_masque = TypeMasqueProche::FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS;
+        $this->type_masque = $type->to();
         $this->avancee = $avancee;
         $this->controle();
         return $this;
     }
 
-    public function set_balcon_ou_auvent(float $avancee): self
+    public function set_paroi_laterale(TypeMasqueProche\ParoiLaterale $type): self
     {
-        $this->type_masque = TypeMasqueProche::BALCON_OU_AUVENT;
-        $this->avancee = $avancee;
-        $this->controle();
-        return $this;
-    }
-
-    public function set_paroi_laterale(bool $retour_sud): self
-    {
-        $this->type_masque = $retour_sud
-            ? TypeMasqueProche::PAROI_LATERALE_AVEC_OBSTACLE_AU_SUD
-            : TypeMasqueProche::PAROI_LATERALE_SANS_OBSTACLE_AU_SUD;
+        $this->type_masque = $type->to();
         $this->avancee = null;
-
         $this->controle();
         return $this;
     }
@@ -52,10 +41,10 @@ final class MasqueProche
 
     public function controle(): void
     {
-        Assert::positif_ou_zero($this->avancee);
-
-        if ($this->type_masque === TypeMasqueProche::FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS)
-            Assert::non_null($this->baie->orientation());
+        Assert::greaterThanEq($this->avancee, 0);
+        if ($this->type_masque === TypeMasqueProche::FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS) {
+            Assert::notNull($this->baie->orientation());
+        }
     }
 
     public function id(): Id

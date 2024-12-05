@@ -5,7 +5,6 @@ namespace App\Domain\PlancherBas;
 use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\PlancherBas\ValueObject\{Caracteristique, Isolation, Position};
-use Webmozart\Assert\Assert;
 
 final class PlancherBasFactory
 {
@@ -17,10 +16,7 @@ final class PlancherBasFactory
         Caracteristique $caracteristique,
         Isolation $isolation,
     ): PlancherBas {
-        Assert::greaterThanEq($caracteristique->annee_construction, $enveloppe->annee_construction_batiment());
-        Assert::greaterThanEq($caracteristique->annee_renovation, $enveloppe->annee_construction_batiment());
-
-        return new PlancherBas(
+        $entity = new PlancherBas(
             id: $id,
             enveloppe: $enveloppe,
             description: $description,
@@ -28,5 +24,8 @@ final class PlancherBasFactory
             caracteristique: $caracteristique,
             isolation: $isolation,
         );
+
+        $entity->controle();
+        return $entity;
     }
 }

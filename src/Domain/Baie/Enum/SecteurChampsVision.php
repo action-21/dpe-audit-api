@@ -16,6 +16,38 @@ enum SecteurChampsVision: string implements Enum
     case SECTEUR_CENTRAL_SUD = 'SECTEUR_CENTRAL_SUD';
     case SECTEUR_CENTRAL_OUEST = 'SECTEUR_CENTRAL_OUEST';
 
+    public static function determine(float $orientation_masque, float $orientation_baie,): self
+    {
+        $diff = \abs($orientation_masque - $orientation_baie);
+
+        return match (Orientation::from_azimut($orientation_baie)) {
+            Orientation::NORD => match (true) {
+                $diff >= -90 && $diff < -45 => self::SECTEUR_LATERAL_OUEST,
+                $diff >= -45 && $diff <= 0 => self::SECTEUR_CENTRAL_OUEST,
+                $diff >= 0 && $diff <= 45 => self::SECTEUR_CENTRAL_EST,
+                $diff > 45 && $diff <= 90 => self::SECTEUR_LATERAL_EST,
+            },
+            Orientation::EST => match (true) {
+                $diff >= -90 && $diff < -45 => self::SECTEUR_LATERAL_NORD,
+                $diff >= -45 && $diff < 0 => self::SECTEUR_CENTRAL_NORD,
+                $diff >= 0 && $diff <= 45 => self::SECTEUR_CENTRAL_SUD,
+                $diff > 45 && $diff <= 90 => self::SECTEUR_LATERAL_SUD,
+            },
+            Orientation::SUD => match (true) {
+                $diff >= -90 && $diff < -45 => self::SECTEUR_LATERAL_EST,
+                $diff >= -45 && $diff <= 0 => self::SECTEUR_CENTRAL_EST,
+                $diff >= 0 && $diff <= 45 => self::SECTEUR_CENTRAL_OUEST,
+                $diff > 45 && $diff <= 90 => self::SECTEUR_LATERAL_OUEST,
+            },
+            Orientation::OUEST => match (true) {
+                $diff >= -90 && $diff < -45 => self::SECTEUR_LATERAL_SUD,
+                $diff >= -45 && $diff <= 0 => self::SECTEUR_CENTRAL_SUD,
+                $diff > 0 && $diff <= 45 => self::SECTEUR_CENTRAL_NORD,
+                $diff > 45 && $diff <= 90 => self::SECTEUR_LATERAL_NORD,
+            }
+        };
+    }
+
     public function id(): string
     {
         return $this->value;

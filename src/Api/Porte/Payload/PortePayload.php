@@ -11,7 +11,7 @@ final class PortePayload
         public string $id,
         public string $description,
         #[Assert\Valid]
-        public PositionPayload|PositionPayloadWithLnc|PositionPayloadWithParoi $position,
+        public PositionPayload|PositionWithLncPayload|PositionWithParoiPayload $position,
         #[Assert\Valid]
         public CaracteristiquePayload $caracteristique,
     ) {}

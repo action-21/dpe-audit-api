@@ -7,7 +7,7 @@ use App\Domain\Porte\ValueObject\Position;
 use App\Services\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PositionPayloadWithLnc
+final class PositionWithLncPayload
 {
     public function __construct(
         #[Assert\Uuid]

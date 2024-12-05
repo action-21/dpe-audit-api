@@ -5,7 +5,6 @@ namespace App\Domain\Lnc\Entity;
 use App\Domain\Common\Type\Id;
 use App\Domain\Lnc\Lnc;
 use App\Domain\Lnc\Enum\{EtatIsolation, TypeBaie, TypeLnc};
-use App\Domain\Lnc\Enum\TypeBaie\TypeBaieFenetre;
 use App\Domain\Lnc\Service\{MoteurEnsoleillement, MoteurSurfaceDeperditive};
 use App\Domain\Lnc\ValueObject\{EnsoleillementBaieCollection, Menuiserie, Position};
 use Webmozart\Assert\Assert;
@@ -35,7 +34,7 @@ final class Baie
         return $this;
     }
 
-    public function set_fenetre(TypeBaieFenetre $type, Menuiserie $menuiserie): self
+    public function set_fenetre(TypeBaie\TypeBaieFenetre $type, Menuiserie $menuiserie): self
     {
         $this->type = $type->to();
         $this->menuiserie = $menuiserie;
@@ -45,20 +44,22 @@ final class Baie
 
     public function update(string $description, float $surface, float $inclinaison, Position $position,): self
     {
-        Assert::greaterThan($surface, 0);
-        Assert::greaterThanEq($inclinaison, 0);
-        Assert::lessThanEq($inclinaison, 90);
-
         $this->description = $description;
         $this->surface = $surface;
         $this->inclinaison = $inclinaison;
         $this->position = $position;
 
+        $this->controle();
         $this->reinitialise();
         return $this;
     }
 
-    public function controle(): void {}
+    public function controle(): void
+    {
+        Assert::greaterThan($this->surface, 0);
+        Assert::greaterThanEq($this->inclinaison, 0);
+        Assert::lessThanEq($this->inclinaison, 90);
+    }
 
     public function reinitialise(): void
     {

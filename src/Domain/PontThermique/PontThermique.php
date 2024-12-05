@@ -30,13 +30,11 @@ final class PontThermique
 
     public function update(string $description, float $longueur, ?float $kpt): self
     {
-        Assert::greaterThan($longueur, 0);
-        Assert::greaterThan($kpt, 0);
-
         $this->description = $description;
         $this->longueur = $longueur;
         $this->kpt = $kpt;
 
+        $this->controle();
         $this->reinitialise();
         return $this;
     }
@@ -46,7 +44,11 @@ final class PontThermique
         $this->performance = null;
     }
 
-    public function controle(): void {}
+    public function controle(): void
+    {
+        Assert::greaterThan($this->longueur, 0);
+        Assert::greaterThan($this->kpt, 0);
+    }
 
     public function calcule_performance(MoteurPerformance $moteur): self
     {

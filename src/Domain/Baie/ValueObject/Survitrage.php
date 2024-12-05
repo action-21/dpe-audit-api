@@ -3,7 +3,7 @@
 namespace App\Domain\Baie\ValueObject;
 
 use App\Domain\Baie\Enum\TypeSurvitrage;
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Survitrage
 {
@@ -14,7 +14,7 @@ final class Survitrage
 
     public static function create(TypeSurvitrage $type_survitrage, ?int $epaisseur_lame): self
     {
-        Assert::positif($epaisseur_lame);
+        Assert::greaterThan($epaisseur_lame, 0);
         return new self(type_survitrage: $type_survitrage, epaisseur_lame: $epaisseur_lame);
     }
 }

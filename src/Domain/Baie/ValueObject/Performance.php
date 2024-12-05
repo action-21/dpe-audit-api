@@ -3,7 +3,7 @@
 namespace App\Domain\Baie\ValueObject;
 
 use App\Domain\Baie\Enum\EtatPerformance;
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -16,9 +16,9 @@ final class Performance
 
     public static function create(float $u, float $b, float $dp): self
     {
-        Assert::positif($u);
-        Assert::positif_ou_zero($b);
-        Assert::positif_ou_zero($dp);
+        Assert::greaterThan($u, 0);
+        Assert::greaterThanEq($b, 0);
+        Assert::greaterThanEq($dp, 0);
 
         return new self(u: $u, b: $b, dp: $dp, etat: EtatPerformance::from_ubaie(ubaie: $u),);
     }
