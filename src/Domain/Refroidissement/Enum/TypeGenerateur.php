@@ -48,4 +48,16 @@ enum TypeGenerateur: string implements Enum
             self::RESEAU_FROID => 'Réseau de froid urbain'
         };
     }
+
+    public function seer_applicable(): bool
+    {
+        return \in_array($this, [
+            self::PAC_AIR_AIR,
+            self::PAC_AIR_EAU,
+            self::PAC_EAU_EAU,
+            self::PAC_EAU_GLYCOLEE_EAU,
+            self::PAC_GEOTHERMIQUE,
+            self::AUTRE_SYSTEME_THERMODYNAMIQUE,
+        ]);
+    }
 }

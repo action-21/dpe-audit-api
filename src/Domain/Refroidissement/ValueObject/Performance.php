@@ -2,7 +2,7 @@
 
 namespace App\Domain\Refroidissement\ValueObject;
 
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -10,7 +10,7 @@ final class Performance
 
     public static function create(float $eer): self
     {
-        Assert::positif($eer);
+        Assert::greaterThan($eer, 0);
         return new self(eer: $eer);
     }
 }

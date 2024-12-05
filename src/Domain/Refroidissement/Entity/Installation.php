@@ -2,10 +2,10 @@
 
 namespace App\Domain\Refroidissement\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Refroidissement\Refroidissement;
 use App\Domain\Refroidissement\Service\{MoteurConsommation, MoteurDimensionnement};
+use Webmozart\Assert\Assert;
 
 /**
  * TODO: Associer l'installation à un logement visité
@@ -22,17 +22,9 @@ final class Installation
         private SystemeCollection $systemes,
     ) {}
 
-    public function update(string $description, float $surface): self
-    {
-        $this->description = $description;
-        $this->surface = $surface;
-        $this->controle();
-        return $this;
-    }
-
     public function controle(): void
     {
-        Assert::positif($this->surface);
+        Assert::greaterThan($this->surface, 0);
     }
 
     public function reinitialise(): void

@@ -5,7 +5,6 @@ namespace App\Domain\Refroidissement\Factory;
 use App\Domain\Common\Type\Id;
 use App\Domain\Refroidissement\Entity\Generateur;
 use App\Domain\Refroidissement\Enum\{EnergieGenerateur, TypeGenerateur};
-use App\Domain\Refroidissement\Enum\TypeGenerateur\{TypeAutres, TypeThermodynamique};
 use App\Domain\Refroidissement\Refroidissement;
 
 final class GenerateurFactory
@@ -14,24 +13,21 @@ final class GenerateurFactory
     private Refroidissement $refroidissement;
     private string $description;
     private ?int $annee_installation;
-    private ?float $seer;
 
     public function initialise(
         Id $id,
         Refroidissement $refroidissement,
         string $description,
         ?int $annee_installation,
-        ?float $seer
     ): self {
         $this->id = $id;
         $this->refroidissement = $refroidissement;
         $this->description = $description;
         $this->annee_installation = $annee_installation;
-        $this->seer = $seer;
         return $this;
     }
 
-    private function build(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur): Generateur
+    private function build(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur, ?float $seer = null,): Generateur
     {
         $entity = new Generateur(
             id: $this->id,
@@ -40,17 +36,18 @@ final class GenerateurFactory
             type_generateur: $type_generateur,
             energie_generateur: $energie_generateur,
             annee_installation: $this->annee_installation,
-            seer: $this->seer,
+            seer: $seer,
         );
         $entity->controle();
         return $entity;
     }
 
-    public function build_systeme_thermodynamique(TypeThermodynamique $type_generateur): Generateur
+    public function build_generateur_thermodynamique(TypeGenerateur\TypeThermodynamique $type_generateur, ?float $seer,): Generateur
     {
         return $this->build(
             type_generateur: $type_generateur->to(),
             energie_generateur: EnergieGenerateur::ELECTRICITE,
+            seer: $seer,
         );
     }
 
@@ -62,11 +59,12 @@ final class GenerateurFactory
         );
     }
 
-    public function build_autres_systemes(TypeAutres $type_generateur, EnergieGenerateur $energie,): Generateur
+    public function build_autre(EnergieGenerateur $energie, ?float $seer,): Generateur
     {
         return $this->build(
-            type_generateur: $type_generateur->to(),
+            type_generateur: TypeGenerateur::AUTRE,
             energie_generateur: $energie,
+            seer: $seer,
         );
     }
 }
