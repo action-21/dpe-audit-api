@@ -77,12 +77,6 @@ final class Installation
         return $this;
     }
 
-    public function remove_systeme(Systeme $entity): self
-    {
-        $this->systemes->remove($entity);
-        return $this;
-    }
-
     public function rdim(): ?float
     {
         return $this->rdim;
