@@ -25,16 +25,6 @@ final class Installation
         private SystemeCollection $systemes,
     ) {}
 
-    public function update(string $description, float $surface, ?Solaire $solaire): self
-    {
-        $this->description = $description;
-        $this->surface = $surface;
-        $this->solaire = $solaire;
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function controle(): void
     {
         Assert::positif($this->surface);
@@ -110,12 +100,6 @@ final class Installation
     public function add_systeme(Systeme $entity): self
     {
         $this->systemes->add($entity);
-        return $this;
-    }
-
-    public function remove_systeme(Systeme $entity): self
-    {
-        $this->systemes->remove($entity);
         return $this;
     }
 }

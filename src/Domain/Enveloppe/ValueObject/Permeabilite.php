@@ -2,7 +2,7 @@
 
 namespace App\Domain\Enveloppe\ValueObject;
 
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Permeabilite
 {
@@ -14,9 +14,9 @@ final class Permeabilite
 
     public static function create(float $hvent, float $hperm, float $q4pa_conv): self
     {
-        Assert::positif_ou_zero($hvent);
-        Assert::positif_ou_zero($hperm);
-        Assert::positif_ou_zero($q4pa_conv);
+        Assert::greaterThanEq($hvent, 0);
+        Assert::greaterThanEq($hperm, 0);
+        Assert::greaterThanEq($q4pa_conv, 0);
 
         return new self(
             hvent: $hvent,

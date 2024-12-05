@@ -2,8 +2,8 @@
 
 namespace App\Domain\Enveloppe\ValueObject;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Enveloppe\Enum\EtatPerformance;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -18,11 +18,11 @@ final class Performance
 
     public static function create(float $sdep, float $dp, float $pt, float $dr, float $gv): self
     {
-        Assert::positif_ou_zero($sdep);
-        Assert::positif_ou_zero($dp);
-        Assert::positif_ou_zero($pt);
-        Assert::positif_ou_zero($dr);
-        Assert::positif_ou_zero($gv);
+        Assert::greaterThanEq($sdep, 0);
+        Assert::greaterThanEq($dp, 0);
+        Assert::greaterThanEq($pt, 0);
+        Assert::greaterThanEq($dr, 0);
+        Assert::greaterThanEq($gv, 0);
 
         return new self(
             ubat: ($ubat = ($dp + $dr) / $sdep),

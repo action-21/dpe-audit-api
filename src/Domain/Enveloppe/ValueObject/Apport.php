@@ -3,7 +3,7 @@
 namespace App\Domain\Enveloppe\ValueObject;
 
 use App\Domain\Common\Enum\{Mois, ScenarioUsage};
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Apport
 {
@@ -32,14 +32,14 @@ final class Apport
         float $apport_solaire_fr,
         float $sse,
     ): self {
-        Assert::positif_ou_zero($f);
-        Assert::positif_ou_zero($apport);
-        Assert::positif_ou_zero($apport_interne);
-        Assert::positif_ou_zero($apport_solaire);
-        Assert::positif_ou_zero($apport_fr);
-        Assert::positif_ou_zero($apport_interne_fr);
-        Assert::positif_ou_zero($apport_solaire_fr);
-        Assert::positif_ou_zero($sse);
+        Assert::greaterThanEq($f, 0);
+        Assert::greaterThanEq($apport, 0);
+        Assert::greaterThanEq($apport_interne, 0);
+        Assert::greaterThanEq($apport_solaire, 0);
+        Assert::greaterThanEq($apport_fr, 0);
+        Assert::greaterThanEq($apport_interne_fr, 0);
+        Assert::greaterThanEq($apport_solaire_fr, 0);
+        Assert::greaterThanEq($sse, 0);
 
         return new self(
             mois: $mois,

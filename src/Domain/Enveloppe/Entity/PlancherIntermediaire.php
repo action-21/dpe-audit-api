@@ -2,11 +2,10 @@
 
 namespace App\Domain\Enveloppe\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Enveloppe\Enum\Inertie;
-use App\Domain\Enveloppe\Enum\Inertie\InertiePlancherIntermediaire;
 use App\Domain\Enveloppe\Enveloppe;
+use Webmozart\Assert\Assert;
 
 final class PlancherIntermediaire
 {
@@ -18,18 +17,9 @@ final class PlancherIntermediaire
         private Inertie $inertie,
     ) {}
 
-    public function update(string $description, float $surface, InertiePlancherIntermediaire $inertie,): self
-    {
-        $this->description = $description;
-        $this->surface = $surface;
-        $this->inertie = $inertie->to();
-        $this->controle();
-        return $this;
-    }
-
     public function controle(): void
     {
-        Assert::positif($this->surface);
+        Assert::greaterThan($this->surface, 0);
     }
 
     public function id(): Id
