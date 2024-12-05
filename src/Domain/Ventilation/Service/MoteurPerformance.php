@@ -2,10 +2,9 @@
 
 namespace App\Domain\Ventilation\Service;
 
-use App\Domain\Common\Error\DomainError;
 use App\Domain\Ventilation\Data\{DebitRepository, PventRepository};
 use App\Domain\Ventilation\Entity\Systeme;
-use App\Domain\Ventilation\Enum\{ModeExtraction, ModeInsufflation, TypeSysteme};
+use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVentilation, TypeVmc};
 use App\Domain\Ventilation\ValueObject\Performance;
 
 final class MoteurPerformance
@@ -18,16 +17,17 @@ final class MoteurPerformance
     public function calcule_performance_systeme(Systeme $entity): Performance
     {
         $debit = $this->debit(
-            type_systeme: $entity->type(),
-            mode_extraction: $entity->mode_extraction(),
-            mode_insufflation: $entity->mode_insufflation(),
+            type_ventilation: $entity->type_ventilation(),
+            type_generateur: $entity->generateur()?->type(),
+            type_vmc: $entity->generateur()?->type_vmc(),
             presence_echangeur: $entity->generateur()?->presence_echangeur_thermique(),
             systeme_collectif: $entity->generateur()?->generateur_collectif(),
             annee_installation: $entity->generateur()?->annee_installation() ?? $entity->ventilation()->annee_construction_batiment(),
         );
         $pvent = $this->pvent(
-            type_systeme: $entity->type(),
-            mode_extraction: $entity->mode_extraction(),
+            type_ventilation: $entity->type_ventilation(),
+            type_generateur: $entity->generateur()?->type(),
+            type_vmc: $entity->generateur()?->type_vmc(),
             systeme_collectif: $entity->generateur()?->generateur_collectif(),
             annee_installation: $entity->generateur()?->annee_installation() ?? $entity->ventilation()->annee_construction_batiment(),
         );
@@ -50,17 +50,20 @@ final class MoteurPerformance
      * @return array{ratio_utilisation: float, pvent_moy: float, pvent: float}
      */
     public function pvent(
-        TypeSysteme $type_systeme,
-        ?ModeExtraction $mode_extraction,
-        int $annee_installation,
+        TypeVentilation $type_ventilation,
+        ?TypeGenerateur $type_generateur,
+        ?TypeVmc $type_vmc,
+        ?int $annee_installation,
         ?bool $systeme_collectif,
     ): array {
         if (null === $data = $this->pvent_repository->find_by(
-            type_systeme: $type_systeme,
-            mode_extraction: $mode_extraction,
+            type_ventilation: $type_ventilation,
+            type_generateur: $type_generateur,
+            type_vmc: $type_vmc,
             annee_installation: $annee_installation,
             systeme_collectif: $systeme_collectif,
-        )) DomainError::valeur_forfaitaire("Pvent");
+        )) throw new \DomainException('Valeur forfaitaire Pvent non trouvée');
+
         return [
             'ratio_utilisation' => $data->ratio_utilisation,
             'pvent_moy' => $data->pvent_moy,
@@ -76,21 +79,21 @@ final class MoteurPerformance
      * @return array{qvarep_conv: float, qvasouf_conv: float, smea_conv: float}
      */
     public function debit(
-        TypeSysteme $type_systeme,
-        ?ModeExtraction $mode_extraction,
-        ?ModeInsufflation $mode_insufflation,
+        TypeVentilation $type_ventilation,
+        ?TypeGenerateur $type_generateur,
+        ?TypeVmc $type_vmc,
         ?bool $presence_echangeur,
         ?bool $systeme_collectif,
-        int $annee_installation,
+        ?int $annee_installation,
     ): array {
         if (null === $data = $this->debit_repository->find_by(
-            type_systeme: $type_systeme,
-            mode_extraction: $mode_extraction,
-            mode_insufflation: $mode_insufflation,
+            type_ventilation: $type_ventilation,
+            type_generateur: $type_generateur,
+            type_vmc: $type_vmc,
             presence_echangeur: $presence_echangeur,
             systeme_collectif: $systeme_collectif,
             annee_installation: $annee_installation,
-        )) DomainError::valeur_forfaitaire("Debit");
+        )) throw new \DomainException('Valeur forfaitaire Debit non trouvée');
 
         return [
             'qvarep_conv' => $data->qvarep_conv,

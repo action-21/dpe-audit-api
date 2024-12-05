@@ -2,14 +2,14 @@
 
 namespace App\Domain\Ventilation\Data;
 
-use App\Domain\Ventilation\Enum\{ModeExtraction, ModeInsufflation, TypeSysteme};
+use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVentilation, TypeVmc};
 
 interface DebitRepository
 {
     public function find_by(
-        TypeSysteme $type_systeme,
-        ?ModeExtraction $mode_extraction,
-        ?ModeInsufflation $mode_insufflation,
+        TypeVentilation $type_ventilation,
+        ?TypeGenerateur $type_generateur,
+        ?TypeVmc $type_vmc,
         ?bool $presence_echangeur,
         ?bool $systeme_collectif,
         ?int $annee_installation,

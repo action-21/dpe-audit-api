@@ -3,7 +3,7 @@
 namespace App\Domain\Ventilation\Entity;
 
 use App\Domain\Common\Type\Id;
-use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVentilation};
+use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVmc};
 use App\Domain\Ventilation\Ventilation;
 use Webmozart\Assert\Assert;
 
@@ -13,8 +13,8 @@ final class Generateur
         private readonly Id $id,
         private readonly Ventilation $ventilation,
         private string $description,
-        private TypeVentilation $type_ventilation,
         private TypeGenerateur $type,
+        private ?TypeVmc $type_vmc,
         private bool $presence_echangeur_thermique,
         private bool $generateur_collectif,
         private ?int $annee_installation,
@@ -43,14 +43,14 @@ final class Generateur
         return $this->description;
     }
 
-    public function type_ventilation(): TypeVentilation
-    {
-        return $this->type_ventilation;
-    }
-
     public function type(): TypeGenerateur
     {
         return $this->type;
+    }
+
+    public function type_vmc(): ?TypeVmc
+    {
+        return $this->type_vmc;
     }
 
     public function presence_echangeur_thermique(): bool

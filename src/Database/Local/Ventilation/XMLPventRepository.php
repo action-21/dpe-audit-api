@@ -4,7 +4,7 @@ namespace App\Database\Local\Ventilation;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
 use App\Domain\Ventilation\Data\{Pvent, PventRepository};
-use App\Domain\Ventilation\Enum\{ModeExtraction, TypeSysteme};
+use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVentilation, TypeVmc};
 
 final class XMLPventRepository implements PventRepository
 {
@@ -16,14 +16,16 @@ final class XMLPventRepository implements PventRepository
     }
 
     public function find_by(
-        TypeSysteme $type_systeme,
-        ?ModeExtraction $mode_extraction,
+        TypeVentilation $type_ventilation,
+        ?TypeGenerateur $type_generateur,
+        ?TypeVmc $type_vmc,
         ?int $annee_installation,
         ?bool $systeme_collectif,
     ): ?Pvent {
         $record = $this->createQuery()
-            ->and('type_systeme', $type_systeme->value)
-            ->and('mode_extraction', $mode_extraction?->value, true)
+            ->and('type_ventilation', $type_ventilation->value)
+            ->and('type_generateur', $type_generateur?->value, true)
+            ->and('type_vmc', $type_vmc?->value, true)
             ->and('systeme_collectif', $systeme_collectif, true)
             ->andCompareTo('annee_installation', $annee_installation)
             ->getOne();

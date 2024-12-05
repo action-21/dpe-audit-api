@@ -13,7 +13,7 @@ enum TypeGenerateur: string implements Enum
     case VENTILATION_HYBRIDE = 'VENTILATION_HYBRIDE';
     case VENTILATION_MECANIQUE = 'VENTILATION_MECANIQUE';
     case PUIT_CLIMATIQUE = 'PUIT_CLIMATIQUE';
-    case VMI = 'VMI';
+    case VMC_INSUFFLATION = 'VMC_INSUFFLATION';
     case VMR = 'VMR';
 
     public static function from_enum_type_ventilation_id(int $id): ?self
@@ -42,7 +42,7 @@ enum TypeGenerateur: string implements Enum
             self::VMC_DOUBLE_FLUX => "VMC Double flux",
             self::VENTILATION_HYBRIDE => "Ventilation hybride",
             self::PUIT_CLIMATIQUE => "Puits climatique",
-            self::VMI => "Ventilation par insufflation",
+            self::VMC_INSUFFLATION => "VMC par insufflation",
             self::VMR => "Ventilation répartie",
         };
     }
