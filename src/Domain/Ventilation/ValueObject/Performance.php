@@ -2,7 +2,7 @@
 
 namespace App\Domain\Ventilation\ValueObject;
 
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -23,12 +23,12 @@ final class Performance
         float $pvent_moy,
         float $pvent,
     ): self {
-        Assert::positif_ou_zero($qvarep_conv);
-        Assert::positif_ou_zero($qvasouf_conv);
-        Assert::positif_ou_zero($smea_conv);
-        Assert::positif_ou_zero($ratio_utilisation);
-        Assert::positif_ou_zero($pvent_moy);
-        Assert::positif_ou_zero($pvent);
+        Assert::greaterThanEq($qvarep_conv, 0);
+        Assert::greaterThanEq($qvasouf_conv, 0);
+        Assert::greaterThanEq($smea_conv, 0);
+        Assert::greaterThanEq($ratio_utilisation, 0);
+        Assert::greaterThanEq($pvent_moy, 0);
+        Assert::greaterThanEq($pvent, 0);
 
         return new self(
             qvarep_conv: $qvarep_conv,

@@ -2,10 +2,10 @@
 
 namespace App\Domain\Ventilation\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVentilation};
 use App\Domain\Ventilation\Ventilation;
+use Webmozart\Assert\Assert;
 
 final class Generateur
 {
@@ -53,8 +53,8 @@ final class Generateur
 
     public function controle(): void
     {
-        Assert::annee($this->annee_installation);
-        Assert::superieur_ou_egal_a($this->annee_installation, $this->ventilation->annee_construction_batiment());
+        Assert::lessThanEq($this->annee_installation, (int) date('Y'));
+        Assert::greaterThanEq($this->annee_installation, $this->ventilation->annee_construction_batiment());
     }
 
     public function reinitialise(): void {}

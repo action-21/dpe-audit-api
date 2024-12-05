@@ -2,10 +2,10 @@
 
 namespace App\Domain\Ventilation\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Ventilation\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance};
 use App\Domain\Ventilation\Ventilation;
+use Webmozart\Assert\Assert;
 
 /**
  * TODO: Associer l'installation à un logement visité
@@ -31,7 +31,7 @@ final class Installation
 
     public function controle(): void
     {
-        Assert::positif($this->surface);
+        Assert::greaterThan($this->surface, 0);
         $this->systemes->controle();
     }
 

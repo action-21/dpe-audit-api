@@ -2,13 +2,13 @@
 
 namespace App\Domain\Ventilation\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Common\ValueObject\ConsommationCollection;
 use App\Domain\Ventilation\Enum\{ModeExtraction, ModeInsufflation, TypeSysteme, TypeVentilation};
 use App\Domain\Ventilation\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance};
 use App\Domain\Ventilation\ValueObject\Performance;
 use App\Domain\Ventilation\Ventilation;
+use Webmozart\Assert\Assert;
 
 final class Systeme
 {
@@ -44,7 +44,7 @@ final class Systeme
         ModeExtraction $mode_extraction,
         ModeInsufflation $mode_insufflation,
     ): self {
-        Assert::egal($generateur->type_ventilation(), TypeVentilation::VENTILATION_MECANIQUE_CENTRALISEE);
+        Assert::same($generateur->type_ventilation(), TypeVentilation::VENTILATION_MECANIQUE_CENTRALISEE);
 
         $this->generateur = $generateur;
         $this->type = TypeSysteme::from_type_generateur($generateur->type());
@@ -58,7 +58,7 @@ final class Systeme
 
     public function set_ventilation_divisee(Generateur $generateur): self
     {
-        Assert::egal($generateur->type_ventilation(), TypeVentilation::VENTILATION_MECANIQUE_DIVISEE);
+        Assert::same($generateur->type_ventilation(), TypeVentilation::VENTILATION_MECANIQUE_DIVISEE);
 
         $this->generateur = $generateur;
         $this->type = TypeSysteme::from_type_generateur($generateur->type());
