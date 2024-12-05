@@ -9,11 +9,17 @@ use App\Api\PlancherBas\Payload\PlancherBasPayload;
 use App\Api\PlancherHaut\Payload\PlancherHautPayload;
 use App\Api\PontThermique\Payload\PontThermiquePayload;
 use App\Api\Porte\Payload\PortePayload;
+use App\Domain\Enveloppe\Enum\Exposition;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class EnveloppePayload
 {
     public function __construct(
+        public Exposition $exposition,
+
+        #[Assert\Positive]
+        public ?float $q4pa_conv,
+
         /** @var LncPayload[] */
         #[Assert\All([new Assert\Type(LncPayload::class)])]
         #[Assert\Valid]
