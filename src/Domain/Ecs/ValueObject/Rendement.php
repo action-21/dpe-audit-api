@@ -3,7 +3,7 @@
 namespace App\Domain\Ecs\ValueObject;
 
 use App\Domain\Common\Enum\ScenarioUsage;
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Rendement
 {
@@ -26,12 +26,12 @@ final class Rendement
         float $rg,
         float $rgs,
     ): self {
-        Assert::positif_ou_zero($fecs);
-        Assert::positif_ou_zero($iecs);
-        Assert::positif_ou_zero($rd);
-        Assert::positif_ou_zero($rs);
-        Assert::positif_ou_zero($rg);
-        Assert::positif_ou_zero($rgs);
+        Assert::greaterThanEq($fecs, 0);
+        Assert::greaterThanEq($iecs, 0);
+        Assert::greaterThanEq($rd, 0);
+        Assert::greaterThanEq($rs, 0);
+        Assert::greaterThanEq($rg, 0);
+        Assert::greaterThanEq($rgs, 0);
 
         return new static(
             scenario: $scenario,

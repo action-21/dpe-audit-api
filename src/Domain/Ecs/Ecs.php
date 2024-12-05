@@ -116,4 +116,11 @@ final class Ecs
     {
         return $this->installations->consommations();
     }
+
+    // * helpers
+
+    public function annee_construction_batiment(): int
+    {
+        return $this->audit->annee_construction_batiment();
+    }
 }

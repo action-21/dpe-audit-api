@@ -3,8 +3,8 @@
 namespace App\Domain\Ecs\ValueObject;
 
 use App\Domain\Common\Enum\{Mois, ScenarioUsage};
-use App\Domain\Common\Service\Assert;
 use App\Domain\Ecs\Enum\TypePerte;
+use Webmozart\Assert\Assert;
 
 final class Perte
 {
@@ -23,8 +23,8 @@ final class Perte
         float $pertes,
         float $pertes_recuperables,
     ): self {
-        Assert::positif_ou_zero($pertes);
-        Assert::positif_ou_zero($pertes_recuperables);
+        Assert::greaterThanEq($pertes, 0);
+        Assert::greaterThanEq($pertes_recuperables, 0);
 
         return new static(
             scenario: $scenario,

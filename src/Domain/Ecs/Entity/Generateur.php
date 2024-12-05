@@ -2,13 +2,13 @@
 
 namespace App\Domain\Ecs\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Ecs\Ecs;
 use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur, TypeGenerateur, UsageEcs};
 use App\Domain\Ecs\Service\{MoteurPerformance, MoteurPerte};
 use App\Domain\Ecs\ValueObject\{Performance, PerteCollection, Signaletique};
 use App\Domain\Simulation\Simulation;
+use Webmozart\Assert\Assert;
 
 final class Generateur
 {
@@ -35,10 +35,9 @@ final class Generateur
 
     public function controle(): void
     {
-        Assert::positif_ou_zero($this->volume_stockage);
-        Assert::annee($this->annee_installation);
-        Assert::superieur_ou_egal_a($this->annee_installation, $this->ecs->audit()->annee_construction_batiment());
-        $this->signaletique?->controle();
+        Assert::greaterThanEq($this->volume_stockage, 0);
+        Assert::lessThanEq($this->annee_installation, (int) date('Y'));
+        Assert::greaterThanEq($this->annee_installation, $this->ecs->annee_construction_batiment());
     }
 
     public function reinitialise(): void

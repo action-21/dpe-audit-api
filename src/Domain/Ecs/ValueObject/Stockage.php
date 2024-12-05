@@ -2,7 +2,7 @@
 
 namespace App\Domain\Ecs\ValueObject;
 
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Stockage
 {
@@ -13,14 +13,11 @@ final class Stockage
 
     public static function create(int $volume_stockage, bool $position_volume_chauffe): self
     {
+        Assert::greaterThan($volume_stockage, 0);
+
         return new self(
             volume_stockage: $volume_stockage,
             position_volume_chauffe: $position_volume_chauffe,
         );
-    }
-
-    public function controle(): void
-    {
-        Assert::positif($this->volume_stockage);
     }
 }

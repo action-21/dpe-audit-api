@@ -2,7 +2,6 @@
 
 namespace App\Domain\Ecs\ValueObject;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Ecs\Enum\{LabelGenerateur, TypeChaudiere};
 
 class Signaletique
@@ -17,13 +16,4 @@ class Signaletique
         public readonly ?float $pveilleuse = null,
         public readonly ?float $cop = null,
     ) {}
-
-    public function controle(): void
-    {
-        Assert::positif($this->pn);
-        Assert::positif($this->rpn);
-        Assert::positif($this->qp0);
-        Assert::positif($this->pveilleuse);
-        Assert::positif($this->cop);
-    }
 }

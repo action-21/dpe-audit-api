@@ -26,15 +26,6 @@ final class Systeme
         private ?Stockage $stockage,
     ) {}
 
-    public function update(Reseau $reseau, ?Stockage $stockage,): self
-    {
-        $this->reseau = $reseau;
-        $this->stockage = $stockage;
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function reinitialise(): void
     {
         $this->rdim = null;
@@ -44,11 +35,7 @@ final class Systeme
         $this->consommations = null;
     }
 
-    public function controle(): void
-    {
-        $this->reseau->controle();
-        $this->stockage?->controle();
-    }
+    public function controle(): void {}
 
     public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
     {

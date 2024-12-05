@@ -2,12 +2,12 @@
 
 namespace App\Domain\Ecs\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Ecs\Ecs;
 use App\Domain\Ecs\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerte, MoteurRendement};
 use App\Domain\Ecs\ValueObject\Solaire;
 use App\Domain\Simulation\Simulation;
+use Webmozart\Assert\Assert;
 
 /**
  * TODO: Associer l'installation à un logement ou plusieurs logements visités
@@ -27,8 +27,8 @@ final class Installation
 
     public function controle(): void
     {
-        Assert::positif($this->surface);
-        $this->solaire?->controle($this->ecs);
+        Assert::greaterThan($this->surface, 0);
+        Assert::greaterThanEq($this->solaire->annee_installation, $this->ecs->annee_construction_batiment());
     }
 
     public function reinitialise(): void
