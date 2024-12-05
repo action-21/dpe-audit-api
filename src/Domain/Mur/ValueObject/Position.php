@@ -11,27 +11,24 @@ final class Position
     public function __construct(
         public readonly Mitoyennete $mitoyennete,
         public readonly float $orientation,
-        public readonly ?Id $local_non_chauffe_id = null,
+        public readonly ?Id $local_non_chauffe_id,
     ) {}
 
-    public static function create(Mitoyennete $mitoyennete, float $orientation,): self
-    {
-        Assert::greaterThanEq($orientation, 0);
-        Assert::lessThan($orientation, 360);
-        Assert::notEq($mitoyennete, Mitoyennete::LOCAL_NON_CHAUFFE);
-
-        return new self(mitoyennete: $mitoyennete, orientation: $orientation);
-    }
-
-    public static function create_liaison_local_non_chauffe(Id $local_non_chauffe_id, float $orientation): self
+    public static function create(Mitoyennete $mitoyennete, float $orientation, ?Id $local_non_chauffe_id): self
     {
         Assert::greaterThanEq($orientation, 0);
         Assert::lessThan($orientation, 360);
 
+        if ($local_non_chauffe_id) {
+            $mitoyennete = Mitoyennete::LOCAL_NON_CHAUFFE;
+        }
+        if ($mitoyennete === Mitoyennete::LOCAL_NON_CHAUFFE && null === $local_non_chauffe_id) {
+            $mitoyennete = Mitoyennete::LOCAL_NON_ACCESSIBLE;
+        }
         return new self(
-            local_non_chauffe_id: $local_non_chauffe_id,
-            mitoyennete: Mitoyennete::LOCAL_NON_CHAUFFE,
+            mitoyennete: $mitoyennete,
             orientation: $orientation,
+            local_non_chauffe_id: $local_non_chauffe_id,
         );
     }
 }

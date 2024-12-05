@@ -24,6 +24,7 @@ final class Generateur
         private EnergieGenerateur $energie_generateur,
         private ?int $annee_installation,
         private ?float $seer,
+        private ?Id $reseau_froid_id = null,
     ) {}
 
     public function controle(): void
@@ -77,6 +78,11 @@ final class Generateur
     public function seer(): ?float
     {
         return $this->seer;
+    }
+
+    public function reseau_froid_id(): ?Id
+    {
+        return $this->reseau_froid_id;
     }
 
     public function performance(): ?Performance

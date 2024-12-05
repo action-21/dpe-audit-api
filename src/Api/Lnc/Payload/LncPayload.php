@@ -12,13 +12,20 @@ final class LncPayload
         public string $id,
         public string $description,
         public TypeLnc $type,
+
         /** @var ParoiPayload[] */
         #[Assert\All([new Assert\Type(ParoiPayload::class)])]
         #[Assert\Valid]
         public array $parois,
-        /** @var (BaiePolycarbonatePayload|FenetrePayload)[] */
-        #[Assert\All([new Assert\Type([BaiePolycarbonatePayload::class, FenetrePayload::class])])]
+
+        /** @var ParoiVitreePayload[] */
+        #[Assert\All([new Assert\Type(ParoiVitreePayload::class,)])]
         #[Assert\Valid]
-        public array $baies,
+        public array $parois_vitrees,
+
+        /** @var FenetrePayload[] */
+        #[Assert\All([new Assert\Type(FenetrePayload::class,)])]
+        #[Assert\Valid]
+        public array $fenetres,
     ) {}
 }

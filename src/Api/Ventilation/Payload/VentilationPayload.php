@@ -14,7 +14,8 @@ final class VentilationPayload
             Generateur\GenerateurDivisePayload::class,
         ])])]
         #[Assert\Valid]
-        public array $generateurs,
+        public array $generateurs_centralises,
+
         /** @var InstallationPayload[] */
         #[Assert\All([new Assert\Type([InstallationPayload::class])])]
         #[Assert\Count(min: 1)]

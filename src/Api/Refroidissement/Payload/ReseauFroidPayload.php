@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Api\Lnc\Payload;
+namespace App\Api\Refroidissement\Payload;
 
 use App\Services\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PositionWithParoiPayload
+final class ReseauFroidPayload
 {
     public function __construct(
         #[Assert\Uuid]
-        public string $paroi_id,
-        #[AppAssert\Orientation]
-        public ?float $orientation,
+        public string $id,
+        #[AppAssert\ReseauFroid]
+        public ?string $reseau_froid_id,
     ) {}
 }

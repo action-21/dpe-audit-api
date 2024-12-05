@@ -2,6 +2,7 @@
 
 namespace App\Api\Lnc\Payload;
 
+use App\Api\Lnc\Payload\Position\PositionPayload;
 use App\Domain\Lnc\Enum\EtatIsolation;
 use Symfony\Component\Validator\Constraints as Assert;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Lnc\Payload;
+namespace App\Api\Lnc\Payload\Position;
 
 use App\Domain\PlancherHaut\Enum\Mitoyennete;
 use App\Services\Validator\Constraints as AppAssert;

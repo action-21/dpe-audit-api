@@ -27,8 +27,12 @@ final class GenerateurFactory
         return $this;
     }
 
-    private function build(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur, ?float $seer = null,): Generateur
-    {
+    private function build(
+        TypeGenerateur $type_generateur,
+        EnergieGenerateur $energie_generateur,
+        ?float $seer = null,
+        ?Id $reseau_froid_id = null,
+    ): Generateur {
         $entity = new Generateur(
             id: $this->id,
             refroidissement: $this->refroidissement,
@@ -37,34 +41,30 @@ final class GenerateurFactory
             energie_generateur: $energie_generateur,
             annee_installation: $this->annee_installation,
             seer: $seer,
+            reseau_froid_id: $reseau_froid_id,
         );
         $entity->controle();
         return $entity;
     }
 
-    public function build_generateur_thermodynamique(TypeGenerateur\TypeThermodynamique $type_generateur, ?float $seer,): Generateur
-    {
+    public function build_climatiseur(
+        TypeGenerateur\Climatiseur $type_generateur,
+        EnergieGenerateur $energie,
+        ?float $seer,
+    ): Generateur {
         return $this->build(
-            type_generateur: $type_generateur->to(),
-            energie_generateur: EnergieGenerateur::ELECTRICITE,
+            type_generateur: ($type_generateur = $type_generateur->to()),
+            energie_generateur: $type_generateur->is_thermodynamique() ? EnergieGenerateur::ELECTRICITE : $energie,
             seer: $seer,
         );
     }
 
-    public function build_reseau_froid(): Generateur
+    public function build_reseau_froid(?Id $reseau_froid_id): Generateur
     {
         return $this->build(
             type_generateur: TypeGenerateur::RESEAU_FROID,
             energie_generateur: EnergieGenerateur::RESEAU_FROID,
-        );
-    }
-
-    public function build_autre(EnergieGenerateur $energie, ?float $seer,): Generateur
-    {
-        return $this->build(
-            type_generateur: TypeGenerateur::AUTRE,
-            energie_generateur: $energie,
-            seer: $seer,
+            reseau_froid_id: $reseau_froid_id,
         );
     }
 }

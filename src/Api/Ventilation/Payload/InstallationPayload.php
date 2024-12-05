@@ -13,14 +13,30 @@ final class InstallationPayload
         public string $description,
         #[Assert\Positive]
         public float $surface,
-        /** @var (Systeme\VentilationCentraliseePayload|Systeme\VentilationDiviseePayload|Systeme\VentilationNaturellePayload)[] */
-        #[Assert\All([new Assert\Type([
-            Systeme\VentilationCentraliseePayload::class,
-            Systeme\VentilationDiviseePayload::class,
-            Systeme\VentilationNaturellePayload::class,
-        ])])]
-        #[Assert\Count(min: 1)]
+
+        /** @var Systeme\VentilationCentraliseePayload[] */
+        #[Assert\All([new Assert\Type(Systeme\VentilationCentraliseePayload::class,)])]
         #[Assert\Valid]
-        public array $systemes,
+        public array $systemes_mecaniques_centralises,
+
+        /** @var Systeme\VentilationDiviseePayload[] */
+        #[Assert\All([new Assert\Type(Systeme\VentilationDiviseePayload::class,)])]
+        #[Assert\Valid]
+        public array $systemes_mecaniques_divises,
+
+        /** @var Systeme\VentilationNaturellePayload[] */
+        #[Assert\All([new Assert\Type(Systeme\VentilationNaturellePayload::class,)])]
+        #[Assert\Valid]
+        public array $systemes_naturels,
     ) {}
+
+    #[Assert\Count(min: 1)]
+    public function getSystemes(): array
+    {
+        return [
+            ...$this->systemes_mecaniques_centralises,
+            ...$this->systemes_mecaniques_divises,
+            ...$this->systemes_naturels,
+        ];
+    }
 }

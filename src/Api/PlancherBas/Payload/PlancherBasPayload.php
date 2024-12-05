@@ -11,7 +11,7 @@ final class PlancherBasPayload
         public string $id,
         public string $description,
         #[Assert\Valid]
-        public PositionPayload|PositionWithLncPayload $position,
+        public PositionPayload $position,
         #[Assert\Valid]
         public CaracteristiquePayload $caracteristique,
         #[Assert\Valid]
