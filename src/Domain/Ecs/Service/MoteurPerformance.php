@@ -26,18 +26,18 @@ final class MoteurPerformance
     public function calcule_performance(Generateur $entity, Simulation $simulation): Performance
     {
         $pn = $this->calcule_pn($entity, $simulation);
-        $paux = $this->paux(categorie_generateur: $entity->categorie(), pn: $pn, presence_ventouse: $entity->signaletique()?->presence_ventouse);
+        $paux = $this->paux(categorie_generateur: $entity->signaletique()->categorie(), pn: $pn, presence_ventouse: $entity->signaletique()?->presence_ventouse);
 
-        $cop = $this->cop_applicable(type_generateur: $entity->type()) ? $this->cop(
+        $cop = $this->cop_applicable(type_generateur: $entity->signaletique()->type) ? $this->cop(
             zone_climatique: $entity->ecs()->audit()->zone_climatique(),
-            type_generateur: $entity->type(),
+            type_generateur: $entity->signaletique()->type,
             annee_installation: $entity->annee_installation() ?? $entity->ecs()->audit()->annee_construction_batiment(),
             cop_saisi: $entity->signaletique()?->cop,
         ) : null;
 
-        $combustion = $this->combustion_applicable(categorie_generateur: $entity->categorie()) ? $this->combustion(
-            type_generateur: $entity->type(),
-            energie_generateur: $entity->energie(),
+        $combustion = $this->combustion_applicable(categorie_generateur: $entity->signaletique()->categorie()) ? $this->combustion(
+            type_generateur: $entity->signaletique()->type,
+            energie_generateur: $entity->signaletique()->energie,
             annee_installation: $entity->annee_installation() ?? $entity->ecs()->audit()->annee_construction_batiment(),
             pn: $pn,
             presence_ventouse: $entity->signaletique()?->presence_ventouse,

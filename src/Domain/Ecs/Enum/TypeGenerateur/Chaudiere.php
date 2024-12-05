@@ -4,7 +4,7 @@ namespace App\Domain\Ecs\Enum\TypeGenerateur;
 
 use App\Domain\Ecs\Enum\TypeGenerateur;
 
-enum TypeChaudiere: string
+enum Chaudiere: string
 {
     case CHAUDIERE_STANDARD = 'CHAUDIERE_STANDARD';
     case CHAUDIERE_BASSE_TEMPERATURE = 'CHAUDIERE_BASSE_TEMPERATURE';

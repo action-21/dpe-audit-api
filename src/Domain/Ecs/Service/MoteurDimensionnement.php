@@ -27,7 +27,7 @@ final class MoteurDimensionnement
 
     public function calcule_pecs(Generateur $entity): float
     {
-        $pecs = $this->pecs(volume_stockage: $entity->volume_stockage());
+        $pecs = $this->pecs(volume_stockage: $entity->signaletique()->volume_stockage);
 
         /** @var Installation */
         foreach ($entity->ecs()->installations() as $installation) {

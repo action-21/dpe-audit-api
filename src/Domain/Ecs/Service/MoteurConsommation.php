@@ -23,7 +23,7 @@ final class MoteurConsommation
 
         return ConsommationCollection::create(
             usage: Usage::ECS,
-            energie: $entity->generateur()->energie()->to(),
+            energie: $entity->generateur()->signaletique()->energie->to(),
             callback: fn(ScenarioUsage $scenario): float => $this->cecs(
                 becs: $entity->ecs()->besoins()->besoins(scenario: $scenario),
                 iecs: $entity->rendements()->iecs(scenario: $scenario),
@@ -43,7 +43,7 @@ final class MoteurConsommation
 
     public function calcule_consommations_auxiliaire_generation(Systeme $entity): ConsommationCollection
     {
-        if (false === $entity->generateur()->generateur_collectif())
+        if (false === $entity->generateur()->signaletique()->generateur_collectif)
             return new ConsommationCollection();
 
         $rdim = $this->moteur_dimensionnement->calcule_dimensionnement($entity);
@@ -62,7 +62,7 @@ final class MoteurConsommation
 
     public function calcule_consommations_auxiliaire_distribution(Systeme $entity): ConsommationCollection
     {
-        if (false === $entity->generateur()->generateur_collectif())
+        if (false === $entity->generateur()->signaletique()->generateur_collectif)
             return new ConsommationCollection();
 
         $rdim = $this->moteur_dimensionnement->calcule_dimensionnement($entity);

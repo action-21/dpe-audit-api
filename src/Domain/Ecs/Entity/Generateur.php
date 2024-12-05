@@ -4,7 +4,7 @@ namespace App\Domain\Ecs\Entity;
 
 use App\Domain\Common\Type\Id;
 use App\Domain\Ecs\Ecs;
-use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur, TypeGenerateur, UsageEcs};
+use App\Domain\Ecs\Enum\{CategorieGenerateur, UsageEcs};
 use App\Domain\Ecs\Service\{MoteurPerformance, MoteurPerte};
 use App\Domain\Ecs\ValueObject\{Performance, PerteCollection, Signaletique};
 use App\Domain\Simulation\Simulation;
@@ -12,8 +12,6 @@ use Webmozart\Assert\Assert;
 
 final class Generateur
 {
-    private CategorieGenerateur $categorie;
-
     private ?Performance $performance = null;
     private ?PerteCollection $pertes_generation = null;
     private ?PerteCollection $pertes_stockage = null;
@@ -21,21 +19,15 @@ final class Generateur
     public function __construct(
         private readonly Id $id,
         private readonly Ecs $ecs,
+        private string $description,
         private ?Id $generateur_mixte_id,
         private ?Id $reseau_chaleur_id,
-        private string $description,
-        private TypeGenerateur $type,
-        private EnergieGenerateur $energie,
-        private int $volume_stockage,
-        private bool $position_volume_chauffe,
-        private bool $generateur_collectif,
-        private Signaletique $signaletique,
         private ?int $annee_installation,
+        private Signaletique $signaletique,
     ) {}
 
     public function controle(): void
     {
-        Assert::greaterThanEq($this->volume_stockage, 0);
         Assert::lessThanEq($this->annee_installation, (int) date('Y'));
         Assert::greaterThanEq($this->annee_installation, $this->ecs->annee_construction_batiment());
     }
@@ -45,12 +37,6 @@ final class Generateur
         $this->performance = null;
         $this->pertes_generation = null;
         $this->pertes_stockage = null;
-    }
-
-    public function determine_categorie(): self
-    {
-        $this->categorie = CategorieGenerateur::determine(type: $this->type, energie: $this->energie);
-        return $this;
     }
 
     public function calcule_performance(MoteurPerformance $moteur, Simulation $simulation): self
@@ -81,21 +67,6 @@ final class Generateur
         return $this->description;
     }
 
-    public function categorie(): CategorieGenerateur
-    {
-        return $this->categorie;
-    }
-
-    public function type(): TypeGenerateur
-    {
-        return $this->type;
-    }
-
-    public function energie(): EnergieGenerateur
-    {
-        return $this->energie;
-    }
-
     public function signaletique(): Signaletique
     {
         return $this->signaletique;
@@ -111,21 +82,6 @@ final class Generateur
         return $this->annee_installation;
     }
 
-    public function position_volume_chauffe(): bool
-    {
-        return $this->position_volume_chauffe;
-    }
-
-    public function generateur_collectif(): bool
-    {
-        return $this->generateur_collectif;
-    }
-
-    public function volume_stockage(): int
-    {
-        return $this->volume_stockage;
-    }
-
     public function reseau_chaleur_id(): ?Id
     {
         return $this->reseau_chaleur_id;
@@ -133,7 +89,7 @@ final class Generateur
 
     public function reference_reseau_chaleur(Id $reseau_chaleur_id): self
     {
-        if ($this->categorie === CategorieGenerateur::RESEAU_CHALEUR) {
+        if ($this->signaletique->categorie() === CategorieGenerateur::RESEAU_CHALEUR) {
             $this->reseau_chaleur_id = $reseau_chaleur_id;
             $this->reinitialise();
         }
@@ -154,7 +110,7 @@ final class Generateur
 
     public function reference_generateur_mixte(Id $generateur_mixte_id): self
     {
-        if (false === \in_array($this->categorie, [
+        if (false === \in_array($this->signaletique->categorie(), [
             CategorieGenerateur::ACCUMULATEUR,
             CategorieGenerateur::CHAUFFE_EAU_ELECTRIQUE,
             CategorieGenerateur::CHAUFFE_EAU_INSTANTANE,

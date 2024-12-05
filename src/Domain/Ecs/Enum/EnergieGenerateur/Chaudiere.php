@@ -4,7 +4,7 @@ namespace App\Domain\Ecs\Enum\EnergieGenerateur;
 
 use App\Domain\Ecs\Enum\EnergieGenerateur;
 
-enum EnergieChaudiere: string 
+enum Chaudiere: string 
 {
     case GAZ_NATUREL = 'GAZ_NATUREL';
     case GPL = 'GPL';

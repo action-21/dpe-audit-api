@@ -4,7 +4,7 @@ namespace App\Domain\Ecs\Enum\TypeGenerateur;
 
 use App\Domain\Ecs\Enum\TypeGenerateur;
 
-enum TypeAccumulateur: string
+enum Accumulateur: string
 {
     case ACCUMULATEUR_CONDENSATION = 'ACCUMULATEUR_CONDENSATION';
     case ACCUMULATEUR_STANDARD = 'ACCUMULATEUR_STANDARD';

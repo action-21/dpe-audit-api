@@ -33,7 +33,6 @@ enum CategorieGenerateur: string implements Enum
             TypeGenerateur::SYSTEME_COLLECTIF_PAR_DEFAUT => self::CHAUDIERE_STANDARD,
 
             TypeGenerateur::CHAUDIERE_STANDARD => match ($energie) {
-                EnergieGenerateur::BOIS,
                 EnergieGenerateur::BOIS_BUCHE,
                 EnergieGenerateur::BOIS_GRANULE,
                 EnergieGenerateur::BOIS_PLAQUETTE => self::CHAUDIERE_BOIS,
@@ -41,17 +40,17 @@ enum CategorieGenerateur: string implements Enum
                 default => self::CHAUDIERE_STANDARD
             },
             TypeGenerateur::CHAUDIERE_BASSE_TEMPERATURE => match ($energie) {
-                EnergieGenerateur::BOIS,
                 EnergieGenerateur::BOIS_BUCHE,
                 EnergieGenerateur::BOIS_GRANULE,
                 EnergieGenerateur::BOIS_PLAQUETTE => self::CHAUDIERE_BOIS,
+                EnergieGenerateur::ELECTRICITE => self::CHAUDIERE_ELECTRIQUE,
                 default => self::CHAUDIERE_BASSE_TEMPERATURE
             },
             TypeGenerateur::CHAUDIERE_CONDENSATION => match ($energie) {
-                EnergieGenerateur::BOIS,
                 EnergieGenerateur::BOIS_BUCHE,
                 EnergieGenerateur::BOIS_GRANULE,
                 EnergieGenerateur::BOIS_PLAQUETTE => self::CHAUDIERE_BOIS,
+                EnergieGenerateur::ELECTRICITE => self::CHAUDIERE_ELECTRIQUE,
                 default => self::CHAUDIERE_CONDENSATION
             },
 

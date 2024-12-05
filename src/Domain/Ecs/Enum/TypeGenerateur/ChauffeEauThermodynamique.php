@@ -4,7 +4,7 @@ namespace App\Domain\Ecs\Enum\TypeGenerateur;
 
 use App\Domain\Ecs\Enum\TypeGenerateur;
 
-enum TypeChauffeEauThermodynamique: string
+enum ChauffeEauThermodynamique: string
 {
     case CET_AIR_AMBIANT = 'CET_AIR_AMBIANT';
     case CET_AIR_EXTERIEUR = 'CET_AIR_EXTERIEUR';
