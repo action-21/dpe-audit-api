@@ -2,7 +2,6 @@
 
 namespace App\Api\Ventilation\Payload;
 
-use App\Api\Ventilation\Payload\Systeme;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class InstallationPayload
@@ -14,29 +13,23 @@ final class InstallationPayload
         #[Assert\Positive]
         public float $surface,
 
-        /** @var Systeme\VentilationCentraliseePayload[] */
-        #[Assert\All([new Assert\Type(Systeme\VentilationCentraliseePayload::class,)])]
+        /** @var VentilationNaturellePayload[] */
+        #[Assert\All([new Assert\Type(VentilationNaturellePayload::class,)])]
         #[Assert\Valid]
-        public array $systemes_mecaniques_centralises,
+        public array $ventilations_naturelles,
 
-        /** @var Systeme\VentilationDiviseePayload[] */
-        #[Assert\All([new Assert\Type(Systeme\VentilationDiviseePayload::class,)])]
+        /** @var VentilationMequaniquePayload[] */
+        #[Assert\All([new Assert\Type(VentilationMequaniquePayload::class,)])]
         #[Assert\Valid]
-        public array $systemes_mecaniques_divises,
-
-        /** @var Systeme\VentilationNaturellePayload[] */
-        #[Assert\All([new Assert\Type(Systeme\VentilationNaturellePayload::class,)])]
-        #[Assert\Valid]
-        public array $systemes_naturels,
+        public array $ventilations_mecaniques,
     ) {}
 
     #[Assert\Count(min: 1)]
     public function getSystemes(): array
     {
         return [
-            ...$this->systemes_mecaniques_centralises,
-            ...$this->systemes_mecaniques_divises,
-            ...$this->systemes_naturels,
+            ...$this->ventilations_mecaniques,
+            ...$this->ventilations_naturelles,
         ];
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Api\Ventilation\Payload\Systeme;
+namespace App\Api\Ventilation\Payload;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class VentilationDiviseePayload
+final class VentilationMequaniquePayload
 {
     public function __construct(
         #[Assert\Uuid]
