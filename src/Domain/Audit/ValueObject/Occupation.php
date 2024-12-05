@@ -2,7 +2,7 @@
 
 namespace App\Domain\Audit\ValueObject;
 
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Occupation
 {
@@ -13,8 +13,8 @@ final class Occupation
 
     public static function create(float $nadeq, float $nmax): self
     {
-        Assert::positif_ou_zero($nadeq);
-        Assert::positif_ou_zero($nmax);
+        Assert::greaterThanEq($nadeq, 0);
+        Assert::greaterThanEq($nmax, 0);
         return new self(nadeq: $nadeq, nmax: $nmax,);
     }
 }

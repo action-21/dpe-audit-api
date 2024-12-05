@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Enveloppe\Payload;
+namespace App\Api\Enveloppe\Payload;
 
 use App\Api\Baie\Payload\BaiePayload;
 use App\Api\Lnc\Payload\LncPayload;

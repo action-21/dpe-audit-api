@@ -23,20 +23,7 @@ final class Audit
         private ?Logement $logement,
     ) {}
 
-    public function update(Adresse $adresse, Batiment $batiment, ?Logement $logement): self
-    {
-        $this->adresse = $adresse;
-        $this->batiment = $batiment;
-        $this->logement = $logement;
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function controle(): void
-    {
-        $this->batiment->controle();
-    }
+    public function controle(): void {}
 
     public function reinitialise(): void
     {

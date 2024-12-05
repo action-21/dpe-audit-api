@@ -3,7 +3,7 @@
 namespace App\Domain\Audit\ValueObject;
 
 use App\Domain\Audit\Enum\TypeBatiment;
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Batiment
 {
@@ -25,6 +25,11 @@ final class Batiment
         float $surface_habitable,
         float $hauteur_sous_plafond,
     ): self {
+        Assert::lessThanEq($annee_construction, (int) \date('Y'));
+        Assert::greaterThan($logements, 0);
+        Assert::greaterThan($surface_habitable, 0);
+        Assert::greaterThan($hauteur_sous_plafond, 0);
+
         return new self(
             altitude: $altitude,
             annee_construction: $annee_construction,
@@ -34,14 +39,5 @@ final class Batiment
             hauteur_sous_plafond: $hauteur_sous_plafond,
             volume_habitable: $surface_habitable * $hauteur_sous_plafond,
         );
-    }
-
-    public function controle(): void
-    {
-        Assert::annee($this->annee_construction);
-        Assert::positif($this->logements);
-        Assert::positif($this->surface_habitable);
-        Assert::positif($this->hauteur_sous_plafond);
-        Assert::positif($this->volume_habitable);
     }
 }
