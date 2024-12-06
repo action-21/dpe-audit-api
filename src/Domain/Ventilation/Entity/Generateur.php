@@ -3,7 +3,7 @@
 namespace App\Domain\Ventilation\Entity;
 
 use App\Domain\Common\Type\Id;
-use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVmc};
+use App\Domain\Ventilation\ValueObject\Signaletique;
 use App\Domain\Ventilation\Ventilation;
 use Webmozart\Assert\Assert;
 
@@ -13,17 +13,13 @@ final class Generateur
         private readonly Id $id,
         private readonly Ventilation $ventilation,
         private string $description,
-        private TypeGenerateur $type,
-        private ?TypeVmc $type_vmc,
-        private bool $presence_echangeur_thermique,
-        private bool $generateur_collectif,
-        private ?int $annee_installation,
+        private Signaletique $signaletique,
     ) {}
 
     public function controle(): void
     {
-        Assert::lessThanEq($this->annee_installation, (int) date('Y'));
-        Assert::greaterThanEq($this->annee_installation, $this->ventilation->annee_construction_batiment());
+        Assert::nullOrlessThanEq($this->signaletique->annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($this->signaletique->annee_installation, $this->ventilation->annee_construction_batiment());
     }
 
     public function reinitialise(): void {}
@@ -43,28 +39,8 @@ final class Generateur
         return $this->description;
     }
 
-    public function type(): TypeGenerateur
+    public function signaletique(): Signaletique
     {
-        return $this->type;
-    }
-
-    public function type_vmc(): ?TypeVmc
-    {
-        return $this->type_vmc;
-    }
-
-    public function presence_echangeur_thermique(): bool
-    {
-        return $this->presence_echangeur_thermique;
-    }
-
-    public function generateur_collectif(): bool
-    {
-        return $this->generateur_collectif;
-    }
-
-    public function annee_installation(): ?int
-    {
-        return $this->annee_installation;
+        return $this->signaletique;
     }
 }

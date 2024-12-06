@@ -26,19 +26,12 @@ final class XMLVentilationTransformer
 
     private function set_generateurs(XMLElement $root, Ventilation $ventilation): void
     {
-        foreach ($root->read_ventilations() as $reader) {
-            if (null === $type_generateur = $reader->type_generateur())
-                continue;
-
+        foreach ($root->read_ventilation()->read_generateurs() as $reader) {
             $entity = new Generateur(
                 id: $reader->id(),
                 ventilation: $ventilation,
                 description: $reader->description(),
-                type_ventilation: $reader->type_ventilation(),
-                type: $type_generateur,
-                presence_echangeur_thermique: $reader->presence_echangeur_thermique(),
-                generateur_collectif: $reader->generateur_collectif(),
-                annee_installation: $reader->annee_installation(),
+                signaletique: $reader->signaletique(),
             );
             $ventilation->add_generateur($entity);
         }
@@ -46,28 +39,27 @@ final class XMLVentilationTransformer
 
     private function set_installations(XMLElement $root, Ventilation $ventilation): void
     {
-        foreach ($root->read_ventilations() as $reader) {
-            $entity = new Installation(
+        foreach ($root->read_ventilation()->read_installations() as $reader) {
+            $installation = new Installation(
                 id: $reader->id(),
                 ventilation: $ventilation,
                 surface: $reader->surface(),
                 systemes: new SystemeCollection,
             );
-            $ventilation->add_installation($entity);
+            $ventilation->add_installation($installation);
 
-            $generateur = null;
-            if ($reader->type_generateur() && null === $generateur = $ventilation->generateurs()->find($reader->id()))
-                throw new \Exception("Le générateur {$reader->id()} n'existe pas");
+            foreach ($reader->read_generateurs() as $generateur_reader) {
+                if (null === $generateur = $ventilation->generateurs()->find($generateur_reader->id()))
+                    throw new \Exception("Le générateur {$reader->id()} n'existe pas");
 
-            $systeme = new Systeme(
-                id: $reader->id(),
-                installation: $entity,
-                type: $reader->type_systeme(),
-                generateur: $generateur,
-                mode_extraction: $reader->mode_extraction(),
-                mode_insufflation: $reader->mode_insufflation(),
-            );
-            $entity->add_systeme($systeme);
+                $systeme = new Systeme(
+                    id: $reader->id(),
+                    installation: $installation,
+                    type_ventilation: $generateur_reader->type_ventilation(),
+                    generateur: $generateur,
+                );
+                $installation->add_systeme($systeme);
+            }
         }
     }
 }

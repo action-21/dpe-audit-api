@@ -18,18 +18,18 @@ final class MoteurPerformance
     {
         $debit = $this->debit(
             type_ventilation: $entity->type_ventilation(),
-            type_generateur: $entity->generateur()?->type(),
-            type_vmc: $entity->generateur()?->type_vmc(),
-            presence_echangeur: $entity->generateur()?->presence_echangeur_thermique(),
-            systeme_collectif: $entity->generateur()?->generateur_collectif(),
-            annee_installation: $entity->generateur()?->annee_installation() ?? $entity->ventilation()->annee_construction_batiment(),
+            type_generateur: $entity->generateur()?->signaletique()->type,
+            type_vmc: $entity->generateur()?->signaletique()->type_vmc,
+            presence_echangeur: $entity->generateur()?->signaletique()->presence_echangeur_thermique,
+            systeme_collectif: $entity->generateur()?->signaletique()->generateur_collectif,
+            annee_installation: $entity->generateur()?->signaletique()->annee_installation ?? $entity->ventilation()->annee_construction_batiment(),
         );
         $pvent = $this->pvent(
             type_ventilation: $entity->type_ventilation(),
-            type_generateur: $entity->generateur()?->type(),
-            type_vmc: $entity->generateur()?->type_vmc(),
-            systeme_collectif: $entity->generateur()?->generateur_collectif(),
-            annee_installation: $entity->generateur()?->annee_installation() ?? $entity->ventilation()->annee_construction_batiment(),
+            type_generateur: $entity->generateur()?->signaletique()->type,
+            type_vmc: $entity->generateur()?->signaletique()->type_vmc,
+            systeme_collectif: $entity->generateur()?->signaletique()->generateur_collectif,
+            annee_installation: $entity->generateur()?->signaletique()->annee_installation ?? $entity->ventilation()->annee_construction_batiment(),
         );
 
         return Performance::create(
