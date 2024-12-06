@@ -2,8 +2,8 @@
 
 namespace App\Domain\Ecs\ValueObject\Signaletique;
 
-use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur, TypeChaudiere};
-use App\Domain\Ecs\ValueObject\Signaletique;
+use App\Domain\Ecs\Enum\{EnergieGenerateur, PositionChaudiere, TypeGenerateur};
+use App\Domain\Ecs\ValueObject\{Combustion, Signaletique};
 
 final class Chaudiere extends Signaletique
 {
@@ -13,25 +13,31 @@ final class Chaudiere extends Signaletique
         int $volume_stockage,
         bool $position_volume_chauffe,
         bool $generateur_collectif,
-        TypeChaudiere $type_chaudiere,
-        ?bool $presence_ventouse,
         ?float $pn,
-        ?float $rpn,
-        ?float $qp0,
-        ?float $pveilleuse,
+        ?PositionChaudiere $position,
+        ?Combustion $combustion,
     ): static {
+        $position = $position ?? PositionChaudiere::CHAUDIERE_SOL;
+
+        if ($type->to() === TypeGenerateur::CHAUDIERE_MULTI_BATIMENT) {
+            $position_volume_chauffe = false;
+            $generateur_collectif = true;
+        }
+        if ($energie->to() === EnergieGenerateur::ELECTRICITE) {
+            $combustion = null;
+        }
+        if ($energie->to() !== EnergieGenerateur::ELECTRICITE) {
+            $combustion = $combustion ?? Combustion::default();
+        }
         return new self(
             type: $type->to(),
             energie: $energie->to(),
             volume_stockage: $volume_stockage,
             position_volume_chauffe: $position_volume_chauffe,
             generateur_collectif: $generateur_collectif,
-            type_chaudiere: $type_chaudiere,
-            presence_ventouse: $presence_ventouse,
+            position_chaudiere: $position,
             pn: $pn,
-            rpn: $rpn,
-            qp0: $qp0,
-            pveilleuse: $pveilleuse,
+            combustion: $combustion,
         );
     }
 }

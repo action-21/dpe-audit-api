@@ -63,52 +63,11 @@ enum EnergieGenerateur: string implements Enum
         };
     }
 
-    /** @return self[] */
-    public static function cases_by_type_generateur(TypeGenerateur $type_generateur): array
+    public function combustible(): bool
     {
-        return match ($type_generateur) {
-            TypeGenerateur::ACCUMULATEUR_STANDARD,
-            TypeGenerateur::ACCUMULATEUR_CONDENSATION => [
-                self::GAZ_NATUREL,
-                self::GPL,
-            ],
-            TypeGenerateur::CHAUDIERE_MULTI_BATIMENT,
-            TypeGenerateur::CHAUDIERE_STANDARD => [
-                self::ELECTRICITE,
-                self::GAZ_NATUREL,
-                self::GPL,
-                self::FIOUL,
-                self::BOIS_BUCHE,
-                self::BOIS_PLAQUETTE,
-                self::BOIS_GRANULE,
-                self::CHARBON,
-            ],
-            TypeGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
-            TypeGenerateur::CHAUDIERE_CONDENSATION => [
-                self::GAZ_NATUREL,
-                self::GPL,
-                self::FIOUL,
-                self::BOIS_BUCHE,
-                self::BOIS_PLAQUETTE,
-                self::BOIS_GRANULE,
-            ],
-            TypeGenerateur::PAC_DOUBLE_SERVICE,
-            TypeGenerateur::PAC_MULTI_BATIMENT,
-            TypeGenerateur::BALLON_ELECTRIQUE_HORIZONTAL,
-            TypeGenerateur::BALLON_ELECTRIQUE_VERTICAL,
-            TypeGenerateur::CET_AIR_AMBIANT,
-            TypeGenerateur::CET_AIR_EXTERIEUR,
-            TypeGenerateur::CET_AIR_EXTRAIT => [
-                self::ELECTRICITE,
-            ],
-            TypeGenerateur::POELE_BOUILLEUR => [
-                self::BOIS_BUCHE,
-                self::BOIS_PLAQUETTE,
-                self::BOIS_GRANULE,
-            ],
-            TypeGenerateur::RESEAU_CHALEUR => [
-                self::RESEAU_CHALEUR,
-            ],
+        return match ($this) {
+            self::ELECTRICITE, self::RESEAU_CHALEUR => false,
+            default => true,
         };
     }
 }

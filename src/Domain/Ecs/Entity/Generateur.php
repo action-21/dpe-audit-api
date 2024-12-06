@@ -4,7 +4,7 @@ namespace App\Domain\Ecs\Entity;
 
 use App\Domain\Common\Type\Id;
 use App\Domain\Ecs\Ecs;
-use App\Domain\Ecs\Enum\{CategorieGenerateur, UsageEcs};
+use App\Domain\Ecs\Enum\{TypeGenerateur, UsageEcs};
 use App\Domain\Ecs\Service\{MoteurPerformance, MoteurPerte};
 use App\Domain\Ecs\ValueObject\{Performance, PerteCollection, Signaletique};
 use App\Domain\Simulation\Simulation;
@@ -28,8 +28,8 @@ final class Generateur
 
     public function controle(): void
     {
-        Assert::lessThanEq($this->annee_installation, (int) date('Y'));
-        Assert::greaterThanEq($this->annee_installation, $this->ecs->annee_construction_batiment());
+        Assert::nullOrLessThanEq($this->annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($this->annee_installation, $this->ecs->annee_construction_batiment());
     }
 
     public function reinitialise(): void
@@ -89,7 +89,7 @@ final class Generateur
 
     public function reference_reseau_chaleur(Id $reseau_chaleur_id): self
     {
-        if ($this->signaletique->categorie() === CategorieGenerateur::RESEAU_CHALEUR) {
+        if ($this->signaletique->type === TypeGenerateur::RESEAU_CHALEUR) {
             $this->reseau_chaleur_id = $reseau_chaleur_id;
             $this->reinitialise();
         }
@@ -110,11 +110,13 @@ final class Generateur
 
     public function reference_generateur_mixte(Id $generateur_mixte_id): self
     {
-        if (false === \in_array($this->signaletique->categorie(), [
-            CategorieGenerateur::ACCUMULATEUR,
-            CategorieGenerateur::CHAUFFE_EAU_ELECTRIQUE,
-            CategorieGenerateur::CHAUFFE_EAU_INSTANTANE,
-            CategorieGenerateur::CHAUFFE_EAU_THERMODYNAMIQUE,
+        if (\in_array($this->signaletique->type, [
+            TypeGenerateur::CHAUDIERE,
+            TypeGenerateur::CHAUDIERE_MULTI_BATIMENT,
+            TypeGenerateur::PAC_DOUBLE_SERVICE,
+            TypeGenerateur::PAC_MULTI_BATIMENT,
+            TypeGenerateur::POELE_BOUILLEUR,
+            TypeGenerateur::RESEAU_CHALEUR,
         ])) $this->generateur_mixte_id = $generateur_mixte_id;
 
         $this->reinitialise();

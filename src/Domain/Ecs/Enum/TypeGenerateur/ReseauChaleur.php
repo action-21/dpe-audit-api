@@ -4,10 +4,9 @@ namespace App\Domain\Ecs\Enum\TypeGenerateur;
 
 use App\Domain\Ecs\Enum\TypeGenerateur;
 
-enum Chaudiere: string
+enum ReseauChaleur: string
 {
-    case CHAUDIERE = 'CHAUDIERE';
-    case CHAUDIERE_MULTI_BATIMENT = 'CHAUDIERE_MULTI_BATIMENT';
+    case RESEAU_CHALEUR = 'RESEAU_CHALEUR';
 
     public function to(): TypeGenerateur
     {

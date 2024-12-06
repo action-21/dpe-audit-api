@@ -18,9 +18,9 @@ final class Solaire
         ?int $annee_installation,
         ?float $fecs,
     ): self {
-        Assert::greaterThanEq($fecs, 0);
-        Assert::lessThanEq($fecs, 1);
-        Assert::lessThanEq($annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($fecs, 0);
+        Assert::nullOrLessThanEq($fecs, 1);
+        Assert::nullOrLessThanEq($annee_installation, (int) date('Y'));
 
         return new self(
             usage: $usage,

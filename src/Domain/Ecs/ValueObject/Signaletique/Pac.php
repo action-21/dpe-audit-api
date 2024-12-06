@@ -5,25 +5,28 @@ namespace App\Domain\Ecs\ValueObject\Signaletique;
 use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur};
 use App\Domain\Ecs\ValueObject\Signaletique;
 
-final class ChauffeEauInstantane extends Signaletique
+final class Pac extends Signaletique
 {
     public static function create(
-        EnergieGenerateur\ChauffeEauInstantane $energie,
+        TypeGenerateur\Pac $type,
+        int $volume_stockage,
         bool $position_volume_chauffe,
         bool $generateur_collectif,
         ?float $pn,
-        ?float $rpn,
-        ?float $qp0,
+        ?float $cop,
     ): static {
+        if ($type->to() === TypeGenerateur::PAC_MULTI_BATIMENT) {
+            $position_volume_chauffe = false;
+            $generateur_collectif = true;
+        }
         $value = new static(
-            type: TypeGenerateur::CHAUFFE_EAU_INSTANTANE,
-            energie: $energie->to(),
-            volume_stockage: 0,
+            type: $type->to(),
+            energie: EnergieGenerateur::ELECTRICITE,
+            volume_stockage: $volume_stockage,
             position_volume_chauffe: $position_volume_chauffe,
             generateur_collectif: $generateur_collectif,
             pn: $pn,
-            rpn: $rpn,
-            qp0: $qp0,
+            cop: $cop,
         );
         $value->controle();
         return $value;

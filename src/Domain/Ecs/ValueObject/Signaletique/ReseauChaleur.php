@@ -7,10 +7,10 @@ use App\Domain\Ecs\ValueObject\Signaletique;
 
 final class ReseauChaleur extends Signaletique
 {
-    public static function create(): static
+    public static function create(TypeGenerateur\ReseauChaleur $type): static
     {
         $value = new static(
-            type: TypeGenerateur::RESEAU_CHALEUR,
+            type: $type->to(),
             energie: EnergieGenerateur::RESEAU_CHALEUR,
             volume_stockage: 0,
             position_volume_chauffe: false,

@@ -28,7 +28,7 @@ final class Installation
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);
-        Assert::greaterThanEq($this->solaire->annee_installation, $this->ecs->annee_construction_batiment());
+        Assert::nullOrGreaterThanEq($this->solaire->annee_installation, $this->ecs->annee_construction_batiment());
     }
 
     public function reinitialise(): void

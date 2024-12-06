@@ -4,7 +4,7 @@ namespace App\Database\Local\Ecs;
 
 use App\Domain\Ecs\Data\{Rg, RgRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur};
+use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur};
 
 final class XMLRgRepository implements RgRepository
 {
@@ -15,10 +15,10 @@ final class XMLRgRepository implements RgRepository
         return 'ecs.rg';
     }
 
-    public function find_by(CategorieGenerateur $categorie_generateur, EnergieGenerateur $energie_generateur): ?Rg
+    public function find_by(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): ?Rg
     {
         $record = $this->createQuery()
-            ->and('categorie_generateur', $categorie_generateur->id())
+            ->and('type_generateur', $type_generateur->id())
             ->and('energie_generateur', $energie_generateur->id())
             ->getOne();
         return $record ? $this->to($record) : null;

@@ -6,6 +6,7 @@ use App\Domain\Ecs\Enum\EnergieGenerateur;
 
 enum Chaudiere: string 
 {
+    case ELECTRICITE = 'ELECTRICITE';
     case GAZ_NATUREL = 'GAZ_NATUREL';
     case GPL = 'GPL';
     case FIOUL = 'FIOUL';

@@ -4,10 +4,9 @@ namespace App\Domain\Ecs\Enum\TypeGenerateur;
 
 use App\Domain\Ecs\Enum\TypeGenerateur;
 
-enum Accumulateur: string
+enum PoeleBouilleur: string
 {
-    case ACCUMULATEUR_CONDENSATION = 'ACCUMULATEUR_CONDENSATION';
-    case ACCUMULATEUR_STANDARD = 'ACCUMULATEUR_STANDARD';
+    case POELE_BOUILLEUR = 'POELE_BOUILLEUR';
 
     public function to(): TypeGenerateur
     {

@@ -4,7 +4,7 @@ namespace App\Database\Local\Ecs;
 
 use App\Domain\Ecs\Data\{Paux, PauxRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Ecs\Enum\{CategorieGenerateur};
+use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur};
 
 final class XMLPauxRepository implements PauxRepository
 {
@@ -15,10 +15,14 @@ final class XMLPauxRepository implements PauxRepository
         return 'ecs.paux';
     }
 
-    public function find_by(CategorieGenerateur $categorie_generateur, ?bool $presence_ventouse): ?Paux
-    {
+    public function find_by(
+        TypeGenerateur $type_generateur,
+        EnergieGenerateur $energie_generateur,
+        ?bool $presence_ventouse,
+    ): ?Paux {
         $record = $this->createQuery()
-            ->and('categorie_generateur', $categorie_generateur->value)
+            ->and('type_generateur', $type_generateur->value)
+            ->and('energie_generateur', $energie_generateur->value, true)
             ->and('presence_ventouse', $presence_ventouse, true)
             ->getOne();
         return $record ? $this->to($record) : null;

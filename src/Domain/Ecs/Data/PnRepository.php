@@ -2,9 +2,9 @@
 
 namespace App\Domain\Ecs\Data;
 
-use App\Domain\Ecs\Enum\TypeChaudiere;
+use App\Domain\Ecs\Enum\PositionChaudiere;
 
 interface PnRepository
 {
-    public function find_by(TypeChaudiere $type_chaudiere, int $annee_installation, float $pdim): ?Pn;
+    public function find_by(PositionChaudiere $position_chaudiere, int $annee_installation, float $pdim): ?Pn;
 }

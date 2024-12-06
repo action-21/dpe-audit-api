@@ -5,7 +5,7 @@ namespace App\Domain\Ecs\Service;
 use App\Domain\Common\Enum\{Enum, ScenarioUsage, ZoneClimatique};
 use App\Domain\Ecs\Data\{FecsRepository, RdRepository, RgRepository};
 use App\Domain\Ecs\Entity\Systeme;
-use App\Domain\Ecs\Enum\{BouclageReseau, CategorieGenerateur, EnergieGenerateur, IsolationReseau, LabelGenerateur, TypeGenerateur, UsageEcs};
+use App\Domain\Ecs\Enum\{BouclageReseau, EnergieGenerateur, IsolationReseau, LabelGenerateur, TypeGenerateur, UsageEcs};
 use App\Domain\Ecs\ValueObject\{Rendement, RendementCollection};
 
 /**
@@ -43,7 +43,6 @@ final class MoteurRendement
         $rgs = [$entity->generateur()->performance()->cop ?? 1];
         $rgs[] = $this->rgs(
             type_generateur: $entity->generateur()->signaletique()->type,
-            energie_generateur: $entity->generateur()->signaletique()->energie,
             isolation_reseau: $entity->reseau()->isolation_reseau,
         );
 
@@ -161,46 +160,47 @@ final class MoteurRendement
         float $becs,
         ?LabelGenerateur $label_generateur,
     ): float {
-        $categorie_generateur = CategorieGenerateur::determine(type: $type_generateur, energie: $energie_generateur,);
-
-        if (false === $this->rs_applicable($categorie_generateur))
+        if (false === $this->rs_applicable($type_generateur, $energie_generateur))
             return 1;
-        if ($type_generateur === TypeGenerateur::BALLON_ELECTRIQUE_VERTICAL && $label_generateur === LabelGenerateur::NE_PERFORMANCE_C)
+        if ($type_generateur === TypeGenerateur::CHAUFFE_EAU_VERTICAL && $label_generateur === LabelGenerateur::NE_PERFORMANCE_C)
             return 1.08 / (1 + ($pertes_stockages * $rd) / ($becs * 1000));
 
         return 1 / (1 + ($pertes_stockages * $rd) / ($becs * 1000));
     }
 
-    public function rs_applicable(CategorieGenerateur $categorie_generateur,): bool
+    public function rs_applicable(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): bool
     {
-        return \in_array($categorie_generateur, [
-            CategorieGenerateur::CHAUDIERE_ELECTRIQUE,
-            CategorieGenerateur::CHAUFFE_EAU_ELECTRIQUE,
-            CategorieGenerateur::CHAUFFE_EAU_INSTANTANE,
-        ]);
+        if ($type_generateur === TypeGenerateur::CHAUFFE_EAU_INSTANTANE)
+            return true;
+
+        return \in_array($type_generateur, [
+            TypeGenerateur::CHAUFFE_EAU_INSTANTANE,
+            TypeGenerateur::CHAUFFE_EAU_VERTICAL,
+            TypeGenerateur::CHAUFFE_EAU_HORIZONTAL,
+            TypeGenerateur::CHAUDIERE,
+        ]) && $energie_generateur === EnergieGenerateur::ELECTRICITE;
     }
 
     /**
      * Rendement annuel de génération/stockage
      */
-    public function rgs(
-        TypeGenerateur $type_generateur,
-        EnergieGenerateur $energie_generateur,
-        IsolationReseau $isolation_reseau,
-    ): float {
-        $categorie_generateur = CategorieGenerateur::determine(type: $type_generateur, energie: $energie_generateur,);
+    public function rgs(TypeGenerateur $type_generateur, IsolationReseau $isolation_reseau,): float
+    {
+        if (false === $this->rgs_applicable($type_generateur))
+            return 1;
 
-        return $this->rgs_applicable($categorie_generateur) ? match ($isolation_reseau) {
+        return match ($isolation_reseau) {
             IsolationReseau::ISOLE => 0.9,
             IsolationReseau::NON_ISOLE, IsolationReseau::INCONNU => 0.75,
-        } : 1;
+        };
     }
 
-    public function rgs_applicable(CategorieGenerateur $categorie_generateur,): bool
+    public function rgs_applicable(TypeGenerateur $type_generateur): bool
     {
-        return \in_array($categorie_generateur, [
-            CategorieGenerateur::CHAUDIERE_MULTI_BATIMENT,
-            CategorieGenerateur::RESEAU_CHALEUR,
+        return \in_array($type_generateur, [
+            TypeGenerateur::CHAUDIERE_MULTI_BATIMENT,
+            TypeGenerateur::PAC_MULTI_BATIMENT,
+            TypeGenerateur::RESEAU_CHALEUR,
         ]);
     }
 
@@ -222,26 +222,21 @@ final class MoteurRendement
         float $qp0,
         float $pveilleuse,
     ): float {
-        $categorie_generateur = CategorieGenerateur::determine(type: $type_generateur, energie: $energie_generateur,);
-
-        if (false === $this->rgs_combustion_applicable($categorie_generateur))
+        if (false === $this->rgs_combustion_applicable($type_generateur, $energie_generateur))
             return 1;
 
-        return $categorie_generateur === CategorieGenerateur::ACCUMULATEUR
+        return $type_generateur === TypeGenerateur::ACCUMULATEUR
             ? 1 / ((1 / $rpn) + ((8592 * $qp0 + $pertes_stockage) / $becs) + (6970 * ($pveilleuse / $becs)))
             : 1 / ((1 / $rpn) + ((1790 * $qp0 + $pertes_stockage) / $becs) + (6970 * ((0.5 * $pveilleuse) / $becs)));
     }
 
-    public function rgs_combustion_applicable(CategorieGenerateur $categorie_generateur,): bool
+    public function rgs_combustion_applicable(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): bool
     {
-        return \in_array($categorie_generateur, [
-            CategorieGenerateur::ACCUMULATEUR,
-            CategorieGenerateur::CHAUDIERE_BOIS,
-            CategorieGenerateur::CHAUDIERE_STANDARD,
-            CategorieGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
-            CategorieGenerateur::CHAUDIERE_CONDENSATION,
-            CategorieGenerateur::POELE_BOIS_BOUILLEUR,
-        ]);
+        return \in_array($type_generateur, [
+            TypeGenerateur::ACCUMULATEUR,
+            TypeGenerateur::CHAUDIERE,
+            TypeGenerateur::POELE_BOUILLEUR,
+        ]) && $energie_generateur->combustible();
     }
 
     /**
@@ -249,20 +244,25 @@ final class MoteurRendement
      */
     public function rg(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): float
     {
-        $categorie_generateur = CategorieGenerateur::determine(type: $type_generateur, energie: $energie_generateur,);
+        if (false === $this->rg_applicable($type_generateur, $energie_generateur))
+            return 1;
 
-        return $this->rg_applicable($categorie_generateur) ? match ($categorie_generateur) {
-            CategorieGenerateur::CHAUDIERE_ELECTRIQUE => 0.97,
-            CategorieGenerateur::CHAUFFE_EAU_ELECTRIQUE => 0.9,
-        } : 1;
+        if (null === $data = $this->rg_repository->find_by(
+            type_generateur: $type_generateur,
+            energie_generateur: $energie_generateur,
+        )) throw new \RuntimeException('Valeur forfaitaire Rg non trouvée');
+
+        return $data->rg;
     }
 
-    public function rg_applicable(CategorieGenerateur $categorie_generateur,): bool
+    public function rg_applicable(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): bool
     {
-        return \in_array($categorie_generateur, [
-            CategorieGenerateur::CHAUDIERE_ELECTRIQUE,
-            CategorieGenerateur::CHAUFFE_EAU_ELECTRIQUE,
-        ]);
+        return \in_array($type_generateur, [
+            TypeGenerateur::CHAUDIERE,
+            TypeGenerateur::CHAUFFE_EAU_INSTANTANE,
+            TypeGenerateur::CHAUFFE_EAU_VERTICAL,
+            TypeGenerateur::CHAUFFE_EAU_HORIZONTAL,
+        ]) && $energie_generateur === EnergieGenerateur::ELECTRICITE;
     }
 
     /**
@@ -281,15 +281,13 @@ final class MoteurRendement
         float $qp0,
         float $pveilleuse,
     ): float {
-        $categorie_generateur = CategorieGenerateur::determine(type: $type_generateur, energie: $energie_generateur,);
-
-        return $this->rg_combustion_applicable($categorie_generateur)
-            ? 1 / ((1 / $rpn) + (1790 * ($qp0 / $becs)) + (6970 * ($pveilleuse / $becs)))
-            : 1;
+        if (false === $this->rg_combustion_applicable($type_generateur, $energie_generateur,))
+            return 1;
+        return 1 / ((1 / $rpn) + (1790 * ($qp0 / $becs)) + (6970 * ($pveilleuse / $becs)));
     }
 
-    public function rg_combustion_applicable(CategorieGenerateur $categorie_generateur,): bool
+    public function rg_combustion_applicable(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): bool
     {
-        return $categorie_generateur === CategorieGenerateur::CHAUFFE_EAU_INSTANTANE;
+        return $type_generateur === TypeGenerateur::CHAUFFE_EAU_INSTANTANE  && $energie_generateur->combustible();
     }
 }

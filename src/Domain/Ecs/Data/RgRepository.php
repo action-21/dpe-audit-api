@@ -2,9 +2,9 @@
 
 namespace App\Domain\Ecs\Data;
 
-use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur};
+use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur};
 
 interface RgRepository
 {
-    public function find_by(CategorieGenerateur $categorie_generateur, EnergieGenerateur $energie_generateur,): ?Rg;
+    public function find_by(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): ?Rg;
 }

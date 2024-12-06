@@ -25,10 +25,10 @@ final class Performance
     ): self {
         Assert::greaterThanEq($pn, 0);
         Assert::greaterThanEq($paux, 0);
-        Assert::greaterThanEq($cop, 0);
-        Assert::greaterThanEq($rpn, 0);
-        Assert::greaterThanEq($qp0, 0);
-        Assert::greaterThanEq($pveilleuse, 0);
+        Assert::nullOrGreaterThan($cop, 0);
+        Assert::nullOrGreaterThan($rpn, 0);
+        Assert::nullOrGreaterThan($qp0, 0);
+        Assert::nullOrGreaterThan($pveilleuse, 0);
 
         return new static(
             pn: $pn,

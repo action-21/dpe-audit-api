@@ -223,7 +223,7 @@ final class MoteurPerte
         if (0 === $volume_stockage)
             return 0;
 
-        if (\in_array($type_generateur, [TypeGenerateur::BALLON_ELECTRIQUE_HORIZONTAL, TypeGenerateur::BALLON_ELECTRIQUE_VERTICAL])) {
+        if (\in_array($type_generateur, [TypeGenerateur::CHAUFFE_EAU_HORIZONTAL, TypeGenerateur::CHAUFFE_EAU_VERTICAL])) {
             if (null === $data = $this->cr_repository->find_by(
                 type_generateur: $type_generateur,
                 label_generateur: $label_generateur ?? LabelGenerateur::INCONNU,

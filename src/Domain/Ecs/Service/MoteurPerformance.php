@@ -7,7 +7,7 @@ use App\Domain\Common\Enum\ZoneClimatique;
 use App\Domain\Common\Service\ExpressionResolver;
 use App\Domain\Ecs\Data\{CombustionRepository, CopRepository, PauxRepository, PnRepository};
 use App\Domain\Ecs\Entity\Generateur;
-use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur, TypeChaudiere, TypeGenerateur};
+use App\Domain\Ecs\Enum\{EnergieGenerateur, PositionChaudiere, TypeCombustion, TypeGenerateur};
 use App\Domain\Ecs\ValueObject\Performance;
 use App\Domain\Simulation\Simulation;
 
@@ -26,7 +26,12 @@ final class MoteurPerformance
     public function calcule_performance(Generateur $entity, Simulation $simulation): Performance
     {
         $pn = $this->calcule_pn($entity, $simulation);
-        $paux = $this->paux(categorie_generateur: $entity->signaletique()->categorie(), pn: $pn, presence_ventouse: $entity->signaletique()?->presence_ventouse);
+        $paux = $this->paux(
+            type_generateur: $entity->signaletique()->type,
+            energie_generateur: $entity->signaletique()->energie,
+            pn: $pn,
+            presence_ventouse: $entity->signaletique()->combustion?->presence_ventouse
+        );
 
         $cop = $this->cop_applicable(type_generateur: $entity->signaletique()->type) ? $this->cop(
             zone_climatique: $entity->ecs()->audit()->zone_climatique(),
@@ -35,16 +40,17 @@ final class MoteurPerformance
             cop_saisi: $entity->signaletique()?->cop,
         ) : null;
 
-        $combustion = $this->combustion_applicable(categorie_generateur: $entity->signaletique()->categorie()) ? $this->combustion(
+        $combustion = $this->combustion(
             type_generateur: $entity->signaletique()->type,
             energie_generateur: $entity->signaletique()->energie,
             annee_installation: $entity->annee_installation() ?? $entity->ecs()->audit()->annee_construction_batiment(),
             pn: $pn,
-            presence_ventouse: $entity->signaletique()?->presence_ventouse,
-            rpn_saisi: $entity->signaletique()?->rpn,
-            qp0_saisi: $entity->signaletique()?->qp0,
-            pveilleuse_saisi: $entity->signaletique()?->pveilleuse,
-        ) : [];
+            type_combustion: $entity->signaletique()->combustion?->type,
+            presence_ventouse: $entity->signaletique()->combustion?->presence_ventouse,
+            rpn_saisi: $entity->signaletique()->combustion?->rpn,
+            qp0_saisi: $entity->signaletique()->combustion?->qp0,
+            pveilleuse_saisi: $entity->signaletique()->combustion?->pveilleuse,
+        );
 
         return Performance::create(
             pn: $pn,
@@ -76,8 +82,8 @@ final class MoteurPerformance
 
         $pdim = \max($pch, $pecs);;
 
-        return $entity->signaletique()->type_chaudiere ? $this->pn_chaudiere(
-            type_chaudiere: $entity->signaletique()->type_chaudiere,
+        return $entity->signaletique()->position_chaudiere ? $this->pn_chaudiere(
+            position_chaudiere: $entity->signaletique()->position_chaudiere,
             annee_installation: $entity->annee_installation() ?? $entity->ecs()->audit()->annee_construction_batiment(),
             pdim: $pdim,
         ) : $pdim;
@@ -89,12 +95,12 @@ final class MoteurPerformance
      * @param float $pdim - Puissance de dimensionnement en kW
      */
     public function pn_chaudiere(
-        TypeChaudiere $type_chaudiere,
+        PositionChaudiere $position_chaudiere,
         int $annee_installation,
         float $pdim,
     ): float {
         if (null === $data = $this->pn_repository->find_by(
-            type_chaudiere: $type_chaudiere,
+            position_chaudiere: $position_chaudiere,
             annee_installation: $annee_installation,
             pdim: $pdim,
         )) throw new \DomainException('Valeur forfaitaire Pn non trouvée');
@@ -110,10 +116,15 @@ final class MoteurPerformance
      * 
      * @param float $pn - Puissance nominale du générateur en kW
      */
-    public function paux(CategorieGenerateur $categorie_generateur, float $pn, ?bool $presence_ventouse,): float
-    {
+    public function paux(
+        TypeGenerateur $type_generateur,
+        EnergieGenerateur $energie_generateur,
+        float $pn,
+        ?bool $presence_ventouse,
+    ): float {
         if (null === $data = $this->paux_repository->find_by(
-            categorie_generateur: $categorie_generateur,
+            type_generateur: $type_generateur,
+            energie_generateur: $energie_generateur,
             presence_ventouse: $presence_ventouse,
         )) throw new \DomainException("Valeur forfaitaire Paux non trouvée");
 
@@ -162,14 +173,19 @@ final class MoteurPerformance
         EnergieGenerateur $energie_generateur,
         int $annee_installation,
         float $pn,
+        ?TypeCombustion $type_combustion,
         ?bool $presence_ventouse,
         ?float $rpn_saisi,
         ?float $qp0_saisi,
         ?float $pveilleuse_saisi,
     ): array {
+        if (false === $this->combustion_applicable($type_generateur, $energie_generateur))
+            return [];
+
         if (null === $data = $this->combustion_repository->find_by(
             type_generateur: $type_generateur,
             energie_generateur: $energie_generateur,
+            type_combustion: $type_combustion,
             annee_installation_generateur: $annee_installation,
             pn: $pn,
         )) throw new \DomainException("Valeurs forfaitaires de combustion non trouvées");
@@ -186,15 +202,13 @@ final class MoteurPerformance
         return ['rpn' => $rpn, 'qp0' => $qp0, 'pveilleuse' => $pveilleuse];
     }
 
-    public function combustion_applicable(CategorieGenerateur $categorie_generateur,): bool
+    public function combustion_applicable(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): bool
     {
-        return \in_array($categorie_generateur, [
-            CategorieGenerateur::CHAUDIERE_BOIS,
-            CategorieGenerateur::CHAUDIERE_STANDARD,
-            CategorieGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
-            CategorieGenerateur::CHAUDIERE_CONDENSATION,
-            CategorieGenerateur::POELE_BOIS_BOUILLEUR,
-            CategorieGenerateur::CHAUFFE_EAU_INSTANTANE,
-        ]);
+        return \in_array($type_generateur, [
+            TypeGenerateur::ACCUMULATEUR,
+            TypeGenerateur::CHAUDIERE,
+            TypeGenerateur::POELE_BOUILLEUR,
+            TypeGenerateur::CHAUFFE_EAU_INSTANTANE,
+        ]) && $energie_generateur->combustible();
     }
 }

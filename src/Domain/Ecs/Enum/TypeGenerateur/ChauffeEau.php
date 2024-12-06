@@ -4,11 +4,12 @@ namespace App\Domain\Ecs\Enum\TypeGenerateur;
 
 use App\Domain\Ecs\Enum\TypeGenerateur;
 
-enum ChauffeEauElectrique: string
+enum ChauffeEau: string
 {
-    case BALLON_ELECTRIQUE_HORIZONTAL = 'BALLON_ELECTRIQUE_HORIZONTAL';
-    case BALLON_ELECTRIQUE_VERTICAL = 'BALLON_ELECTRIQUE_VERTICAL';
+    case ACCUMULATEUR = 'ACCUMULATEUR';
     case CHAUFFE_EAU_INSTANTANE = 'CHAUFFE_EAU_INSTANTANE';
+    case CHAUFFE_EAU_VERTICAL = 'CHAUFFE_EAU_VERTICAL';
+    case CHAUFFE_EAU_HORIZONTAL = 'CHAUFFE_EAU_HORIZONTAL';
 
     public function to(): TypeGenerateur
     {

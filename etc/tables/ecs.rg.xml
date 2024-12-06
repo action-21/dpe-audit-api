@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <table name="ecs.rg">
     <row>
-        <categorie_generateur>CHAUFFE_EAU_ELECTRIQUE</categorie_generateur>
-        <energie_generateur>ELECTRICITE</energie_generateur>
-        <rg>1</rg>
-    </row>
-    <row>
-        <categorie_generateur>CHAUFFE_EAU_INSTANTANE</categorie_generateur>
-        <energie_generateur>ELECTRICITE</energie_generateur>
-        <rg>1</rg>
-    </row>
-    <row>
-        <categorie_generateur>CHAUDIERE_ELECTRIQUE</categorie_generateur>
+        <type_generateur>CHAUDIERE</type_generateur>
         <energie_generateur>ELECTRICITE</energie_generateur>
         <rg>0.97</rg>
+    </row>
+    <row>
+        <type_generateur>CHAUFFE_EAU_INSTANTANE</type_generateur>
+        <energie_generateur>ELECTRICITE</energie_generateur>
+        <rg>1</rg>
+    </row>
+    <row>
+        <type_generateur>CHAUFFE_EAU_VERTICAL</type_generateur>
+        <energie_generateur>ELECTRICITE</energie_generateur>
+        <rg>1</rg>
+    </row>
+    <row>
+        <type_generateur>CHAUFFE_EAU_HORIZONTAL</type_generateur>
+        <energie_generateur>ELECTRICITE</energie_generateur>
+        <rg>1</rg>
     </row>
 </table>

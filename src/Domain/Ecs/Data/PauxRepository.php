@@ -2,9 +2,13 @@
 
 namespace App\Domain\Ecs\Data;
 
-use App\Domain\Ecs\Enum\CategorieGenerateur;
+use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur};
 
 interface PauxRepository
 {
-    public function find_by(CategorieGenerateur $categorie_generateur, ?bool $presence_ventouse): ?Paux;
+    public function find_by(
+        TypeGenerateur $type_generateur,
+        EnergieGenerateur $energie_generateur,
+        ?bool $presence_ventouse,
+    ): ?Paux;
 }
