@@ -12,9 +12,9 @@ enum TypeLiaison: string implements Enum
     case REFEND_MUR = 'REFEND_MUR';
     case MENUISERIE_MUR = 'MENUISERIE_MUR';
 
-    public static function from_enum_type_liaison_id(int $type_liaison_id): self
+    public static function from_enum_type_liaison_id(int $id): self
     {
-        return match ($type_liaison_id) {
+        return match ($id) {
             1 => self::PLANCHER_BAS_MUR,
             2 => self::PLANCHER_INTERMEDIAIRE_MUR,
             3 => self::PLANCHER_HAUT_MUR,

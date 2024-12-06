@@ -10,7 +10,7 @@ use App\Database\Opendata\Enveloppe\XMLEnveloppeReader;
 use App\Database\Opendata\Production\XMLProductionReader;
 use App\Database\Opendata\Refroidissement\XMLRefroidissementReader;
 use App\Database\Opendata\Ventilation\XMLVentilationReader;
-use App\Database\Opendata\Visite\XMLLogementReader;
+use App\Database\Opendata\Visite\XMLVisiteReader;
 
 class XMLElement extends \SimpleXMLElement
 {
@@ -182,6 +182,11 @@ class XMLElement extends \SimpleXMLElement
         return XMLEnveloppeReader::from($this->etat_initial());
     }
 
+    public function read_ventilation(): XMLVentilationReader
+    {
+        return XMLVentilationReader::from($this->etat_initial());
+    }
+
     public function read_chauffage(): XMLChauffageReader
     {
         return XMLChauffageReader::from($this->etat_initial());
@@ -202,16 +207,8 @@ class XMLElement extends \SimpleXMLElement
         return XMLProductionReader::from($this->etat_initial());
     }
 
-    public function read_logements_visites(): XMLLogementReader
+    public function read_visite(): XMLVisiteReader
     {
-        return XMLLogementReader::from($this->etat_initial()->findMany('.//logement_visite_collection//logement_visite'));
-    }
-
-    /**
-     * TODO: identifier les installations par appartement dans le cas d'un Audit-DPE immeuble
-     */
-    public function read_ventilations(): XMLVentilationReader
-    {
-        return XMLVentilationReader::from($this->etat_initial()->findMany('.//ventilation_collection//ventilation'));
+        return XMLVisiteReader::from($this->etat_initial());
     }
 }

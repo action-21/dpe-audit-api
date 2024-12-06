@@ -2,17 +2,19 @@
 
 namespace App\Database\Opendata\Ecs;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\{XMLElement, XMLReader};
 use App\Domain\Common\Type\Id;
 use App\Domain\Ecs\Enum\{BouclageReseau, IsolationReseau, UsageEcs};
 use App\Domain\Ecs\ValueObject\{Reseau, Solaire};
 
-final class XMLInstallationReader extends XMLReaderIterator
+final class XMLInstallationReader extends XMLReader
 {
-    public function read_generateurs(): XMLGenerateurReader
+    /** @return XMLGenerateurReader[] */
+    public function read_generateurs(): array
     {
-        return XMLGenerateurReader::from(
-            $this->xml()->findMany('.//generateur_ecs_collection/generateur_ecs')
+        return \array_map(
+            fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
+            $this->xml()->findMany('.//generateur_ecs_collection//generateur_ecs')
         );
     }
 

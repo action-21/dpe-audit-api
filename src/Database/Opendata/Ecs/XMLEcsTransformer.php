@@ -42,17 +42,11 @@ final class XMLEcsTransformer
                     id: $generateur_reader->id(),
                     ecs: $ecs,
                     description: $generateur_reader->description(),
-                    type: $generateur_reader->type(),
-                    energie: $generateur_reader->energie(),
-                    volume_stockage: $generateur_reader->volume_stockage(),
-                    position_volume_chauffe: $generateur_reader->position_volume_chauffe(),
-                    generateur_collectif: $installation_collective,
                     signaletique: $generateur_reader->signaletique(),
                     annee_installation: $generateur_reader->annee_installation(),
                     generateur_mixte_id: $generateur_reader->match_generateur_mixte(),
                     reseau_chaleur_id: $generateur_reader->reseau_chaleur_id(),
                 );
-                $generateur->determine_categorie();
                 $ecs->add_generateur($generateur);
             }
         }

@@ -19,9 +19,10 @@ final class XMLVisiteTransformer
     public function transform(XMLElement $root): Visite
     {
         $audit = $this->audit_transformer->transform($root);
+        $reader = $root->read_visite();
         $visite = $this->factory->build($audit);
 
-        foreach ($root->read_logements_visites() as $reader) {
+        foreach ($reader->read_logements() as $reader) {
             $logement = new Logement(
                 id: $reader->id(),
                 visite: $visite,

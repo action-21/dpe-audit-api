@@ -2,11 +2,11 @@
 
 namespace App\Database\Opendata\PlancherBas;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\PlancherBas\Enum\{EtatIsolation, Inertie, Mitoyennete, TypeIsolation, TypePlancherBas};
 
-final class XMLPlancherBasReader extends XMLReaderIterator
+final class XMLPlancherBasReader extends XMLReader
 {
     public function match(string $reference): bool
     {

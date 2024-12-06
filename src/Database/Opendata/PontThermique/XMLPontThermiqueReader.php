@@ -2,11 +2,11 @@
 
 namespace App\Database\Opendata\PontThermique;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\PontThermique\Enum\TypeLiaison;
 
-final class XMLPontThermiqueReader extends XMLReaderIterator
+final class XMLPontThermiqueReader extends XMLReader
 {
     public function id(): Id
     {

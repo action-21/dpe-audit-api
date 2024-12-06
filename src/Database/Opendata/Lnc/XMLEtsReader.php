@@ -2,15 +2,19 @@
 
 namespace App\Database\Opendata\Lnc;
 
-use App\Database\Opendata\XMLReader;
+use App\Database\Opendata\{XMLElement, XMLReader};
 use App\Domain\Common\Type\Id;
 use App\Domain\Lnc\Enum\{NatureMenuiserie, TypeBaie, TypeVitrage};
 
 final class XMLEtsReader extends XMLReader
 {
-    public function read_baies(): XMLBaieReader
+    /** @return XMLBaieReader[] */
+    public function read_baies(): array
     {
-        return XMLBaieReader::from($this->xml()->findManyOrError('.//baie_ets_collection/baie_ets'));
+        return \array_map(
+            fn(XMLElement $xml): XMLBaieReader => XMLBaieReader::from($xml),
+            $this->xml()->findMany('.//baie_ets_collection//baie_ets')
+        );
     }
 
     public function id(): Id

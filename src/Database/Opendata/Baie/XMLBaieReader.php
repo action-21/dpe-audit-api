@@ -2,12 +2,12 @@
 
 namespace App\Database\Opendata\Baie;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Baie\Enum\{Mitoyennete, NatureGazLame, NatureMenuiserie, TypeBaie, TypeFermeture, TypePose, TypeSurvitrage, TypeVitrage};
 use App\Domain\Baie\ValueObject\{Caracteristique, DoubleFenetre, Menuiserie, Survitrage};
 use App\Domain\Common\Type\Id;
 
-final class XMLBaieReader extends XMLReaderIterator
+final class XMLBaieReader extends XMLReader
 {
     public function read_double_fenetre(): ?XMLDoubleFenetreReader
     {

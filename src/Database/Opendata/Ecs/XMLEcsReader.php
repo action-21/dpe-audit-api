@@ -2,18 +2,26 @@
 
 namespace App\Database\Opendata\Ecs;
 
-use App\Database\Opendata\XMLReader;
+use App\Database\Opendata\{XMLElement, XMLReader};
 
 final class XMLEcsReader extends XMLReader
 {
-    public function read_installations(): XMLInstallationReader
+    /** @return XMLInstallationReader[] */
+    public function read_installations(): array
     {
-        return XMLInstallationReader::from($this->xml()->findMany('.//installation_ecs_collection//installation_ecs'));
+        return \array_map(
+            fn(XMLElement $xml): XMLInstallationReader => XMLInstallationReader::from($xml),
+            $this->xml()->findMany('.//installation_ecs_collection//installation_ecs')
+        );
     }
 
-    public function read_generateurs(): XMLGenerateurReader
+    /** @return XMLGenerateurReader[] */
+    public function read_generateurs(): array
     {
-        return XMLGenerateurReader::from($this->xml()->findMany('.//generateur_ecs_collection//generateur_ecs'));
+        return \array_map(
+            fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
+            $this->xml()->findMany('.//generateur_ecs_collection//generateur_ecs')
+        );
     }
 
     // * Données calculées

@@ -2,12 +2,12 @@
 
 namespace App\Database\Opendata\Porte;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\Porte\Enum\{EtatIsolation, Mitoyennete, NatureMenuiserie, TypePose, TypeVitrage};
 use App\Domain\Porte\ValueObject\{Caracteristique, Menuiserie, Position, Vitrage};
 
-final class XMLPorteReader extends XMLReaderIterator
+final class XMLPorteReader extends XMLReader
 {
     public function match(string $reference): bool
     {

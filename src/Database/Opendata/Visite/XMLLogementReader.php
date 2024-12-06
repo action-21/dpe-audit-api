@@ -2,11 +2,11 @@
 
 namespace App\Database\Opendata\Visite;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\Visite\Enum\Typologie;
 
-final class XMLLogementReader extends XMLReaderIterator
+final class XMLLogementReader extends XMLReader
 {
     public function id(): Id
     {

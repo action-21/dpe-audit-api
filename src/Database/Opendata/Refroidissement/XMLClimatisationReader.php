@@ -2,13 +2,11 @@
 
 namespace App\Database\Opendata\Refroidissement;
 
-use App\Database\Opendata\XMLReaderIterator;
-use App\Domain\Common\Enum\Energie;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
-use App\Domain\Refroidissement\Enum\EnergieGenerateur;
-use App\Domain\Refroidissement\Enum\TypeGenerateur;
+use App\Domain\Refroidissement\Enum\{EnergieGenerateur, TypeGenerateur};
 
-final class XMLClimatisationReader extends XMLReaderIterator
+final class XMLClimatisationReader extends XMLReader
 {
     public function id(): Id
     {

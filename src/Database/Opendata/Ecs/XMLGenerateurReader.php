@@ -2,13 +2,12 @@
 
 namespace App\Database\Opendata\Ecs;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
-use App\Domain\Ecs\Enum\{CategorieGenerateur, EnergieGenerateur, LabelGenerateur, TypeChaudiere, TypeGenerateur, TypeStockage};
-use App\Domain\Ecs\ValueObject\Signaletique;
-use App\Domain\Ecs\ValueObject\Stockage;
+use App\Domain\Ecs\Enum\{EnergieGenerateur, LabelGenerateur, PositionChaudiere, TypeCombustion, TypeGenerateur};
+use App\Domain\Ecs\ValueObject\{Combustion, Signaletique, Stockage};
 
-final class XMLGenerateurReader extends XMLReaderIterator
+final class XMLGenerateurReader extends XMLReader
 {
     public function apply(): bool
     {
@@ -34,6 +33,11 @@ final class XMLGenerateurReader extends XMLReaderIterator
             }
         }
         return false;
+    }
+
+    public function read_installation(): XMLInstallationReader
+    {
+        return XMLInstallationReader::from($this->xml()->findOneOrError('./ancestor::installation_ecs'));
     }
 
     public function id(): Id
@@ -82,33 +86,48 @@ final class XMLGenerateurReader extends XMLReaderIterator
     public function signaletique(): Signaletique
     {
         return new Signaletique(
-            type_chaudiere: $this->type_chaudiere(),
+            type: $this->type(),
+            energie: $this->energie(),
+            volume_stockage: $this->volume_stockage(),
+            position_volume_chauffe: $this->position_volume_chauffe(),
+            generateur_collectif: $this->generateur_collectif(),
+            position_chaudiere: $this->position_chaudiere(),
             label: $this->label(),
-            presence_ventouse: $this->presence_ventouse(),
+            combustion: $this->combustion(),
             pn: $this->pn_saisi(),
-            rpn: $this->rpn_saisi(),
-            qp0: $this->qp0_saisi(),
-            pveilleuse: $this->pveilleuse_saisi(),
             cop: $this->cop_saisi(),
         );
     }
 
-    public function categorie(): CategorieGenerateur
+    public function combustion(): ?Combustion
     {
-        return CategorieGenerateur::determine(type: $this->type(), energie: $this->energie());
+        return $this->energie()->combustible() ? new Combustion(
+            type: $this->type_combustion(),
+            presence_ventouse: $this->presence_ventouse(),
+            rpn: $this->rpn_saisi(),
+            qp0: $this->qp0_saisi(),
+            pveilleuse: $this->pveilleuse_saisi(),
+        ) : null;
     }
 
-    public function type_chaudiere(): ?TypeChaudiere
+    public function type_combustion(): ?TypeCombustion
     {
-        return match ($this->categorie()) {
-            CategorieGenerateur::CHAUDIERE_BOIS,
-            CategorieGenerateur::CHAUDIERE_ELECTRIQUE,
-            CategorieGenerateur::CHAUDIERE_STANDARD,
-            CategorieGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
-            CategorieGenerateur::CHAUDIERE_CONDENSATION => match (true) {
-                ($this->pn() < 18) => TypeChaudiere::CHAUDIERE_MURALE,
-                ($this->pn() >= 18) => TypeChaudiere::CHAUDIERE_SOL,
-                default => null,
+        return TypeCombustion::from_enum_type_generateur_ecs_id($this->enum_type_generateur_ecs_id());
+    }
+
+    public function generateur_collectif(): bool
+    {
+        return $this->read_installation()->installation_collective();
+    }
+
+    public function position_chaudiere(): ?PositionChaudiere
+    {
+        return match ($this->type()) {
+            TypeGenerateur::CHAUDIERE,
+            TypeGenerateur::CHAUDIERE_MULTI_BATIMENT => match (true) {
+                ($this->pn() < 18) => PositionChaudiere::CHAUDIERE_MURALE,
+                ($this->pn() >= 18) => PositionChaudiere::CHAUDIERE_SOL,
+                default =>  PositionChaudiere::CHAUDIERE_SOL,
             },
             default => null,
         };

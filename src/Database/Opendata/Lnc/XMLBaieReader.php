@@ -2,11 +2,11 @@
 
 namespace App\Database\Opendata\Lnc;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\Lnc\Enum\{Mitoyennete};
 
-final class XMLBaieReader extends XMLReaderIterator
+final class XMLBaieReader extends XMLReader
 {
     public function id(): Id
     {

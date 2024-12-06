@@ -23,6 +23,7 @@ final class XMLPlancherHautTransformer
                 description: $reader->description(),
                 position: new Position(
                     local_non_chauffe_id: $lnc?->id(),
+                    orientation: null,
                     mitoyennete: $reader->mitoyennete(),
                 ),
                 caracteristique: new Caracteristique(

@@ -2,13 +2,17 @@
 
 namespace App\Database\Opendata\Refroidissement;
 
-use App\Database\Opendata\XMLReader;
+use App\Database\Opendata\{XMLElement, XMLReader};
 
 final class XMLRefroidissementReader extends XMLReader
 {
-    public function read_climatisations(): XMLClimatisationReader
+    /** @return XMLClimatisationReader[] */
+    public function read_climatisations(): array
     {
-        return XMLClimatisationReader::from($this->xml()->findMany('.//climatisation_collection//climatisation'));
+        return \array_map(
+            fn(XMLElement $xml): XMLClimatisationReader => XMLClimatisationReader::from($xml),
+            $this->xml()->findMany('.//climatisation_collection//climatisation')
+        );
     }
 
     // * Données calculées

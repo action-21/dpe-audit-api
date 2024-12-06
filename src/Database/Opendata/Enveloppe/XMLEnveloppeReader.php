@@ -2,7 +2,7 @@
 
 namespace App\Database\Opendata\Enveloppe;
 
-use App\Database\Opendata\XMLReader;
+use App\Database\Opendata\{XMLElement, XMLReader};
 use App\Database\Opendata\Baie\XMLBaieReader;
 use App\Database\Opendata\Mur\XMLMurReader;
 use App\Database\Opendata\PlancherBas\XMLPlancherBasReader;
@@ -13,34 +13,58 @@ use App\Domain\Enveloppe\Enum\Exposition;
 
 final class XMLEnveloppeReader extends XMLReader
 {
-    public function read_murs(): XMLMurReader
+    /** @return XMLMurReader[] */
+    public function read_murs(): array
     {
-        return XMLMurReader::from($this->xml()->findMany('.//mur_collection//mur'));
+        return \array_map(
+            fn(XMLElement $xml): XMLMurReader => XMLMurReader::from($xml),
+            $this->xml()->findMany('.//mur_collection//mur')
+        );
     }
 
-    public function read_planchers_bas(): XMLPlancherBasReader
+    /** @return XMLPlancherBasReader[] */
+    public function read_planchers_bas(): array
     {
-        return XMLPlancherBasReader::from($this->xml()->findMany('.//plancher_bas_collection//plancher_bas'));
+        return \array_map(
+            fn(XMLElement $xml): XMLPlancherBasReader => XMLPlancherBasReader::from($xml),
+            $this->xml()->findMany('.//plancher_bas_collection//plancher_bas')
+        );
     }
 
-    public function read_planchers_hauts(): XMLPlancherHautReader
+    /** @return XMLPlancherHautReader[] */
+    public function read_planchers_hauts(): array
     {
-        return XMLPlancherHautReader::from($this->xml()->findMany('.//plancher_haut_collection//plancher_haut'));
+        return \array_map(
+            fn(XMLElement $xml): XMLPlancherHautReader => XMLPlancherHautReader::from($xml),
+            $this->xml()->findMany('.//plancher_haut_collection//plancher_haut')
+        );
     }
 
-    public function read_baies(): XMLBaieReader
+    /** @return XMLBaieReader[] */
+    public function read_baies(): array
     {
-        return XMLBaieReader::from($this->xml()->findMany('.//baie_vitree_collection//baie_vitree'));
+        return \array_map(
+            fn(XMLElement $xml): XMLBaieReader => XMLBaieReader::from($xml),
+            $this->xml()->findMany('.//baie_vitree_collection//baie_vitree')
+        );
     }
 
-    public function read_portes(): XMLPorteReader
+    /** @return XMLPorteReader[] */
+    public function read_portes(): array
     {
-        return XMLPorteReader::from($this->xml()->findMany('.//porte_collection//porte'));
+        return \array_map(
+            fn(XMLElement $xml): XMLPorteReader => XMLPorteReader::from($xml),
+            $this->xml()->findMany('.//porte_collection//porte')
+        );
     }
 
-    public function read_ponts_thermiques(): XMLPontThermiqueReader
+    /** @return XMLPontThermiqueReader[] */
+    public function read_ponts_thermiques(): array
     {
-        return XMLPontThermiqueReader::from($this->xml()->findMany('.//pont_thermique_collection//pont_thermique'));
+        return \array_map(
+            fn(XMLElement $xml): XMLPontThermiqueReader => XMLPontThermiqueReader::from($xml),
+            $this->xml()->findMany('.//pont_thermique_collection//pont_thermique')
+        );
     }
 
     public function plusieurs_facade_exposee(): bool

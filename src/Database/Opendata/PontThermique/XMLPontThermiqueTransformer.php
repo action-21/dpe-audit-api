@@ -20,7 +20,7 @@ final class XMLPontThermiqueTransformer
             $liaison = match ($reader->type_liaison()) {
                 TypeLiaison::PLANCHER_BAS_MUR => Liaison::create_liaison_plancher_bas_mur(
                     mur_id: $mur_id,
-                    plancher_bas_id: $plancher_id,
+                    plancher_id: $plancher_id,
                 ),
                 TypeLiaison::PLANCHER_INTERMEDIAIRE_MUR => Liaison::create_liaison_plancher_intermediaire_mur(
                     mur_id: $mur_id,
@@ -28,7 +28,7 @@ final class XMLPontThermiqueTransformer
                 ),
                 TypeLiaison::PLANCHER_HAUT_MUR => Liaison::create_liaison_plancher_haut_mur(
                     mur_id: $mur_id,
-                    plancher_haut_id: $plancher_id,
+                    plancher_id: $plancher_id,
                 ),
                 TypeLiaison::REFEND_MUR => Liaison::create_liaison_refend_mur(
                     mur_id: $mur_id,

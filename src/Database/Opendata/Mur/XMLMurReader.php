@@ -2,11 +2,11 @@
 
 namespace App\Database\Opendata\Mur;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\Mur\Enum\{EtatIsolation, Inertie, Mitoyennete, TypeDoublage, TypeIsolation, TypeMur};
 
-final class XMLMurReader extends XMLReaderIterator
+final class XMLMurReader extends XMLReader
 {
     public function match(string $reference): bool
     {
