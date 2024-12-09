@@ -58,4 +58,12 @@ enum EnergieGenerateur: string implements Enum
             default => Energie::from($this->value),
         };
     }
+
+    public function combustible(): bool
+    {
+        return match ($this) {
+            self::ELECTRICITE, self::RESEAU_CHALEUR => false,
+            default => true,
+        };
+    }
 }

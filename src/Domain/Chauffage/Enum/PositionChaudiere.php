@@ -4,7 +4,7 @@ namespace App\Domain\Chauffage\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum TypeChaudiere: string implements Enum
+enum PositionChaudiere: string implements Enum
 {
     case CHAUDIERE_MURALE = 'CHAUDIERE_MURALE';
     case CHAUDIERE_SOL = 'CHAUDIERE_SOL';

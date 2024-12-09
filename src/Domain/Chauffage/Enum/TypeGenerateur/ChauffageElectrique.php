@@ -4,7 +4,7 @@ namespace App\Domain\Chauffage\Enum\TypeGenerateur;
 
 use App\Domain\Chauffage\Enum\TypeGenerateur;
 
-enum TypeChauffageElectrique: string
+enum ChauffageElectrique: string
 {
     case RADIATEUR_ELECTRIQUE_ACCUMULATION = 'RADIATEUR_ELECTRIQUE_ACCUMULATION';
     case RADIATEUR_ELECTRIQUE = 'RADIATEUR_ELECTRIQUE';

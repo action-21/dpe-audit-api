@@ -5,6 +5,7 @@ namespace App\Database\Opendata\Mur;
 use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\Mur\Enum\{EtatIsolation, Inertie, Mitoyennete, TypeDoublage, TypeIsolation, TypeMur};
+use App\Domain\Mur\ValueObject\{Caracteristique, Isolation};
 
 final class XMLMurReader extends XMLReader
 {
@@ -31,6 +32,34 @@ final class XMLMurReader extends XMLReader
     public function orientation(): float
     {
         return $this->xml()->findOneOrError('.//enum_orientation_id')->orientation();
+    }
+
+    public function caracteristique(): Caracteristique
+    {
+        return new Caracteristique(
+            type: $this->type_mur(),
+            type_doublage: $this->type_doublage(),
+            inertie: $this->inertie(),
+            surface: $this->surface(),
+            presence_enduit_isolant: $this->presence_enduit_isolant(),
+            paroi_ancienne: $this->paroi_ancienne(),
+            epaisseur: $this->epaisseur(),
+            annee_construction: null,
+            annee_renovation: null,
+            u0: $this->umur0_saisi(),
+            u: $this->umur_saisi(),
+        );
+    }
+
+    public function isolation(): Isolation
+    {
+        return new Isolation(
+            etat_isolation: $this->etat_isolation(),
+            type_isolation: $this->type_isolation(),
+            annee_isolation: $this->annee_isolation(),
+            epaisseur_isolation: $this->epaisseur_isolation(),
+            resistance_thermique_isolation: $this->resistance_isolation(),
+        );
     }
 
     public function mitoyennete(): Mitoyennete

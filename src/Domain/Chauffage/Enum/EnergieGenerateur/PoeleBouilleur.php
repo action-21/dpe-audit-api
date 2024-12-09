@@ -4,10 +4,11 @@ namespace App\Domain\Chauffage\Enum\EnergieGenerateur;
 
 use App\Domain\Chauffage\Enum\EnergieGenerateur;
 
-enum EnergieRadiateurIndependant: string
+enum PoeleBouilleur: string 
 {
-    case GAZ_NATUREL = 'GAZ_NATUREL';
-    case GPL = 'GPL';
+    case BOIS_BUCHE = 'BOIS_BUCHE';
+    case BOIS_PLAQUETTE = 'BOIS_PLAQUETTE';
+    case BOIS_GRANULE = 'BOIS_GRANULE';
 
     public function to(): EnergieGenerateur
     {

@@ -4,10 +4,9 @@ namespace App\Domain\Chauffage\Enum\TypeGenerateur;
 
 use App\Domain\Chauffage\Enum\TypeGenerateur;
 
-enum TypeGenerateurAirChaud: string
+enum ReseauChaleur: string
 {
-    case GENERATEUR_AIR_CHAUD = 'GENERATEUR_AIR_CHAUD';
-    case GENERATEUR_AIR_CHAUD_CONDENSATION = 'GENERATEUR_AIR_CHAUD_CONDENSATION';
+    case RESEAU_CHALEUR = 'RESEAU_CHALEUR';
 
     public function to(): TypeGenerateur
     {

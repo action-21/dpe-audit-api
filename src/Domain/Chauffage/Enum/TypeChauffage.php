@@ -26,27 +26,6 @@ enum TypeChauffage: string implements Enum
         };
     }
 
-    public static function from_categorie(CategorieGenerateur $categorie): self
-    {
-        return match ($categorie) {
-            CategorieGenerateur::PAC,
-            CategorieGenerateur::PAC_HYBRIDE,
-            CategorieGenerateur::PAC_MULTI_BATIMENT,
-            CategorieGenerateur::CHAUDIERE_BOIS,
-            CategorieGenerateur::CHAUDIERE_ELECTRIQUE,
-            CategorieGenerateur::CHAUDIERE_STANDARD,
-            CategorieGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
-            CategorieGenerateur::CHAUDIERE_CONDENSATION,
-            CategorieGenerateur::CHAUDIERE_MULTI_BATIMENT,
-            CategorieGenerateur::GENERATEUR_AIR_CHAUD,
-            CategorieGenerateur::POELE_BOIS_BOUILLEUR,
-            CategorieGenerateur::RESEAU_CHALEUR => self::CHAUFFAGE_CENTRAL,
-            CategorieGenerateur::CHAUFFAGE_ELECTRIQUE,
-            CategorieGenerateur::POELE_INSERT,
-            CategorieGenerateur::RADIATEUR_GAZ => self::CHAUFFAGE_DIVISE,
-        };
-    }
-
     public function id(): string
     {
         return $this->value;

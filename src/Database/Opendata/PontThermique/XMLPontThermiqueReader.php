@@ -5,6 +5,7 @@ namespace App\Database\Opendata\PontThermique;
 use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\PontThermique\Enum\TypeLiaison;
+use App\Domain\PontThermique\ValueObject\Liaison;
 
 final class XMLPontThermiqueReader extends XMLReader
 {
@@ -92,6 +93,17 @@ final class XMLPontThermiqueReader extends XMLReader
     public function description(): string
     {
         return $this->xml()->findOne('.//description')?->strval() ?? 'Pont thermique non décrit';
+    }
+
+    public function liaison(): Liaison
+    {
+        return new Liaison(
+            type: $this->type_liaison(),
+            pont_thermique_partiel: $this->pont_thermique_partiel(),
+            mur_id: $this->mur_id(),
+            plancher_id: $this->plancher_id(),
+            ouverture_id: $this->ouverture_id(),
+        );
     }
 
     public function type_liaison(): TypeLiaison

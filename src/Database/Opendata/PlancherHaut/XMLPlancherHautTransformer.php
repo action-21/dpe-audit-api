@@ -6,7 +6,7 @@ use App\Database\Opendata\Lnc\XMLLncTransformer;
 use App\Database\Opendata\XMLElement;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\PlancherHaut\{PlancherHaut, PlancherHautCollection};
-use App\Domain\PlancherHaut\ValueObject\{Caracteristique, Isolation, Position};
+use App\Domain\PlancherHaut\ValueObject\Position;
 
 final class XMLPlancherHautTransformer
 {
@@ -26,22 +26,8 @@ final class XMLPlancherHautTransformer
                     orientation: null,
                     mitoyennete: $reader->mitoyennete(),
                 ),
-                caracteristique: new Caracteristique(
-                    type: $reader->type_plancher_haut(),
-                    inertie: $reader->inertie(),
-                    surface: $reader->surface(),
-                    annee_construction: null,
-                    annee_renovation: null,
-                    u0: $reader->uph0_saisi(),
-                    u: $reader->uph_saisi(),
-                ),
-                isolation: new Isolation(
-                    etat_isolation: $reader->etat_isolation(),
-                    type_isolation: $reader->type_isolation(),
-                    annee_isolation: $reader->annee_isolation(),
-                    epaisseur_isolation: $reader->epaisseur_isolation(),
-                    resistance_thermique_isolation: $reader->resistance_isolation(),
-                ),
+                caracteristique: $reader->caracteristique(),
+                isolation: $reader->isolation(),
             );
             $entity->initialise();
             $enveloppe->parois()->add_plancher_haut($entity);

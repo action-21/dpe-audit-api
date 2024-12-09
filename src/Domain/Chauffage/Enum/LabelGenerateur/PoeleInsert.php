@@ -4,9 +4,9 @@ namespace App\Domain\Chauffage\Enum\LabelGenerateur;
 
 use App\Domain\Chauffage\Enum\LabelGenerateur;
 
-enum LabelGenerateurElectrique: string
+enum PoeleInsert: string
 {
-    case NF_PERFORMANCE = 'NF_PERFORMANCE';
+    case FLAMME_VERTE = 'FLAMME_VERTE';
     case SANS = 'SANS';
     case INCONNU = 'INCONNU';
 

@@ -5,6 +5,7 @@ namespace App\Database\Opendata\PlancherBas;
 use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\PlancherBas\Enum\{EtatIsolation, Inertie, Mitoyennete, TypeIsolation, TypePlancherBas};
+use App\Domain\PlancherBas\ValueObject\{Caracteristique, Isolation};
 
 final class XMLPlancherBasReader extends XMLReader
 {
@@ -26,6 +27,31 @@ final class XMLPlancherBasReader extends XMLReader
     public function description(): string
     {
         return $this->xml()->findOne('.//description')?->strval() ?? 'Plancher bas non décrit';
+    }
+
+    public function caracteristique(): Caracteristique
+    {
+        return new Caracteristique(
+            type: $this->type_plancher_bas(),
+            inertie: $this->inertie(),
+            perimetre: $this->perimetre(),
+            surface: $this->surface(),
+            annee_construction: null,
+            annee_renovation: null,
+            u0: $this->upb0_saisi(),
+            u: $this->upb_saisi(),
+        );
+    }
+
+    public function isolation(): Isolation
+    {
+        return new Isolation(
+            etat_isolation: $this->etat_isolation(),
+            type_isolation: $this->type_isolation(),
+            annee_isolation: $this->annee_isolation(),
+            epaisseur_isolation: $this->epaisseur_isolation(),
+            resistance_thermique_isolation: $this->resistance_isolation(),
+        );
     }
 
     public function mitoyennete(): Mitoyennete

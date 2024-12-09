@@ -4,7 +4,7 @@ namespace App\Database\Opendata\Baie;
 
 use App\Database\Opendata\XMLReader;
 use App\Domain\Baie\Enum\{NatureGazLame, NatureMenuiserie, TypeBaie, TypePose, TypeSurvitrage, TypeVitrage};
-use App\Domain\Baie\ValueObject\{Menuiserie, Survitrage};
+use App\Domain\Baie\ValueObject\{Menuiserie, Survitrage, Vitrage};
 
 final class XMLDoubleFenetreReader extends XMLReader
 {
@@ -17,13 +17,19 @@ final class XMLDoubleFenetreReader extends XMLReader
     {
         return $this->nature_menuiserie() && $this->type_vitrage() ? new Menuiserie(
             nature: $this->nature_menuiserie(),
-            type_vitrage: $this->type_vitrage(),
             type_pose: $this->type_pose(),
             presence_joint: false,
             presence_retour_isolation: false,
             largeur_dormant: null,
-            survitrage: $this->survitrage(),
             presence_rupteur_pont_thermique: $this->presence_rupteur_pont_thermique(),
+        ) : null;
+    }
+
+    public function vitrage(): ?Vitrage
+    {
+        return $this->type_vitrage() ? new Vitrage(
+            type_vitrage: $this->type_vitrage(),
+            survitrage: $this->survitrage(),
             nature_gaz_lame: $this->nature_gaz_lame(),
             epaisseur_lame: $this->epaisseur_lame(),
         ) : null;

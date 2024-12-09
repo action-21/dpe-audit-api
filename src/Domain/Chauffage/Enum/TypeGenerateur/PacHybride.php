@@ -4,7 +4,7 @@ namespace App\Domain\Chauffage\Enum\TypeGenerateur;
 
 use App\Domain\Chauffage\Enum\TypeGenerateur;
 
-enum TypePacHybride: string
+enum PacHybride: string
 {
     case PAC_HYBRIDE_AIR_EAU = 'PAC_HYBRIDE_AIR_EAU';
     case PAC_HYBRIDE_EAU_EAU = 'PAC_HYBRIDE_EAU_EAU';

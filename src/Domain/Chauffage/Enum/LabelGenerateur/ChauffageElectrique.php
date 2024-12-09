@@ -4,9 +4,9 @@ namespace App\Domain\Chauffage\Enum\LabelGenerateur;
 
 use App\Domain\Chauffage\Enum\LabelGenerateur;
 
-enum LabelGenerateurBois: string
+enum ChauffageElectrique: string
 {
-    case FLAMME_VERTE = 'FLAMME_VERTE';
+    case NF_PERFORMANCE = 'NF_PERFORMANCE';
     case SANS = 'SANS';
     case INCONNU = 'INCONNU';
 
