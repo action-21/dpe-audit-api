@@ -2,6 +2,7 @@
 
 namespace App\Api\Ecs\Payload;
 
+use App\Api\Ecs\Payload\Signaletique\{ChaudierePayload, ChauffeEauPayload, PacPayload, PoeleBouilleurPayload, ReseauChaleurPayload};
 use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur};
 use App\Services\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,7 +24,7 @@ final class GenerateurPayload
         public bool $position_volume_chauffe,
         public bool $generateur_collectif,
         #[Assert\Valid]
-        public SignaletiquePayload $signaletique,
+        public ChaudierePayload|ChauffeEauPayload|PacPayload|PoeleBouilleurPayload|ReseauChaleurPayload $signaletique,
         public ?int $annee_installation,
     ) {}
 }
