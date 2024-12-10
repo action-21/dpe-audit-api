@@ -4,7 +4,7 @@ namespace App\Domain\Ventilation\Enum\TypeVentilation;
 
 use App\Domain\Ventilation\Enum\TypeVentilation;
 
-enum TypeVentilationNaturelle: string
+enum VentilationNaturelle: string
 {
     case VENTILATION_NATURELLE_OUVERTURE_FENETRES = 'VENTILATION_NATURELLE_OUVERTURE_FENETRES';
     case VENTILATION_NATURELLE_ENTREES_AIR_HAUTES_BASSES = 'VENTILATION_NATURELLE_ENTREES_AIR_HAUTES_BASSES';

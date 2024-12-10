@@ -31,7 +31,7 @@ final class SystemeFactory
         return $entity;
     }
 
-    public function build_ventilation_naturelle(TypeVentilation\TypeVentilationNaturelle $type_ventilation,): Systeme
+    public function build_ventilation_naturelle(TypeVentilation\VentilationNaturelle $type_ventilation,): Systeme
     {
         return $this->build(
             type_ventilation: $type_ventilation->to(),

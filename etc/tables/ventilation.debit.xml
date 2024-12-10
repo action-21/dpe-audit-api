@@ -409,7 +409,7 @@
     </row>
     <row>
         <type_ventilation>VENTILATION_MECANIQUE</type_ventilation>
-        <type_generateur>VMC_INSUFFLATION</type_generateur>
+        <type_generateur>VMI</type_generateur>
         <type_vmc></type_vmc>
         <presence_echangeur_thermique></presence_echangeur_thermique>
         <generateur_collectif></generateur_collectif>
@@ -420,7 +420,7 @@
     </row>
     <row>
         <type_ventilation>VENTILATION_MECANIQUE</type_ventilation>
-        <type_generateur>VMC_INSUFFLATION</type_generateur>
+        <type_generateur>VMI</type_generateur>
         <type_vmc></type_vmc>
         <presence_echangeur_thermique></presence_echangeur_thermique>
         <generateur_collectif></generateur_collectif>
@@ -431,7 +431,7 @@
     </row>
     <row>
         <type_ventilation>VENTILATION_MECANIQUE</type_ventilation>
-        <type_generateur>VMC_INSUFFLATION</type_generateur>
+        <type_generateur>VMI</type_generateur>
         <type_vmc></type_vmc>
         <presence_echangeur_thermique></presence_echangeur_thermique>
         <generateur_collectif></generateur_collectif>
@@ -442,7 +442,7 @@
     </row>
     <row>
         <type_ventilation>VENTILATION_MECANIQUE</type_ventilation>
-        <type_generateur>VMC_INSUFFLATION</type_generateur>
+        <type_generateur>VMI</type_generateur>
         <type_vmc></type_vmc>
         <presence_echangeur_thermique></presence_echangeur_thermique>
         <generateur_collectif></generateur_collectif>

@@ -10,6 +10,6 @@ final class VentilationNaturellePayload
     public function __construct(
         #[Assert\Uuid]
         public string $id,
-        public TypeVentilation\TypeVentilationNaturelle $type_ventilation,
+        public TypeVentilation\VentilationNaturelle $type_ventilation,
     ) {}
 }

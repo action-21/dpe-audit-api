@@ -10,10 +10,10 @@ enum TypeGenerateur: string implements Enum
     case VMC_SIMPLE_FLUX_GAZ = 'VMC_SIMPLE_FLUX_GAZ';
     case VMC_BASSE_PRESSION = 'VMC_BASSE_PRESSION';
     case VMC_DOUBLE_FLUX = 'VMC_DOUBLE_FLUX';
+    case VMI = 'VMI';
     case VENTILATION_HYBRIDE = 'VENTILATION_HYBRIDE';
     case VENTILATION_MECANIQUE = 'VENTILATION_MECANIQUE';
     case PUIT_CLIMATIQUE = 'PUIT_CLIMATIQUE';
-    case VMC_INSUFFLATION = 'VMC_INSUFFLATION';
     case VMR = 'VMR';
 
     public static function from_enum_type_ventilation_id(int $id): ?self
@@ -36,14 +36,22 @@ enum TypeGenerateur: string implements Enum
     public function lib(): string
     {
         return match ($this) {
-            self::VMC_SIMPLE_FLUX => "VMC Simple fluxe",
+            self::VMC_SIMPLE_FLUX => "VMC Simple flux",
             self::VMC_SIMPLE_FLUX_GAZ => "VMC Simple flux Gaz",
             self::VMC_BASSE_PRESSION => "VMC Basse pression",
             self::VMC_DOUBLE_FLUX => "VMC Double flux",
             self::VENTILATION_HYBRIDE => "Ventilation hybride",
             self::PUIT_CLIMATIQUE => "Puits climatique",
-            self::VMC_INSUFFLATION => "VMC par insufflation",
+            self::VMI => "Ventilation mécanique par insufflation",
             self::VMR => "Ventilation répartie",
+        };
+    }
+
+    public function is_generateur_collectif(): ?bool
+    {
+        return match ($this) {
+            self::VMR => false,
+            default => null,
         };
     }
 }

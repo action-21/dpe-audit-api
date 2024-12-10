@@ -2,7 +2,7 @@
 
 namespace App\Api\Ventilation\Payload;
 
-use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVmc};
+use App\Api\Ventilation\Payload\Signaletique\{PuitClimatiquePayload, VentilationMecaniquePayload, VmcPayload, VmiPayload, VmrPayload};
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class GenerateurPayload
@@ -12,9 +12,8 @@ final class GenerateurPayload
         public string $id,
         public string $description,
         public ?int $annee_installation,
-        public TypeGenerateur $type,
-        public ?TypeVmc $type_vmc,
-        public bool $presence_echangeur_thermique,
         public bool $generateur_collectif,
+        #[Assert\Valid]
+        public PuitClimatiquePayload|VentilationMecaniquePayload|VmcPayload|VmiPayload|VmrPayload $signaletique,
     ) {}
 }

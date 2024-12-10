@@ -14,12 +14,14 @@ final class Generateur
         private readonly Ventilation $ventilation,
         private string $description,
         private Signaletique $signaletique,
+        private bool $generateur_collectif,
+        private ?int $annee_installation,
     ) {}
 
     public function controle(): void
     {
-        Assert::nullOrlessThanEq($this->signaletique->annee_installation, (int) date('Y'));
-        Assert::nullOrGreaterThanEq($this->signaletique->annee_installation, $this->ventilation->annee_construction_batiment());
+        Assert::nullOrlessThanEq($this->annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($this->annee_installation, $this->ventilation->annee_construction_batiment());
     }
 
     public function reinitialise(): void {}
@@ -42,5 +44,15 @@ final class Generateur
     public function signaletique(): Signaletique
     {
         return $this->signaletique;
+    }
+
+    public function generateur_collectif(): bool
+    {
+        return $this->generateur_collectif;
+    }
+
+    public function annee_installation(): ?int
+    {
+        return $this->annee_installation;
     }
 }

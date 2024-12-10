@@ -8,36 +8,51 @@ final class Signaletique
 {
     public function __construct(
         public readonly TypeGenerateur $type,
-        public readonly ?TypeVmc $type_vmc,
         public readonly bool $presence_echangeur_thermique,
-        public readonly bool $generateur_collectif,
-        public readonly ?int $annee_installation,
+        public readonly ?TypeVmc $type_vmc = null,
     ) {}
 
-    public static function create(
-        TypeGenerateur $type,
-        bool $generateur_collectif,
-        ?TypeVmc $type_vmc,
-        ?bool $presence_echangeur_thermique,
-        ?int $annee_installation,
+    public static function create_vmc(
+        TypeGenerateur\Vmc $type,
+        TypeVmc $type_vmc,
+        bool $presence_echangeur_thermique,
     ): self {
-        if (\in_array($type, [
-            TypeGenerateur::VMC_SIMPLE_FLUX,
-            TypeGenerateur::VMC_BASSE_PRESSION,
-            TypeGenerateur::VENTILATION_HYBRIDE,
-        ])) {
-            $type_vmc = $type_vmc ?? TypeVmc::AUTOREGLABLE;
-        }
-        if ($type === TypeGenerateur::VMR) {
-            $generateur_collectif = false;
-        }
-
         return new self(
-            type: $type,
+            type: $type->to(),
             type_vmc: $type_vmc,
-            presence_echangeur_thermique: $presence_echangeur_thermique ?? false,
-            generateur_collectif: $generateur_collectif,
-            annee_installation: $annee_installation,
+            presence_echangeur_thermique: $presence_echangeur_thermique,
+        );
+    }
+
+    public static function create_ventilation_mecanique(): self
+    {
+        return new self(
+            type: TypeGenerateur::VENTILATION_MECANIQUE,
+            presence_echangeur_thermique: false,
+        );
+    }
+
+    public static function create_puit_climatique(bool $presence_echangeur_thermique,): self
+    {
+        return new self(
+            type: TypeGenerateur::PUIT_CLIMATIQUE,
+            presence_echangeur_thermique: $presence_echangeur_thermique,
+        );
+    }
+
+    public static function create_vmi(): self
+    {
+        return new self(
+            type: TypeGenerateur::VMI,
+            presence_echangeur_thermique: false,
+        );
+    }
+
+    public static function create_vmr(): self
+    {
+        return new self(
+            type: TypeGenerateur::VMR,
+            presence_echangeur_thermique: false,
         );
     }
 }
