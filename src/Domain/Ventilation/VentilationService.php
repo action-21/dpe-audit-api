@@ -2,7 +2,6 @@
 
 namespace App\Domain\Ventilation;
 
-use App\Domain\Simulation\Simulation;
 use App\Domain\Ventilation\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance};
 
 /**
