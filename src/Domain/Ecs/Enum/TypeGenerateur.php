@@ -74,6 +74,19 @@ enum TypeGenerateur: string implements Enum
         };
     }
 
+    public function is_usage_mixte(): bool
+    {
+        return match ($this) {
+            self::CHAUDIERE,
+            self::CHAUDIERE_MULTI_BATIMENT,
+            self::PAC_DOUBLE_SERVICE,
+            self::PAC_MULTI_BATIMENT,
+            self::POELE_BOUILLEUR,
+            self::RESEAU_CHALEUR => true,
+            default => false,
+        };
+    }
+
     public function is_generateur_collectif(): ?bool
     {
         return match ($this) {
@@ -109,5 +122,10 @@ enum TypeGenerateur: string implements Enum
             self::CHAUFFE_EAU_VERTICAL,
             self::CHAUFFE_EAU_HORIZONTAL,
         ]);
+    }
+
+    public function is_reseau_chaleur(): bool
+    {
+        return $this === self::RESEAU_CHALEUR;
     }
 }

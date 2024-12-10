@@ -162,6 +162,11 @@ enum TypeGenerateur: string implements Enum
         ]);
     }
 
+    public function is_reseau_chaleur(): bool
+    {
+        return $this === self::RESEAU_CHALEUR;
+    }
+
     public function is_usage_mixte(): bool
     {
         return \in_array($this, [

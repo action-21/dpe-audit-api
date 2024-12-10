@@ -4,9 +4,9 @@ namespace App\Domain\Refroidissement\Enum\TypeGenerateur;
 
 use App\Domain\Refroidissement\Enum\TypeGenerateur;
 
-enum Climatiseur: string
+enum ReseauFroid: string
 {
-    case AUTRE = 'AUTRE';
+    case RESEAU_FROID = 'RESEAU_FROID';
 
     public function to(): TypeGenerateur
     {
