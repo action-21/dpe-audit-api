@@ -2,19 +2,33 @@
 
 namespace App\Database\Opendata\Chauffage;
 
-use App\Database\Opendata\XMLReaderIterator;
-use App\Domain\Chauffage\Enum\{CategorieGenerateur, EnergieGenerateur, LabelGenerateur, TypeChaudiere, TypeChauffage, TypeGenerateur};
-use App\Domain\Chauffage\ValueObject\Signaletique;
+use App\Database\Opendata\XMLReader;
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, PositionChaudiere, TypeCombustion, TypeDistribution, TypeGenerateur};
+use App\Domain\Chauffage\ValueObject\{Combustion, Reseau, Signaletique};
 use App\Domain\Common\Type\Id;
 
 /**
  * Par défaut, les types de générateurs "PAC Hybride - partie ..." sont considérés comme des PAC hybrides air/eau
  */
-final class XMLGenerateurReader extends XMLReaderIterator
+final class XMLGenerateurReader extends XMLReader
 {
     public function apply(): bool
     {
         return false === \in_array($this->enum_type_generateur_ch_id(), [145, 146, 147, 162, 163, 164, 165, 166, 167, 168, 169, 170]);
+    }
+
+    public function read_installation(): XMLInstallationReader
+    {
+        return XMLInstallationReader::from($this->xml()->findOneOrError('./parent::generateur_chauffage_collection/parent::installation_chauffage'));
+    }
+
+    /** @return XMLEmetteurReader[] */
+    public function read_emetteurs(): array
+    {
+        return \array_filter(
+            $this->read_installation()->read_emetteurs(),
+            fn(XMLEmetteurReader $item): bool => $item->apply() && $item->enum_lien_generateur_emetteur_id() === $this->enum_lien_generateur_emetteur_id(),
+        );
     }
 
     public function match(string $reference): bool
@@ -81,28 +95,39 @@ final class XMLGenerateurReader extends XMLReaderIterator
     public function signaletique(): Signaletique
     {
         return new Signaletique(
-            type_chaudiere: $this->type_chaudiere(),
+            type: $this->type_generateur(),
+            energie: $this->energie_generateur(),
+            position_volume_chauffe: $this->position_volume_chauffe(),
+            generateur_collectif: $this->generateur_collectif(),
+            type_partie_chaudiere: $this->type_partie_chaudiere(),
+            energie_partie_chaudiere: $this->energie_partie_chaudiere(),
+            position_chaudiere: $this->position_chaudiere(),
             label: $this->label(),
-            presence_regulation_combustion: $this->presence_regulation_combustion(),
-            presence_ventouse: $this->presence_ventouse(),
             priorite_cascade: $this->priorite_generateur_cascade(),
             pn: $this->pn_saisi(),
+            scop: $this->scop_saisi(),
+            combustion: $this->combustion(),
+        );
+    }
+
+    public function combustion(): ?Combustion
+    {
+        return $this->type_combustion() ? new Combustion(
+            type: $this->type_combustion(),
+            presence_ventouse: $this->presence_ventouse(),
+            presence_regulation_combustion: $this->presence_regulation_combustion(),
+            pveilleuse: $this->pveilleuse_saisi(),
+            qp0: $this->qp0_saisi(),
             rpn: $this->rpn_saisi(),
             rpint: $this->rpint_saisi(),
             tfonc30: $this->tfonc30_saisi(),
             tfonc100: $this->tfonc100_saisi(),
-            qp0: $this->qp0_saisi(),
-            pveilleuse: $this->pveilleuse_saisi(),
-            scop: $this->scop_saisi(),
-        );
+        ) : null;
     }
 
-    public function categorie(): CategorieGenerateur
+    public function type_combustion(): ?TypeCombustion
     {
-        return CategorieGenerateur::determine(
-            type_generateur: $this->type_generateur(),
-            energie_generateur: $this->energie_generateur(),
-        );
+        return TypeCombustion::from_enum_type_generateur_ch_id($this->enum_type_generateur_ch_id());
     }
 
     public function generateur_appoint(): bool
@@ -115,9 +140,9 @@ final class XMLGenerateurReader extends XMLReaderIterator
         return $this->enum_lien_generateur_emetteur_id() === 3;
     }
 
-    public function type_chauffage(): TypeChauffage
+    public function generateur_collectif(): bool
     {
-        return TypeChauffage::from_categorie($this->categorie());
+        return $this->enum_lien_generateur_emetteur_id() === 1 && $this->read_installation()->installation_collective();
     }
 
     public function type_generateur(): TypeGenerateur
@@ -125,27 +150,19 @@ final class XMLGenerateurReader extends XMLReaderIterator
         return TypeGenerateur::from_type_generateur_ch_id($this->enum_type_generateur_ch_id());
     }
 
-    public function type_chaudiere(): ?TypeChaudiere
+    public function position_chaudiere(): ?PositionChaudiere
     {
-        return match ($this->categorie()) {
-            CategorieGenerateur::CHAUDIERE_BOIS,
-            CategorieGenerateur::CHAUDIERE_ELECTRIQUE,
-            CategorieGenerateur::CHAUDIERE_STANDARD,
-            CategorieGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
-            CategorieGenerateur::CHAUDIERE_CONDENSATION => match (true) {
-                ($this->pn() < 18) => TypeChaudiere::CHAUDIERE_MURALE,
-                ($this->pn() >= 18) => TypeChaudiere::CHAUDIERE_SOL,
-                default => null,
-            },
-            default => null,
-        };
+        return $this->type_generateur()->is_chaudiere() ? match (true) {
+            ($this->pn() < 18) => PositionChaudiere::CHAUDIERE_MURALE,
+            ($this->pn() >= 18) => PositionChaudiere::CHAUDIERE_SOL,
+            default =>  PositionChaudiere::CHAUDIERE_SOL,
+        } : null;
     }
 
     public function type_partie_chaudiere(): ?TypeGenerateur
     {
         return match ($this->enum_type_generateur_ch_id()) {
-            148, 149, 150, 151, 160, 161 => TypeGenerateur::CHAUDIERE_CONDENSATION,
-            152, 153, 154, 155, 156, 157, 158, 159 => TypeGenerateur::CHAUDIERE_STANDARD,
+            148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161 => TypeGenerateur::CHAUDIERE,
             default => null,
         };
     }
@@ -199,6 +216,26 @@ final class XMLGenerateurReader extends XMLReaderIterator
     public function label(): ?LabelGenerateur
     {
         return LabelGenerateur::from_enum_type_generateur_ch_id($this->enum_type_generateur_ch_id());
+    }
+
+    public function reseau(): ?Reseau
+    {
+        $installation = $this->read_installation();
+
+        return ($type_distribution = $this->type_distribution()) ? new Reseau(
+            type_distribution: $type_distribution,
+            presence_circulateur_externe: $installation->presence_circulateur_externe(),
+            niveaux_desservis: $installation->niveaux_desservis(),
+            isolation_reseau: $installation->isolation_reseau(),
+        ) : null;
+    }
+
+    public function type_distribution(): ?TypeDistribution
+    {
+        foreach ($this->read_emetteurs() as $emetteur_reader) {
+            return $emetteur_reader->type_distribution();
+        }
+        return null;
     }
 
     public function pn_saisi(): ?float

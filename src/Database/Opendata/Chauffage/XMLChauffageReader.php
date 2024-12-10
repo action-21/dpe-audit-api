@@ -2,23 +2,35 @@
 
 namespace App\Database\Opendata\Chauffage;
 
-use App\Database\Opendata\XMLReader;
+use App\Database\Opendata\{XMLElement, XMLReader};
 
 final class XMLChauffageReader extends XMLReader
 {
-    public function read_installations(): XMLInstallationReader
+    /** @return XMLInstallationReader[] */
+    public function read_installations(): array
     {
-        return XMLInstallationReader::from($this->xml()->findMany('.//installation_chauffage_collection//installation_chauffage'));
+        return \array_map(
+            fn(XMLElement $xml): XMLInstallationReader => XMLInstallationReader::from($xml),
+            $this->xml()->findMany('.//installation_chauffage_collection//installation_chauffage')
+        );
     }
 
-    public function read_generateurs(): XMLGenerateurReader
+    /** @return XMLGenerateurReader[] */
+    public function read_generateurs(): array
     {
-        return XMLGenerateurReader::from($this->xml()->findMany('.//generateur_chauffage_collection//generateur_chauffage'));
+        return \array_filter(\array_map(
+            fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
+            $this->xml()->findMany('.//generateur_chauffage_collection//generateur_chauffage')
+        ), fn(XMLGenerateurReader $reader): bool => $reader->apply());
     }
 
-    public function read_emetteurs(): XMLEmetteurReader
+    /** @return XMLEmetteurReader[] */
+    public function read_emetteurs(): array
     {
-        return XMLEmetteurReader::from($this->xml()->findMany('.//emetteur_chauffage_collection//emetteur_chauffage'));
+        return \array_filter(\array_map(
+            fn(XMLElement $xml): XMLEmetteurReader => XMLEmetteurReader::from($xml),
+            $this->xml()->findMany('.//emetteur_chauffage_collection//emetteur_chauffage')
+        ), fn(XMLEmetteurReader $reader): bool => $reader->apply());
     }
 
     // * Données calculées

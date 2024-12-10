@@ -2,11 +2,11 @@
 
 namespace App\Database\Opendata\Chauffage;
 
-use App\Database\Opendata\XMLReaderIterator;
+use App\Database\Opendata\XMLReader;
 use App\Domain\Chauffage\Enum\{TemperatureDistribution, TypeDistribution, TypeEmetteur};
 use App\Domain\Common\Type\Id;
 
-final class XMLEmetteurReader extends XMLReaderIterator
+final class XMLEmetteurReader extends XMLReader
 {
     public function apply(): bool
     {

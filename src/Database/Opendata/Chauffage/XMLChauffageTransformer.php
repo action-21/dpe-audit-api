@@ -28,56 +28,39 @@ final class XMLChauffageTransformer
 
     private function set_generateurs(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($root->read_chauffage()->read_installations() as $installation_reader) {
-            $installation_collective = $installation_reader->installation_collective();
+        foreach ($root->read_chauffage()->read_generateurs() as $generateur_reader) {
+            if ($chauffage->generateurs()->find(id: $generateur_reader->id()))
+                continue;
 
-            foreach ($installation_reader->read_generateurs() as $generateur_reader) {
-                if (false === $generateur_reader->apply())
-                    continue;
-                if ($chauffage->generateurs()->find(id: $generateur_reader->id()))
-                    continue;
-
-                $generateur = new Generateur(
-                    id: $generateur_reader->id(),
-                    chauffage: $chauffage,
-                    generateur_mixte_id: $generateur_reader->match_generateur_mixte(),
-                    reseau_chaleur_id: $generateur_reader->reseau_chaleur_id(),
-                    description: $generateur_reader->description(),
-                    type: $generateur_reader->type_generateur(),
-                    energie: $generateur_reader->energie_generateur(),
-                    position_volume_chauffe: $generateur_reader->position_volume_chauffe(),
-                    generateur_collectif: $installation_collective && false === $generateur_reader->generateur_appoint(),
-                    signaletique: $generateur_reader->signaletique(),
-                    annee_installation: $generateur_reader->annee_installation(),
-                    type_partie_chaudiere: $generateur_reader->type_partie_chaudiere(),
-                    energie_partie_chaudiere: $generateur_reader->energie_partie_chaudiere(),
-                );
-                $generateur->determine_categorie();
-                $chauffage->add_generateur($generateur);
-            }
+            $generateur = new Generateur(
+                id: $generateur_reader->id(),
+                chauffage: $chauffage,
+                generateur_mixte_id: $generateur_reader->match_generateur_mixte(),
+                reseau_chaleur_id: $generateur_reader->reseau_chaleur_id(),
+                description: $generateur_reader->description(),
+                signaletique: $generateur_reader->signaletique(),
+                annee_installation: $generateur_reader->annee_installation(),
+            );
+            $chauffage->add_generateur($generateur);
         }
     }
 
     private function set_emetteurs(XMLElement $root, Chauffage $chauffage): void
     {
-        foreach ($root->read_chauffage()->read_installations() as $installation_reader) {
-            foreach ($installation_reader->read_emetteurs() as $emetteur_reader) {
-                if (false === $emetteur_reader->apply())
-                    continue;
-                if ($chauffage->emetteurs()->find(id: $emetteur_reader->id()))
-                    continue;
+        foreach ($root->read_chauffage()->read_emetteurs() as $emetteur_reader) {
+            if ($chauffage->emetteurs()->find(id: $emetteur_reader->id()))
+                continue;
 
-                $emetteur = new Emetteur(
-                    id: $emetteur_reader->id(),
-                    chauffage: $chauffage,
-                    description: $emetteur_reader->description(),
-                    type: $emetteur_reader->type_emetteur(),
-                    temperature_distribution: $emetteur_reader->temperature_distribution(),
-                    presence_robinet_thermostatique: $emetteur_reader->presence_robinet_thermostatique(),
-                    annee_installation: $emetteur_reader->annee_installation(),
-                );
-                $chauffage->add_emetteur($emetteur);
-            }
+            $emetteur = new Emetteur(
+                id: $emetteur_reader->id(),
+                chauffage: $chauffage,
+                description: $emetteur_reader->description(),
+                type: $emetteur_reader->type_emetteur(),
+                temperature_distribution: $emetteur_reader->temperature_distribution(),
+                presence_robinet_thermostatique: $emetteur_reader->presence_robinet_thermostatique(),
+                annee_installation: $emetteur_reader->annee_installation(),
+            );
+            $chauffage->add_emetteur($emetteur);
         }
     }
 
@@ -97,8 +80,6 @@ final class XMLChauffageTransformer
             );
 
             foreach ($installation_reader->read_generateurs() as $generateur_reader) {
-                if (false === $generateur_reader->apply())
-                    continue;
                 if ($installation_reader->has_appoint_electrique_sdb() && $generateur_reader->is_appoint_electrique_sdb())
                     continue;
                 if (null === $generateur = $chauffage->generateurs()->find(id: $generateur_reader->id()))
@@ -108,19 +89,11 @@ final class XMLChauffageTransformer
                     id: $generateur_reader->id(),
                     installation: $installation,
                     generateur: $generateur,
-                    type_distribution: $installation_reader->type_distribution(
-                        enum_lien_generateur_emetteur_id: $generateur_reader->enum_lien_generateur_emetteur_id(),
-                    ),
-                    position_volume_chauffe: $generateur_reader->position_volume_chauffe(),
-                    reseau: $installation_reader->reseau(),
+                    reseau: $generateur_reader->reseau(),
                     emetteurs: new EmetteurCollection(),
                 );
 
-                foreach ($installation_reader->read_emetteurs() as $emetteur_reader) {
-                    if (false === $emetteur_reader->apply())
-                        continue;
-                    if ($emetteur_reader->enum_lien_generateur_emetteur_id() !== $generateur_reader->enum_lien_generateur_emetteur_id())
-                        continue;
+                foreach ($generateur_reader->read_emetteurs() as $emetteur_reader) {
                     if (null === $emetteur = $chauffage->emetteurs()->find(id: $emetteur_reader->id()))
                         throw new \RuntimeException("Emetteur {$emetteur_reader->id()} non trouvé");
 
@@ -152,8 +125,6 @@ final class XMLChauffageTransformer
             );
 
             foreach ($installation_reader->read_generateurs() as $generateur_reader) {
-                if (false === $generateur_reader->apply())
-                    continue;
                 if (false === $generateur_reader->is_appoint_electrique_sdb())
                     continue;
                 if (null === $generateur = $chauffage->generateurs()->find(id: $generateur_reader->id()))
@@ -163,11 +134,7 @@ final class XMLChauffageTransformer
                     id: $generateur_reader->id(),
                     installation: $installation,
                     generateur: $generateur,
-                    type_distribution: $installation_reader->type_distribution(
-                        enum_lien_generateur_emetteur_id: $generateur_reader->enum_lien_generateur_emetteur_id(),
-                    ),
-                    position_volume_chauffe: $generateur_reader->position_volume_chauffe(),
-                    reseau: $installation_reader->reseau(),
+                    reseau: $generateur_reader->reseau(),
                     emetteurs: new EmetteurCollection(),
                 );
                 $installation->add_systeme($systeme);

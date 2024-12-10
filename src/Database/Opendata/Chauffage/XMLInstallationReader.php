@@ -2,25 +2,29 @@
 
 namespace App\Database\Opendata\Chauffage;
 
-use App\Database\Opendata\XMLReaderIterator;
-use App\Domain\Chauffage\Enum\{IsolationReseau, TypeDistribution};
-use App\Domain\Chauffage\ValueObject\{Regulation, Reseau, Solaire};
+use App\Database\Opendata\{XMLElement, XMLReader};
+use App\Domain\Chauffage\Enum\IsolationReseau;
+use App\Domain\Chauffage\ValueObject\{Regulation, Solaire};
 use App\Domain\Common\Type\Id;
 
-final class XMLInstallationReader extends XMLReaderIterator
+final class XMLInstallationReader extends XMLReader
 {
-    public function read_generateurs(): XMLGenerateurReader
+    /** @return XMLGenerateurReader[] */
+    public function read_generateurs(): array
     {
-        return XMLGenerateurReader::from(
-            $this->xml()->findMany('.//generateur_chauffage_collection/generateur_chauffage')
-        );
+        return \array_filter(\array_map(
+            fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
+            $this->xml()->findMany('.//generateur_chauffage_collection//generateur_chauffage')
+        ), fn(XMLGenerateurReader $reader): bool => $reader->apply());
     }
 
-    public function read_emetteurs(): XMLEmetteurReader
+    /** @return XMLEmetteurReader[] */
+    public function read_emetteurs(): array
     {
-        return XMLEmetteurReader::from(
-            $this->xml()->findMany('.//emetteur_chauffage_collection/emetteur_chauffage')
-        );
+        return \array_filter(\array_map(
+            fn(XMLElement $xml): XMLEmetteurReader => XMLEmetteurReader::from($xml),
+            $this->xml()->findMany('.//emetteur_chauffage_collection//emetteur_chauffage')
+        ), fn(XMLEmetteurReader $reader): bool => $reader->apply());
     }
 
     /**
@@ -98,37 +102,6 @@ final class XMLInstallationReader extends XMLReaderIterator
         return \in_array($this->enum_cfg_installation_ch_id(), [2, 7]) ? new Solaire(
             fch: $this->fch_saisi(),
         ) : null;
-    }
-
-    public function reseau(): ?Reseau
-    {
-        return $this->has_reseau() ? new Reseau(
-            presence_circulateur_externe: $this->presence_circulateur_externe(),
-            niveaux_desservis: $this->niveaux_desservis(),
-            isolation_reseau: $this->isolation_reseau(),
-        ) : null;
-    }
-
-    public function has_reseau(): bool
-    {
-        foreach ($this->read_emetteurs() as $emetteur) {
-            if (false === $emetteur->apply())
-                continue;
-
-            return true;
-        }
-        return false;
-    }
-
-    public function type_distribution(int $enum_lien_generateur_emetteur_id): TypeDistribution
-    {
-        foreach ($this->read_emetteurs() as $emetteur_reader) {
-            if ($emetteur_reader->enum_lien_generateur_emetteur_id() !== $enum_lien_generateur_emetteur_id)
-                continue;
-
-            return $emetteur_reader->type_distribution();
-        }
-        return TypeDistribution::SANS;
     }
 
     public function presence_circulateur_externe(): bool
