@@ -222,6 +222,32 @@ enum TypeGenerateur: string implements Enum
         ]);
     }
 
+    public function is_generateur_collectif(): ?bool
+    {
+        if ($this->is_chauffage_electrique() || $this->is_poele_insert()) {
+            return false;
+        }
+        return match ($this) {
+            self::RADIATEUR_GAZ => false,
+            self::CHAUDIERE_MULTI_BATIMENT, self::PAC_MULTI_BATIMENT, self::RESEAU_CHALEUR => true,
+            default => null,
+        };
+    }
+
+    public function position_volume_chauffe(): ?bool
+    {
+        if ($this->is_chauffage_electrique()) {
+            return true;
+        }
+        return match ($this) {
+            self::CHAUDIERE_MULTI_BATIMENT, self::PAC_MULTI_BATIMENT, self::RESEAU_CHALEUR => false,
+            default => null,
+        };
+    }
+
+    /**
+     * @deprecated
+     */
     public function combustion_applicable(): bool
     {
         return \in_array($this, [
@@ -236,11 +262,17 @@ enum TypeGenerateur: string implements Enum
         ]);
     }
 
+    /**
+     * @deprecated
+     */
     public function scop_applicable(): bool
     {
         return $this->is_pac() && $this !== self::PAC_MULTI_BATIMENT;
     }
 
+    /**
+     * @deprecated
+     */
     public function tfonc_applicable(): bool
     {
         return \in_array($this, [

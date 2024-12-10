@@ -5,7 +5,6 @@ namespace App\Api\Chauffage\Resource;
 use App\Domain\Common\Type\Id;
 use App\Domain\Common\ValueObject\Consommation;
 use App\Domain\Chauffage\Entity\{Systeme as Entity, SystemeCollection as EntityCollection};
-use App\Domain\Chauffage\Enum\TypeDistribution;
 use App\Domain\Chauffage\ValueObject\{Performance, Rendement, Reseau};
 
 final class SystemeResource
@@ -13,9 +12,7 @@ final class SystemeResource
     public function __construct(
         public readonly Id $id,
         public readonly Id $generateur_id,
-        public readonly TypeDistribution $type_distribution,
         public readonly ?Reseau $reseau,
-        public readonly bool $position_volume_chauffe,
         public readonly ?float $rdim,
         public readonly ?Performance $performance,
         /** @var EmetteurResource[] */
@@ -33,9 +30,7 @@ final class SystemeResource
         return new self(
             id: $entity->id(),
             generateur_id: $entity->generateur()->id(),
-            type_distribution: $entity->type_distribution(),
             reseau: $entity->reseau(),
-            position_volume_chauffe: $entity->position_volume_chauffe(),
             rdim: $entity->rdim(),
             performance: $entity->generateur()->performance(),
             emetteurs: EmetteurResource::from_collection($entity->emetteurs()),

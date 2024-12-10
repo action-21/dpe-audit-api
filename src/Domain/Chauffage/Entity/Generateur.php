@@ -22,8 +22,10 @@ final class Generateur
         private ?Id $generateur_mixte_id,
         private ?Id $reseau_chaleur_id,
         private string $description,
-        private Signaletique $signaletique,
+        private bool $position_volume_chauffe,
+        private bool $generateur_collectif,
         private ?int $annee_installation,
+        private Signaletique $signaletique,
     ) {}
 
     public function controle(): void
@@ -72,6 +74,16 @@ final class Generateur
         return $this->description;
     }
 
+    public function position_volume_chauffe(): bool
+    {
+        return $this->position_volume_chauffe;
+    }
+
+    public function generateur_collectif(): bool
+    {
+        return $this->generateur_collectif;
+    }
+
     public function type(): TypeGenerateur
     {
         return $this->signaletique->type;
@@ -80,16 +92,6 @@ final class Generateur
     public function energie(): EnergieGenerateur
     {
         return $this->signaletique->energie;
-    }
-
-    public function position_volume_chauffe(): bool
-    {
-        return $this->signaletique->position_volume_chauffe;
-    }
-
-    public function generateur_collectif(): bool
-    {
-        return $this->signaletique->generateur_collectif;
     }
 
     public function effet_joule(): bool

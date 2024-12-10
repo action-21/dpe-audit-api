@@ -2,7 +2,7 @@
 
 namespace App\Domain\Chauffage\ValueObject;
 
-use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, PositionChaudiere, TypeCombustion, TypeGenerateur};
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, PositionChaudiere, TypeGenerateur};
 use Webmozart\Assert\Assert;
 
 final class Signaletique
@@ -10,8 +10,6 @@ final class Signaletique
     public function __construct(
         public readonly TypeGenerateur $type,
         public readonly EnergieGenerateur $energie,
-        public readonly bool $position_volume_chauffe,
-        public readonly bool $generateur_collectif,
         public readonly ?TypeGenerateur $type_partie_chaudiere = null,
         public readonly ?EnergieGenerateur $energie_partie_chaudiere = null,
         public readonly ?PositionChaudiere $position_chaudiere = null,
@@ -22,139 +20,83 @@ final class Signaletique
         public readonly ?Combustion $combustion = null,
     ) {}
 
+    private function merge(
+        ?TypeGenerateur $type_partie_chaudiere = null,
+        ?EnergieGenerateur $energie_partie_chaudiere = null,
+        ?PositionChaudiere $position_chaudiere = null,
+        ?LabelGenerateur $label = null,
+        ?int $priorite_cascade = null,
+        ?float $pn = null,
+        ?float $scop = null,
+        ?Combustion $combustion = null,
+    ): self {
+        return new self(
+            type: $this->type,
+            energie: $this->energie,
+            type_partie_chaudiere: $type_partie_chaudiere ?? $this->type_partie_chaudiere,
+            energie_partie_chaudiere: $energie_partie_chaudiere ?? $this->energie_partie_chaudiere,
+            position_chaudiere: $position_chaudiere ?? $this->position_chaudiere,
+            label: $label ?? $this->label,
+            priorite_cascade: $priorite_cascade ?? $this->priorite_cascade,
+            pn: $pn ?? $this->pn,
+            scop: $scop ?? $this->scop,
+            combustion: $combustion ?? $this->combustion,
+        );
+    }
+
     public static function create_chaudiere(
         TypeGenerateur\Chaudiere $type,
         EnergieGenerateur\Chaudiere $energie,
-        bool $position_volume_chauffe,
-        bool $generateur_collectif,
-        ?PositionChaudiere $position,
-        ?Combustion $combustion,
-        ?int $priorite_cascade,
-        ?float $pn,
     ): static {
-        Assert::nullOrGreaterThan($pn, 0);
-        Assert::nullOrGreaterThanEq($priorite_cascade, 0);
-
-        $position = $position ?? PositionChaudiere::CHAUDIERE_SOL;
-        $priorite_cascade = $priorite_cascade > 2 ? 2 : $priorite_cascade;
-
-        if ($type->to() === TypeGenerateur::CHAUDIERE_MULTI_BATIMENT) {
-            $position_volume_chauffe = false;
-            $generateur_collectif = true;
-        }
-        if ($energie->to() === EnergieGenerateur::ELECTRICITE) {
-            $combustion = null;
-        }
-        if ($energie->to() !== EnergieGenerateur::ELECTRICITE) {
-            $combustion = $combustion ?? Combustion::default();
-        }
-
         return new self(
             type: $type->to(),
-            energie: $energie->to(),
-            position_volume_chauffe: $position_volume_chauffe,
-            generateur_collectif: $generateur_collectif,
-            priorite_cascade: $priorite_cascade,
-            position_chaudiere: $position,
-            pn: $pn,
-            combustion: $combustion,
+            energie: ($energie = $energie->to()),
+            position_chaudiere: PositionChaudiere::CHAUDIERE_SOL,
+            combustion: $energie->is_combustible() ? Combustion::default() : null,
         );
     }
 
     public static function create_chauffage_electrique(
         TypeGenerateur\ChauffageElectrique $type,
         LabelGenerateur\ChauffageElectrique $label,
-        ?float $pn,
-    ): static {
-        Assert::nullOrGreaterThan($pn, 0);
-
+    ): self {
         return new self(
             type: $type->to(),
             energie: EnergieGenerateur::ELECTRICITE,
             label: $label->to(),
-            position_volume_chauffe: true,
-            generateur_collectif: false,
-            pn: $pn
         );
     }
 
-    public static function create_pac(
-        TypeGenerateur\Pac $type,
-        bool $position_volume_chauffe,
-        bool $generateur_collectif,
-        ?float $pn,
-        ?float $scop,
-    ): static {
-        Assert::nullOrGreaterThan($pn, 0);
-        Assert::nullOrGreaterThan($scop, 0);
-
+    public static function create_pac(TypeGenerateur\Pac $type,): self
+    {
         return new self(
             type: $type->to(),
             energie: EnergieGenerateur::ELECTRICITE,
-            position_volume_chauffe: $position_volume_chauffe,
-            generateur_collectif: $generateur_collectif,
-            pn: $pn,
-            scop: $scop,
         );
     }
 
     public static function create_pac_hybride(
-        TypeGenerateur\Pac $type,
+        TypeGenerateur\PacHybride $type,
         EnergieGenerateur\PacHybride $energie_partie_chaudiere,
-        bool $position_volume_chauffe,
-        bool $generateur_collectif,
-        ?PositionChaudiere $position,
-        ?Combustion $combustion,
-        ?int $priorite_cascade,
-        ?float $pn,
-        ?float $scop,
-    ): static {
-        Assert::nullOrGreaterThan($pn, 0);
-        Assert::nullOrGreaterThan($scop, 0);
-        Assert::nullOrGreaterThanEq($priorite_cascade, 0);
-
-        $position = $position ?? PositionChaudiere::CHAUDIERE_SOL;
-        $combustion = $combustion ?? Combustion::default();
-        $priorite_cascade = $priorite_cascade > 2 ? 2 : $priorite_cascade;
-
+    ): self {
         return new self(
             type: $type->to(),
             energie: EnergieGenerateur::ELECTRICITE,
             type_partie_chaudiere: TypeGenerateur::CHAUDIERE,
             energie_partie_chaudiere: $energie_partie_chaudiere->to(),
-            position_volume_chauffe: $position_volume_chauffe,
-            generateur_collectif: $generateur_collectif,
-            priorite_cascade: $priorite_cascade,
-            position_chaudiere: $position,
-            pn: $pn,
-            scop: $scop,
-            combustion: $combustion,
+            position_chaudiere: PositionChaudiere::CHAUDIERE_SOL,
+            combustion: Combustion::default(),
         );
     }
 
     public static function create_generateur_air_chaud(
         TypeGenerateur\GenerateurAirChaud $type,
         EnergieGenerateur\GenerateurAirChaud $energie,
-        bool $position_volume_chauffe,
-        bool $generateur_collectif,
-        ?Combustion $combustion,
-        ?float $pn,
-    ): static {
-        Assert::nullOrGreaterThan($pn, 0);
-
-        if ($energie->to() === EnergieGenerateur::ELECTRICITE) {
-            $combustion = null;
-        }
-        if ($energie->to() !== EnergieGenerateur::ELECTRICITE) {
-            $combustion = $combustion ?? Combustion::default();
-        }
+    ): self {
         return new self(
             type: $type->to(),
-            energie: $energie->to(),
-            position_volume_chauffe: $position_volume_chauffe,
-            generateur_collectif: $generateur_collectif,
-            combustion: $combustion,
-            pn: $pn,
+            energie: ($energie = $energie->to()),
+            combustion: $energie->is_combustible() ? Combustion::default() : null,
         );
     }
 
@@ -162,39 +104,22 @@ final class Signaletique
         TypeGenerateur\PoeleInsert $type,
         EnergieGenerateur\PoeleInsert $energie,
         LabelGenerateur\PoeleInsert $label,
-        bool $position_volume_chauffe,
-        bool $generateur_collectif,
-        ?float $pn,
-    ): static {
-        Assert::nullOrGreaterThan($pn, 0);
-
+    ): self {
         return new self(
             type: $type->to(),
             energie: $energie->to(),
-            position_volume_chauffe: $position_volume_chauffe,
-            generateur_collectif: $generateur_collectif,
             label: $label->to(),
-            pn: $pn,
         );
     }
 
     public static function create_poele_bouilleur(
         TypeGenerateur\PoeleBouilleur $type,
         EnergieGenerateur\PoeleBouilleur $energie,
-        bool $position_volume_chauffe,
-        bool $generateur_collectif,
-        ?Combustion $combustion,
-        ?float $pn,
-    ): static {
-        Assert::nullOrGreaterThan($pn, 0);
-
+    ): self {
         return new self(
             type: $type->to(),
             energie: $energie->to(),
-            position_volume_chauffe: $position_volume_chauffe,
-            generateur_collectif: $generateur_collectif,
-            combustion: $combustion ?? Combustion::default(),
-            pn: $pn,
+            combustion: Combustion::default(),
         );
     }
 
@@ -203,43 +128,50 @@ final class Signaletique
         return new self(
             type: TypeGenerateur::RESEAU_CHALEUR,
             energie: EnergieGenerateur::RESEAU_CHALEUR,
-            position_volume_chauffe: false,
-            generateur_collectif: true,
         );
     }
 
     public static function create_radiateur_gaz(
         TypeGenerateur\RadiateurGaz $type,
         EnergieGenerateur\RadiateurGaz $energie,
-        ?float $rpn,
-        ?float $pn,
-    ): static {
-        Assert::nullOrGreaterThan($pn, 0);
-
+    ): self {
         return new self(
             type: $type->to(),
             energie: $energie->to(),
-            position_volume_chauffe: true,
-            generateur_collectif: false,
-            combustion: $combustion ?? Combustion::create(type: TypeCombustion::STANDARD, rpn: $rpn),
-            pn: $pn,
+            combustion: Combustion::default(),
         );
+    }
+
+    public function with_pn(?float $pn): self
+    {
+        Assert::nullOrGreaterThan($pn, 0);
+        return $this->merge(pn: $pn);
+    }
+
+    public function with_scop(?float $scop): self
+    {
+        Assert::nullOrGreaterThan($scop, 0);
+        return $this->type->is_pac() ? $this->merge(scop: $scop) : $this;
+    }
+
+    public function with_position(PositionChaudiere $position_chaudiere): self
+    {
+        return $this->type->is_chaudiere() ? $this->merge(position_chaudiere: $position_chaudiere) : $this;
+    }
+
+    public function with_cascade(?int $priorite_cascade): self
+    {
+        Assert::nullOrGreaterThanEq($priorite_cascade, 0);
+        return $this->type->is_chaudiere() ? $this->merge(priorite_cascade: $priorite_cascade) : $this;
+    }
+
+    public function with_combustion(?Combustion $combustion): self
+    {
+        return $this->energie->is_combustible() ? $this->merge(combustion: $combustion ?? Combustion::default()) : $this;
     }
 
     public function effet_joule(): bool
     {
-        return \in_array($this->type, [
-            TypeGenerateur::CHAUDIERE,
-            TypeGenerateur::CHAUDIERE_MULTI_BATIMENT,
-            TypeGenerateur::GENERATEUR_AIR_CHAUD,
-            TypeGenerateur::CONVECTEUR_BI_JONCTION,
-            TypeGenerateur::CONVECTEUR_ELECTRIQUE,
-            TypeGenerateur::PANNEAU_RAYONNANT_ELECTRIQUE,
-            TypeGenerateur::PLAFOND_RAYONNANT_ELECTRIQUE,
-            TypeGenerateur::PLANCHER_RAYONNANT_ELECTRIQUE,
-            TypeGenerateur::RADIATEUR_ELECTRIQUE,
-            TypeGenerateur::RADIATEUR_ELECTRIQUE_ACCUMULATION,
-            TypeGenerateur::GENERATEUR_AIR_CHAUD,
-        ]) && $this->energie === EnergieGenerateur::ELECTRICITE;
+        return $this->energie === EnergieGenerateur::ELECTRICITE;
     }
 }
