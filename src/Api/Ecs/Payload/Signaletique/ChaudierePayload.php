@@ -14,8 +14,6 @@ final class ChaudierePayload
         public EnergieGenerateur\Chaudiere $energie,
         #[Assert\PositiveOrZero]
         public int $volume_stockage,
-        public bool $position_volume_chauffe,
-        public bool $generateur_collectif,
         public PositionChaudiere $position,
         #[Assert\Positive]
         public ?float $pn,
@@ -25,15 +23,9 @@ final class ChaudierePayload
 
     public function to(): Signaletique
     {
-        return Signaletique::create_chaudiere(
-            type: $this->type,
-            energie: $this->energie,
-            volume_stockage: $this->volume_stockage,
-            position_volume_chauffe: $this->position_volume_chauffe,
-            generateur_collectif: $this->generateur_collectif,
-            pn: $this->pn,
-            position: $this->position,
-            combustion: $this->combustion?->to(),
-        );
+        return Signaletique::create_chaudiere(type: $this->type, energie: $this->energie, volume_stockage: $this->volume_stockage,)
+            ->with_pn($this->pn)
+            ->with_position($this->position)
+            ->with_combustion($this->combustion?->to());
     }
 }

@@ -33,12 +33,12 @@ final class MoteurPerte
             );
             $pertes += $this->pertes_distribution_col_vc(
                 becs: $becs,
-                installation_collective: $entity->generateur()->signaletique()->generateur_collectif,
+                installation_collective: $entity->generateur()->generateur_collectif(),
                 rdim: $rdim,
             );
             $pertes += $this->pertes_distribution_col_hvc(
                 becs: $becs,
-                installation_collective: $entity->generateur()->signaletique()->generateur_collectif,
+                installation_collective: $entity->generateur()->generateur_collectif(),
                 rdim: $rdim,
             );
             return Perte::create(
@@ -79,7 +79,7 @@ final class MoteurPerte
                 pertes: $pertes,
                 pertes_recuperables: $this->pertes_generation_recuperables(
                     pertes_generation: $pertes,
-                    position_volume_chauffe: $entity->signaletique()->position_volume_chauffe,
+                    position_volume_chauffe: $entity->position_volume_chauffe(),
                 ),
             );
         });
@@ -89,8 +89,8 @@ final class MoteurPerte
     {
         return PerteCollection::create(function (ScenarioUsage $scenario, Mois $mois) use ($entity, $simulation) {
             $pertes = $this->pertes_stockage(
-                volume_stockage: $entity->signaletique()->volume_stockage,
-                type_generateur: $entity->signaletique()->type,
+                volume_stockage: $entity->volume_stockage(),
+                type_generateur: $entity->type(),
                 label_generateur: $entity->signaletique()?->label,
             );
             return Perte::create(
@@ -101,7 +101,7 @@ final class MoteurPerte
                 pertes_recuperables: $this->pertes_stockage_recuperables(
                     pertes_stockage: $pertes,
                     nref: $simulation->audit()->situation()->nref(scenario: $scenario, mois: $mois),
-                    position_volume_chauffe: $entity->signaletique()->position_volume_chauffe,
+                    position_volume_chauffe: $entity->position_volume_chauffe(),
                 ),
             );
         });
@@ -112,7 +112,7 @@ final class MoteurPerte
         return PerteCollection::create(function (ScenarioUsage $scenario, Mois $mois) use ($entity, $simulation) {
             $pertes = $this->pertes_stockage(
                 volume_stockage: $entity->stockage()?->volume_stockage ?? 0,
-                type_generateur: $entity->generateur()->signaletique()->type,
+                type_generateur: $entity->generateur()->type(),
                 label_generateur: $entity->generateur()->signaletique()?->label,
             );
             return Perte::create(

@@ -13,8 +13,6 @@ final class ReseauChaleurPayload
 
     public function to(): Signaletique
     {
-        return Signaletique::create_reseau_chaleur(
-            type: $this->type,
-        );
+        return Signaletique::create_reseau_chaleur();
     }
 }

@@ -68,9 +68,46 @@ enum TypeGenerateur: string implements Enum
 
     public function position_volume_chauffe(): ?bool
     {
+        return match ($this) {
+            self::CHAUDIERE_MULTI_BATIMENT, self::PAC_MULTI_BATIMENT, self::RESEAU_CHALEUR => false,
+            default => null,
+        };
+    }
+
+    public function is_generateur_collectif(): ?bool
+    {
+        return match ($this) {
+            self::CHAUDIERE_MULTI_BATIMENT, self::PAC_MULTI_BATIMENT, self::RESEAU_CHALEUR => true,
+            default => null,
+        };
+    }
+
+    public function is_chaudiere(): bool
+    {
         return \in_array($this, [
+            self::CHAUDIERE,
             self::CHAUDIERE_MULTI_BATIMENT,
+        ]);
+    }
+
+    public function is_pac(): bool
+    {
+        return \in_array($this, [
+            self::CET_AIR_AMBIANT,
+            self::CET_AIR_EXTERIEUR,
+            self::CET_AIR_EXTRAIT,
+            self::PAC_DOUBLE_SERVICE,
             self::PAC_MULTI_BATIMENT,
-        ]) ? false : null;
+        ]);
+    }
+
+    public function is_chauffe_eau(): bool
+    {
+        return \in_array($this, [
+            self::ACCUMULATEUR,
+            self::CHAUFFE_EAU_INSTANTANE,
+            self::CHAUFFE_EAU_VERTICAL,
+            self::CHAUFFE_EAU_HORIZONTAL,
+        ]);
     }
 }

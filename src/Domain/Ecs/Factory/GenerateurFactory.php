@@ -16,6 +16,8 @@ final class GenerateurFactory
         ?Id $generateur_mixte_id,
         ?Id $reseau_chaleur_id,
         ?int $annee_installation,
+        bool $position_volume_chauffe,
+        bool $generateur_collectif,
         Signaletique $signaletique,
     ): Generateur {
         $entity = new Generateur(
@@ -25,6 +27,8 @@ final class GenerateurFactory
             generateur_mixte_id: $generateur_mixte_id,
             reseau_chaleur_id: $reseau_chaleur_id,
             annee_installation: $annee_installation,
+            position_volume_chauffe: $signaletique->type->position_volume_chauffe() ?? $position_volume_chauffe,
+            generateur_collectif: $signaletique->type->is_generateur_collectif() ?? $generateur_collectif,
             signaletique: $signaletique,
         );
         $entity->controle();

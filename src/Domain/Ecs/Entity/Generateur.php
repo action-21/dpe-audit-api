@@ -4,9 +4,9 @@ namespace App\Domain\Ecs\Entity;
 
 use App\Domain\Common\Type\Id;
 use App\Domain\Ecs\Ecs;
-use App\Domain\Ecs\Enum\{TypeGenerateur, UsageEcs};
+use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur, UsageEcs};
 use App\Domain\Ecs\Service\{MoteurPerformance, MoteurPerte};
-use App\Domain\Ecs\ValueObject\{Performance, PerteCollection, Signaletique};
+use App\Domain\Ecs\ValueObject\{Combustion, Performance, PerteCollection, Signaletique};
 use App\Domain\Simulation\Simulation;
 use Webmozart\Assert\Assert;
 
@@ -23,6 +23,8 @@ final class Generateur
         private ?Id $generateur_mixte_id,
         private ?Id $reseau_chaleur_id,
         private ?int $annee_installation,
+        private bool $position_volume_chauffe,
+        private bool $generateur_collectif,
         private Signaletique $signaletique,
     ) {}
 
@@ -65,6 +67,36 @@ final class Generateur
     public function description(): string
     {
         return $this->description;
+    }
+
+    public function type(): TypeGenerateur
+    {
+        return $this->signaletique->type;
+    }
+
+    public function energie(): EnergieGenerateur
+    {
+        return $this->signaletique->energie;
+    }
+
+    public function volume_stockage(): int
+    {
+        return $this->signaletique->volume_stockage;
+    }
+
+    public function position_volume_chauffe(): bool
+    {
+        return $this->position_volume_chauffe;
+    }
+
+    public function generateur_collectif(): bool
+    {
+        return $this->generateur_collectif;
+    }
+
+    public function combustion(): ?Combustion
+    {
+        return $this->signaletique->combustion;
     }
 
     public function signaletique(): Signaletique

@@ -12,8 +12,6 @@ final class PacPayload
         public TypeGenerateur\Pac $type,
         #[Assert\PositiveOrZero]
         public int $volume_stockage,
-        public bool $position_volume_chauffe,
-        public bool $generateur_collectif,
         public PositionChaudiere $position,
         #[Assert\Positive]
         public ?float $pn,
@@ -23,13 +21,8 @@ final class PacPayload
 
     public function to(): Signaletique
     {
-        return Signaletique::create_pac(
-            type: $this->type,
-            volume_stockage: $this->volume_stockage,
-            position_volume_chauffe: $this->position_volume_chauffe,
-            generateur_collectif: $this->generateur_collectif,
-            pn: $this->pn,
-            cop: $this->cop,
-        );
+        return Signaletique::create_pac(type: $this->type, volume_stockage: $this->volume_stockage,)
+            ->with_pn($this->pn)
+            ->with_cop($this->cop);
     }
 }

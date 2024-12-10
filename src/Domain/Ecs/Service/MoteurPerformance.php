@@ -27,29 +27,29 @@ final class MoteurPerformance
     {
         $pn = $this->calcule_pn($entity, $simulation);
         $paux = $this->paux(
-            type_generateur: $entity->signaletique()->type,
-            energie_generateur: $entity->signaletique()->energie,
+            type_generateur: $entity->type(),
+            energie_generateur: $entity->energie(),
             pn: $pn,
-            presence_ventouse: $entity->signaletique()->combustion?->presence_ventouse
+            presence_ventouse: $entity->combustion()?->presence_ventouse
         );
 
-        $cop = $this->cop_applicable(type_generateur: $entity->signaletique()->type) ? $this->cop(
+        $cop = $this->cop_applicable(type_generateur: $entity->type()) ? $this->cop(
             zone_climatique: $entity->ecs()->audit()->zone_climatique(),
-            type_generateur: $entity->signaletique()->type,
+            type_generateur: $entity->type(),
             annee_installation: $entity->annee_installation() ?? $entity->ecs()->audit()->annee_construction_batiment(),
             cop_saisi: $entity->signaletique()?->cop,
         ) : null;
 
         $combustion = $this->combustion(
-            type_generateur: $entity->signaletique()->type,
-            energie_generateur: $entity->signaletique()->energie,
+            type_generateur: $entity->type(),
+            energie_generateur: $entity->energie(),
             annee_installation: $entity->annee_installation() ?? $entity->ecs()->audit()->annee_construction_batiment(),
             pn: $pn,
-            type_combustion: $entity->signaletique()->combustion?->type,
-            presence_ventouse: $entity->signaletique()->combustion?->presence_ventouse,
-            rpn_saisi: $entity->signaletique()->combustion?->rpn,
-            qp0_saisi: $entity->signaletique()->combustion?->qp0,
-            pveilleuse_saisi: $entity->signaletique()->combustion?->pveilleuse,
+            type_combustion: $entity->combustion()?->type,
+            presence_ventouse: $entity->combustion()?->presence_ventouse,
+            rpn_saisi: $entity->combustion()?->rpn,
+            qp0_saisi: $entity->combustion()?->qp0,
+            pveilleuse_saisi: $entity->combustion()?->pveilleuse,
         );
 
         return Performance::create(

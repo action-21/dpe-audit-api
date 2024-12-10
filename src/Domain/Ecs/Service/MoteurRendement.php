@@ -30,19 +30,19 @@ final class MoteurRendement
             fecs_saisi: $entity->installation()->solaire()?->fecs,
         );
         $rd = $this->rd(
-            reseau_collectif: $entity->generateur()->signaletique()->generateur_collectif,
+            reseau_collectif: $entity->generateur()->generateur_collectif(),
             bouclage_reseau: $entity->reseau()->type_bouclage,
             alimentation_contigue: $entity->reseau()->alimentation_contigues,
-            production_volume_habitable: $entity->generateur()->signaletique()->position_volume_chauffe,
+            production_volume_habitable: $entity->generateur()->position_volume_chauffe(),
         );
         $rg = [$this->rg(
-            type_generateur: $entity->generateur()->signaletique()->type,
-            energie_generateur: $entity->generateur()->signaletique()->energie,
+            type_generateur: $entity->generateur()->type(),
+            energie_generateur: $entity->generateur()->energie(),
         )];
 
         $rgs = [$entity->generateur()->performance()->cop ?? 1];
         $rgs[] = $this->rgs(
-            type_generateur: $entity->generateur()->signaletique()->type,
+            type_generateur: $entity->generateur()->type(),
             isolation_reseau: $entity->reseau()->isolation_reseau,
         );
 
@@ -53,24 +53,24 @@ final class MoteurRendement
             $pertes_stockage += $entity->generateur()->pertes_stockage()->pertes(scenario: $scenario);
 
             $rs = $this->rs(
-                type_generateur: $entity->generateur()->signaletique()->type,
-                energie_generateur: $entity->generateur()->signaletique()->energie,
+                type_generateur: $entity->generateur()->type(),
+                energie_generateur: $entity->generateur()->energie(),
                 label_generateur: $entity->generateur()->signaletique()->label,
                 pertes_stockages: $pertes_stockage,
                 rd: $rd,
                 becs: $becs,
             );
             $rg[] = $this->rg_combustion(
-                type_generateur: $entity->generateur()->signaletique()->type,
-                energie_generateur: $entity->generateur()->signaletique()->energie,
+                type_generateur: $entity->generateur()->type(),
+                energie_generateur: $entity->generateur()->energie(),
                 becs: $becs,
                 rpn: $entity->generateur()->performance()->rpn ?? 0,
                 qp0: $entity->generateur()->performance()->qp0 ?? 0,
                 pveilleuse: $entity->generateur()->performance()->pveilleuse ?? 0,
             );
             $rgs[] = $this->rgs_combustion(
-                type_generateur: $entity->generateur()->signaletique()->type,
-                energie_generateur: $entity->generateur()->signaletique()->energie,
+                type_generateur: $entity->generateur()->type(),
+                energie_generateur: $entity->generateur()->energie(),
                 becs: $becs,
                 pertes_stockage: $pertes_stockage,
                 rpn: $entity->generateur()->performance()->rpn ?? 0,
