@@ -5,8 +5,3 @@ resources:
         class: ApiPlatform\Metadata\Get
         uriTemplate: /audit/{id}/ventilation
         output: App\Api\Ventilation\Resource\VentilationResource
-      ventilation.post:
-        class: ApiPlatform\Metadata\Post
-        uriTemplate: /audit/{id}/ventilation
-        input: App\Api\Ventilation\Payload\VentilationPayload
-        output: App\Api\Ventilation\Resource\VentilationResource
