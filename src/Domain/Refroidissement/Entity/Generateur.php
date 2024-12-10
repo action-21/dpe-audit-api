@@ -27,8 +27,8 @@ final class Generateur
 
     public function controle(): void
     {
-        Assert::lessThanEq($this->annee_installation, (int) date('Y'));
-        Assert::greaterThanEq($this->annee_installation, $this->refroidissement->annee_construction_batiment());
+        Assert::nullOrLessThanEq($this->annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($this->annee_installation, $this->refroidissement->annee_construction_batiment());
     }
 
     public function reinitialise(): void

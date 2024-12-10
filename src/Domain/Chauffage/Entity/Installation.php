@@ -6,10 +6,10 @@ use App\Domain\Chauffage\Chauffage;
 use App\Domain\Chauffage\Enum\TypeChauffage;
 use App\Domain\Chauffage\Service\{MoteurConsommation, MoteurDimensionnement, MoteurRendement};
 use App\Domain\Chauffage\ValueObject\{Regulation, Solaire};
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Common\ValueObject\ConsommationCollection;
 use App\Domain\Simulation\Simulation;
+use Webmozart\Assert\Assert;
 
 /**
  * TODO: Associer l'installation à un logement visité
@@ -33,29 +33,9 @@ final class Installation
         private SystemeCollection $systemes,
     ) {}
 
-    public function update(
-        string $description,
-        float $surface,
-        bool $comptage_individuel,
-        ?Solaire $solaire,
-        Regulation $regulation_centrale,
-        Regulation $regulation_terminale,
-    ): self {
-        $this->description = $description;
-        $this->surface = $surface;
-        $this->comptage_individuel = $comptage_individuel;
-        $this->solaire = $solaire;
-        $this->regulation_centrale = $regulation_centrale;
-        $this->regulation_terminale = $regulation_terminale;
-
-        $this->controle();
-        return $this;
-    }
-
     public function controle(): void
     {
-        Assert::positif($this->surface);
-        $this->solaire?->controle();
+        Assert::greaterThan($this->surface, 0);
         $this->systemes->controle();
     }
 

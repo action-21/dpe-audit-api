@@ -30,10 +30,10 @@ final class Caracteristique
     ): self {
         Assert::greaterThan($surface, 0);
         Assert::greaterThan($perimetre, 0);
-        Assert::greaterThan($u0, 0);
-        Assert::greaterThan($u, 0);
-        Assert::lessThanEq($annee_construction, (int) \date('Y'));
-        Assert::lessThanEq($annee_renovation, (int) \date('Y'));
+        Assert::nullOrGreaterThan($u0, 0);
+        Assert::nullOrGreaterThan($u, 0);
+        Assert::nullOrLessThanEq($annee_construction, (int) \date('Y'));
+        Assert::nullOrLessThanEq($annee_renovation, (int) \date('Y'));
 
         return new self(
             type: $type,

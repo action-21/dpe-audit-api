@@ -16,15 +16,15 @@ final class Position
 
     public static function create(Mitoyennete $mitoyennete, ?float $orientation,): self
     {
-        Assert::greaterThanEq($orientation, 0);
-        Assert::lessThan($orientation, 360);
+        Assert::nullOrGreaterThanEq($orientation, 0);
+        Assert::nullOrLessThan($orientation, 360);
         return new self(mitoyennete: $mitoyennete, orientation: $orientation);
     }
 
     public static function create_liaison_paroi(Paroi $entity, ?float $orientation,): self
     {
-        Assert::greaterThanEq($orientation, 0);
-        Assert::lessThan($orientation, 360);
+        Assert::nullOrGreaterThanEq($orientation, 0);
+        Assert::nullOrLessThan($orientation, 360);
         return new self(paroi: $entity, orientation: $orientation);
     }
 

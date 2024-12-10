@@ -28,9 +28,9 @@ final class PlancherBas implements Paroi
 
     public function controle(): void
     {
-        Assert::greaterThanEq($this->caracteristique->annee_construction, $this->enveloppe->annee_construction_batiment());
-        Assert::greaterThanEq($this->caracteristique->annee_renovation, $this->enveloppe->annee_construction_batiment());
-        Assert::greaterThanEq($this->isolation->annee_isolation, $this->enveloppe->annee_construction_batiment());
+        Assert::nullOrGreaterThanEq($this->caracteristique->annee_construction, $this->enveloppe->annee_construction_batiment());
+        Assert::nullOrGreaterThanEq($this->caracteristique->annee_renovation, $this->enveloppe->annee_construction_batiment());
+        Assert::nullOrGreaterThanEq($this->isolation->annee_isolation, $this->enveloppe->annee_construction_batiment());
     }
 
     public function reinitialise(): void

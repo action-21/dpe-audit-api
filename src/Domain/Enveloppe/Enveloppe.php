@@ -35,7 +35,7 @@ final class Enveloppe
 
     public function controle(): void
     {
-        Assert::greaterThan($this->q4pa_conv, 0);
+        Assert::nullOrGreaterThan($this->q4pa_conv, 0);
         $this->locaux_non_chauffes->controle();
         $this->ponts_thermiques->controle();
         $this->refends->controle();

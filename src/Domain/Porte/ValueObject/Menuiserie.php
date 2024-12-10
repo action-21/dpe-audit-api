@@ -22,7 +22,7 @@ final class Menuiserie
         bool $presence_retour_isolation,
         ?int $largeur_dormant,
     ): self {
-        Assert::greaterThanEq($largeur_dormant, 0);
+        Assert::nullOrGreaterThanEq($largeur_dormant, 0);
 
         return new self(
             nature_menuiserie: $nature_menuiserie,

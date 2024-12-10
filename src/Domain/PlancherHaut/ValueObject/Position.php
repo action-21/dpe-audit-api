@@ -16,8 +16,8 @@ final class Position
 
     public static function create(Mitoyennete $mitoyennete, ?float $orientation, ?Id $local_non_chauffe_id): self
     {
-        Assert::greaterThanEq($orientation, 0);
-        Assert::lessThan($orientation, 360);
+        Assert::nullOrGreaterThanEq($orientation, 0);
+        Assert::nullOrLessThan($orientation, 360);
 
         if ($local_non_chauffe_id) {
             $mitoyennete = Mitoyennete::LOCAL_NON_CHAUFFE;

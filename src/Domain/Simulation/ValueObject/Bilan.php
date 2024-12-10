@@ -2,8 +2,8 @@
 
 namespace App\Domain\Simulation\ValueObject;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Simulation\Enum\Etiquette;
+use Webmozart\Assert\Assert;
 
 final class Bilan
 {
@@ -20,7 +20,7 @@ final class Bilan
         Etiquette $etiquette_energie,
         Etiquette $etiquette_climat,
     ): self {
-        Assert::positif_ou_zero($emission);
+        Assert::greaterThanEq($emission, 0);
 
         return new self(
             consommation: $consommation,

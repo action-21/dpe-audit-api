@@ -3,7 +3,7 @@
 namespace App\Domain\Common\ValueObject;
 
 use App\Domain\Common\Enum\{Mois, ScenarioUsage, Usage};
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Emission
 {
@@ -20,7 +20,7 @@ final class Emission
         Mois $mois,
         float $emission
     ): self {
-        Assert::positif_ou_zero($emission);
+        Assert::greaterThanEq($emission, 0);
         return new self(
             usage: $usage,
             scenario: $scenario,

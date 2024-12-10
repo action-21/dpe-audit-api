@@ -23,9 +23,6 @@ final class Visite
 
     public function reinitialise(): void {}
 
-    /**
-     * TODO: Implémenter des modes de contrôle stricte et permissif
-     */
     public function controle(): void
     {
         if ($this->audit->batiment()->type !== TypeBatiment::IMMEUBLE)

@@ -2,10 +2,10 @@
 
 namespace App\Domain\Visite\Entity;
 
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Visite\Enum\Typologie;
 use App\Domain\Visite\Visite;
+use Webmozart\Assert\Assert;
 
 final class Logement
 {
@@ -17,17 +17,9 @@ final class Logement
         private float $surface_habitable,
     ) {}
 
-    public function update(string $description, Typologie $typologie, float $surface_habitable): self
-    {
-        $this->description = $description;
-        $this->surface_habitable = $surface_habitable;
-        $this->typologie = $typologie;
-        return $this;
-    }
-
     public function controle(): void
     {
-        Assert::positif($this->surface_habitable);
+        Assert::greaterThan($this->surface_habitable, 0);
     }
 
     public function id(): Id

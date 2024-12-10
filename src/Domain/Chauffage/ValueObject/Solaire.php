@@ -2,7 +2,7 @@
 
 namespace App\Domain\Chauffage\ValueObject;
 
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Solaire
 {
@@ -10,12 +10,8 @@ final class Solaire
 
     public static function create(?float $fch): self
     {
+        Assert::nullOrGreaterThanEq($fch, 0);
+        Assert::nullOrLessThanEq($fch, 1);
         return new self(fch: $fch,);
-    }
-
-    public function controle(): void
-    {
-        Assert::positif_ou_zero($this->fch);
-        Assert::inferieur_ou_egal_a($this->fch, 1);
     }
 }

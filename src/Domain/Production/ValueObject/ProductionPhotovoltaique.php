@@ -3,7 +3,7 @@
 namespace App\Domain\Production\ValueObject;
 
 use App\Domain\Common\Enum\Mois;
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class ProductionPhotovoltaique
 {
@@ -14,7 +14,7 @@ final class ProductionPhotovoltaique
 
     public static function create(Mois $mois, float $ppv): self
     {
-        Assert::positif_ou_zero($ppv);
+        Assert::greaterThanEq($ppv, 0);
         return new self(mois: $mois, ppv: $ppv);
     }
 }

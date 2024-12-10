@@ -3,7 +3,7 @@
 namespace App\Domain\Simulation\ValueObject;
 
 use App\Domain\Common\Enum\{ScenarioUsage, Usage};
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -22,9 +22,9 @@ final class Performance
         float $consommation_ep,
         float $emission,
     ): self {
-        Assert::positif_ou_zero($consommation_ef);
-        Assert::positif_ou_zero($consommation_ep);
-        Assert::positif_ou_zero($emission);
+        Assert::greaterThanEq($consommation_ef, 0);
+        Assert::greaterThanEq($consommation_ep, 0);
+        Assert::greaterThanEq($emission, 0);
 
         return new self(
             scenario: $scenario,

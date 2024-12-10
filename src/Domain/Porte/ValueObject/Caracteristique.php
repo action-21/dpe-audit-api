@@ -28,7 +28,7 @@ final class Caracteristique
     ): self {
         Assert::greaterThanEq($surface, 0);
         Assert::greaterThanEq($u, 0);
-        Assert::lessThanEq($annee_installation, (int) \date('Y'));
+        Assert::nullOrLessThanEq($annee_installation, (int) \date('Y'));
 
         return new self(
             surface: $surface,

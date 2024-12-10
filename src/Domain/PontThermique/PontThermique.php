@@ -36,7 +36,7 @@ final class PontThermique
     public function controle(): void
     {
         Assert::greaterThan($this->longueur, 0);
-        Assert::greaterThan($this->kpt, 0);
+        Assert::nullOrGreaterThan($this->kpt, 0);
     }
 
     public function calcule_performance(MoteurPerformance $moteur): self

@@ -3,7 +3,7 @@
 namespace App\Domain\Common\ValueObject;
 
 use App\Domain\Common\Enum\{Energie, ScenarioUsage, Usage};
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 /**
  * Les consommations sont exprimées sur l'année
@@ -24,7 +24,7 @@ final class Consommation
         ScenarioUsage $scenario,
         float $consommation,
     ): self {
-        Assert::positif_ou_zero($consommation);
+        Assert::greaterThanEq($consommation, 0);
         return new self(
             usage: $usage,
             energie: $energie,

@@ -30,7 +30,7 @@ final class Baie implements Paroi
 
     public function controle(): void
     {
-        Assert::greaterThanEq($this->caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());
+        Assert::nullOrGreaterThanEq($this->caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());
     }
 
     public function reinitialise(): void

@@ -31,9 +31,9 @@ final class Isolation
         ?int $epaisseur_isolation,
         ?float $resistance_thermique_isolation,
     ): self {
-        Assert::lessThanEq($annee_isolation, (int) \date('Y'));
-        Assert::greaterThan($epaisseur_isolation, 0);
-        Assert::greaterThan($resistance_thermique_isolation, 0);
+        Assert::nullOrLessThanEq($annee_isolation, (int) \date('Y'));
+        Assert::nullOrGreaterThan($epaisseur_isolation, 0);
+        Assert::nullOrGreaterThan($resistance_thermique_isolation, 0);
 
         return new self(
             etat_isolation: EtatIsolation::ISOLE,
