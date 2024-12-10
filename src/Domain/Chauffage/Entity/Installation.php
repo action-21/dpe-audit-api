@@ -3,8 +3,9 @@
 namespace App\Domain\Chauffage\Entity;
 
 use App\Domain\Chauffage\Chauffage;
+use App\Domain\Chauffage\Enum\TypeChauffage;
 use App\Domain\Chauffage\Service\{MoteurConsommation, MoteurDimensionnement, MoteurRendement};
-use App\Domain\Chauffage\ValueObject\{PerteCollection, Regulation, Solaire};
+use App\Domain\Chauffage\ValueObject\{Regulation, Solaire};
 use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
 use App\Domain\Common\ValueObject\ConsommationCollection;
@@ -126,7 +127,7 @@ final class Installation
 
     public function installation_collective(): bool
     {
-        return $this->systemes->filter_by_systeme_central()->has_generateur_collectif();
+        return $this->systemes->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)->has_generateur_collectif();
     }
 
     public function effet_joule(): bool

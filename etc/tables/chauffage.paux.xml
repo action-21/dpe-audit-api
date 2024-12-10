@@ -1,119 +1,312 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <table name="chauffage.paux">
     <row>
-        <categorie_generateur>CHAUDIERE_BASSE_TEMPERATURE</categorie_generateur>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>ELECTRICITE</energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>FIOUL</energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>20</G>
         <H>1.6</H>
         <pn_max>400</pn_max>
     </row>
     <row>
-        <categorie_generateur>CHAUDIERE_BOIS</categorie_generateur>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>GAZ_NATUREL</energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>20</G>
+        <H>1.6</H>
+        <pn_max>400</pn_max>
+    </row>
+    <row>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>GPL</energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>20</G>
+        <H>1.6</H>
+        <pn_max>400</pn_max>
+    </row>
+    <row>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>BOIS_BUCHE</energie_generateur>
         <presence_ventouse>1</presence_ventouse>
         <G>73.3</G>
         <H>10.5</H>
         <pn_max>70</pn_max>
     </row>
     <row>
-        <categorie_generateur>CHAUDIERE_BOIS</categorie_generateur>
-        <presence_ventouse></presence_ventouse>
-        <G>0</G>
-        <H>0</H>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>BOIS_GRANULE</energie_generateur>
+        <presence_ventouse>1</presence_ventouse>
+        <G>73.3</G>
+        <H>10.5</H>
         <pn_max>70</pn_max>
     </row>
     <row>
-        <categorie_generateur>CHAUDIERE_CONDENSATION</categorie_generateur>
-        <presence_ventouse></presence_ventouse>
-        <G>20</G>
-        <H>1.6</H>
-        <pn_max>400</pn_max>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>BOIS_PLAQUETTE</energie_generateur>
+        <presence_ventouse>1</presence_ventouse>
+        <G>73.3</G>
+        <H>10.5</H>
+        <pn_max>70</pn_max>
     </row>
     <row>
-        <categorie_generateur>CHAUDIERE_ELECTRIQUE</categorie_generateur>
-        <presence_ventouse></presence_ventouse>
-        <G>0</G>
-        <H>0</H>
-        <pn_max></pn_max>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>CHARBON</energie_generateur>
+        <presence_ventouse>1</presence_ventouse>
+        <G>73.3</G>
+        <H>10.5</H>
+        <pn_max>70</pn_max>
     </row>
     <row>
-        <categorie_generateur>CHAUDIERE_MULTI_BATIMENT</categorie_generateur>
-        <presence_ventouse></presence_ventouse>
-        <G>0</G>
-        <H>0</H>
-        <pn_max></pn_max>
-    </row>
-    <row>
-        <categorie_generateur>CHAUDIERE_STANDARD</categorie_generateur>
-        <presence_ventouse></presence_ventouse>
-        <G>20</G>
-        <H>1.6</H>
-        <pn_max>400</pn_max>
-    </row>
-    <row>
-        <categorie_generateur>CHAUFFAGE_ELECTRIQUE</categorie_generateur>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>CHARBON</energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>0</G>
         <H>0</H>
         <pn_max></pn_max>
     </row>
     <row>
-        <categorie_generateur>GENERATEUR_AIR_CHAUD</categorie_generateur>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>BOIS_BUCHE</energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>BOIS_GRANULE</energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>CHAUDIERE</type_generateur>
+        <energie_generateur>BOIS_PLAQUETTE</energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>CHAUDIERE_MULTI_BATIMENT</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>GENERATEUR_AIR_CHAUD</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>0</G>
         <H>4</H>
-        <pn_max>300</pn_max>
+        <pn_max></pn_max>
     </row>
     <row>
-        <categorie_generateur>PAC</categorie_generateur>
+        <type_generateur>PAC_AIR_AIR</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>0</G>
         <H>0</H>
         <pn_max></pn_max>
     </row>
     <row>
-        <categorie_generateur>PAC_HYBRIDE</categorie_generateur>
+        <type_generateur>PAC_AIR_EAU</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>0</G>
         <H>0</H>
         <pn_max></pn_max>
     </row>
     <row>
-        <categorie_generateur>PAC_MULTI_BATIMENT</categorie_generateur>
+        <type_generateur>PAC_EAU_EAU</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>0</G>
         <H>0</H>
         <pn_max></pn_max>
     </row>
     <row>
-        <categorie_generateur>POELE_BOIS_BOUILLEUR</categorie_generateur>
+        <type_generateur>PAC_EAU_GLYCOLEE_EAU</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PAC_GEOTHERMIQUE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PAC_HYBRIDE_AIR_EAU</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PAC_HYBRIDE_EAU_EAU</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PAC_HYBRIDE_EAU_GLYCOLEE_EAU</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PAC_HYBRIDE_GEOTHERMIQUE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PAC_MULTI_BATIMENT</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>POELE_BOUILLEUR</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse>1</presence_ventouse>
         <G>73.3</G>
         <H>10.5</H>
         <pn_max>70</pn_max>
     </row>
     <row>
-        <categorie_generateur>POELE_BOIS_BOUILLEUR</categorie_generateur>
+        <type_generateur>POELE_BOUILLEUR</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>0</G>
         <H>0</H>
         <pn_max>70</pn_max>
     </row>
     <row>
-        <categorie_generateur>POELE_INSERT</categorie_generateur>
+        <type_generateur>RESEAU_CHALEUR</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>0</G>
         <H>0</H>
         <pn_max></pn_max>
     </row>
     <row>
-        <categorie_generateur>RADIATEUR_GAZ</categorie_generateur>
+        <type_generateur>CONVECTEUR_BI_JONCTION</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse></presence_ventouse>
-        <G>40</G>
+        <G>0</G>
         <H>0</H>
         <pn_max></pn_max>
     </row>
     <row>
-        <categorie_generateur>RESEAU_CHALEUR</categorie_generateur>
+        <type_generateur>CONVECTEUR_ELECTRIQUE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PANNEAU_RAYONNANT_ELECTRIQUE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PLAFOND_RAYONNANT_ELECTRIQUE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>PLANCHER_RAYONNANT_ELECTRIQUE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>RADIATEUR_ELECTRIQUE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>RADIATEUR_ELECTRIQUE_ACCUMULATION</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>CUISINIERE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>FOYER_FERME</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>INSERT</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>POELE</type_generateur>
+        <energie_generateur></energie_generateur>
+        <presence_ventouse></presence_ventouse>
+        <G>0</G>
+        <H>0</H>
+        <pn_max></pn_max>
+    </row>
+    <row>
+        <type_generateur>RADIATEUR_GAZ</type_generateur>
+        <energie_generateur></energie_generateur>
         <presence_ventouse></presence_ventouse>
         <G>0</G>
         <H>0</H>

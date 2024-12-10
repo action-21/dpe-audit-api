@@ -3,7 +3,7 @@
 namespace App\Domain\Chauffage\Service;
 
 use App\Domain\Chauffage\Entity\{Generateur, Installation, Systeme};
-use App\Domain\Chauffage\Enum\Configuration;
+use App\Domain\Chauffage\Enum\{Configuration, TypeChauffage};
 use App\Domain\Common\Enum\{Mois, ScenarioUsage};
 use App\Domain\Simulation\Simulation;
 
@@ -26,8 +26,8 @@ final class MoteurDimensionnement
     public function calcule_dimensionnement_systeme(Systeme $entity): float
     {
         $configuration = Configuration::determine($entity->installation());
-        $somme_pn_base = $entity->installation()->systemes()->filter_by_systeme_central()->has_pn()
-            ? $entity->installation()->systemes()->filter_by_systeme_central()->pn()
+        $somme_pn_base = $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)->has_pn()
+            ? $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)()->pn()
             : null;
 
         return match (true) {
@@ -35,7 +35,7 @@ final class MoteurDimensionnement
                 configuration: $configuration,
                 appoint: $entity->installation()->systemes()->has_systeme_divise(),
                 systemes_base: $entity->installation()->systemes()->has_systeme_central()
-                    ? $entity->installation()->systemes()->filter_by_systeme_central()->count()
+                    ? $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)()->count()
                     : $entity->installation()->systemes()->count(),
                 pn_base: $entity->generateur()->signaletique()?->pn,
                 somme_pn_base: $somme_pn_base,
@@ -45,7 +45,7 @@ final class MoteurDimensionnement
                 appoint: $entity->installation()->systemes()->has_systeme_divise(),
             ),
             $configuration->is_appoint($entity) => $this->rdim_appoint(
-                systemes: $entity->installation()->systemes()->filter_by_systeme_divise()->count(),
+                systemes: $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)()->count(),
             ),
         };
     }

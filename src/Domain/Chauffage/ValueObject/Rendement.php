@@ -3,7 +3,7 @@
 namespace App\Domain\Chauffage\ValueObject;
 
 use App\Domain\Common\Enum\ScenarioUsage;
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Rendement
 {
@@ -30,14 +30,14 @@ final class Rendement
         float $re,
         float $rr,
     ): self {
-        Assert::positif_ou_zero($fch);
-        Assert::positif_ou_zero($i0);
-        Assert::positif_ou_zero($int);
-        Assert::positif_ou_zero($ich);
-        Assert::positif_ou_zero($rg);
-        Assert::positif_ou_zero($rd);
-        Assert::positif_ou_zero($re);
-        Assert::positif_ou_zero($rr);
+        Assert::greaterThanEq($fch, 0);
+        Assert::greaterThanEq($i0, 0);
+        Assert::greaterThanEq($int, 0);
+        Assert::greaterThanEq($ich, 0);
+        Assert::greaterThanEq($rg, 0);
+        Assert::greaterThanEq($rd, 0);
+        Assert::greaterThanEq($re, 0);
+        Assert::greaterThanEq($rr, 0);
 
         return new static(
             scenario: $scenario,

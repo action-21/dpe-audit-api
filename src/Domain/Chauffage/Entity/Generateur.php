@@ -3,9 +3,9 @@
 namespace App\Domain\Chauffage\Entity;
 
 use App\Domain\Chauffage\Chauffage;
-use App\Domain\Chauffage\Enum\{TypeGenerateur, UsageChauffage};
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, TypeGenerateur, UsageChauffage};
 use App\Domain\Chauffage\Service\{MoteurDimensionnement, MoteurPerformance, MoteurPerte};
-use App\Domain\Chauffage\ValueObject\{Performance, PerteCollection, Signaletique};
+use App\Domain\Chauffage\ValueObject\{Combustion, Performance, PerteCollection, Signaletique};
 use App\Domain\Common\Type\Id;
 use App\Domain\Simulation\Simulation;
 use Webmozart\Assert\Assert;
@@ -72,19 +72,44 @@ final class Generateur
         return $this->description;
     }
 
+    public function type(): TypeGenerateur
+    {
+        return $this->signaletique->type;
+    }
+
+    public function energie(): EnergieGenerateur
+    {
+        return $this->signaletique->energie;
+    }
+
+    public function position_volume_chauffe(): bool
+    {
+        return $this->signaletique->position_volume_chauffe;
+    }
+
+    public function generateur_collectif(): bool
+    {
+        return $this->signaletique->generateur_collectif;
+    }
+
     public function effet_joule(): bool
     {
         return $this->signaletique->effet_joule();
     }
 
-    public function usage(): UsageChauffage
-    {
-        return $this->generateur_mixte_id ? UsageChauffage::CHAUFFAGE_ECS : UsageChauffage::CHAUFFAGE;;
-    }
-
     public function signaletique(): Signaletique
     {
         return $this->signaletique;
+    }
+
+    public function combustion(): ?Combustion
+    {
+        return $this->signaletique->combustion;
+    }
+
+    public function usage(): UsageChauffage
+    {
+        return $this->generateur_mixte_id ? UsageChauffage::CHAUFFAGE_ECS : UsageChauffage::CHAUFFAGE;;
     }
 
     public function annee_installation(): ?int
@@ -120,7 +145,7 @@ final class Generateur
 
     public function reference_generateur_mixte(Id $generateur_mixte_id): self
     {
-        if ($this->signaletique->type->usage_mixte()) {
+        if ($this->signaletique->type->is_usage_mixte()) {
             $this->generateur_mixte_id = $generateur_mixte_id;
             $this->reinitialise();
         }

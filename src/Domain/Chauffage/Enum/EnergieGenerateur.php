@@ -59,10 +59,18 @@ enum EnergieGenerateur: string implements Enum
         };
     }
 
-    public function combustible(): bool
+    public function is_combustible(): bool
     {
         return match ($this) {
             self::ELECTRICITE, self::RESEAU_CHALEUR => false,
+            default => true,
+        };
+    }
+
+    public function is_bois(): bool
+    {
+        return match ($this) {
+            self::BOIS_BUCHE, self::BOIS_PLAQUETTE, self::BOIS_GRANULE => false,
             default => true,
         };
     }

@@ -103,7 +103,66 @@ enum TypeGenerateur: string implements Enum
         };
     }
 
-    public function usage_mixte(): bool
+    public function is_chauffage_electrique(): bool
+    {
+        return \in_array($this, [
+            self::PANNEAU_RAYONNANT_ELECTRIQUE,
+            self::PLAFOND_RAYONNANT_ELECTRIQUE,
+            self::PLANCHER_RAYONNANT_ELECTRIQUE,
+            self::RADIATEUR_ELECTRIQUE,
+            self::RADIATEUR_ELECTRIQUE_ACCUMULATION,
+        ]);
+    }
+
+    public function is_poele_insert(): bool
+    {
+        return \in_array($this, [
+            self::CUISINIERE,
+            self::FOYER_FERME,
+            self::INSERT,
+            self::POELE,
+        ]);
+    }
+
+    public function is_chaudiere(): bool
+    {
+        return \in_array($this, [
+            self::CHAUDIERE,
+            self::CHAUDIERE_MULTI_BATIMENT,
+            self::PAC_HYBRIDE_AIR_EAU,
+            self::PAC_HYBRIDE_EAU_EAU,
+            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
+            self::PAC_HYBRIDE_GEOTHERMIQUE,
+        ]);
+    }
+
+    public function is_pac(): bool
+    {
+        return \in_array($this, [
+            self::PAC_AIR_AIR,
+            self::PAC_AIR_EAU,
+            self::PAC_EAU_EAU,
+            self::PAC_EAU_GLYCOLEE_EAU,
+            self::PAC_GEOTHERMIQUE,
+            self::PAC_HYBRIDE_AIR_EAU,
+            self::PAC_HYBRIDE_EAU_EAU,
+            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
+            self::PAC_HYBRIDE_GEOTHERMIQUE,
+            self::PAC_MULTI_BATIMENT,
+        ]);
+    }
+
+    public function is_pac_hybride(): bool
+    {
+        return \in_array($this, [
+            self::PAC_HYBRIDE_AIR_EAU,
+            self::PAC_HYBRIDE_EAU_EAU,
+            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
+            self::PAC_HYBRIDE_GEOTHERMIQUE,
+        ]);
+    }
+
+    public function is_usage_mixte(): bool
     {
         return \in_array($this, [
             self::CHAUDIERE,
@@ -122,7 +181,7 @@ enum TypeGenerateur: string implements Enum
         ]);
     }
 
-    public function chauffage_central(): bool
+    public function is_chauffage_central(): bool
     {
         return \in_array($this, [
             self::CHAUDIERE,
@@ -143,7 +202,7 @@ enum TypeGenerateur: string implements Enum
         ]);
     }
 
-    public function chauffage_divise(): bool
+    public function is_chauffage_divise(): bool
     {
         return \in_array($this, [
             self::CONVECTEUR_BI_JONCTION,
@@ -160,6 +219,36 @@ enum TypeGenerateur: string implements Enum
             self::INSERT,
             self::POELE,
             self::RADIATEUR_GAZ,
+        ]);
+    }
+
+    public function combustion_applicable(): bool
+    {
+        return \in_array($this, [
+            self::CHAUDIERE,
+            self::POELE_BOUILLEUR,
+            self::RADIATEUR_GAZ,
+            self::GENERATEUR_AIR_CHAUD,
+            self::PAC_HYBRIDE_AIR_EAU,
+            self::PAC_HYBRIDE_EAU_EAU,
+            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
+            self::PAC_HYBRIDE_GEOTHERMIQUE,
+        ]);
+    }
+
+    public function scop_applicable(): bool
+    {
+        return $this->is_pac() && $this !== self::PAC_MULTI_BATIMENT;
+    }
+
+    public function tfonc_applicable(): bool
+    {
+        return \in_array($this, [
+            self::CHAUDIERE,
+            self::PAC_HYBRIDE_AIR_EAU,
+            self::PAC_HYBRIDE_EAU_EAU,
+            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
+            self::PAC_HYBRIDE_GEOTHERMIQUE,
         ]);
     }
 }

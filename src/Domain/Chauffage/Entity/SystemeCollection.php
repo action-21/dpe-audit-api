@@ -2,7 +2,7 @@
 
 namespace App\Domain\Chauffage\Entity;
 
-use App\Domain\Chauffage\Enum\CategorieGenerateur;
+use App\Domain\Chauffage\Enum\{TypeChauffage};
 use App\Domain\Chauffage\Service\{MoteurConsommation, MoteurDimensionnement, MoteurRendement};
 use App\Domain\Chauffage\ValueObject\PerteCollection;
 use App\Domain\Common\Collection\ArrayCollection;
@@ -45,39 +45,29 @@ final class SystemeCollection extends ArrayCollection
         return $this->findFirst(fn(mixed $key, Systeme $item): bool => $item->id()->compare($id));
     }
 
+    public function filter_by_generateur_combustion(): self
+    {
+        return $this->filter(fn(Systeme $item): bool => null !== $item->generateur()->combustion());
+    }
+
     public function filter_by_systeme_collectif(): self
     {
-        return $this->filter(fn(Systeme $item): bool => $item->generateur()->generateur_collectif());
+        return $this->filter(fn(Systeme $item): bool => $item->generateur()->signaletique()->generateur_collectif);
     }
 
     public function filter_by_systeme_individuel(): self
     {
-        return $this->filter(fn(Systeme $item): bool => false === $item->generateur()->generateur_collectif());
+        return $this->filter(fn(Systeme $item): bool => false === $item->generateur()->signaletique()->generateur_collectif);
     }
 
-    public function filter_by_systeme_central(): self
+    public function filter_by_type_chauffage(TypeChauffage $type_chauffage): self
     {
-        return $this->filter(fn(Systeme $item): bool => $item->is_systeme_central());
-    }
-
-    public function filter_by_systeme_divise(): self
-    {
-        return $this->filter(fn(Systeme $item): bool => $item->is_systeme_divise());
+        return $this->filter(fn(Systeme $item): bool => $item->type_chauffage() === $type_chauffage);
     }
 
     public function filter_by_generateur(Id $id): self
     {
         return $this->filter(fn(Systeme $item): bool => $item->generateur()->id()->compare($id));
-    }
-
-    public function filter_by_categorie_generateur(CategorieGenerateur $categorie_generateur): self
-    {
-        return $this->filter(fn(Systeme $item): bool => $item->generateur()->categorie() === $categorie_generateur);
-    }
-
-    public function filter_by_generateur_combustion(): self
-    {
-        return $this->filter(fn(Systeme $item): bool => $item->generateur()->categorie()->combustion());
     }
 
     public function filter_by_cascade(bool $cascade): self
@@ -106,27 +96,27 @@ final class SystemeCollection extends ArrayCollection
 
     public function has_systeme_central(): bool
     {
-        return $this->filter_by_systeme_central()->count() > 0;
+        return $this->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)->count() > 0;
     }
 
     public function has_systeme_divise(): bool
     {
-        return $this->filter_by_systeme_divise()->count() > 0;
+        return $this->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_DIVISE)->count() > 0;
     }
 
     public function has_chaudiere(): bool
     {
-        return $this->filter(fn(Systeme $item): bool => $item->generateur()->categorie()->is_chaudiere())->count() > 0;
+        return $this->filter(fn(Systeme $item): bool => $item->generateur()->type()->is_chaudiere())->count() > 0;
     }
 
     public function has_chaudiere_bois(): bool
     {
-        return $this->filter(fn(Systeme $item): bool => $item->generateur()->categorie()->is_chaudiere_bois())->count() > 0;
+        return $this->has_chaudiere() && $this->filter(fn(Systeme $item): bool => $item->generateur()->energie()->is_bois())->count() > 0;
     }
 
     public function has_pac(): bool
     {
-        return $this->filter(fn(Systeme $item): bool => $item->generateur()->categorie()->is_pac())->count() > 0;
+        return $this->filter(fn(Systeme $item): bool => $item->generateur()->type()->is_pac())->count() > 0;
     }
 
     public function has_cascade(): bool
@@ -143,24 +133,10 @@ final class SystemeCollection extends ArrayCollection
         return true;
     }
 
-    /** @return CategorieGenerateur[] */
-    public function categories(): array
-    {
-        /** @var CategorieGenerateur[] */
-        $collection = [];
-
-        foreach ($this->elements as $element) {
-            if (false === \in_array($element->generateur()->categorie(), $collection, true)) {
-                $collection[] = $element->generateur()->categorie();
-            }
-        }
-        return $collection;
-    }
-
     public function effet_joule(): bool
     {
         if ($this->has_systeme_central()) {
-            $collection = $this->filter_by_systeme_central();
+            $collection = $this->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL);
             return $collection->filter(fn(Systeme $item): bool => $item->effet_joule())->count() > $collection->count() / 2;
         }
         return $this->filter(fn(Systeme $item): bool => $item->effet_joule())->count() > $this->count() / 2;

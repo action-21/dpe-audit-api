@@ -12,6 +12,7 @@ final class Signaletique
         public readonly EnergieGenerateur $energie,
         public readonly bool $position_volume_chauffe,
         public readonly bool $generateur_collectif,
+        public readonly ?TypeGenerateur $type_partie_chaudiere = null,
         public readonly ?EnergieGenerateur $energie_partie_chaudiere = null,
         public readonly ?PositionChaudiere $position_chaudiere = null,
         public readonly ?LabelGenerateur $label = null,
@@ -119,6 +120,7 @@ final class Signaletique
         return new self(
             type: $type->to(),
             energie: EnergieGenerateur::ELECTRICITE,
+            type_partie_chaudiere: TypeGenerateur::CHAUDIERE,
             energie_partie_chaudiere: $energie_partie_chaudiere->to(),
             position_volume_chauffe: $position_volume_chauffe,
             generateur_collectif: $generateur_collectif,

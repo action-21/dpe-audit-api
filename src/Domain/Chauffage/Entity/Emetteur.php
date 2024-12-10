@@ -4,12 +4,9 @@ namespace App\Domain\Chauffage\Entity;
 
 use App\Domain\Chauffage\Chauffage;
 use App\Domain\Chauffage\Enum\{TemperatureDistribution, TypeEmetteur, TypeEmission};
-use App\Domain\Common\Service\Assert;
 use App\Domain\Common\Type\Id;
+use Webmozart\Assert\Assert;
 
-/**
- * Émetteur hydraulique
- */
 final class Emetteur
 {
     public function __construct(
@@ -22,30 +19,12 @@ final class Emetteur
         private ?int $annee_installation,
     ) {}
 
-    public function update(
-        string $description,
-        TypeEmetteur $type,
-        TemperatureDistribution $temperature_distribution,
-        bool $presence_robinet_thermostatique,
-        ?int $annee_installation,
-    ): self {
-        $this->description = $description;
-        $this->type = $type;
-        $this->temperature_distribution = $temperature_distribution;
-        $this->presence_robinet_thermostatique = $presence_robinet_thermostatique;
-        $this->annee_installation = $annee_installation;
-
-        $this->controle();
-        $this->reinitialise();
-        return $this;
-    }
-
     public function reinitialise(): void {}
 
     public function controle(): void
     {
-        Assert::annee($this->annee_installation);
-        Assert::superieur_ou_egal_a($this->annee_installation, $this->chauffage->annee_construction_batiment());
+        Assert::nullOrLessThanEq($this->annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($this->annee_installation, $this->chauffage->annee_construction_batiment());
     }
 
     public function id(): Id

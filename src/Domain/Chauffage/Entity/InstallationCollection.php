@@ -2,13 +2,11 @@
 
 namespace App\Domain\Chauffage\Entity;
 
-use App\Domain\Chauffage\Enum\CategorieGenerateur;
-use App\Domain\Chauffage\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance, MoteurPerte, MoteurRendement};
+use App\Domain\Chauffage\Service\{MoteurConsommation, MoteurDimensionnement, MoteurRendement};
 use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\Type\Id;
 use App\Domain\Common\ValueObject\ConsommationCollection;
 use App\Domain\Simulation\Simulation;
-use PHPUnit\Event\Telemetry\System;
 
 /**
  * @property Installation[] $elements

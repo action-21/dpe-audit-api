@@ -3,7 +3,7 @@
 namespace App\Domain\Chauffage\Service\MoteurRendement;
 
 use App\Domain\Chauffage\Entity\Systeme;
-use App\Domain\Chauffage\Enum\{CategorieGenerateur, EnergieGenerateur, TauxCharge};
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, TauxCharge, TypeCombustion, TypeGenerateur};
 use App\Domain\Common\Enum\ScenarioUsage;
 use App\Domain\Simulation\Simulation;
 
@@ -23,7 +23,8 @@ use App\Domain\Simulation\Simulation;
 final class MoteurRendementGenerationCombustion
 {
     private ScenarioUsage $scenario;
-    private CategorieGenerateur $categorie_generateur;
+    private TypeGenerateur $type_generateur;
+    private ?TypeCombustion $type_combustion;
     private EnergieGenerateur $energie_generateur;
 
     private float $gv;
@@ -42,8 +43,9 @@ final class MoteurRendementGenerationCombustion
 
     public function initialise(
         ScenarioUsage $scenario,
-        CategorieGenerateur $categorie_generateur,
+        TypeGenerateur $type_generateur,
         EnergieGenerateur $energie_generateur,
+        ?TypeCombustion $type_combustion,
         bool $regulation,
         ?int $priorite_cascade,
         float $gv,
@@ -58,8 +60,9 @@ final class MoteurRendementGenerationCombustion
         ?float $tfonc100,
     ): self {
         $this->scenario = $scenario;
-        $this->categorie_generateur = $categorie_generateur;
+        $this->type_generateur = $type_generateur;
         $this->energie_generateur = $energie_generateur;
+        $this->type_combustion = $type_combustion;
         $this->gv = $gv;
         $this->tbase = $tbase;
         $this->regulation = $regulation;
@@ -262,62 +265,78 @@ final class MoteurRendementGenerationCombustion
         $Rpn = $this->rpn;
         $Rpint = $this->rpint;
 
-        if ($this->categorie_generateur === CategorieGenerateur::CHAUDIERE_STANDARD) {
-            if ($x == 30) {
-                $Tfonc = $this->regulation ? $this->tfonc30 : $this->tfonc100;
-                return 0.3 * $Pn * ((100 - ($Rpint + 0.1 * (50 - $Tfonc))) / ($Rpint + 0.1 * (50 - $Tfonc)));
+        if ($this->type_generateur->is_chaudiere()) {
+            if ($this->energie_generateur->is_bois()) {
+                if ($x == 50) {
+                    return 0.5 * $Pn * ((100 - $Rpint) / $Rpint);
+                }
+                if ($x == 100) {
+                    return $Pn * ((100 - $Rpn) / $Rpn);
+                }
+                if ($x < 50) {
+                    $QP50 = $this->qp(50);
+                    return ((($QP50 - 0.15 * $QP0) * $x) / 0.5) + 0.15 * $QP0;
+                }
+                if ($x < 100) {
+                    $QP50 = $this->qp(50);
+                    $QP100 = $this->qp(100);
+                    return ((($QP100 - $QP50) * $x) / 0.5) + 2 * $QP50 - $QP100;
+                }
             }
-            if ($x == 100) {
-                $Tfonc = $this->tfonc100;
-                return $Pn * ((100 - ($Rpn + 0.1 * (70 - $Tfonc))) / ($Rpn + 0.1 * (70 - $Tfonc)));
+            if ($this->type_combustion === TypeCombustion::STANDARD) {
+                if ($x == 30) {
+                    $Tfonc = $this->regulation ? $this->tfonc30 : $this->tfonc100;
+                    return 0.3 * $Pn * ((100 - ($Rpint + 0.1 * (50 - $Tfonc))) / ($Rpint + 0.1 * (50 - $Tfonc)));
+                }
+                if ($x == 100) {
+                    $Tfonc = $this->tfonc100;
+                    return $Pn * ((100 - ($Rpn + 0.1 * (70 - $Tfonc))) / ($Rpn + 0.1 * (70 - $Tfonc)));
+                }
+                if ($x < 30) {
+                    $QP30 = $this->qp(30);
+                    return ((($QP30 - 0.15 * $QP0) * $x) / 0.3) + 0.15 * $QP0;
+                }
+                if ($x < 100) {
+                    $QP30 = $this->qp(30);
+                    $QP100 = $this->qp(100);
+                    return ((($QP100 - $QP30) * $x) / 0.7) + $QP30 - ((($QP100 - $QP30) * 0.3) / 0.7);
+                }
             }
-            if ($x < 30) {
-                $QP30 = $this->qp(30);
-                return ((($QP30 - 0.15 * $QP0) * $x) / 0.3) + 0.15 * $QP0;
-            }
-            if ($x < 100) {
-                $QP30 = $this->qp(30);
-                $QP100 = $this->qp(100);
-                return ((($QP100 - $QP30) * $x) / 0.7) + $QP30 - ((($QP100 - $QP30) * 0.3) / 0.7);
+            if (in_array($this->type_combustion, [
+                TypeCombustion::BASSE_TEMPERATURE,
+                TypeCombustion::CONDENSATION,
+            ])) {
+                if ($x == 15) {
+                    $QP30 = $this->qp(30);
+                    return $QP30 / 2;
+                }
+                if ($x == 30) {
+                    $Tfonc = $this->regulation ? $this->tfonc30 : $this->tfonc100;
+                    return $this->type_combustion === TypeCombustion::CONDENSATION
+                        ? 0.3 * $Pn * ((100 - ($Rpint + 0.2 * (33 - $Tfonc))) / ($Rpint + 0.2 * (33 - $Tfonc)))
+                        : 0.3 * $Pn * ((100 - ($Rpint + 0.1 * (40 - $Tfonc))) / ($Rpint + 0.1 * (40 - $Tfonc)));
+                }
+                if ($x == 100) {
+                    $Tfonc = $this->tfonc100;
+                    return $Pn * ((100 - ($Rpn + 0.1 * (70 - $Tfonc))) / ($Rpn + 0.1 * (70 - $Tfonc)));
+                }
+                if ($x < 15) {
+                    $QP15 = $this->qp(15);
+                    return ((($QP15 - 0.15 * $QP0) * $x) / 0.15) + 0.15 * $QP0;
+                }
+                if ($x < 30) {
+                    $QP15 = $this->qp(15);
+                    $QP30 = $this->qp(30);
+                    return ((($QP30 - $QP15) * $x) / 0.15) + $QP15 * ((($QP30 - $QP15) * 0.15) / 0.15);
+                }
+                if ($x < 100) {
+                    $QP30 = $this->qp(30);
+                    $QP100 = $this->qp(100);
+                    return ((($QP100 - $QP30) * $x) / 0.7) + $QP30 - ((($QP100 - $QP30) * 0.3) / 0.7);
+                }
             }
         }
-        if (\in_array($this->categorie_generateur, [
-            CategorieGenerateur::CHAUDIERE_BASSE_TEMPERATURE,
-            CategorieGenerateur::CHAUDIERE_CONDENSATION,
-        ])) {
-            if ($x == 15) {
-                $QP30 = $this->qp(30);
-                return $QP30 / 2;
-            }
-            if ($x == 30) {
-                $Tfonc = $this->regulation ? $this->tfonc30 : $this->tfonc100;
-                return $this->categorie_generateur === CategorieGenerateur::CHAUDIERE_CONDENSATION
-                    ? 0.3 * $Pn * ((100 - ($Rpint + 0.2 * (33 - $Tfonc))) / ($Rpint + 0.2 * (33 - $Tfonc)))
-                    : 0.3 * $Pn * ((100 - ($Rpint + 0.1 * (40 - $Tfonc))) / ($Rpint + 0.1 * (40 - $Tfonc)));
-            }
-            if ($x == 100) {
-                $Tfonc = $this->tfonc100;
-                return $Pn * ((100 - ($Rpn + 0.1 * (70 - $Tfonc))) / ($Rpn + 0.1 * (70 - $Tfonc)));
-            }
-            if ($x < 15) {
-                $QP15 = $this->qp(15);
-                return ((($QP15 - 0.15 * $QP0) * $x) / 0.15) + 0.15 * $QP0;
-            }
-            if ($x < 30) {
-                $QP15 = $this->qp(15);
-                $QP30 = $this->qp(30);
-                return ((($QP30 - $QP15) * $x) / 0.15) + $QP15 * ((($QP30 - $QP15) * 0.15) / 0.15);
-            }
-            if ($x < 100) {
-                $QP30 = $this->qp(30);
-                $QP100 = $this->qp(100);
-                return ((($QP100 - $QP30) * $x) / 0.7) + $QP30 - ((($QP100 - $QP30) * 0.3) / 0.7);
-            }
-        }
-        if (\in_array($this->categorie_generateur, [
-            CategorieGenerateur::CHAUDIERE_BOIS,
-            CategorieGenerateur::POELE_BOIS_BOUILLEUR,
-        ])) {
+        if ($this->type_generateur === TypeGenerateur::POELE_BOUILLEUR) {
             if ($x == 50) {
                 return 0.5 * $Pn * ((100 - $Rpint) / $Rpint);
             }
@@ -334,7 +353,7 @@ final class MoteurRendementGenerationCombustion
                 return ((($QP100 - $QP50) * $x) / 0.5) + 2 * $QP50 - $QP100;
             }
         }
-        if ($this->categorie_generateur === CategorieGenerateur::GENERATEUR_AIR_CHAUD) {
+        if ($this->type_generateur === TypeGenerateur::GENERATEUR_AIR_CHAUD) {
             if ($x == 50) {
                 return 0.5 * $Pn * ((100 - $Rpint) / $Rpint);
             }
@@ -351,7 +370,7 @@ final class MoteurRendementGenerationCombustion
                 return ((($QP100 - $QP50) * $x) / 0.5) + 2 * $QP50 - $QP100;
             }
         }
-        if ($this->categorie_generateur === CategorieGenerateur::RADIATEUR_GAZ) {
+        if ($this->type_generateur === TypeGenerateur::RADIATEUR_GAZ) {
             return 1.04 * ((100 - $Rpn) / $Rpn) * $Pn * $x;
         }
         return 0;
@@ -369,8 +388,9 @@ final class MoteurRendementGenerationCombustion
 
         return $this->initialise(
             scenario: $scenario,
-            categorie_generateur: $entity->generateur()->categorie(),
+            type_generateur: $entity->generateur()->type(),
             energie_generateur: $entity->generateur()->energie(),
+            type_combustion: $entity->generateur()->combustion()?->type,
             regulation: $entity->installation()->regulation_centrale()->presence_regulation || $entity->installation()->regulation_terminale()->presence_regulation,
             priorite_cascade: $entity->generateur()->signaletique()?->priorite_cascade,
             gv: $simulation->enveloppe()->performance()->gv,

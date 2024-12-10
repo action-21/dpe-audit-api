@@ -4,7 +4,7 @@ namespace App\Database\Local\Chauffage;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
 use App\Domain\Chauffage\Data\{Combustion, CombustionRepository};
-use App\Domain\Chauffage\Enum\{EnergieGenerateur, TypeGenerateur};
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, TypeCombustion, TypeGenerateur};
 
 final class XMLCombustionRepository implements CombustionRepository
 {
@@ -17,12 +17,14 @@ final class XMLCombustionRepository implements CombustionRepository
 
     public function find_by(
         TypeGenerateur $type_generateur,
+        ?TypeCombustion $type_combustion,
         EnergieGenerateur $energie_generateur,
         int $annee_installation_generateur,
         float $pn,
     ): ?Combustion {
         $record = $this->createQuery()
             ->and('type_generateur', $type_generateur->value)
+            ->and('type_combustion', $type_combustion?->value, true)
             ->and('energie_generateur', $energie_generateur->value, true)
             ->andCompareTo('annee_installation_generateur', $annee_installation_generateur)
             ->andCompareTo('pn', $pn)

@@ -17,8 +17,8 @@ enum Configuration: string implements Enum
     public static function determine(Installation $entity): self
     {
         $systemes_chauffage_central = $entity->installation_collective()
-            ? $entity->systemes()->filter_by_systeme_collectif()->filter_by_systeme_central()
-            : $entity->systemes()->filter_by_systeme_central();
+            ? $entity->systemes()->filter_by_systeme_collectif()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)
+            : $entity->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL);
 
         $is_chauffage_central = $systemes_chauffage_central->has_systeme_central();
         $has_pac = $systemes_chauffage_central->has_pac();
@@ -57,11 +57,10 @@ enum Configuration: string implements Enum
     public function is_base(Systeme $entity): bool
     {
         return match ($this) {
-            self::BASE => $entity->is_systeme_central(),
-            self::BASE_APPOINT => $entity->is_systeme_central(),
-            self::BASE_BOIS_RELEVE_PAC => $entity->generateur()->categorie()->is_chaudiere_bois(),
-            self::BASE_BOIS_RELEVE_CHAUDIERE => $entity->generateur()->categorie()->is_chaudiere_bois(),
-            self::BASE_PAC_RELEVE_CHAUDIERE => $entity->generateur()->categorie()->is_pac() && $entity->is_systeme_central(),
+            self::BASE_BOIS_RELEVE_PAC => $entity->generateur()->signaletique()->type->is_chaudiere() && $entity->generateur()->signaletique()->energie->is_bois(),
+            self::BASE_BOIS_RELEVE_CHAUDIERE => $entity->generateur()->signaletique()->type->is_chaudiere(),
+            self::BASE_PAC_RELEVE_CHAUDIERE => $entity->generateur()->signaletique()->type->is_pac() && $entity->type_chauffage() === TypeChauffage::CHAUFFAGE_CENTRAL,
+            self::BASE, self::BASE_APPOINT => $entity->type_chauffage() === TypeChauffage::CHAUFFAGE_CENTRAL,
             self::AUTRES => true,
         };
     }
@@ -69,9 +68,8 @@ enum Configuration: string implements Enum
     public function is_releve(Systeme $entity): bool
     {
         return match ($this) {
-            self::BASE_BOIS_RELEVE_PAC => $entity->generateur()->categorie()->is_pac() && $entity->is_systeme_central(),
-            self::BASE_BOIS_RELEVE_CHAUDIERE => $entity->generateur()->categorie()->is_chaudiere(),
-            self::BASE_PAC_RELEVE_CHAUDIERE => $entity->generateur()->categorie()->is_chaudiere(),
+            self::BASE_BOIS_RELEVE_PAC => $entity->generateur()->signaletique()->type->is_pac() && $entity->type_chauffage() === TypeChauffage::CHAUFFAGE_CENTRAL,
+            self::BASE_BOIS_RELEVE_CHAUDIERE, self::BASE_PAC_RELEVE_CHAUDIERE => $entity->generateur()->signaletique()->type->is_chaudiere(),
             default => false,
         };
     }
@@ -81,7 +79,7 @@ enum Configuration: string implements Enum
         return match ($this) {
             self::BASE => false,
             self::AUTRES => false,
-            default => $entity->is_systeme_divise(),
+            default => $entity->type_chauffage() === TypeChauffage::CHAUFFAGE_DIVISE,
         };
     }
 

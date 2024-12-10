@@ -4,7 +4,7 @@ namespace App\Database\Local\Chauffage;
 
 use App\Domain\Chauffage\Data\{Pn, PnRepository};
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Chauffage\Enum\{TypeChaudiere};
+use App\Domain\Chauffage\Enum\PositionChaudiere;
 
 final class XMLPnRepository implements PnRepository
 {
@@ -15,10 +15,10 @@ final class XMLPnRepository implements PnRepository
         return 'chauffage.pn';
     }
 
-    public function find_by(TypeChaudiere $type_chaudiere, int $annee_installation, float $pdim): ?Pn
+    public function find_by(PositionChaudiere $position_chaudiere, int $annee_installation, float $pdim): ?Pn
     {
         $record = $this->createQuery()
-            ->and('type_chaudiere', $type_chaudiere->id())
+            ->and('position_chaudiere', $position_chaudiere->value)
             ->andCompareTo('annee_installation_generateur', $annee_installation)
             ->andCompareTo('pdim', $pdim)
             ->getOne();

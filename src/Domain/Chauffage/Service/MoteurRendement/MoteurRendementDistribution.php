@@ -14,14 +14,14 @@ final class MoteurRendementDistribution
     {
         if ($entity->emetteurs()->count() === 0) {
             return $this->rd(
-                type_distribution: TypeDistribution::SANS,
+                type_distribution: null,
                 temperature_distribution: null,
                 isolation_reseau: null,
                 reseau_collectif: null,
             );
         }
         return \array_reduce($entity->emetteurs()->values(), fn(float $carry, Emetteur $item): float => $carry += $this->rd(
-            type_distribution: $entity->type_distribution(),
+            type_distribution: $entity->reseau()->type_distribution,
             temperature_distribution: $item->temperature_distribution(),
             isolation_reseau: $entity->reseau()->isolation_reseau,
             reseau_collectif: $entity->generateur()->generateur_collectif(),
@@ -29,7 +29,7 @@ final class MoteurRendementDistribution
     }
 
     public function rd(
-        TypeDistribution $type_distribution,
+        ?TypeDistribution $type_distribution,
         ?TemperatureDistribution $temperature_distribution,
         ?IsolationReseau $isolation_reseau,
         ?bool $reseau_collectif,

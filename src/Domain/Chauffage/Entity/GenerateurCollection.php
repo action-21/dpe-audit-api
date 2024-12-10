@@ -2,7 +2,7 @@
 
 namespace App\Domain\Chauffage\Entity;
 
-use App\Domain\Chauffage\Enum\CategorieGenerateur;
+use App\Domain\Chauffage\Enum\TypeGenerateur;
 use App\Domain\Chauffage\Service\{MoteurDimensionnement, MoteurPerformance, MoteurPerte};
 use App\Domain\Chauffage\ValueObject\PerteCollection;
 use App\Domain\Common\Collection\ArrayCollection;
@@ -49,9 +49,9 @@ final class GenerateurCollection extends ArrayCollection
         return $this->findFirst(fn(mixed $key, Generateur $item): bool => $item->id()->compare($id) || $item->generateur_mixte_id()?->compare($id) ?? false);
     }
 
-    public function filter_by_categorie(CategorieGenerateur $categorie): self
+    public function filter_by_type(TypeGenerateur $type): self
     {
-        return $this->filter(fn(Generateur $generateur) => $generateur->categorie() === $categorie);
+        return $this->filter(fn(Generateur $generateur) => $generateur->signaletique()->type === $type);
     }
 
     public function pertes(): PerteCollection

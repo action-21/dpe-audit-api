@@ -4,7 +4,7 @@ namespace App\Domain\Chauffage\Service\MoteurRendement;
 
 use App\Domain\Chauffage\Data\RgRepository;
 use App\Domain\Chauffage\Entity\Systeme;
-use App\Domain\Chauffage\Enum\{CategorieGenerateur, EnergieGenerateur, LabelGenerateur, TypeGenerateur};
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, TypeGenerateur};
 use App\Domain\Common\Enum\{ScenarioUsage, ZoneClimatique};
 use App\Domain\Simulation\Simulation;
 
@@ -17,8 +17,8 @@ final class MoteurRendementGeneration
 
     public function calcule_rendement_generation(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario): ?float
     {
-        if ($rg = $this->calcule_rendement_generation_thermodynamique($entity))
-            return $rg;
+        if ($entity->generateur()->performance()->scop)
+            return $entity->generateur()->performance()->scop;
         if ($rg = $this->calcule_rendement_generation_combustion($entity, $simulation, $scenario))
             return $rg;
         if ($rg = $this->calcule_rendement_generation_hybride($entity, $simulation, $scenario))
@@ -32,16 +32,9 @@ final class MoteurRendementGeneration
         );
     }
 
-    public function calcule_rendement_generation_thermodynamique(Systeme $entity): ?float
-    {
-        return $entity->generateur()->categorie() === CategorieGenerateur::PAC
-            ? $entity->generateur()->performance()?->scop
-            : null;
-    }
-
     public function calcule_rendement_generation_combustion(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario): ?float
     {
-        if (false === $entity->generateur()->categorie()->combustion())
+        if (false === $entity->generateur()->combustion())
             return null;
 
         $service = ($this->moteur_rendement_generation_combustion)($entity, $simulation, $scenario);
@@ -50,13 +43,13 @@ final class MoteurRendementGeneration
 
     public function calcule_rendement_generation_hybride(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario): ?float
     {
-        if (false === $this->rg_pac_hybride_applicable($entity->generateur()->categorie()))
+        if (false === $this->rg_pac_hybride_applicable($entity->generateur()->type()))
             return null;
 
         return $this->rg_pac_hybride(
             zone_climatique: $entity->chauffage()->audit()->zone_climatique(),
             rg_chaudiere: $this->calcule_rendement_generation_combustion($entity, $simulation, $scenario),
-            rg_pac: $this->calcule_rendement_generation_thermodynamique($entity),
+            rg_pac: $entity->generateur()->performance()->scop,
         );
     }
 
@@ -76,16 +69,19 @@ final class MoteurRendementGeneration
         return $data->rg;
     }
 
-    public function rg_applicable(CategorieGenerateur $categorie_generateur,): bool
+    public function rg_applicable(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur,): bool
     {
-        return \in_array($categorie_generateur, [
-            CategorieGenerateur::CHAUDIERE_MULTI_BATIMENT,
-            CategorieGenerateur::PAC_MULTI_BATIMENT,
-            CategorieGenerateur::RESEAU_CHALEUR,
-            CategorieGenerateur::CHAUDIERE_ELECTRIQUE,
-            CategorieGenerateur::POELE_INSERT,
-            CategorieGenerateur::CHAUFFAGE_ELECTRIQUE,
-        ]);
+        if ($type_generateur->is_chauffage_electrique() || $type_generateur->is_poele_insert()) {
+            return true;
+        }
+        if (\in_array($type_generateur, [
+            TypeGenerateur::RESEAU_CHALEUR,
+            TypeGenerateur::CHAUDIERE_MULTI_BATIMENT,
+            TypeGenerateur::PAC_MULTI_BATIMENT,
+        ])) {
+            return true;
+        }
+        return \in_array($type_generateur, [TypeGenerateur::CHAUDIERE]) && $energie_generateur === EnergieGenerateur::ELECTRICITE;
     }
 
     public function rg_pac_hybride(ZoneClimatique $zone_climatique, float $rg_chaudiere, float $rg_pac,): float
@@ -95,9 +91,9 @@ final class MoteurRendementGeneration
         return $rg_chaudiere * $tx_chaudiere + $rg_pac * $tx_pac;
     }
 
-    public function rg_pac_hybride_applicable(CategorieGenerateur $categorie_generateur,): bool
+    public function rg_pac_hybride_applicable(TypeGenerateur $type_generateur,): bool
     {
-        return $categorie_generateur === CategorieGenerateur::PAC_HYBRIDE;
+        return $type_generateur->combustion_applicable() && $type_generateur->scop_applicable();
     }
 
     public function taux_couverture_hybride_partie_chaudiere(ZoneClimatique $zone_climatique): float

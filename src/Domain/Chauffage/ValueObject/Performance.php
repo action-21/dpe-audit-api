@@ -2,7 +2,7 @@
 
 namespace App\Domain\Chauffage\ValueObject;
 
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Performance
 {
@@ -29,15 +29,15 @@ final class Performance
         ?float $tfonc30,
         ?float $tfonc100,
     ): self {
-        Assert::positif_ou_zero($pn);
-        Assert::positif_ou_zero($paux);
-        Assert::positif_ou_zero($scop);
-        Assert::positif_ou_zero($rpn);
-        Assert::positif_ou_zero($rpint);
-        Assert::positif_ou_zero($qp0);
-        Assert::positif_ou_zero($pveilleuse);
-        Assert::positif_ou_zero($tfonc30);
-        Assert::positif_ou_zero($tfonc100);
+        Assert::greaterThanEq($pn, 0);
+        Assert::greaterThanEq($paux, 0);
+        Assert::greaterThanEq($scop, 0);
+        Assert::greaterThanEq($rpn, 0);
+        Assert::greaterThanEq($rpint, 0);
+        Assert::greaterThanEq($qp0, 0);
+        Assert::greaterThanEq($pveilleuse, 0);
+        Assert::greaterThanEq($tfonc30, 0);
+        Assert::greaterThanEq($tfonc100, 0);
 
         return new static(
             pn: $pn,

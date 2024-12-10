@@ -3,7 +3,7 @@
 namespace App\Domain\Chauffage\ValueObject;
 
 use App\Domain\Common\Enum\{Mois, ScenarioUsage};
-use App\Domain\Common\Service\Assert;
+use Webmozart\Assert\Assert;
 
 final class Perte
 {
@@ -20,8 +20,8 @@ final class Perte
         float $pertes,
         float $pertes_recuperables,
     ): self {
-        Assert::positif_ou_zero($pertes);
-        Assert::positif_ou_zero($pertes_recuperables);
+        Assert::greaterThanEq($pertes, 0);
+        Assert::greaterThanEq($pertes_recuperables, 0);
 
         return new static(
             scenario: $scenario,

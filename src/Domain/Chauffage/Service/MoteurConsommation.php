@@ -33,7 +33,7 @@ final class MoteurConsommation
                 scenario: $scenario,
             );
 
-            if ($entity->generateur()->energie_partie_chaudiere()) {
+            if ($entity->generateur()->signaletique()->energie_partie_chaudiere) {
                 $collection->add(Consommation::create(
                     usage: Usage::CHAUFFAGE,
                     energie: $entity->generateur()->energie()->to(),
@@ -45,7 +45,7 @@ final class MoteurConsommation
                 ));
                 $collection->add(Consommation::create(
                     usage: Usage::CHAUFFAGE,
-                    energie: $entity->generateur()->energie_partie_chaudiere()->to(),
+                    energie: $entity->generateur()->signaletique()->energie_partie_chaudiere->to(),
                     scenario: $scenario,
                     consommation: $this->cch_partie_chaudiere(
                         cch: $cch,
