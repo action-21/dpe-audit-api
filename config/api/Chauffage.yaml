@@ -1,8 +1,10 @@
 resources:
   App\Domain\Chauffage\Chauffage:
+    shortName: Chauffage
     operations:
       chauffage.get:
-        class: ApiPlatform\Metadata\Get
         uriTemplate: /audit/{id}/chauffage
+        class: ApiPlatform\Metadata\Get
+        provider: App\Api\Chauffage\State\ChauffageProvider
         output: App\Api\Chauffage\Resource\ChauffageResource
 

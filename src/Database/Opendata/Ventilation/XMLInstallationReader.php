@@ -10,11 +10,10 @@ use App\Domain\Common\Type\Id;
  */
 final class XMLInstallationReader extends XMLReader
 {
-    /** @return XMLGenerateurReader[] */
-    public function read_generateurs(): array
+    /** @return XMLSystemeReader[] */
+    public function read_systemes(): array
     {
-        $reader = XMLGenerateurReader::from($this->xml());
-        return $reader->apply() ? [$reader] : [];
+        return [XMLSystemeReader::from($this->xml())];
     }
 
     public function id(): Id

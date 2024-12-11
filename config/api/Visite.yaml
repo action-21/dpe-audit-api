@@ -1,7 +1,9 @@
 resources:
   App\Domain\Visite\Visite:
+    shortName: Visite
     operations:
       visite.get:
-        class: ApiPlatform\Metadata\Get
         uriTemplate: /audit/{id}/visite
+        class: ApiPlatform\Metadata\Get
+        provider: App\Api\Visite\State\VisiteProvider
         output: App\Api\Visite\Resource\VisiteResource

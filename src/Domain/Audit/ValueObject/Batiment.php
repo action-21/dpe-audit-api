@@ -18,7 +18,7 @@ final class Batiment
     ) {}
 
     public static function create(
-        TypeBatiment $type_batiment,
+        TypeBatiment $type,
         int $annee_construction,
         int $altitude,
         int $logements,
@@ -34,7 +34,7 @@ final class Batiment
             altitude: $altitude,
             annee_construction: $annee_construction,
             logements: $logements,
-            type: $logements > 2 ? TypeBatiment::IMMEUBLE : $type_batiment,
+            type: $logements > 2 ? TypeBatiment::IMMEUBLE : $type,
             surface_habitable: $surface_habitable,
             hauteur_sous_plafond: $hauteur_sous_plafond,
             volume_habitable: $surface_habitable * $hauteur_sous_plafond,

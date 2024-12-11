@@ -7,10 +7,10 @@ use App\Domain\Common\Type\Id;
 
 final class AuditFactory
 {
-    public function build(Id $id, Adresse $adresse, Batiment $batiment, ?Logement $logement): Audit
+    public function build(Adresse $adresse, Batiment $batiment, ?Logement $logement, ?Id $id = null): Audit
     {
         $entity = new Audit(
-            id: $id,
+            id: $id ?? Id::create(),
             date_creation: new \DateTimeImmutable(),
             adresse: $adresse,
             batiment: $batiment,

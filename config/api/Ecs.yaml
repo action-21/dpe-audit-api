@@ -1,7 +1,9 @@
 resources:
   App\Domain\Ecs\Ecs:
+    shortName: Ecs
     operations:
       ecs.get:
-        class: ApiPlatform\Metadata\Get
         uriTemplate: /audit/{id}/ecs
+        class: ApiPlatform\Metadata\Get
+        provider: App\Api\Ecs\State\EcsProvider
         output: App\Api\Ecs\Resource\EcsResource

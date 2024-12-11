@@ -1,7 +1,9 @@
 resources:
   App\Domain\Ventilation\Ventilation:
+    shortName: Ventilation
     operations:
       ventilation.get:
-        class: ApiPlatform\Metadata\Get
         uriTemplate: /audit/{id}/ventilation
+        class: ApiPlatform\Metadata\Get
+        provider: App\Api\Ventilation\State\VentilationProvider
         output: App\Api\Ventilation\Resource\VentilationResource

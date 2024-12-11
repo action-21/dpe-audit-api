@@ -3,11 +3,8 @@
 namespace App\Database\Opendata\Audit;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Audit\Enum\Perimetre;
-use App\Domain\Audit\Enum\TypeBatiment;
-use App\Domain\Audit\ValueObject\Adresse;
-use App\Domain\Audit\ValueObject\Batiment;
-use App\Domain\Audit\ValueObject\Logement;
+use App\Domain\Audit\Enum\{Perimetre, TypeBatiment};
+use App\Domain\Audit\ValueObject\{Adresse, Batiment, Logement};
 use App\Domain\Common\Type\Id;
 
 final class XMLAuditReader extends XMLReader
@@ -41,7 +38,7 @@ final class XMLAuditReader extends XMLReader
     public function batiment(): Batiment
     {
         return Batiment::create(
-            type_batiment: $this->type_batiment(),
+            type: $this->type_batiment(),
             annee_construction: $this->annee_construction(),
             altitude: $this->altitude(),
             logements: $this->nombre_appartement() ?? 1,

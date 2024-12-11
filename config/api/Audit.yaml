@@ -3,6 +3,7 @@ resources:
     shortName: Audit
     operations:
       audit.get:
-        class: ApiPlatform\Metadata\Get
         uriTemplate: /audit/{id}
+        class: ApiPlatform\Metadata\Get
+        provider: App\Api\Audit\State\AuditProvider
         output: App\Api\Audit\Resource\AuditResource

@@ -2,6 +2,7 @@
 
 namespace App\Api\Audit\Payload;
 
+use App\Domain\Audit\ValueObject\Logement;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class LogementPayload
@@ -13,4 +14,13 @@ final class LogementPayload
         #[Assert\Positive]
         public float $hauteur_sous_plafond,
     ) {}
+
+    public function to(): Logement
+    {
+        return Logement::create(
+            description: $this->description,
+            surface_habitable: $this->surface_habitable,
+            hauteur_sous_plafond: $this->hauteur_sous_plafond,
+        );
+    }
 }

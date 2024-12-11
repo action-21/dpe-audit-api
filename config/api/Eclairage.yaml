@@ -1,7 +1,0 @@
-resources:
-  App\Domain\Eclairage\Eclairage:
-    operations:
-      eclairage.get:
-        class: ApiPlatform\Metadata\Get
-        uriTemplate: /audit/{id}/eclairage
-        output: App\Api\Eclairage\Resource\EclairageResource

@@ -50,14 +50,16 @@ final class XMLVentilationTransformer
             );
             $ventilation->add_installation($installation);
 
-            foreach ($reader->read_generateurs() as $generateur_reader) {
-                if (null === $generateur = $ventilation->generateurs()->find($generateur_reader->id()))
+            foreach ($reader->read_systemes() as $systeme_reader) {
+                $generateur = null;
+
+                if ($systeme_reader->generateur_id() && null === $generateur = $ventilation->generateurs()->find($systeme_reader->generateur_id()))
                     throw new \Exception("Le générateur {$reader->id()} n'existe pas");
 
                 $systeme = new Systeme(
                     id: $reader->id(),
                     installation: $installation,
-                    type_ventilation: $generateur_reader->type_ventilation(),
+                    type_ventilation: $systeme_reader->type_ventilation(),
                     generateur: $generateur,
                 );
                 $installation->add_systeme($systeme);

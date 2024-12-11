@@ -7,7 +7,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class AuditPayload
 {
     public function __construct(
-        public string $id,
         #[Assert\Valid]
         public AdressePayload $adresse,
         #[Assert\Valid]
