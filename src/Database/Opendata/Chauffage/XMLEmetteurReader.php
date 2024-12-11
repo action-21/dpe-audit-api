@@ -11,7 +11,12 @@ final class XMLEmetteurReader extends XMLReader
     public function apply(): bool
     {
         return null !== TypeEmetteur::from_type_emission_distribution_id($this->enum_type_emission_distribution_id())
-            && null !== TemperatureDistribution::from_enum_temp_distribution_ch_id($this->enum_temp_distribution_ch_id());
+            && null !== $this->temperature_distribution();
+    }
+
+    public function read_installation(): XMLInstallationReader
+    {
+        return XMLInstallationReader::from($this->xml()->findOneOrError('./ancestor::installation_chauffage'));
     }
 
     public function id(): Id
@@ -39,9 +44,10 @@ final class XMLEmetteurReader extends XMLReader
         return TypeDistribution::from_type_emission_distribution_id($this->enum_type_emission_distribution_id());
     }
 
-    public function temperature_distribution(): TemperatureDistribution
+    public function temperature_distribution(): ?TemperatureDistribution
     {
-        return TemperatureDistribution::from_enum_temp_distribution_ch_id($this->enum_temp_distribution_ch_id());
+        return TemperatureDistribution::from_enum_temp_distribution_ch_id($this->enum_temp_distribution_ch_id())
+            ?? TemperatureDistribution::from_enum_type_emission_distribution_id($this->enum_type_emission_distribution_id());
     }
 
     public function chauffage_central(): bool

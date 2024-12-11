@@ -18,7 +18,7 @@ final class SystemeFactory
             id: $id,
             installation: $installation,
             generateur: $generateur,
-            reseau: $reseau,
+            reseau: $generateur->type()->is_chauffage_central() ? $reseau : null,
             emetteurs: new EmetteurCollection(),
         );
         $entity->controle();

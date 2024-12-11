@@ -24,38 +24,27 @@ final class XMLEcsTransformer
         return $ecs;
     }
 
-    /**
-     * TODO: merge pac hybride
-     */
     private function set_generateurs(XMLElement $root, Ecs $ecs): void
     {
-        foreach ($root->read_ecs()->read_installations() as $installation_reader) {
-            $installation_collective = $installation_reader->installation_collective();
+        foreach ($root->read_ecs()->read_generateurs() as $generateur_reader) {
+            if ($ecs->generateurs()->find(id: $generateur_reader->id()))
+                continue;
 
-            foreach ($installation_reader->read_generateurs() as $generateur_reader) {
-                if (false === $generateur_reader->apply())
-                    continue;
-                if ($ecs->generateurs()->find(id: $generateur_reader->id()))
-                    continue;
-
-                $generateur = new Generateur(
-                    id: $generateur_reader->id(),
-                    ecs: $ecs,
-                    description: $generateur_reader->description(),
-                    signaletique: $generateur_reader->signaletique(),
-                    annee_installation: $generateur_reader->annee_installation(),
-                    generateur_mixte_id: $generateur_reader->match_generateur_mixte(),
-                    reseau_chaleur_id: $generateur_reader->reseau_chaleur_id(),
-                );
-                $ecs->add_generateur($generateur);
-            }
+            $generateur = new Generateur(
+                id: $generateur_reader->id(),
+                ecs: $ecs,
+                description: $generateur_reader->description(),
+                signaletique: $generateur_reader->signaletique(),
+                annee_installation: $generateur_reader->annee_installation(),
+                generateur_mixte_id: $generateur_reader->match_generateur_mixte(),
+                reseau_chaleur_id: $generateur_reader->reseau_chaleur_id(),
+                position_volume_chauffe: $generateur_reader->position_volume_chauffe(),
+                generateur_collectif: $generateur_reader->generateur_collectif(),
+            );
+            $ecs->add_generateur($generateur);
         }
     }
 
-    /**
-     * IMPORTANT : La puissance par défaut des générateurs ne peut être évaluée depuis les données de l'open data
-     * (type de chaudière manquant). On considère donc la donnée intermédiaire pn comme étant la puissance nominale saisie.
-     */
     private function set_installations(XMLElement $root, Ecs $ecs): void
     {
         foreach ($root->read_ecs()->read_installations() as $installation_reader) {
@@ -69,8 +58,6 @@ final class XMLEcsTransformer
             );
 
             foreach ($installation_reader->read_generateurs() as $generateur_reader) {
-                if (false === $generateur_reader->apply())
-                    continue;
                 if (null === $generateur = $ecs->generateurs()->find(id: $generateur_reader->id()))
                     throw new \RuntimeException("Generateur {$generateur_reader->id()} non trouvé");
 

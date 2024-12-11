@@ -41,43 +41,6 @@ final class MoteurRendementGenerationCombustion
     private ?float $tfonc30;
     private ?float $tfonc100;
 
-    public function initialise(
-        ScenarioUsage $scenario,
-        TypeGenerateur $type_generateur,
-        EnergieGenerateur $energie_generateur,
-        ?TypeCombustion $type_combustion,
-        bool $regulation,
-        ?int $priorite_cascade,
-        float $gv,
-        float $tbase,
-        float $pn,
-        float $somme_pn,
-        float $qp0,
-        float $pveilleuse,
-        float $rpn,
-        ?float $rpint,
-        ?float $tfonc30,
-        ?float $tfonc100,
-    ): self {
-        $this->scenario = $scenario;
-        $this->type_generateur = $type_generateur;
-        $this->energie_generateur = $energie_generateur;
-        $this->type_combustion = $type_combustion;
-        $this->gv = $gv;
-        $this->tbase = $tbase;
-        $this->regulation = $regulation;
-        $this->priorite_cascade = $priorite_cascade;
-        $this->pn = $pn;
-        $this->somme_pn = $somme_pn;
-        $this->qp0 = $qp0;
-        $this->pveilleuse = $pveilleuse;
-        $this->rpn = $rpn;
-        $this->rpint = $rpint;
-        $this->tfonc30 = $tfonc30;
-        $this->tfonc100 = $tfonc100;
-        return $this;
-    }
-
     /**
      * Rendement de génération par combustion (PCI)
      */
@@ -376,6 +339,20 @@ final class MoteurRendementGenerationCombustion
         return 0;
     }
 
+    public function apply(TypeGenerateur $type_generateur, EnergieGenerateur $energie_generateur): bool
+    {
+        return \in_array($type_generateur, [
+            TypeGenerateur::CHAUDIERE,
+            TypeGenerateur::GENERATEUR_AIR_CHAUD,
+            TypeGenerateur::PAC_HYBRIDE_AIR_EAU,
+            TypeGenerateur::PAC_HYBRIDE_EAU_EAU,
+            TypeGenerateur::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
+            TypeGenerateur::PAC_HYBRIDE_GEOTHERMIQUE,
+            TypeGenerateur::POELE_BOUILLEUR,
+            TypeGenerateur::RADIATEUR_GAZ,
+        ]) && $energie_generateur->is_combustible();
+    }
+
     public function __invoke(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario): self
     {
         $systemes = $entity->installation()->systemes()->filter_by_generateur_combustion();
@@ -386,23 +363,22 @@ final class MoteurRendementGenerationCombustion
             (0 < $priorite_cascade) =>  $systemes->filter_by_cascade(true)->filter_by_priorite_cascade(true)->pn(),
         };
 
-        return $this->initialise(
-            scenario: $scenario,
-            type_generateur: $entity->generateur()->type(),
-            energie_generateur: $entity->generateur()->energie(),
-            type_combustion: $entity->generateur()->combustion()?->type,
-            regulation: $entity->installation()->regulation_centrale()->presence_regulation || $entity->installation()->regulation_terminale()->presence_regulation,
-            priorite_cascade: $entity->generateur()->signaletique()?->priorite_cascade,
-            gv: $simulation->enveloppe()->performance()->gv,
-            tbase: $simulation->audit()->situation()->tbase(),
-            pn: $entity->generateur()->performance()->pn,
-            somme_pn: $somme_pn,
-            qp0: $entity->generateur()->performance()->qp0,
-            pveilleuse: $entity->generateur()->performance()->pveilleuse,
-            rpn: $entity->generateur()->performance()->rpn,
-            rpint: $entity->generateur()->performance()->rpint,
-            tfonc30: $entity->generateur()->performance()->tfonc30,
-            tfonc100: $entity->generateur()->performance()->tfonc100,
-        );
+        $this->scenario = $scenario;
+        $this->type_generateur = $entity->generateur()->type();
+        $this->energie_generateur = $entity->generateur()->energie();
+        $this->type_combustion = $entity->generateur()->combustion()?->type;
+        $this->gv = $simulation->enveloppe()->performance()->gv;
+        $this->tbase = $simulation->audit()->situation()->tbase();
+        $this->regulation = $entity->installation()->regulation_centrale()->presence_regulation || $entity->installation()->regulation_terminale()->presence_regulation;
+        $this->priorite_cascade = $entity->generateur()->signaletique()?->priorite_cascade;
+        $this->pn = $entity->generateur()->performance()->pn;
+        $this->somme_pn = $somme_pn;
+        $this->qp0 = $entity->generateur()->performance()->qp0;
+        $this->pveilleuse = $entity->generateur()->performance()->pveilleuse;
+        $this->rpn = $entity->generateur()->performance()->rpn;
+        $this->rpint = $entity->generateur()->performance()->rpint;
+        $this->tfonc30 = $entity->generateur()->performance()->tfonc30;
+        $this->tfonc100 = $entity->generateur()->performance()->tfonc100;
+        return $this;
     }
 }

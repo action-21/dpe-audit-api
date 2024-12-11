@@ -20,13 +20,13 @@ final class XMLPventRepository implements PventRepository
         ?TypeGenerateur $type_generateur,
         ?TypeVmc $type_vmc,
         ?int $annee_installation,
-        ?bool $systeme_collectif,
+        ?bool $generateur_collectif,
     ): ?Pvent {
         $record = $this->createQuery()
             ->and('type_ventilation', $type_ventilation->value)
             ->and('type_generateur', $type_generateur?->value, true)
             ->and('type_vmc', $type_vmc?->value, true)
-            ->and('systeme_collectif', $systeme_collectif, true)
+            ->and('generateur_collectif', $generateur_collectif, true)
             ->andCompareTo('annee_installation', $annee_installation)
             ->getOne();
         return $record ? $this->to($record) : null;

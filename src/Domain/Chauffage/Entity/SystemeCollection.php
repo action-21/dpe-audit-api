@@ -52,12 +52,12 @@ final class SystemeCollection extends ArrayCollection
 
     public function filter_by_systeme_collectif(): self
     {
-        return $this->filter(fn(Systeme $item): bool => $item->generateur()->signaletique()->generateur_collectif);
+        return $this->filter(fn(Systeme $item): bool => $item->generateur()->generateur_collectif());
     }
 
     public function filter_by_systeme_individuel(): self
     {
-        return $this->filter(fn(Systeme $item): bool => false === $item->generateur()->signaletique()->generateur_collectif);
+        return $this->filter(fn(Systeme $item): bool => false === $item->generateur()->generateur_collectif());
     }
 
     public function filter_by_type_chauffage(TypeChauffage $type_chauffage): self

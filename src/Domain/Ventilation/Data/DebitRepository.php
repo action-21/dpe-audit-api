@@ -10,8 +10,8 @@ interface DebitRepository
         TypeVentilation $type_ventilation,
         ?TypeGenerateur $type_generateur,
         ?TypeVmc $type_vmc,
-        ?bool $presence_echangeur,
-        ?bool $systeme_collectif,
+        ?bool $presence_echangeur_thermique,
+        ?bool $generateur_collectif,
         ?int $annee_installation,
     ): ?Debit;
 }

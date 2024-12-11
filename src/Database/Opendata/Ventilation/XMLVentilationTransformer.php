@@ -32,6 +32,8 @@ final class XMLVentilationTransformer
                 ventilation: $ventilation,
                 description: $reader->description(),
                 signaletique: $reader->signaletique(),
+                generateur_collectif: $reader->generateur_collectif(),
+                annee_installation: $reader->annee_installation(),
             );
             $ventilation->add_generateur($entity);
         }

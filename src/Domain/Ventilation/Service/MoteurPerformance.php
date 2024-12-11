@@ -20,15 +20,15 @@ final class MoteurPerformance
             type_ventilation: $entity->type_ventilation(),
             type_generateur: $entity->generateur()?->signaletique()->type,
             type_vmc: $entity->generateur()?->signaletique()->type_vmc,
-            presence_echangeur: $entity->generateur()?->signaletique()->presence_echangeur_thermique,
-            systeme_collectif: $entity->generateur()?->generateur_collectif(),
+            presence_echangeur_thermique: $entity->generateur()?->signaletique()->presence_echangeur_thermique,
+            generateur_collectif: $entity->generateur()?->generateur_collectif(),
             annee_installation: $entity->generateur()?->annee_installation() ?? $entity->ventilation()->annee_construction_batiment(),
         );
         $pvent = $this->pvent(
             type_ventilation: $entity->type_ventilation(),
             type_generateur: $entity->generateur()?->signaletique()->type,
             type_vmc: $entity->generateur()?->signaletique()->type_vmc,
-            systeme_collectif: $entity->generateur()?->generateur_collectif(),
+            generateur_collectif: $entity->generateur()?->generateur_collectif(),
             annee_installation: $entity->generateur()?->annee_installation() ?? $entity->ventilation()->annee_construction_batiment(),
         );
 
@@ -54,14 +54,14 @@ final class MoteurPerformance
         ?TypeGenerateur $type_generateur,
         ?TypeVmc $type_vmc,
         ?int $annee_installation,
-        ?bool $systeme_collectif,
+        ?bool $generateur_collectif,
     ): array {
         if (null === $data = $this->pvent_repository->find_by(
             type_ventilation: $type_ventilation,
             type_generateur: $type_generateur,
             type_vmc: $type_vmc,
             annee_installation: $annee_installation,
-            systeme_collectif: $systeme_collectif,
+            generateur_collectif: $generateur_collectif,
         )) throw new \DomainException('Valeur forfaitaire Pvent non trouvée');
 
         return [
@@ -82,16 +82,16 @@ final class MoteurPerformance
         TypeVentilation $type_ventilation,
         ?TypeGenerateur $type_generateur,
         ?TypeVmc $type_vmc,
-        ?bool $presence_echangeur,
-        ?bool $systeme_collectif,
+        ?bool $presence_echangeur_thermique,
+        ?bool $generateur_collectif,
         ?int $annee_installation,
     ): array {
         if (null === $data = $this->debit_repository->find_by(
             type_ventilation: $type_ventilation,
             type_generateur: $type_generateur,
             type_vmc: $type_vmc,
-            presence_echangeur: $presence_echangeur,
-            systeme_collectif: $systeme_collectif,
+            presence_echangeur_thermique: $presence_echangeur_thermique,
+            generateur_collectif: $generateur_collectif,
             annee_installation: $annee_installation,
         )) throw new \DomainException('Valeur forfaitaire Debit non trouvée');
 

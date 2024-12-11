@@ -19,7 +19,7 @@ final class XMLGenerateurReader extends XMLReader
 
     public function read_installation(): XMLInstallationReader
     {
-        return XMLInstallationReader::from($this->xml()->findOneOrError('./parent::generateur_chauffage_collection/parent::installation_chauffage'));
+        return XMLInstallationReader::from($this->xml()->findOneOrError('./ancestor::installation_chauffage'));
     }
 
     /** @return XMLEmetteurReader[] */
@@ -97,8 +97,6 @@ final class XMLGenerateurReader extends XMLReader
         return new Signaletique(
             type: $this->type_generateur(),
             energie: $this->energie_generateur(),
-            position_volume_chauffe: $this->position_volume_chauffe(),
-            generateur_collectif: $this->generateur_collectif(),
             type_partie_chaudiere: $this->type_partie_chaudiere(),
             energie_partie_chaudiere: $this->energie_partie_chaudiere(),
             position_chaudiere: $this->position_chaudiere(),
@@ -222,7 +220,7 @@ final class XMLGenerateurReader extends XMLReader
     {
         $installation = $this->read_installation();
 
-        return ($type_distribution = $this->type_distribution()) ? new Reseau(
+        return ($type_distribution = $this->type_distribution()) && $this->type_generateur()->is_chauffage_central() ? new Reseau(
             type_distribution: $type_distribution,
             presence_circulateur_externe: $installation->presence_circulateur_externe(),
             niveaux_desservis: $installation->niveaux_desservis(),

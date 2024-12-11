@@ -2,7 +2,6 @@
 
 namespace App\Domain\Porte\Service;
 
-use App\Domain\Common\Error\DomainError;
 use App\Domain\Porte\Data\{BporteRepository, UporteRepository};
 use App\Domain\Porte\Enum\{EtatIsolation, Mitoyennete, NatureMenuiserie, TypeVitrage};
 use App\Domain\Porte\Porte;

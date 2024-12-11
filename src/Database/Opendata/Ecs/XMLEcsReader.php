@@ -18,10 +18,10 @@ final class XMLEcsReader extends XMLReader
     /** @return XMLGenerateurReader[] */
     public function read_generateurs(): array
     {
-        return \array_map(
+        return \array_filter(\array_map(
             fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
             $this->xml()->findMany('.//generateur_ecs_collection//generateur_ecs')
-        );
+        ), fn(XMLGenerateurReader $reader): bool => $reader->apply());
     }
 
     // * Données calculées

@@ -5,8 +5,9 @@ namespace App\Database\Opendata\Refroidissement;
 use App\Database\Opendata\XMLReader;
 use App\Domain\Common\Type\Id;
 use App\Domain\Refroidissement\Enum\{EnergieGenerateur, TypeGenerateur};
+use App\Domain\Refroidissement\ValueObject\Signaletique;
 
-final class XMLClimatisationReader extends XMLReader
+final class XMLGenerateurReader extends XMLReader
 {
     public function id(): Id
     {
@@ -21,6 +22,15 @@ final class XMLClimatisationReader extends XMLReader
     public function description(): string
     {
         return $this->xml()->findOne('.//description')?->strval() ?? 'Installation de refroidissement non décrite';
+    }
+
+    public function signaletique(): Signaletique
+    {
+        return new Signaletique(
+            type_generateur: $this->type_generateur(),
+            energie_generateur: $this->energie_generateur(),
+            seer: null,
+        );
     }
 
     public function type_generateur(): TypeGenerateur

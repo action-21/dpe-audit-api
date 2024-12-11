@@ -11,6 +11,6 @@ interface PventRepository
         ?TypeGenerateur $type_generateur,
         ?TypeVmc $type_vmc,
         ?int $annee_installation,
-        ?bool $systeme_collectif,
+        ?bool $generateur_collectif,
     ): ?Pvent;
 }

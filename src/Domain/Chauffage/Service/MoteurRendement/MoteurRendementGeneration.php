@@ -34,8 +34,10 @@ final class MoteurRendementGeneration
 
     public function calcule_rendement_generation_combustion(Systeme $entity, Simulation $simulation, ScenarioUsage $scenario): ?float
     {
-        if (false === $entity->generateur()->combustion())
-            return null;
+        if (false === $this->moteur_rendement_generation_combustion->apply(
+            type_generateur: $entity->generateur()->type(),
+            energie_generateur: $entity->generateur()->energie()
+        )) return null;
 
         $service = ($this->moteur_rendement_generation_combustion)($entity, $simulation, $scenario);
         return $service->calcule_rendement_generation();

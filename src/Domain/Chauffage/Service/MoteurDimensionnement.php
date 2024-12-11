@@ -27,7 +27,7 @@ final class MoteurDimensionnement
     {
         $configuration = Configuration::determine($entity->installation());
         $somme_pn_base = $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)->has_pn()
-            ? $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)()->pn()
+            ? $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)->pn()
             : null;
 
         return match (true) {
@@ -35,7 +35,7 @@ final class MoteurDimensionnement
                 configuration: $configuration,
                 appoint: $entity->installation()->systemes()->has_systeme_divise(),
                 systemes_base: $entity->installation()->systemes()->has_systeme_central()
-                    ? $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)()->count()
+                    ? $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)->count()
                     : $entity->installation()->systemes()->count(),
                 pn_base: $entity->generateur()->signaletique()?->pn,
                 somme_pn_base: $somme_pn_base,
@@ -45,7 +45,7 @@ final class MoteurDimensionnement
                 appoint: $entity->installation()->systemes()->has_systeme_divise(),
             ),
             $configuration->is_appoint($entity) => $this->rdim_appoint(
-                systemes: $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)()->count(),
+                systemes: $entity->installation()->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)->count(),
             ),
         };
     }

@@ -28,10 +28,10 @@ final class Systeme
 
     public function controle(): void
     {
-        if (false === $this->generateur->signaletique()->type->is_chauffage_central()) {
+        if (false === $this->generateur->type()->is_chauffage_central()) {
             Assert::null($this->reseau);
         }
-        if (false === $this->generateur->signaletique()->type->is_chauffage_divise()) {
+        if (false === $this->generateur->type()->is_chauffage_divise()) {
             Assert::notNull($this->reseau);
         }
     }

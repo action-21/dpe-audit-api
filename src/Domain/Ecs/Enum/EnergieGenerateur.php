@@ -85,7 +85,7 @@ enum EnergieGenerateur: string implements Enum
     public function is_bois(): bool
     {
         return match ($this) {
-            self::BOIS_BUCHE, self::BOIS_PLAQUETTE, self::BOIS_GRANULE => false,
+            self::BOIS_BUCHE, self::BOIS_PLAQUETTE, self::BOIS_GRANULE => true,
             default => true,
         };
     }

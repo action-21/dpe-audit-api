@@ -20,6 +20,16 @@ enum TypeVmc: string implements Enum
         };
     }
 
+    public static function from_pvent_moy(float $pvent): ?self
+    {
+        return match ($pvent) {
+            35, 65 => self::AUTOREGLABLE,
+            15, 50 => self::HYGROREGLABLE_TYPE_A,
+            80, 35 => self::HYGROREGLABLE_TYPE_B,
+            default => null,
+        };
+    }
+
     public function id(): string
     {
         return $this->value;
@@ -32,5 +42,10 @@ enum TypeVmc: string implements Enum
             self::HYGROREGLABLE_TYPE_A => 'Hygroréglable - Type A',
             self::HYGROREGLABLE_TYPE_B => 'Hygroréglable - Type B',
         };
+    }
+
+    public static function default(): self
+    {
+        return self::AUTOREGLABLE;
     }
 }

@@ -11,10 +11,7 @@ final class XMLGenerateurReader extends XMLReader
 {
     public function apply(): bool
     {
-        return match ($this->enum_type_generateur_ecs_id()) {
-            120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133 => false,
-            default => true,
-        };
+        return true;
     }
 
     public function match(string $reference): bool
@@ -89,8 +86,6 @@ final class XMLGenerateurReader extends XMLReader
             type: $this->type(),
             energie: $this->energie(),
             volume_stockage: $this->volume_stockage(),
-            position_volume_chauffe: $this->position_volume_chauffe(),
-            generateur_collectif: $this->generateur_collectif(),
             position_chaudiere: $this->position_chaudiere(),
             label: $this->label(),
             combustion: $this->combustion(),

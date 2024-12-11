@@ -40,6 +40,8 @@ final class XMLChauffageTransformer
                 description: $generateur_reader->description(),
                 signaletique: $generateur_reader->signaletique(),
                 annee_installation: $generateur_reader->annee_installation(),
+                position_volume_chauffe: $generateur_reader->position_volume_chauffe(),
+                generateur_collectif: $generateur_reader->generateur_collectif(),
             );
             $chauffage->add_generateur($generateur);
         }

@@ -28,7 +28,7 @@ final class Performance
         Assert::nullOrGreaterThan($cop, 0);
         Assert::nullOrGreaterThan($rpn, 0);
         Assert::nullOrGreaterThan($qp0, 0);
-        Assert::nullOrGreaterThan($pveilleuse, 0);
+        Assert::nullOrGreaterThanEq($pveilleuse, 0);
 
         return new static(
             pn: $pn,

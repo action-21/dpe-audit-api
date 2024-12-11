@@ -3,7 +3,6 @@
 namespace App\Domain\PlancherBas\Service;
 
 use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\Error\DomainError;
 use App\Domain\Common\Service\Interpolation;
 use App\Domain\PlancherBas\Data\{BpbRepository, Upb0Repository, UeRepository, UpbRepository};
 use App\Domain\PlancherBas\Enum\{EtatIsolation, Mitoyennete, TypePlancherBas};
@@ -89,10 +88,10 @@ final class MoteurPerformance
         if ($upb0_saisi)
             return $upb0_saisi;
 
-        if (null === $valeur = $this->u0_repository->find_by(type_plancher_bas: $type_plancher_bas))
-            throw DomainError::valeur_forfaitaire("Upb0");
+        if (null === $data = $this->u0_repository->find_by(type_plancher_bas: $type_plancher_bas))
+            throw new \DomainException("Valeur forfaitaire Upb0 non trouvée");
 
-        return $valeur->u0;
+        return $data->u0;
     }
 
     /**
@@ -133,7 +132,7 @@ final class MoteurPerformance
             zone_climatique: $zone_climatique,
             annee_construction_isolation: $annee_isolation ?? $annee_construction,
             effet_joule: $effet_joule,
-        )) DomainError::valeur_forfaitaire("Upb");
+        )) throw new \DomainException("Valeur forfaitaire Upb non trouvée");
 
         return $upb->upb;
     }
@@ -150,7 +149,7 @@ final class MoteurPerformance
             ->valeurs_proches(surface: $surface, perimetre: $perimetre);
 
         if ($collection->isEmpty())
-            DomainError::valeur_forfaitaire("Ue");
+            throw new \DomainException("Valeur forfaitaire Ue non trouvée");
 
         if ($collection->count() === 1)
             return $collection->first()->ue;
@@ -198,7 +197,7 @@ final class MoteurPerformance
             return $b_lnc;
 
         if (null === $valeur = $this->b_repository->find_by(mitoyennete: $mitoyennete))
-            DomainError::valeur_forfaitaire("b");
+            throw new \DomainException("Valeur forfaitaire b non trouvée");
 
         return $valeur->b;
     }

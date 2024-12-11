@@ -6,11 +6,11 @@ use App\Database\Opendata\{XMLElement, XMLReader};
 
 final class XMLRefroidissementReader extends XMLReader
 {
-    /** @return XMLClimatisationReader[] */
-    public function read_climatisations(): array
+    /** @return XMLGenerateurReader[] */
+    public function read_generateurs(): array
     {
         return \array_map(
-            fn(XMLElement $xml): XMLClimatisationReader => XMLClimatisationReader::from($xml),
+            fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
             $this->xml()->findMany('.//climatisation_collection//climatisation')
         );
     }

@@ -20,6 +20,15 @@ enum TemperatureDistribution: string implements Enum
         };
     }
 
+    public static function from_enum_type_emission_distribution_id(int $id): ?self
+    {
+        return match ($id) {
+            12, 14, 16, 18, 25, 27, 29, 31, 33, 35, 37, 39, 47, 79 => self::MOYENNE,
+            11, 13, 15, 17, 24, 26, 28, 30, 32, 34, 36, 38, 46, 48 => self::HAUTE,
+            default => null,
+        };
+    }
+
     public function id(): string
     {
         return $this->value;

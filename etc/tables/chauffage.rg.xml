@@ -309,7 +309,7 @@
         <rg>1</rg>
     </row>
     <row>
-        <type_generateur>CHAUDIERE_STANDARD</type_generateur>
+        <type_generateur>CHAUDIERE</type_generateur>
         <energie_generateur>ELECTRICITE</energie_generateur>
         <label_generateur></label_generateur>
         <annee_installation_generateur gt="" gte="" lt="" lte="" />

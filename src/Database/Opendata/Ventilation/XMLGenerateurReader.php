@@ -29,15 +29,13 @@ final class XMLGenerateurReader extends XMLReader
         return TypeVentilation::from_enum_type_ventilation_id($this->enum_type_ventilation_id());
     }
 
-    public function signaletique(): Signaletique
+    public function signaletique(): ?Signaletique
     {
-        return new Signaletique(
+        return $this->type_generateur() ? new Signaletique(
             type: $this->type_generateur(),
             type_vmc: $this->type_vmc(),
-            generateur_collectif: $this->generateur_collectif(),
             presence_echangeur_thermique: $this->presence_echangeur_thermique(),
-            annee_installation: $this->annee_installation(),
-        );
+        ) : null;
     }
 
     public function type_generateur(): ?TypeGenerateur
@@ -47,7 +45,12 @@ final class XMLGenerateurReader extends XMLReader
 
     public function type_vmc(): ?TypeVmc
     {
-        return TypeVmc::from_enum_type_ventilation_id($this->enum_type_ventilation_id());
+        if ($this->type_generateur()?->is_vmc()) {
+            return TypeVmc::from_enum_type_ventilation_id($this->enum_type_ventilation_id())
+                ?? TypeVmc::from_pvent_moy($this->pvent_moy() ?? 0)
+                ?? TypeVmc::default();
+        }
+        return null;
     }
 
     public function annee_installation(): ?int
@@ -81,5 +84,10 @@ final class XMLGenerateurReader extends XMLReader
     public function enum_type_ventilation_id(): int
     {
         return $this->xml()->findOneOrError('.//enum_type_ventilation_id')->intval();
+    }
+
+    public function pvent_moy(): ?float
+    {
+        return $this->xml()->findOne('.//pvent_moy')?->floatval();
     }
 }

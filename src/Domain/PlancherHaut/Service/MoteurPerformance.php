@@ -3,7 +3,6 @@
 namespace App\Domain\PlancherHaut\Service;
 
 use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\Error\DomainError;
 use App\Domain\PlancherHaut\Data\{BphRepository, Uph0Repository, UphRepository};
 use App\Domain\PlancherHaut\Enum\{Categorie, EtatIsolation, Mitoyennete, TypePlancherHaut};
 use App\Domain\PlancherHaut\PlancherHaut;
@@ -79,7 +78,7 @@ final class MoteurPerformance
             return $uph0_saisi;
 
         if (null === $valeur = $this->u0_repository->find_by(type_plancher_haut: $type_plancher_haut))
-            DomainError::valeur_forfaitaire("U0");
+            throw new \DomainException("Valeur forfaitaire Uph0 non trouvée");
 
         return $valeur->u0;
     }

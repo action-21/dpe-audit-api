@@ -57,7 +57,7 @@ enum Configuration: string implements Enum
     public function is_base(Systeme $entity): bool
     {
         return match ($this) {
-            self::BASE_BOIS_RELEVE_PAC => $entity->generateur()->signaletique()->type->is_chaudiere() && $entity->generateur()->signaletique()->energie->is_bois(),
+            self::BASE_BOIS_RELEVE_PAC => $entity->generateur()->type()->is_chaudiere() && $entity->generateur()->energie()->is_bois(),
             self::BASE_BOIS_RELEVE_CHAUDIERE => $entity->generateur()->signaletique()->type->is_chaudiere(),
             self::BASE_PAC_RELEVE_CHAUDIERE => $entity->generateur()->signaletique()->type->is_pac() && $entity->type_chauffage() === TypeChauffage::CHAUFFAGE_CENTRAL,
             self::BASE, self::BASE_APPOINT => $entity->type_chauffage() === TypeChauffage::CHAUFFAGE_CENTRAL,

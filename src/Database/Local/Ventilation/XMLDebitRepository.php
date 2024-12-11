@@ -19,17 +19,17 @@ final class XMLDebitRepository implements DebitRepository
         TypeVentilation $type_ventilation,
         ?TypeGenerateur $type_generateur,
         ?TypeVmc $type_vmc,
-        ?bool $presence_echangeur,
-        ?bool $systeme_collectif,
+        ?bool $presence_echangeur_thermique,
+        ?bool $generateur_collectif,
         ?int $annee_installation,
     ): ?Debit {
         $record = $this->createQuery()
             ->and('type_ventilation', $type_ventilation->id())
             ->and('type_generateur', $type_generateur?->id(), true)
             ->and('type_vmc', $type_vmc?->id(), true)
-            ->and('presence_echangeur', $presence_echangeur, true)
-            ->and('systeme_collectif', $systeme_collectif, true)
-            ->andCompareTo('annee_installation_generateur', $annee_installation)
+            ->and('presence_echangeur_thermique', $presence_echangeur_thermique, true)
+            ->and('generateur_collectif', $generateur_collectif, true)
+            ->andCompareTo('annee_installation', $annee_installation)
             ->getOne();
         return $record ? $this->to($record) : null;
     }
