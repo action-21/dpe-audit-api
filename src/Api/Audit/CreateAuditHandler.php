@@ -3,15 +3,13 @@
 namespace App\Api\Audit;
 
 use App\Api\Audit\Payload\AuditPayload;
-use App\Domain\Audit\{Audit, AuditFactory};
+use App\Domain\Audit\Audit;
 
 final class CreateAuditHandler
 {
-    public function __construct(private AuditFactory $factory) {}
-
     public function __invoke(AuditPayload $payload): Audit
     {
-        return $this->factory->build(
+        return Audit::create(
             adresse: $payload->adresse->to(),
             batiment: $payload->batiment->to(),
             logement: $payload->logement?->to(),

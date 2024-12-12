@@ -23,6 +23,17 @@ final class Audit
         private ?Logement $logement,
     ) {}
 
+    public static function create(Adresse $adresse, Batiment $batiment, ?Logement $logement, ?Id $id = null): self
+    {
+        return new self(
+            id: $id ?? Id::create(),
+            date_creation: new \DateTimeImmutable(),
+            adresse: $adresse,
+            batiment: $batiment,
+            logement: $logement,
+        );
+    }
+
     public function controle(): void {}
 
     public function reinitialise(): void
