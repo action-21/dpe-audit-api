@@ -5,6 +5,9 @@ namespace App\Api\Ventilation\Payload;
 use App\Domain\Common\Type\Id;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @property SystemePayload[] $systemes
+ */
 final class InstallationPayload
 {
     public function __construct(

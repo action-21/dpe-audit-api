@@ -21,6 +21,18 @@ final class Installation
         private SystemeCollection $systemes,
     ) {}
 
+    public static function create(Id $id, Ventilation $ventilation, float $surface,): Installation
+    {
+        Assert::greaterThan($surface, 0);
+
+        return new Installation(
+            id: $id,
+            ventilation: $ventilation,
+            surface: $surface,
+            systemes: new SystemeCollection(),
+        );
+    }
+
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);

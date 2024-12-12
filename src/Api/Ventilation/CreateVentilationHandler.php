@@ -2,73 +2,52 @@
 
 namespace App\Api\Ventilation;
 
-use App\Api\Ventilation\Payload\{GenerateurPayload, InstallationPayload, SystemePayload, VentilationPayload};
+use App\Api\Ventilation\Payload\VentilationPayload;
 use App\Domain\Audit\Audit;
-use App\Domain\Ventilation\{Ventilation, VentilationFactory};
-use App\Domain\Ventilation\Entity\Installation;
-use App\Domain\Ventilation\Factory\{GenerateurFactory, InstallationFactory, SystemeFactory};
+use App\Domain\Common\Type\Id;
+use App\Domain\Ventilation\Ventilation;
+use App\Domain\Ventilation\Entity\{Generateur, Installation, Systeme};
 
 final class CreateVentilationHandler
 {
-    public function __construct(
-        private VentilationFactory $ventilation_factory,
-        private GenerateurFactory $generateur_factory,
-        private InstallationFactory $installation_factory,
-        private SystemeFactory $systeme_factory,
-    ) {}
-
     public function __invoke(VentilationPayload $payload, Audit $audit,): Ventilation
     {
-        $ventilation = $this->ventilation_factory->build(audit: $audit);
+        $ventilation = Ventilation::create(audit: $audit);
 
-        foreach ($payload->generateurs as $generateur) {
-            $this->set_generateur($generateur, $ventilation);
+        foreach ($payload->generateurs as $generateur_payload) {
+            $ventilation->add_generateur(Generateur::create(
+                id: Id::from($generateur_payload->id),
+                ventilation: $ventilation,
+                description: $generateur_payload->description,
+                signaletique: $generateur_payload->signaletique->to(),
+                generateur_collectif: $generateur_payload->generateur_collectif,
+                annee_installation: $generateur_payload->annee_installation,
+            ));
         }
-        foreach ($payload->installations as $installation) {
-            $this->set_installation($installation, $ventilation);
+        foreach ($payload->installations as $installation_payload) {
+            $installation = Installation::create(
+                id: Id::from($installation_payload->id),
+                ventilation: $ventilation,
+                surface: $installation_payload->surface,
+            );
+
+            foreach ($installation_payload->systemes as $systeme_payload) {
+                $generateur = $systeme_payload->generateur_id()
+                    ? $ventilation->generateurs()->find(Id::from($systeme_payload->generateur_id()))
+                    : null;
+
+                if ($systeme_payload->generateur_id() && null === $generateur) {
+                    throw new \InvalidArgumentException('Generateur not found');
+                }
+
+                $installation->add_systeme(Systeme::create(
+                    id: Id::from($systeme_payload->id),
+                    installation: $installation,
+                    type_ventilation: $systeme_payload->type_ventilation,
+                    generateur: $generateur,
+                ));
+            }
         }
         return $ventilation;
-    }
-
-    private function set_generateur(GenerateurPayload $payload, Ventilation $ventilation): void
-    {
-        $ventilation->add_generateur($this->generateur_factory->build(
-            id: $payload->id(),
-            ventilation: $ventilation,
-            description: $payload->description,
-            signaletique: $payload->signaletique->to(),
-            generateur_collectif: $payload->generateur_collectif,
-            annee_installation: $payload->annee_installation,
-        ));
-    }
-
-    private function set_installation(InstallationPayload $payload, Ventilation $ventilation): void
-    {
-        $installation = $this->installation_factory->build(
-            id: $payload->id(),
-            ventilation: $ventilation,
-            surface: $payload->surface,
-        );
-
-        foreach ($payload->systemes as $systeme) {
-            $this->set_systeme($systeme, $installation);
-        }
-        $ventilation->add_installation($installation);
-    }
-
-    private function set_systeme(SystemePayload $payload, Installation $installation): void
-    {
-        $factory = ($this->systeme_factory)(id: $payload->id(), installation: $installation);
-
-        if ($payload->type_ventilation_naturelle()) {
-            $systeme = $factory->build_ventilation_naturelle(type_ventilation: $payload->type_ventilation_naturelle());
-            $installation->add_systeme($systeme);
-            return;
-        }
-        if (null === $generateur = $installation->ventilation()->generateurs()->find($payload->generateur_id())) {
-            throw new \InvalidArgumentException('Generateur not found');
-        }
-        $systeme = $factory->build_ventilation_mecanique(generateur: $generateur);
-        $installation->add_systeme($systeme);
     }
 }

@@ -4,6 +4,10 @@ namespace App\Api\Ventilation\Payload;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @property GenerateurPayload[] $generateurs
+ * @property InstallationPayload[] $installations
+ */
 final class VentilationPayload
 {
     public function __construct(

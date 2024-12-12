@@ -18,6 +18,27 @@ final class Generateur
         private ?int $annee_installation,
     ) {}
 
+    public static function create(
+        Id $id,
+        Ventilation $ventilation,
+        string $description,
+        Signaletique $signaletique,
+        bool $generateur_collectif,
+        ?int $annee_installation,
+    ): Generateur {
+        Assert::nullOrlessThanEq($annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($annee_installation, $ventilation->annee_construction_batiment());
+
+        return new Generateur(
+            id: $id,
+            ventilation: $ventilation,
+            description: $description,
+            signaletique: $signaletique,
+            generateur_collectif: $signaletique->type->is_generateur_collectif() ?? $generateur_collectif,
+            annee_installation: $annee_installation,
+        );
+    }
+
     public function controle(): void
     {
         Assert::nullOrlessThanEq($this->annee_installation, (int) date('Y'));

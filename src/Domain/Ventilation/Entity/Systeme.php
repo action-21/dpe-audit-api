@@ -8,6 +8,7 @@ use App\Domain\Ventilation\Enum\TypeVentilation;
 use App\Domain\Ventilation\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance};
 use App\Domain\Ventilation\ValueObject\Performance;
 use App\Domain\Ventilation\Ventilation;
+use Webmozart\Assert\Assert;
 
 final class Systeme
 {
@@ -22,6 +23,23 @@ final class Systeme
         private ?Generateur $generateur,
     ) {}
 
+    public static function create(
+        Id $id,
+        Installation $installation,
+        TypeVentilation $type_ventilation,
+        ?Generateur $generateur,
+    ): Systeme {
+        if ($type_ventilation === TypeVentilation::VENTILATION_MECANIQUE) {
+            Assert::notNull($generateur);
+        }
+        return new Systeme(
+            id: $id,
+            installation: $installation,
+            type_ventilation: $type_ventilation,
+            generateur: $type_ventilation === TypeVentilation::VENTILATION_MECANIQUE ? $generateur : null,
+        );
+    }
+
     public function reinitialise(): void
     {
         $this->rdim = null;
@@ -29,7 +47,12 @@ final class Systeme
         $this->consommations = null;
     }
 
-    public function controle(): void {}
+    public function controle(): void
+    {
+        if ($this->type_ventilation === TypeVentilation::VENTILATION_MECANIQUE) {
+            Assert::notNull($this->generateur);
+        }
+    }
 
     public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
     {
