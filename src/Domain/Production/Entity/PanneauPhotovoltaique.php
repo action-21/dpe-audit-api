@@ -22,14 +22,39 @@ final class PanneauPhotovoltaique
         private ?float $surface_capteurs,
     ) {}
 
+    public static function create(
+        Id $id,
+        Production $production,
+        float $orientation,
+        float $inclinaison,
+        int $modules,
+        ?float $surface_capteurs,
+    ): self {
+        Assert::greaterThan($modules, 0);
+        Assert::greaterThanEq($orientation, 0);
+        Assert::lessThan($orientation, 360);
+        Assert::greaterThanEq($inclinaison, 0);
+        Assert::lessThanEq($inclinaison, 90);
+        Assert::nullOrGreaterThan($surface_capteurs, 0);
+
+        return new self(
+            id: $id,
+            production: $production,
+            orientation: $orientation,
+            inclinaison: $inclinaison,
+            modules: $modules,
+            surface_capteurs: $surface_capteurs,
+        );
+    }
+
     public function controle(): void
     {
-        Assert::greaterThan($this->surface_capteurs, 0);
         Assert::greaterThan($this->modules, 0);
         Assert::greaterThanEq($this->orientation, 0);
         Assert::lessThan($this->orientation, 360);
         Assert::greaterThanEq($this->inclinaison, 0);
         Assert::lessThanEq($this->inclinaison, 90);
+        Assert::nullOrGreaterThan($this->surface_capteurs, 0);
     }
 
     public function reinitialise(): void
