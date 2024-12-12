@@ -17,6 +17,24 @@ final class Logement
         private float $surface_habitable,
     ) {}
 
+    public static function create(
+        Id $id,
+        Visite $visite,
+        string $description,
+        Typologie $typologie,
+        float $surface_habitable,
+    ): self {
+        Assert::greaterThan($surface_habitable, 0);
+
+        return new self(
+            id: $id,
+            visite: $visite,
+            description: $description,
+            typologie: $typologie,
+            surface_habitable: $surface_habitable,
+        );
+    }
+
     public function controle(): void
     {
         Assert::greaterThan($this->surface_habitable, 0);
