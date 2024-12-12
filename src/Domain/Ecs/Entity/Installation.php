@@ -25,6 +25,26 @@ final class Installation
         private SystemeCollection $systemes,
     ) {}
 
+    public static function create(
+        Id $id,
+        Ecs $ecs,
+        string $description,
+        float $surface,
+        ?Solaire $solaire,
+    ): self {
+        Assert::greaterThan($surface, 0);
+        Assert::nullOrGreaterThanEq($solaire?->annee_installation, $ecs->annee_construction_batiment());
+
+        return new self(
+            id: $id,
+            ecs: $ecs,
+            description: $description,
+            surface: $surface,
+            solaire: $solaire,
+            systemes: new SystemeCollection(),
+        );
+    }
+
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);

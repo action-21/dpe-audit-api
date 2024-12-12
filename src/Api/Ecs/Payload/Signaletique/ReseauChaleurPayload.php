@@ -5,7 +5,7 @@ namespace App\Api\Ecs\Payload\Signaletique;
 use App\Domain\Ecs\Enum\TypeGenerateur;
 use App\Domain\Ecs\ValueObject\Signaletique;
 
-final class ReseauChaleurPayload
+final class ReseauChaleurPayload implements SignaletiquePayload
 {
     public function __construct(
         public TypeGenerateur\ReseauChaleur $type,

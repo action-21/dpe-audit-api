@@ -4,6 +4,10 @@ namespace App\Api\Ecs\Payload;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @property GenerateurPayload[] $generateurs
+ * @property InstallationPayload[] $installations
+ */
 final class EcsPayload
 {
     public function __construct(

@@ -12,6 +12,8 @@ final class GenerateurPayload
     public function __construct(
         #[Assert\Uuid]
         public string $id,
+        #[Assert\Uuid]
+        public ?string $generateur_mixte_id,
         #[AppAssert\ReseauChaleur]
         public ?string $reseau_chaleur_id,
         public string $description,

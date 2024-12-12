@@ -18,6 +18,15 @@ final class Ecs
         private GenerateurCollection $generateurs,
     ) {}
 
+    public static function create(Audit $audit): self
+    {
+        return new self(
+            audit: $audit,
+            generateurs: new GenerateurCollection(),
+            installations: new InstallationCollection(),
+        );
+    }
+
     public function reinitialise(): void
     {
         $this->besoins = null;

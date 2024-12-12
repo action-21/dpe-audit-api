@@ -7,7 +7,7 @@ use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur};
 use App\Domain\Ecs\ValueObject\Signaletique;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PoeleBouilleurPayload
+final class PoeleBouilleurPayload implements SignaletiquePayload
 {
     public function __construct(
         public TypeGenerateur\PoeleBouilleur $type,

@@ -26,6 +26,22 @@ final class Systeme
         private ?Stockage $stockage,
     ) {}
 
+    public static function create(
+        Id $id,
+        Installation $installation,
+        Generateur $generateur,
+        Reseau $reseau,
+        ?Stockage $stockage,
+    ): self {
+        return new self(
+            id: $id,
+            installation: $installation,
+            generateur: $generateur,
+            reseau: $reseau,
+            stockage: $stockage,
+        );
+    }
+
     public function reinitialise(): void
     {
         $this->rdim = null;

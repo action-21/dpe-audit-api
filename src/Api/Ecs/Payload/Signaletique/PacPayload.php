@@ -6,7 +6,7 @@ use App\Domain\Ecs\Enum\{PositionChaudiere, TypeGenerateur};
 use App\Domain\Ecs\ValueObject\Signaletique;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PacPayload
+final class PacPayload implements SignaletiquePayload
 {
     public function __construct(
         public TypeGenerateur\Pac $type,

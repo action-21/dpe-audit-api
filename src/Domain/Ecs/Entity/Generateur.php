@@ -28,6 +28,33 @@ final class Generateur
         private Signaletique $signaletique,
     ) {}
 
+    public static function create(
+        Id $id,
+        Ecs $ecs,
+        string $description,
+        ?Id $generateur_mixte_id,
+        ?Id $reseau_chaleur_id,
+        ?int $annee_installation,
+        bool $position_volume_chauffe,
+        bool $generateur_collectif,
+        Signaletique $signaletique,
+    ): self {
+        Assert::nullOrLessThanEq($annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($annee_installation, $ecs->annee_construction_batiment());
+
+        return new self(
+            id: $id,
+            ecs: $ecs,
+            description: $description,
+            generateur_mixte_id: $signaletique->type->is_usage_mixte() ? $generateur_mixte_id : null,
+            reseau_chaleur_id: $signaletique->type->is_reseau_chaleur() ? $reseau_chaleur_id : null,
+            annee_installation: $annee_installation,
+            position_volume_chauffe: $signaletique->type->position_volume_chauffe() ?? $position_volume_chauffe,
+            generateur_collectif: $signaletique->type->is_generateur_collectif() ?? $generateur_collectif,
+            signaletique: $signaletique,
+        );
+    }
+
     public function controle(): void
     {
         Assert::nullOrLessThanEq($this->annee_installation, (int) date('Y'));
