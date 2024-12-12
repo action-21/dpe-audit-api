@@ -14,7 +14,6 @@ use App\Domain\Refroidissement\Refroidissement;
 use App\Domain\Simulation\Service\MoteurPerformance;
 use App\Domain\Simulation\ValueObject\{Bilan, PerformanceCollection};
 use App\Domain\Ventilation\Ventilation;
-use App\Domain\Visite\Visite;
 
 final class Simulation
 {
@@ -30,9 +29,31 @@ final class Simulation
         private Refroidissement $refroidissement,
         private Ventilation $ventilation,
         private Production $production,
-        private Visite $visite,
         private Eclairage $eclairage
     ) {}
+
+    public static function create(
+        Audit $audit,
+        Enveloppe $enveloppe,
+        Chauffage $chauffage,
+        Ecs $ecs,
+        Ventilation $ventilation,
+        Refroidissement $refroidissement,
+        Production $production,
+        Eclairage $eclairage,
+    ): Simulation {
+        return new Simulation(
+            id: Id::create(),
+            audit: $audit,
+            enveloppe: $enveloppe,
+            chauffage: $chauffage,
+            ecs: $ecs,
+            ventilation: $ventilation,
+            refroidissement: $refroidissement,
+            production: $production,
+            eclairage: $eclairage,
+        );
+    }
 
     public function reinitialise(): self
     {
@@ -44,7 +65,6 @@ final class Simulation
         $this->ventilation->reinitialise();
         $this->production->reinitialise();
         $this->eclairage->reinitialise();
-        $this->visite->reinitialise();
 
         $this->performances = null;
         return $this;
@@ -60,7 +80,6 @@ final class Simulation
         $this->ventilation->controle();
         $this->production->controle();
         $this->eclairage->controle();
-        $this->visite->controle();
         return $this;
     }
 
@@ -109,11 +128,6 @@ final class Simulation
     public function production(): Production
     {
         return $this->production;
-    }
-
-    public function visite(): Visite
-    {
-        return $this->visite;
     }
 
     public function eclairage(): Eclairage

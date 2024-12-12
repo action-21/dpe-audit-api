@@ -2,16 +2,15 @@
 
 namespace App\Domain\Simulation;
 
-use App\Domain\Audit\{Audit, AuditRepository};
-use App\Domain\Chauffage\{Chauffage, ChauffageRepository};
+use App\Domain\Audit\AuditRepository;
+use App\Domain\Chauffage\ChauffageRepository;
 use App\Domain\Common\Type\Id;
-use App\Domain\Eclairage\{Eclairage, EclairageRepository};
-use App\Domain\Ecs\{Ecs, EcsRepository};
-use App\Domain\Enveloppe\{Enveloppe, EnveloppeRepository};
-use App\Domain\Production\{Production, ProductionRepository};
-use App\Domain\Refroidissement\{Refroidissement, RefroidissementRepository};
-use App\Domain\Ventilation\{Ventilation, VentilationRepository};
-use App\Domain\Visite\{Visite, VisiteRepository};
+use App\Domain\Eclairage\EclairageRepository;
+use App\Domain\Ecs\EcsRepository;
+use App\Domain\Enveloppe\EnveloppeRepository;
+use App\Domain\Production\ProductionRepository;
+use App\Domain\Refroidissement\RefroidissementRepository;
+use App\Domain\Ventilation\VentilationRepository;
 
 final class SimulationFactory
 {
@@ -24,7 +23,6 @@ final class SimulationFactory
         private ProductionRepository $production_repository,
         private RefroidissementRepository $refroidissement_repository,
         private VentilationRepository $ventilation_repository,
-        private VisiteRepository $visite_repository,
     ) {}
 
     public function from_audit(Id $id): Simulation
@@ -36,7 +34,6 @@ final class SimulationFactory
         $ventilation = $this->ventilation_repository->find($id);
         $refroidissement = $this->refroidissement_repository->find($id);
         $production = $this->production_repository->find($id);
-        $visite = $this->visite_repository->find($id);
         $eclairage = $this->eclairage_repository->find($id);
 
         return new Simulation(
@@ -48,32 +45,6 @@ final class SimulationFactory
             ventilation: $ventilation,
             refroidissement: $refroidissement,
             production: $production,
-            visite: $visite,
-            eclairage: $eclairage,
-        );
-    }
-
-    public function build(
-        Audit $audit,
-        Enveloppe $enveloppe,
-        Chauffage $chauffage,
-        Ecs $ecs,
-        Ventilation $ventilation,
-        Refroidissement $refroidissement,
-        Production $production,
-        Visite $visite,
-        Eclairage $eclairage,
-    ): Simulation {
-        return new Simulation(
-            id: Id::create(),
-            audit: $audit,
-            enveloppe: $enveloppe,
-            chauffage: $chauffage,
-            ecs: $ecs,
-            ventilation: $ventilation,
-            refroidissement: $refroidissement,
-            production: $production,
-            visite: $visite,
             eclairage: $eclairage,
         );
     }

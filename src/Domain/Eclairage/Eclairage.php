@@ -13,6 +13,11 @@ final class Eclairage
 
     public function __construct(private readonly Audit $audit) {}
 
+    public static function create(Audit $audit): self
+    {
+        return new self($audit);
+    }
+
     public function reinitialise(): void
     {
         $this->consommations = null;
