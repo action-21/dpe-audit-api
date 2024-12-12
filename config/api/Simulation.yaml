@@ -5,8 +5,16 @@ resources:
         class: ApiPlatform\Metadata\Get
         uriTemplate: /audit/{id}/simulation
         output: App\Api\Simulation\Resource\SimulationResource
+        provider: App\Api\Simulation\State\GetSimulationProvider
+      simulation.put:
+        class: ApiPlatform\Metadata\Put
+        uriTemplate: /audit/{id}/simulation
+        input: App\Api\Simulation\Payload\SimulationTravauxPayload
+        output: App\Api\Simulation\Resource\SimulationResource
+        processor: App\Api\Simulation\State\UpdateSimulationProcessor
       simulation.post:
         class: ApiPlatform\Metadata\Post
         uriTemplate: /audit/simulation
         input: App\Api\Simulation\Payload\SimulationPayload
         output: App\Api\Simulation\Resource\SimulationResource
+        processor: App\Api\Simulation\State\CreateSimulationProcessor
