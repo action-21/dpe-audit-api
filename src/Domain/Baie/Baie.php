@@ -28,6 +28,28 @@ final class Baie implements Paroi
         private MasqueLointainCollection $masques_lointains
     ) {}
 
+    public static function create(
+        Id $id,
+        Enveloppe $enveloppe,
+        string $description,
+        Position $position,
+        Caracteristique $caracteristique,
+        ?DoubleFenetre $double_fenetre,
+    ): self {
+        Assert::nullOrGreaterThanEq($caracteristique->annee_installation, $enveloppe->annee_construction_batiment());
+
+        return new self(
+            id: $id,
+            enveloppe: $enveloppe,
+            description: $description,
+            position: $position,
+            caracteristique: $caracteristique,
+            double_fenetre: $double_fenetre,
+            masques_proches: new MasqueProcheCollection(),
+            masques_lointains: new MasqueLointainCollection()
+        );
+    }
+
     public function controle(): void
     {
         Assert::nullOrGreaterThanEq($this->caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());

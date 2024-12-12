@@ -35,4 +35,14 @@ enum TypeBaie: string implements Enum
             self::PORTE_FENETRE_BATTANTE => 'Portes-fenêtres battantes sans soubassement',
         };
     }
+
+    public function is_fenetre(): bool
+    {
+        return in_array($this, [
+            self::FENETRE_BATTANTE,
+            self::FENETRE_COULISSANTE,
+            self::PORTE_FENETRE_COULISSANTE,
+            self::PORTE_FENETRE_BATTANTE,
+        ]);
+    }
 }

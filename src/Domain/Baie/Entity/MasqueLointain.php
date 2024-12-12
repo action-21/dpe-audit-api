@@ -19,6 +19,25 @@ final class MasqueLointain
         private float $orientation,
     ) {}
 
+    public static function create(
+        Baie $baie,
+        string $description,
+        TypeMasqueLointain $type_masque,
+        float $hauteur,
+        float $orientation,
+    ): self {
+        $entity = new self(
+            id: Id::create(),
+            baie: $baie,
+            description: $description,
+            type_masque: $type_masque,
+            hauteur: $hauteur,
+            orientation: $orientation,
+        );
+        $entity->controle();
+        return $entity;
+    }
+
     public function controle(): void
     {
         Assert::greaterThan($this->hauteur, 0);

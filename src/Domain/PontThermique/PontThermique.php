@@ -28,6 +28,27 @@ final class PontThermique
         private ?float $kpt = null,
     ) {}
 
+    public static function create(
+        Id $id,
+        Enveloppe $enveloppe,
+        string $description,
+        float $longueur,
+        Liaison $liaison,
+        ?float $kpt = null,
+    ): self {
+        Assert::greaterThan($longueur, 0);
+        Assert::nullOrGreaterThan($kpt, 0);
+
+        return new self(
+            id: $id,
+            enveloppe: $enveloppe,
+            description: $description,
+            longueur: $longueur,
+            liaison: $liaison,
+            kpt: $kpt,
+        );
+    }
+
     public function reinitialise(): void
     {
         $this->performance = null;

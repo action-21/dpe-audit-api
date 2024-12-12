@@ -3,6 +3,7 @@
 namespace App\Api\Baie\Payload;
 
 use App\Domain\Baie\Enum\{NatureGazLame, TypeVitrage};
+use App\Domain\Baie\ValueObject\Vitrage;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class VitragePayload
@@ -15,4 +16,14 @@ final class VitragePayload
         #[Assert\Valid]
         public ?SurvitragePayload $survitrage,
     ) {}
+
+    public function to(): Vitrage
+    {
+        return Vitrage::create(
+            type_vitrage: $this->type_vitrage,
+            nature_gaz_lame: $this->nature_gaz_lame,
+            epaisseur_lame: $this->epaisseur_lame,
+            survitrage: $this->survitrage?->to(),
+        );
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Api\Baie\Payload\DoubleFenetre;
 
 use App\Api\Baie\Payload\{MenuiseriePayload, VitragePayload};
 use App\Domain\Baie\Enum\TypeBaie;
+use App\Domain\Baie\ValueObject\DoubleFenetre;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class PorteFenetrePayload
@@ -22,4 +23,17 @@ final class PorteFenetrePayload
         #[Assert\Positive]
         public ?float $sw,
     ) {}
+
+    public function to(): DoubleFenetre
+    {
+        return DoubleFenetre::create_porte_fenetre(
+            type: $this->type,
+            presence_soubassement: $this->presence_soubassement,
+            menuiserie: $this->menuiserie->to(),
+            vitrage: $this->vitrage->to(),
+            ug: $this->ug,
+            uw: $this->uw,
+            sw: $this->sw,
+        );
+    }
 }

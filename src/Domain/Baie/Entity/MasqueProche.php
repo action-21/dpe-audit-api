@@ -17,9 +17,42 @@ final class MasqueProche
         private ?float $avancee = null,
     ) {}
 
+    public static function create(
+        Baie $baie,
+        string $description,
+        TypeMasqueProche $type_masque,
+        ?float $avancee,
+    ): self {
+        Assert::nullOrGreaterThanEq($avancee, 0);
+
+        if (\in_array($type_masque, [
+            TypeMasqueProche::FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS,
+            TypeMasqueProche::BALCON_OU_AUVENT
+        ])) {
+            Assert::notNull($avancee);
+        }
+        if ($type_masque === TypeMasqueProche::FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS) {
+            Assert::notNull($baie->orientation());
+        }
+        return new self(
+            id: Id::create(),
+            baie: $baie,
+            description: $description,
+            type_masque: $type_masque,
+            avancee: $avancee,
+        );
+    }
+
     public function controle(): void
     {
-        Assert::greaterThanEq($this->avancee, 0);
+        Assert::nullOrGreaterThanEq($this->avancee, 0);
+
+        if (\in_array($this->type_masque, [
+            TypeMasqueProche::FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS,
+            TypeMasqueProche::BALCON_OU_AUVENT
+        ])) {
+            Assert::notNull($this->avancee);
+        }
         if ($this->type_masque === TypeMasqueProche::FOND_BALCON_OU_FOND_ET_FLANC_LOGGIAS) {
             Assert::notNull($this->baie->orientation());
         }

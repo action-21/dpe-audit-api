@@ -3,6 +3,7 @@
 namespace App\Api\Baie\Payload\DoubleFenetre;
 
 use App\Domain\Baie\Enum\TypeBaie;
+use App\Domain\Baie\ValueObject\DoubleFenetre;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class ParoiVitreePayload
@@ -16,4 +17,14 @@ final class ParoiVitreePayload
         #[Assert\Positive]
         public ?float $sw,
     ) {}
+
+    public function to(): DoubleFenetre
+    {
+        return DoubleFenetre::create_paroi_vitree(
+            type: $this->type,
+            ug: $this->ug,
+            uw: $this->uw,
+            sw: $this->sw,
+        );
+    }
 }

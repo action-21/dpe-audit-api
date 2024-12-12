@@ -17,6 +17,22 @@ final class Refend
         private Inertie $inertie,
     ) {}
 
+    public static function create(
+        Enveloppe $enveloppe,
+        string $description,
+        float $surface,
+        Inertie\InertieRefend $inertie,
+    ): self {
+        Assert::greaterThan($surface, 0);
+        return new self(
+            id: Id::create(),
+            enveloppe: $enveloppe,
+            description: $description,
+            surface: $surface,
+            inertie: $inertie->to(),
+        );
+    }
+
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);

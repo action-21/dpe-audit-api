@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Ecs;
+namespace App\Api\Ecs;
 
 use App\Api\Ecs\Payload\EcsPayload;
 use App\Domain\Audit\Audit;

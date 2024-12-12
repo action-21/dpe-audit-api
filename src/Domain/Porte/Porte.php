@@ -23,6 +23,24 @@ final class Porte implements Paroi
         private Caracteristique $caracteristique,
     ) {}
 
+    public static function create(
+        Id $id,
+        Enveloppe $enveloppe,
+        string $description,
+        Position $position,
+        Caracteristique $caracteristique,
+    ): self {
+        Assert::nullOrGreaterThanEq($caracteristique->annee_installation, $enveloppe->annee_construction_batiment());
+
+        return new self(
+            id: $id,
+            enveloppe: $enveloppe,
+            description: $description,
+            position: $position,
+            caracteristique: $caracteristique,
+        );
+    }
+
     public function controle(): void
     {
         Assert::nullOrGreaterThanEq($this->caracteristique->annee_installation, $this->enveloppe->annee_construction_batiment());

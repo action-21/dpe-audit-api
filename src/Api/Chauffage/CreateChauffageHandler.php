@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Chauffage;
+namespace App\Api\Chauffage;
 
 use App\Api\Chauffage\Payload\ChauffagePayload;
 use App\Domain\Audit\Audit;

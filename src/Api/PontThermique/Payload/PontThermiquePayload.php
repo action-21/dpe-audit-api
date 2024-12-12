@@ -13,7 +13,7 @@ final class PontThermiquePayload
         #[Assert\Positive]
         public float $longueur,
         #[Assert\Valid]
-        public LiaisonPlancherBasMurPayload|LiaisonPlancherIntermediaireMurPayload|LiaisonPlancherHautMurPayload|LiaisonRefendMurPayload|LiaisonMenuiserieMurPayload $liaison,
+        public LiaisonPayload $liaison,
         #[Assert\Positive]
         public ?float $kpt,
     ) {}

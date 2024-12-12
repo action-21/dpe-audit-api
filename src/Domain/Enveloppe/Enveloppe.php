@@ -33,6 +33,22 @@ final class Enveloppe
         private PlancherIntermediaireCollection $planchers_intermediaires,
     ) {}
 
+    public static function create(Audit $audit, Exposition $exposition, ?float $q4pa_conv,): self
+    {
+        Assert::nullOrGreaterThan($q4pa_conv, 0);
+
+        return new self(
+            audit: $audit,
+            exposition: $exposition,
+            q4pa_conv: $q4pa_conv,
+            locaux_non_chauffes: new LncCollection(),
+            parois: Parois::create(),
+            ponts_thermiques: new PontThermiqueCollection(),
+            refends: new RefendCollection(),
+            planchers_intermediaires: new PlancherIntermediaireCollection(),
+        );
+    }
+
     public function controle(): void
     {
         Assert::nullOrGreaterThan($this->q4pa_conv, 0);

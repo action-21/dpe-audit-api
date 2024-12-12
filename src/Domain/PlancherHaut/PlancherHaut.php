@@ -27,17 +27,33 @@ final class PlancherHaut implements Paroi
         private Isolation $isolation,
     ) {}
 
+    public static function create(
+        Id $id,
+        Enveloppe $enveloppe,
+        string $description,
+        Position $position,
+        Caracteristique $caracteristique,
+        Isolation $isolation,
+    ): self {
+        Assert::nullOrGreaterThanEq($caracteristique->annee_construction, $enveloppe->annee_construction_batiment());
+        Assert::nullOrGreaterThanEq($caracteristique->annee_renovation, $enveloppe->annee_construction_batiment());
+        Assert::nullOrGreaterThanEq($isolation->annee_isolation, $enveloppe->annee_construction_batiment());
+
+        return (new self(
+            id: $id,
+            enveloppe: $enveloppe,
+            description: $description,
+            position: $position,
+            caracteristique: $caracteristique,
+            isolation: $isolation,
+        ))->determine_categorie();
+    }
+
     public function controle(): void
     {
         Assert::nullOrGreaterThanEq($this->caracteristique->annee_construction, $this->enveloppe->annee_construction_batiment());
         Assert::nullOrGreaterThanEq($this->caracteristique->annee_renovation, $this->enveloppe->annee_construction_batiment());
         Assert::nullOrGreaterThanEq($this->isolation->annee_isolation, $this->enveloppe->annee_construction_batiment());
-    }
-
-    public function initialise(): self
-    {
-        $this->determine_categorie();
-        return $this;
     }
 
     public function reinitialise(): void

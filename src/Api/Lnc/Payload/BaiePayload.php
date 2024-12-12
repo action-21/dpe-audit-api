@@ -2,25 +2,30 @@
 
 namespace App\Api\Lnc\Payload;
 
-use App\Api\Lnc\Payload\Position;
 use App\Domain\Lnc\Enum\TypeBaie;
 use App\Services\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class FenetrePayload
+final class BaiePayload
 {
     public function __construct(
         #[Assert\Uuid]
         public string $id,
         public string $description,
         #[Assert\Valid]
-        public Position\PositionPayload|Position\PositionWithParoiPayload $position,
-        public TypeBaie\TypeBaieFenetre $type,
+        public PositionPayload $position,
+        public TypeBaie $type,
         #[Assert\Positive]
         public float $surface,
         #[AppAssert\Inclinaison]
         public float $inclinaison,
         #[Assert\Valid]
-        public MenuiseriePayload $menuiserie,
+        public ?MenuiseriePayload $menuiserie,
     ) {}
+
+    #[Assert\IsTrue]
+    public function isValid(): bool
+    {
+        return $this->type->is_fenetre() ? null !== $this->menuiserie : true;
+    }
 }

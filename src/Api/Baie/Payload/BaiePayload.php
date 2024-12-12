@@ -4,10 +4,12 @@ namespace App\Api\Baie\Payload;
 
 use App\Api\Baie\Payload\Caracteristique;
 use App\Api\Baie\Payload\DoubleFenetre;
-use App\Api\Baie\Payload\MasqueProche;
-use App\Api\Baie\Payload\Position\{PositionPayload, PositionWithLncPayload, PositionWithParoiPayload};
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @property MasqueProchePayload[] $masques_proches
+ * @property MasqueLointainPayload[] $masques_lointains
+ */
 final class BaiePayload
 {
     public function __construct(
@@ -15,13 +17,13 @@ final class BaiePayload
         public string $id,
         public string $description,
         #[Assert\Valid]
-        public PositionPayload|PositionWithLncPayload|PositionWithParoiPayload $position,
+        public PositionPayload $position,
         #[Assert\Valid]
         public Caracteristique\FenetrePayload|Caracteristique\ParoiVitreePayload|Caracteristique\PorteFenetrePayload $caracteristique,
         #[Assert\Valid]
         public null|DoubleFenetre\FenetrePayload|DoubleFenetre\ParoiVitreePayload|DoubleFenetre\PorteFenetrePayload $double_fenetre,
-        /** @var (MasqueProche\BalconAuvent|MasqueProche\ParoiLaterale)[] */
-        #[Assert\All([new Assert\Type([MasqueProche\BalconAuvent::class, MasqueProche\ParoiLaterale::class])])]
+        /** @var MasqueProchePayload[] */
+        #[Assert\All([new Assert\Type(MasqueProchePayload::class)])]
         #[Assert\Valid]
         public array $masques_proches,
         /** @var MasqueLointainPayload[] */

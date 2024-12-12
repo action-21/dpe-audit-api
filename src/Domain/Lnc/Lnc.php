@@ -28,6 +28,18 @@ final class Lnc
         private BaieCollection $baies,
     ) {}
 
+    public static function create(Id $id, Enveloppe $enveloppe, string $description, TypeLnc $type): self
+    {
+        return new self(
+            id: $id,
+            enveloppe: $enveloppe,
+            description: $description,
+            type: $type,
+            parois: new ParoiCollection,
+            baies: new BaieCollection,
+        );
+    }
+
     public function controle(): void
     {
         $this->parois->controle();

@@ -3,6 +3,7 @@
 namespace App\Api\Baie\Payload\Caracteristique;
 
 use App\Domain\Baie\Enum\{TypeBaie, TypeFermeture};
+use App\Domain\Baie\ValueObject\Caracteristique;
 use App\Services\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,4 +27,20 @@ final class ParoiVitreePayload
         #[Assert\Positive]
         public ?float $sw,
     ) {}
+
+    public function to(): Caracteristique
+    {
+        return Caracteristique::create_paroi_vitree(
+            type: $this->type,
+            surface: $this->surface,
+            inclinaison: $this->inclinaison,
+            type_fermeture: $this->type_fermeture,
+            presence_protection_solaire: $this->presence_protection_solaire,
+            annee_installation: $this->annee_installation,
+            ug: $this->ug,
+            uw: $this->uw,
+            ujn: $this->ujn,
+            sw: $this->sw,
+        );
+    }
 }

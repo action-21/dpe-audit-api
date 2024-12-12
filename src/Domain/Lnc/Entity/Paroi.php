@@ -3,7 +3,7 @@
 namespace App\Domain\Lnc\Entity;
 
 use App\Domain\Common\Type\Id;
-use App\Domain\Lnc\Enum\{EtatIsolation};
+use App\Domain\Lnc\Enum\{EtatIsolation, Mitoyennete};
 use App\Domain\Lnc\Lnc;
 use App\Domain\Lnc\Service\MoteurSurfaceDeperditive;
 use App\Domain\Lnc\ValueObject\Position;
@@ -23,11 +23,33 @@ final class Paroi
         private EtatIsolation $etat_isolation,
     ) {}
 
+    public static function create(
+        Id $id,
+        Lnc $local_non_chauffe,
+        string $description,
+        Position $position,
+        float $surface,
+        EtatIsolation $etat_isolation,
+    ): self {
+        Assert::greaterThan($surface, 0);
+        Assert::notNull($position->mitoyennete);
+        Assert::null($position->paroi_id);
+
+        return new self(
+            id: $id,
+            local_non_chauffe: $local_non_chauffe,
+            description: $description,
+            position: $position,
+            surface: $surface,
+            etat_isolation: $etat_isolation,
+        );
+    }
+
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);
         Assert::notNull($this->position->mitoyennete);
-        Assert::null($this->position->paroi);
+        Assert::null($this->position->paroi_id);
     }
 
     public function reinitialise(): void
@@ -61,6 +83,11 @@ final class Paroi
     public function position(): Position
     {
         return $this->position;
+    }
+
+    public function mitoyennete(): Mitoyennete
+    {
+        return $this->position->mitoyennete;
     }
 
     public function surface(): float
