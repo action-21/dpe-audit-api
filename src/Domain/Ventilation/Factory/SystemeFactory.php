@@ -18,6 +18,13 @@ final class SystemeFactory
         return $this;
     }
 
+    public function __invoke(Id $id, Installation $installation): self
+    {
+        $this->id = $id;
+        $this->installation = $installation;
+        return $this;
+    }
+
     private function build(TypeVentilation $type_ventilation, ?Generateur $generateur = null,): Systeme
     {
         $entity = new Systeme(

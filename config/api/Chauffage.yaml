@@ -7,4 +7,3 @@ resources:
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Chauffage\State\ChauffageProvider
         output: App\Api\Chauffage\Resource\ChauffageResource
-

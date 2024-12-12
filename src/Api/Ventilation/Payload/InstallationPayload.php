@@ -2,6 +2,7 @@
 
 namespace App\Api\Ventilation\Payload;
 
+use App\Domain\Common\Type\Id;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class InstallationPayload
@@ -13,23 +14,16 @@ final class InstallationPayload
         #[Assert\Positive]
         public float $surface,
 
-        /** @var VentilationNaturellePayload[] */
-        #[Assert\All([new Assert\Type(VentilationNaturellePayload::class,)])]
+        /** @var SystemePayload[] */
+        #[Assert\All([new Assert\Type(SystemePayload::class,)])]
         #[Assert\Valid]
-        public array $ventilations_naturelles,
-
-        /** @var VentilationMequaniquePayload[] */
-        #[Assert\All([new Assert\Type(VentilationMequaniquePayload::class,)])]
-        #[Assert\Valid]
-        public array $ventilations_mecaniques,
+        #[Assert\Count(min: 1)]
+        public array $systemes,
     ) {}
 
-    #[Assert\Count(min: 1)]
-    public function getSystemes(): array
+
+    public function id(): Id
     {
-        return [
-            ...$this->ventilations_mecaniques,
-            ...$this->ventilations_naturelles,
-        ];
+        return Id::from($this->id);
     }
 }
