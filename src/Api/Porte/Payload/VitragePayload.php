@@ -12,7 +12,6 @@ final class VitragePayload
         #[Assert\PositiveOrZero]
         #[Assert\LessThanOrEqual(60)]
         public int $taux_vitrage,
-
         public ?TypeVitrage $type_vitrage,
     ) {}
 

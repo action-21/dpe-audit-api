@@ -15,29 +15,29 @@ final class Position
         public readonly ?float $orientation = null,
     ) {}
 
-    public static function create(Mitoyennete $mitoyennete, ?float $orientation,): self
-    {
-        Assert::greaterThanEq($orientation, 0);
-        Assert::lessThan($orientation, 360);
-        Assert::notEq($mitoyennete, Mitoyennete::LOCAL_NON_CHAUFFE);
+    public static function create(
+        Mitoyennete $mitoyennete,
+        ?float $orientation,
+        ?Id $local_non_chauffe_id,
+    ): self {
+        Assert::nullOrGreaterThanEq($orientation, 0);
+        Assert::nullOrlessThan($orientation, 360);
 
-        return new self(mitoyennete: $mitoyennete, orientation: $orientation);
+        if ($local_non_chauffe_id) {
+            $mitoyennete = Mitoyennete::LOCAL_NON_CHAUFFE;
+        }
+        if ($mitoyennete === Mitoyennete::LOCAL_NON_CHAUFFE && null === $local_non_chauffe_id) {
+            $mitoyennete = Mitoyennete::LOCAL_NON_ACCESSIBLE;
+        }
+        return new self(
+            mitoyennete: $mitoyennete,
+            orientation: $orientation,
+            local_non_chauffe_id: $local_non_chauffe_id,
+        );
     }
 
     public static function create_liaison_paroi(Id $paroi_id): self
     {
         return new self(paroi_id: $paroi_id);
-    }
-
-    public static function create_liaison_local_non_chauffe(Id $local_non_chauffe_id, ?float $orientation): self
-    {
-        Assert::greaterThanEq($orientation, 0);
-        Assert::lessThan($orientation, 360);
-
-        return new self(
-            local_non_chauffe_id: $local_non_chauffe_id,
-            mitoyennete: Mitoyennete::LOCAL_NON_CHAUFFE,
-            orientation: $orientation,
-        );
     }
 }
