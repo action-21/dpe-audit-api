@@ -17,6 +17,18 @@ final class Systeme
         private Generateur $generateur,
     ) {}
 
+    public static function create(
+        Id $id,
+        Installation $installation,
+        Generateur $generateur,
+    ): Systeme {
+        return new Systeme(
+            id: $id,
+            installation: $installation,
+            generateur: $generateur,
+        );
+    }
+
     public function reinitialise(): void
     {
         $this->rdim = null;

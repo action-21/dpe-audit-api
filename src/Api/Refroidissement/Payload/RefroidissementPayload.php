@@ -4,18 +4,17 @@ namespace App\Api\Refroidissement\Payload;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @property GenerateurPayload[] $generateurs
+ * @property InstallationPayload[] $installations
+ */
 final class RefroidissementPayload
 {
     public function __construct(
-        /** @var ClimatiseurPayload[] */
-        #[Assert\All([new Assert\Type(ClimatiseurPayload::class,)])]
+        /** @var GenerateurPayload[] */
+        #[Assert\All([new Assert\Type(GenerateurPayload::class,)])]
         #[Assert\Valid]
-        public array $climatiseurs,
-
-        /** @var ReseauFroidPayload[] */
-        #[Assert\All([new Assert\Type(ReseauFroidPayload::class,)])]
-        #[Assert\Valid]
-        public array $reseaux_froid,
+        public array $generateurs,
 
         /** @var InstallationPayload[] */
         #[Assert\All([new Assert\Type(InstallationPayload::class)])]

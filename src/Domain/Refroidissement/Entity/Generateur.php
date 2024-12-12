@@ -25,6 +25,27 @@ final class Generateur
         private ?Id $reseau_froid_id,
     ) {}
 
+    public static function create(
+        Id $id,
+        Refroidissement $refroidissement,
+        string $description,
+        Signaletique $signaletique,
+        ?int $annee_installation,
+        ?Id $reseau_froid_id,
+    ): Generateur {
+        Assert::nullOrLessThanEq($annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($annee_installation, $refroidissement->annee_construction_batiment());
+
+        return new Generateur(
+            id: $id,
+            refroidissement: $refroidissement,
+            description: $description,
+            signaletique: $signaletique,
+            annee_installation: $annee_installation,
+            reseau_froid_id: $signaletique->type_generateur === TypeGenerateur::RESEAU_FROID ? $reseau_froid_id : null,
+        );
+    }
+
     public function controle(): void
     {
         Assert::nullOrLessThanEq($this->annee_installation, (int) date('Y'));
