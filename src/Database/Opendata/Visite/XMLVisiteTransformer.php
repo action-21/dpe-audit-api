@@ -7,12 +7,11 @@ use App\Database\Opendata\XMLElement;
 use App\Domain\Common\Type\Id;
 use App\Domain\Visite\Entity\Logement;
 use App\Domain\Visite\Enum\Typologie;
-use App\Domain\Visite\{Visite, VisiteFactory};
+use App\Domain\Visite\Visite;
 
 final class XMLVisiteTransformer
 {
     public function __construct(
-        private VisiteFactory $factory,
         private XMLAuditTransformer $audit_transformer,
     ) {}
 
@@ -20,7 +19,7 @@ final class XMLVisiteTransformer
     {
         $audit = $this->audit_transformer->transform($root);
         $reader = $root->read_visite();
-        $visite = $this->factory->build($audit);
+        $visite = Visite::create(audit: $audit);
 
         foreach ($reader->read_logements() as $reader) {
             $logement = new Logement(

@@ -4,20 +4,19 @@ namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\Audit\XMLAuditTransformer;
 use App\Database\Opendata\XMLElement;
-use App\Domain\Chauffage\{Chauffage, ChauffageFactory};
+use App\Domain\Chauffage\Chauffage;
 use App\Domain\Chauffage\Entity\{Emetteur, EmetteurCollection, Generateur, Installation, Systeme, SystemeCollection};
 
 final class XMLChauffageTransformer
 {
     public function __construct(
-        private ChauffageFactory $factory,
         private XMLAuditTransformer $audit_transformer,
     ) {}
 
     public function transform(XMLElement $root): Chauffage
     {
         $audit = $this->audit_transformer->transform($root);
-        $chauffage = $this->factory->build($audit);
+        $chauffage = Chauffage::create($audit);
 
         $this->set_generateurs($root, $chauffage);
         $this->set_emetteurs($root, $chauffage);

@@ -4,20 +4,17 @@ namespace App\Database\Opendata\Ecs;
 
 use App\Database\Opendata\Audit\XMLAuditTransformer;
 use App\Database\Opendata\XMLElement;
-use App\Domain\Ecs\{Ecs, EcsFactory};
+use App\Domain\Ecs\Ecs;
 use App\Domain\Ecs\Entity\{Installation, Generateur, Systeme, SystemeCollection};
 
 final class XMLEcsTransformer
 {
-    public function __construct(
-        private EcsFactory $factory,
-        private XMLAuditTransformer $audit_transformer,
-    ) {}
+    public function __construct(private XMLAuditTransformer $audit_transformer) {}
 
     public function transform(XMLElement $root): Ecs
     {
         $audit = $this->audit_transformer->transform($root);
-        $ecs = $this->factory->build($audit);
+        $ecs = Ecs::create(audit: $audit);
 
         $this->set_generateurs($root, $ecs);
         $this->set_installations($root, $ecs);

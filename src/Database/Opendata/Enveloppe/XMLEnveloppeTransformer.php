@@ -10,7 +10,7 @@ use App\Database\Opendata\PlancherHaut\XMLPlancherHautTransformer;
 use App\Database\Opendata\PontThermique\XMLPontThermiqueTransformer;
 use App\Database\Opendata\Porte\XMLPorteTransformer;
 use App\Database\Opendata\XMLElement;
-use App\Domain\Enveloppe\{Enveloppe, EnveloppeFactory};
+use App\Domain\Enveloppe\Enveloppe;
 
 final class XMLEnveloppeTransformer
 {
@@ -22,7 +22,6 @@ final class XMLEnveloppeTransformer
         private XMLPorteTransformer $porte_transformer,
         private XMLPontThermiqueTransformer $pont_thermique_transformer,
         private XMLAuditTransformer $audit_transformer,
-        private EnveloppeFactory $factory,
     ) {}
 
     public function transform(XMLElement $root): Enveloppe
@@ -30,7 +29,7 @@ final class XMLEnveloppeTransformer
         $audit = $this->audit_transformer->transform($root);
         $reader = $root->read_enveloppe();
 
-        $enveloppe = $this->factory->build(
+        $enveloppe = Enveloppe::create(
             audit: $audit,
             exposition: $reader->exposition(),
             q4pa_conv: $reader->q4pa_conv(),

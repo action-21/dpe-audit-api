@@ -6,19 +6,18 @@ use App\Database\Opendata\Audit\XMLAuditTransformer;
 use App\Database\Opendata\XMLElement;
 use App\Domain\Common\Type\Id;
 use App\Domain\Refroidissement\Entity\{Generateur, Installation, Systeme, SystemeCollection};
-use App\Domain\Refroidissement\{Refroidissement, RefroidissementFactory};
+use App\Domain\Refroidissement\Refroidissement;
 
 final class XMLRefroidissementTransformer
 {
     public function __construct(
-        private RefroidissementFactory $factory,
         private XMLAuditTransformer $audit_transformer,
     ) {}
 
     public function transform(XMLElement $root): Refroidissement
     {
         $audit = $this->audit_transformer->transform($root);
-        $refroidissement = $this->factory->build($audit);
+        $refroidissement = Refroidissement::create(audit: $audit);
 
         $this->set_generateurs($root, $refroidissement);
         $this->set_installations($root, $refroidissement);

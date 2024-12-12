@@ -5,19 +5,18 @@ namespace App\Database\Opendata\Ventilation;
 use App\Database\Opendata\Audit\XMLAuditTransformer;
 use App\Database\Opendata\XMLElement;
 use App\Domain\Ventilation\Entity\{Generateur, Installation, Systeme, SystemeCollection};
-use App\Domain\Ventilation\{Ventilation, VentilationFactory};
+use App\Domain\Ventilation\Ventilation;
 
 final class XMLVentilationTransformer
 {
     public function __construct(
-        private VentilationFactory $factory,
         private XMLAuditTransformer $audit_transformer,
     ) {}
 
     public function transform(XMLElement $root): Ventilation
     {
         $audit = $this->audit_transformer->transform($root);
-        $ventilation = $this->factory->build($audit);
+        $ventilation = Ventilation::create(audit: $audit);
 
         $this->set_generateurs($root, $ventilation);
         $this->set_installations($root, $ventilation);
