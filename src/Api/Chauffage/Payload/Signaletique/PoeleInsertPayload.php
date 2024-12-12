@@ -6,7 +6,7 @@ use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, TypeGenerateu
 use App\Domain\Chauffage\ValueObject\Signaletique;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PoeleInsertPayload
+final class PoeleInsertPayload implements SignaletiquePayload
 {
     public function __construct(
         public TypeGenerateur\PoeleInsert $type,

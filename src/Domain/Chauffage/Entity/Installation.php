@@ -33,6 +33,31 @@ final class Installation
         private SystemeCollection $systemes,
     ) {}
 
+    public static function create(
+        Id $id,
+        Chauffage $chauffage,
+        string $description,
+        float $surface,
+        bool $comptage_individuel,
+        Solaire $solaire,
+        Regulation $regulation_centrale,
+        Regulation $regulation_terminale,
+    ): self {
+        Assert::greaterThan($surface, 0);
+
+        return new self(
+            id: $id,
+            chauffage: $chauffage,
+            description: $description,
+            surface: $surface,
+            solaire: $solaire,
+            regulation_centrale: $regulation_centrale,
+            regulation_terminale: $regulation_terminale,
+            comptage_individuel: $comptage_individuel,
+            systemes: new SystemeCollection(),
+        );
+    }
+
     public function controle(): void
     {
         Assert::greaterThan($this->surface, 0);

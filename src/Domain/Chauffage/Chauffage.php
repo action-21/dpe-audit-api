@@ -23,6 +23,16 @@ final class Chauffage
         private InstallationCollection $installations,
     ) {}
 
+    public static function create(Audit $audit): self
+    {
+        return new self(
+            audit: $audit,
+            generateurs: new GenerateurCollection(),
+            emetteurs: new EmetteurCollection(),
+            installations: new InstallationCollection(),
+        );
+    }
+
     public function controle(): void
     {
         $this->installations->controle();

@@ -26,6 +26,24 @@ final class Systeme
         private EmetteurCollection $emetteurs,
     ) {}
 
+    public static function create(
+        Id $id,
+        Installation $installation,
+        Generateur $generateur,
+        ?Reseau $reseau,
+    ): self {
+        if (false === $generateur->type()->is_chauffage_divise()) {
+            Assert::notNull($reseau);
+        }
+        return new self(
+            id: $id,
+            installation: $installation,
+            generateur: $generateur,
+            reseau: $generateur->type()->is_chauffage_central() ? $reseau : null,
+            emetteurs: new EmetteurCollection(),
+        );
+    }
+
     public function controle(): void
     {
         if (false === $this->generateur->type()->is_chauffage_central()) {

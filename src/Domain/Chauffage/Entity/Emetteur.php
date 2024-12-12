@@ -19,6 +19,29 @@ final class Emetteur
         private ?int $annee_installation,
     ) {}
 
+    public static function create(
+        Id $id,
+        Chauffage $chauffage,
+        string $description,
+        TypeEmetteur $type,
+        TemperatureDistribution $temperature_distribution,
+        bool $presence_robinet_thermostatique,
+        ?int $annee_installation,
+    ): self {
+        Assert::nullOrLessThanEq($annee_installation, (int) date('Y'));
+        Assert::nullOrGreaterThanEq($annee_installation, $chauffage->annee_construction_batiment());
+
+        return new self(
+            id: $id,
+            chauffage: $chauffage,
+            description: $description,
+            type: $type,
+            temperature_distribution: $temperature_distribution,
+            presence_robinet_thermostatique: $presence_robinet_thermostatique,
+            annee_installation: $annee_installation,
+        );
+    }
+
     public function reinitialise(): void {}
 
     public function controle(): void

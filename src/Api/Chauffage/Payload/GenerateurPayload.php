@@ -12,6 +12,8 @@ final class GenerateurPayload
         #[Assert\Uuid]
         public string $id,
         public string $description,
+        #[Assert\Uuid]
+        public ?string $generateur_mixte_id,
         #[AppAssert\ReseauChaleur]
         public ?string $reseau_chaleur_id,
         public ?int $annee_installation,
