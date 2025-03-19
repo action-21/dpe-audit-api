@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Production;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class XMLPanneauPvReader extends XMLReader
 {

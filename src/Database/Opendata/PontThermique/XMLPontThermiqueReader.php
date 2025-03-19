@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\PontThermique;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\PontThermique\Enum\TypeLiaison;
 use App\Domain\PontThermique\ValueObject\Liaison;
 

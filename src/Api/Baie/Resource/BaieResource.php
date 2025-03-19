@@ -4,7 +4,7 @@ namespace App\Api\Baie\Resource;
 
 use App\Domain\Baie\{Baie as Entity, BaieCollection as EntityCollection};
 use App\Domain\Baie\ValueObject\{Caracteristique, DoubleFenetre, Ensoleillement, Performance, Position};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class BaieResource
 {

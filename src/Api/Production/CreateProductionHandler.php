@@ -4,7 +4,7 @@ namespace App\Api\Production;
 
 use App\Api\Production\Payload\ProductionPayload;
 use App\Domain\Audit\Audit;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Production\Entity\PanneauPhotovoltaique;
 use App\Domain\Production\Production;
 

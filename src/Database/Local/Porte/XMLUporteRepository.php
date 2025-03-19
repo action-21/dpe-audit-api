@@ -4,7 +4,7 @@ namespace App\Database\Local\Porte;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
 use App\Domain\Porte\Data\{Uporte, UporteRepository};
-use App\Domain\Porte\Enum\{EtatIsolation, NatureMenuiserie, TypeVitrage};
+use App\Domain\Porte\Enum\{EtatIsolation, Materiau, TypeVitrage};
 
 final class XMLUporteRepository implements UporteRepository
 {
@@ -18,16 +18,15 @@ final class XMLUporteRepository implements UporteRepository
     public function find_by(
         bool $presence_sas,
         EtatIsolation $isolation,
-        NatureMenuiserie $nature_menuiserie,
+        Materiau $materiau,
         ?TypeVitrage $type_vitrage,
-        ?float $taux_vitrage
+        ?float $taux_vitrage,
     ): ?Uporte {
         $record = $this->createQuery()
             ->and('presence_sas', $presence_sas)
             ->and('isolation', $isolation->id(), true)
-            ->and('nature_menuiserie', $nature_menuiserie->id(), true)
+            ->and('materiau', $materiau->id(), true)
             ->and('type_vitrage', $type_vitrage?->id(), true)
-            ->and('taux_vitrage', $taux_vitrage, true)
             ->andCompareTo('taux_vitrage', $taux_vitrage)
             ->getOne();
         return $record ? $this->to($record) : null;

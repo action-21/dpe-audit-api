@@ -2,7 +2,7 @@
 
 namespace App\Domain\Refroidissement\Entity;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Refroidissement\Refroidissement;
 use App\Domain\Refroidissement\Service\{MoteurConsommation, MoteurDimensionnement};
 use Webmozart\Assert\Assert;

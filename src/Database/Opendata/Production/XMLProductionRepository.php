@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Production;
 
 use App\Database\Opendata\XMLOpendataRepository;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Production\{Production, ProductionRepository};
 
 final class XMLProductionRepository implements ProductionRepository

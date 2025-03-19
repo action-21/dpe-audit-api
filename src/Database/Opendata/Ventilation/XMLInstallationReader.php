@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Ventilation;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * TODO: identifier les installations par appartement dans le cas d'un Audit-DPE immeuble

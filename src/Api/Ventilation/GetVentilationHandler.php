@@ -4,7 +4,7 @@ namespace App\Api\Ventilation;
 
 use App\Domain\Ventilation\Ventilation;
 use App\Domain\Ventilation\VentilationRepository;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class GetVentilationHandler
 {

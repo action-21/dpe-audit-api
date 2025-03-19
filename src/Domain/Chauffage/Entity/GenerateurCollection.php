@@ -6,7 +6,7 @@ use App\Domain\Chauffage\Enum\TypeGenerateur;
 use App\Domain\Chauffage\Service\{MoteurDimensionnement, MoteurPerformance, MoteurPerte};
 use App\Domain\Chauffage\ValueObject\PerteCollection;
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Simulation\Simulation;
 
 /**

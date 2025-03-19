@@ -6,7 +6,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Api\Simulation\SimulationHandler;
 use App\Api\Simulation\Resource\SimulationResource;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * @implements ProviderInterface<SimulationResource|null>

@@ -2,7 +2,7 @@
 
 namespace App\Domain\Production\Entity;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Production\Production;
 use App\Domain\Production\Service\MoteurProduction;
 use App\Domain\Production\ValueObject\ProductionPhotovoltaiqueCollection;

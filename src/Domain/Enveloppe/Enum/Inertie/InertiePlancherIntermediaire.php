@@ -6,9 +6,8 @@ use App\Domain\Enveloppe\Enum\Inertie;
 
 enum InertiePlancherIntermediaire: string
 {
-    case INCONNUE = 'INCONNUE';
-    case LOURDE = 'LOURDE';
-    case LEGERE = 'LEGERE';
+    case LOURDE = 'lourde';
+    case LEGERE = 'legere';
 
     public function to(): Inertie
     {

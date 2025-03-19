@@ -2,7 +2,7 @@
 
 namespace App\Api\Ecs\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Common\ValueObject\Consommation;
 use App\Domain\Ecs\Entity\{Systeme as Entity, SystemeCollection as EntityCollection};
 use App\Domain\Ecs\ValueObject\{Performance, Perte, Rendement, Reseau, Stockage};

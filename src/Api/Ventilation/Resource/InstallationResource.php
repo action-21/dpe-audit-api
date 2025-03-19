@@ -2,7 +2,7 @@
 
 namespace App\Api\Ventilation\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Common\ValueObject\Consommation;
 use App\Domain\Ventilation\Entity\{Installation as Entity, InstallationCollection as EntityCollection};
 

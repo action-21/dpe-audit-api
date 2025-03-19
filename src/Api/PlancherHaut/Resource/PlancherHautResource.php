@@ -2,7 +2,7 @@
 
 namespace App\Api\PlancherHaut\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\PlancherHaut\Enum\Categorie;
 use App\Domain\PlancherHaut\{PlancherHaut as Entity, PlancherHautCollection as EntityCollection};
 use App\Domain\PlancherHaut\ValueObject\{Caracteristique, Performance, Isolation, Position};

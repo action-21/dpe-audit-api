@@ -5,7 +5,7 @@ namespace App\Database\Opendata\Audit;
 use App\Database\Opendata\XMLReader;
 use App\Domain\Audit\Enum\{Perimetre, TypeBatiment};
 use App\Domain\Audit\ValueObject\{Adresse, Batiment, Logement};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class XMLAuditReader extends XMLReader
 {

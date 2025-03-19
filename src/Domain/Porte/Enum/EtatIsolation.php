@@ -6,16 +6,15 @@ use App\Domain\Common\Enum\Enum;
 
 enum EtatIsolation: string implements Enum
 {
-    case INCONNU = 'INCONNU';
-    case NON_ISOLE = 'NON_ISOLE';
-    case ISOLE = 'ISOLE';
+    case NON_ISOLE = 'non_isole';
+    case ISOLE = 'isole';
 
-    public static function from_enum_type_porte_id(int $type_porte_id): self
+    public static function from_enum_type_porte_id(int $type_porte_id): ?self
     {
         return match ($type_porte_id) {
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 => self::NON_ISOLE,
             13, 15 => self::ISOLE,
-            14, 16 => self::INCONNU,
+            default => null,
         };
     }
 
@@ -27,7 +26,6 @@ enum EtatIsolation: string implements Enum
     public function lib(): string
     {
         return match ($this) {
-            self::INCONNU => 'Inconnu',
             self::NON_ISOLE => 'Non isolé',
             self::ISOLE => 'Isolé',
         };

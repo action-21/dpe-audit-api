@@ -7,7 +7,7 @@ use ApiPlatform\State\ProcessorInterface;
 use App\Api\Simulation\SimulationHandler;
 use App\Api\Simulation\Payload\SimulationTravauxPayload;
 use App\Api\Simulation\Resource\SimulationResource;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**

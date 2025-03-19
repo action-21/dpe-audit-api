@@ -5,7 +5,7 @@ namespace App\Database\Opendata\Baie;
 use App\Database\Opendata\XMLReader;
 use App\Domain\Baie\Enum\{Mitoyennete, NatureGazLame, NatureMenuiserie, TypeBaie, TypeFermeture, TypePose, TypeSurvitrage, TypeVitrage};
 use App\Domain\Baie\ValueObject\{Caracteristique, DoubleFenetre, Menuiserie, Survitrage, Vitrage};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class XMLBaieReader extends XMLReader
 {

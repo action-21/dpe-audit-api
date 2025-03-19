@@ -3,7 +3,7 @@
 namespace App\Database\Local\ReseauChaleur;
 
 use App\Database\Local\{XMLTableElement, XMLTableRepositoryTrait};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\ReseauChaleur\ReseauChaleur;
 use App\Domain\ReseauChaleur\ReseauChaleurRepository;
 

@@ -9,7 +9,7 @@ use App\Api\PlancherBas\Resource\PlancherBasResource;
 use App\Api\PlancherHaut\Resource\PlancherHautResource;
 use App\Api\PontThermique\Resource\PontThermiqueResource;
 use App\Api\Porte\Resource\PorteResource;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enveloppe as Entity;
 use App\Domain\Enveloppe\Enum\Exposition;
 use App\Domain\Enveloppe\ValueObject\{Apport, Inertie, Performance, Permeabilite};

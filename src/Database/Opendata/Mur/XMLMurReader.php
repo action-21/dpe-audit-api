@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Mur;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Mur\Enum\{EtatIsolation, Inertie, Mitoyennete, TypeDoublage, TypeIsolation, TypeMur};
 use App\Domain\Mur\ValueObject\{Caracteristique, Isolation};
 

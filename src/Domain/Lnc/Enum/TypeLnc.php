@@ -6,19 +6,19 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeLnc: string implements Enum
 {
-    case GARAGE = 'GARAGE';
-    case CELLIER = 'CELLIER';
-    case ESPACE_TAMPON_SOLARISE = 'ESPACE_TAMPON_SOLARISE';
-    case COMBLE_FORTEMENT_VENTILE = 'COMBLE_FORTEMENT_VENTILE';
-    case COMBLE_FAIBLEMENT_VENTILE = 'COMBLE_FAIBLEMENT_VENTILE';
-    case COMBLE_TRES_FAIBLEMENT_VENTILE = 'COMBLE_TRES_FAIBLEMENT_VENTILE';
-    case CIRCULATION_SANS_OUVERTURE_EXTERIEURE = 'CIRCULATION_SANS_OUVERTURE_EXTERIEURE';
-    case CIRCULATION_AVEC_OUVERTURE_EXTERIEURE = 'CIRCULATION_AVEC_OUVERTURE_EXTERIEURE';
-    case CIRCULATION_AVEC_BOUCHE_OU_GAINE_DESENFUMAGE_OUVERTE = 'CIRCULATION_AVEC_BOUCHE_OU_GAINE_DESENFUMAGE_OUVERTE';
-    case HALL_ENTREE_AVEC_FERMETURE_AUTOMATIQUE = 'HALL_ENTREE_AVEC_FERMETURE_AUTOMATIQUE';
-    case HALL_ENTREE_SANS_FERMETURE_AUTOMATIQUE = 'HALL_ENTREE_SANS_FERMETURE_AUTOMATIQUE';
-    case GARAGE_COLLECTIF = 'GARAGE_COLLECTIF';
-    case AUTRES = 'AUTRES';
+    case GARAGE = 'garage';
+    case CELLIER = 'cellier';
+    case ESPACE_TAMPON_SOLARISE = 'espace_tampon_solarise';
+    case COMBLE_FORTEMENT_VENTILE = 'comble_fortement_ventile';
+    case COMBLE_FAIBLEMENT_VENTILE = 'comble_faiblement_ventile';
+    case COMBLE_TRES_FAIBLEMENT_VENTILE = 'comble_tres_faiblement_ventile';
+    case CIRCULATION_SANS_OUVERTURE_EXTERIEURE = 'circulation_sans_ouverture_exterieure';
+    case CIRCULATION_AVEC_OUVERTURE_EXTERIEURE = 'circulation_avec_ouverture_exterieure';
+    case CIRCULATION_AVEC_BOUCHE_OU_GAINE_DESENFUMAGE_OUVERTE = 'circulation_avec_bouche_ou_gaine_desenfumage_ouverte';
+    case HALL_ENTREE_AVEC_FERMETURE_AUTOMATIQUE = 'hall_entree_avec_fermeture_automatique';
+    case HALL_ENTREE_SANS_FERMETURE_AUTOMATIQUE = 'hall_entree_sans_fermeture_automatique';
+    case GARAGE_COLLECTIF = 'garage_collectif';
+    case AUTRES = 'autres';
 
     public static function from_type_adjacence_id(int $id): ?self
     {

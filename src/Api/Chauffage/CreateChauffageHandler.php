@@ -4,7 +4,7 @@ namespace App\Api\Chauffage;
 
 use App\Api\Chauffage\Payload\ChauffagePayload;
 use App\Domain\Audit\Audit;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Chauffage\Chauffage;
 use App\Domain\Chauffage\Entity\{Emetteur, Generateur, Installation, Systeme};
 

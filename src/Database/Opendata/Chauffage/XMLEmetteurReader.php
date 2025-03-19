@@ -4,7 +4,7 @@ namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\XMLReader;
 use App\Domain\Chauffage\Enum\{TemperatureDistribution, TypeDistribution, TypeEmetteur};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class XMLEmetteurReader extends XMLReader
 {

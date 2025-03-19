@@ -4,7 +4,7 @@ namespace App\Database\Opendata\Visite;
 
 use App\Database\Opendata\Audit\XMLAuditTransformer;
 use App\Database\Opendata\XMLElement;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Visite\Entity\Logement;
 use App\Domain\Visite\Enum\Typologie;
 use App\Domain\Visite\Visite;

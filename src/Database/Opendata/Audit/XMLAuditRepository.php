@@ -4,7 +4,7 @@ namespace App\Database\Opendata\Audit;
 
 use App\Database\Opendata\XMLOpendataRepository;
 use App\Domain\Audit\{Audit, AuditRepository};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class XMLAuditRepository implements AuditRepository
 {

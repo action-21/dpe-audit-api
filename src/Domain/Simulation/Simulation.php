@@ -5,7 +5,7 @@ namespace App\Domain\Simulation;
 use App\Domain\Audit\Audit;
 use App\Domain\Chauffage\Chauffage;
 use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Eclairage\Eclairage;
 use App\Domain\Ecs\Ecs;
 use App\Domain\Enveloppe\Enveloppe;

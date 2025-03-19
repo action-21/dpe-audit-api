@@ -6,9 +6,9 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeVitrage: string implements Enum
 {
-    case SIMPLE_VITRAGE = 'SIMPLE_VITRAGE';
-    case DOUBLE_VITRAGE = 'DOUBLE_VITRAGE';
-    case TRIPLE_VITRAGE = 'TRIPLE_VITRAGE';
+    case SIMPLE_VITRAGE = 'simple_vitrage';
+    case DOUBLE_VITRAGE = 'double_vitrage';
+    case TRIPLE_VITRAGE = 'triple_vitrage';
 
     public static function from_enum_type_porte_id(int $type_porte_id): ?self
     {

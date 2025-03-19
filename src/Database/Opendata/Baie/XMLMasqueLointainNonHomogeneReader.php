@@ -5,7 +5,7 @@ namespace App\Database\Opendata\Baie;
 use App\Database\Opendata\XMLReaderIterator;
 use App\Domain\Baie\Enum\TypeMasqueLointain;
 use App\Domain\Common\Enum\Orientation;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class XMLMasqueLointainNonHomogeneReader extends XMLReaderIterator
 {

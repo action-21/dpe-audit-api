@@ -4,7 +4,7 @@ namespace App\Domain\Refroidissement\Entity;
 
 use App\Domain\Refroidissement\Refroidissement;
 use App\Domain\Refroidissement\Enum\{EnergieGenerateur, TypeGenerateur};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Refroidissement\Service\MoteurPerformance;
 use App\Domain\Refroidissement\ValueObject\{Performance, Signaletique};
 use Webmozart\Assert\Assert;

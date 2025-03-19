@@ -2,7 +2,7 @@
 
 namespace App\Api\Chauffage\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Common\ValueObject\{Besoin, Consommation};
 use App\Domain\Chauffage\Chauffage as Entity;
 

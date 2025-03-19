@@ -4,7 +4,7 @@ namespace App\Api\Baie\Resource;
 
 use App\Domain\Baie\Entity\{MasqueProche as Entity, MasqueProcheCollection as EntityCollection};
 use App\Domain\Baie\Enum\TypeMasqueProche;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class MasqueProcheResource
 {

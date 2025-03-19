@@ -2,7 +2,7 @@
 
 namespace App\Api\Chauffage\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Chauffage\Entity\{Emetteur as Entity, EmetteurCollection as EntityCollection};
 use App\Domain\Chauffage\Enum\{TemperatureDistribution, TypeEmetteur, TypeEmission};
 

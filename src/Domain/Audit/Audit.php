@@ -2,11 +2,9 @@
 
 namespace App\Domain\Audit;
 
-use App\Domain\Audit\Enum\TypeBatiment;
 use App\Domain\Audit\Service\{MoteurDimensionnement, MoteurScenarioConventionnel};
 use App\Domain\Audit\ValueObject\{Adresse, Batiment, Logement, Occupation, Situation};
-use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Simulation\Simulation;
 
 final class Audit
@@ -16,25 +14,32 @@ final class Audit
     private ?Situation $situation = null;
 
     public function __construct(
-        private readonly Id $id,
-        private readonly \DateTimeImmutable $date_creation,
-        private Adresse $adresse,
-        private Batiment $batiment,
-        private ?Logement $logement,
+        public readonly Id $id,
+        public readonly \DateTimeImmutable $date_etablissement,
+        public readonly Adresse $adresse,
+        public readonly Batiment $batiment,
+        public readonly ?Logement $logement,
     ) {}
 
-    public static function create(Adresse $adresse, Batiment $batiment, ?Logement $logement, ?Id $id = null): self
+    public static function create(Adresse $adresse, Batiment $batiment, ?Logement $logement): self
     {
-        return new self(
-            id: $id ?? Id::create(),
-            date_creation: new \DateTimeImmutable(),
+        $entity = new self(
+            id: Id::create(),
+            date_etablissement: new \DateTimeImmutable(),
             adresse: $adresse,
             batiment: $batiment,
             logement: $logement,
         );
+
+        $entity->controle();
+        return $entity;
     }
 
-    public function controle(): void {}
+    public function controle(): void
+    {
+        $this->adresse->controle();
+        $this->batiment->controle();
+    }
 
     public function reinitialise(): void
     {
@@ -61,31 +66,6 @@ final class Audit
         return $this;
     }
 
-    public function id(): Id
-    {
-        return $this->id;
-    }
-
-    public function date_creation(): \DateTimeImmutable
-    {
-        return $this->date_creation;
-    }
-
-    public function adresse(): Adresse
-    {
-        return $this->adresse;
-    }
-
-    public function batiment(): Batiment
-    {
-        return $this->batiment;
-    }
-
-    public function logement(): ?Logement
-    {
-        return $this->logement;
-    }
-
     public function occupation(): ?Occupation
     {
         return $this->occupation;
@@ -108,16 +88,6 @@ final class Audit
 
     // * helpers
 
-    public function zone_climatique(): ZoneClimatique
-    {
-        return $this->adresse->zone_climatique;
-    }
-
-    public function type_batiment(): TypeBatiment
-    {
-        return $this->batiment->type;
-    }
-
     public function altitude(): int
     {
         return $this->batiment->altitude;
@@ -126,25 +96,5 @@ final class Audit
     public function nombre_logements(): int
     {
         return $this->batiment->logements;
-    }
-
-    public function annee_construction_batiment(): int
-    {
-        return $this->batiment->annee_construction;
-    }
-
-    public function surface_habitable_reference(): float
-    {
-        return $this->logement?->surface_habitable ?? $this->batiment->surface_habitable;
-    }
-
-    public function hauteur_sous_plafond_reference(): float
-    {
-        return $this->logement?->hauteur_sous_plafond ?? $this->batiment->hauteur_sous_plafond;
-    }
-
-    public function surface_habitable_moyenne(): float
-    {
-        return $this->batiment->surface_habitable / $this->batiment->logements;
     }
 }

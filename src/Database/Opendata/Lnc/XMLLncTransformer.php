@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Lnc;
 
 use App\Database\Opendata\XMLElement;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Lnc\Entity\{Baie, BaieCollection, Paroi, ParoiCollection};
 use App\Domain\Lnc\Enum\{Mitoyennete, TypeBaie, TypeLnc};

@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\PlancherHaut;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\PlancherHaut\Enum\{EtatIsolation, Inertie, Mitoyennete, TypeIsolation, TypePlancherHaut};
 use App\Domain\PlancherHaut\ValueObject\{Caracteristique, Isolation};
 

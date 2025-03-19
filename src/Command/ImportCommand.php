@@ -5,7 +5,7 @@ namespace App\Command;
 use App\Database\Opendata\XMLOpendataRepository;
 use App\Domain\Audit\Enum\PeriodeConstruction;
 use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;

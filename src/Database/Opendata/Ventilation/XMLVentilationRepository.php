@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Ventilation;
 
 use App\Database\Opendata\XMLOpendataRepository;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Ventilation\{Ventilation, VentilationRepository};
 
 final class XMLVentilationRepository implements VentilationRepository

@@ -9,20 +9,10 @@ use App\Domain\Common\Enum\Enum;
  */
 enum EtatPerformance: string implements Enum
 {
-    case TRES_BONNE = 'TRES_BONNE';
-    case BONNE = 'BONNE';
-    case MOYENNE = 'MOYENNE';
-    case INSUFFISANTE = 'INSUFFISANTE';
-
-    public static function from_uporte(float $uporte): self
-    {
-        return match (true) {
-            $uporte >= 3 => self::INSUFFISANTE,
-            $uporte >= 2.2 => self::MOYENNE,
-            $uporte >= 1.6 => self::BONNE,
-            $uporte < 1.6 => self::TRES_BONNE,
-        };
-    }
+    case TRES_BONNE = 'tres_bonne';
+    case BONNE = 'bonne';
+    case MOYENNE = 'moyenne';
+    case INSUFFISANTE = 'insuffisante';
 
     public function id(): string
     {

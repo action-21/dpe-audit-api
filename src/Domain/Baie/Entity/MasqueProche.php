@@ -4,7 +4,7 @@ namespace App\Domain\Baie\Entity;
 
 use App\Domain\Baie\Baie;
 use App\Domain\Baie\Enum\TypeMasqueProche;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use Webmozart\Assert\Assert;
 
 final class MasqueProche

@@ -4,7 +4,7 @@ namespace App\Api\Audit\Resource;
 
 use App\Domain\Audit\Audit as Entity;
 use App\Domain\Audit\ValueObject\{Adresse, Batiment, Logement, Occupation};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class AuditResource
 {

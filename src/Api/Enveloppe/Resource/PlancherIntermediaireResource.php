@@ -2,7 +2,7 @@
 
 namespace App\Api\Enveloppe\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Entity\{PlancherIntermediaire as Entity, PlancherIntermediaireCollection as EntityCollection};
 use App\Domain\Enveloppe\Enum\Inertie;
 

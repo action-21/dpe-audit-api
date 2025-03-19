@@ -2,7 +2,7 @@
 
 namespace App\Api\Lnc\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Lnc\Entity\{Baie as Entity, BaieCollection as EntityCollection};
 use App\Domain\Lnc\Enum\{EtatIsolation, TypeBaie};
 use App\Domain\Lnc\ValueObject\{EnsoleillementBaie, Menuiserie, Position};

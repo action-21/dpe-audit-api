@@ -3,7 +3,7 @@
 namespace App\Domain\Lnc;
 
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Lnc\Enum\TypeLnc;
 use App\Domain\Lnc\Service\{MoteurEnsoleillement, MoteurPerformance, MoteurSurfaceDeperditive};
 

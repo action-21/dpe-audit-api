@@ -2,7 +2,7 @@
 
 namespace App\Domain\PlancherBas\ValueObject;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\PlancherBas\Enum\Mitoyennete;
 
 final class Position

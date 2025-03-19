@@ -3,7 +3,7 @@
 namespace App\Domain\Production;
 
 use App\Domain\Audit\Audit;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Production\Entity\{PanneauPhotovoltaique, PanneauPhotovoltaiqueCollection};
 use App\Domain\Production\Service\MoteurProduction;
 use App\Domain\Simulation\Simulation;

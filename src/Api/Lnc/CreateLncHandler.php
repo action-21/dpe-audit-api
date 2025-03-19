@@ -3,7 +3,7 @@
 namespace App\Api\Lnc;
 
 use App\Api\Lnc\Payload\LncPayload;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Lnc\Entity\{Baie, Paroi};
 use App\Domain\Lnc\Lnc;

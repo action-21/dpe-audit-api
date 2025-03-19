@@ -5,7 +5,7 @@ namespace App\Database\Opendata\Chauffage;
 use App\Database\Opendata\{XMLElement, XMLReader};
 use App\Domain\Chauffage\Enum\IsolationReseau;
 use App\Domain\Chauffage\ValueObject\{Regulation, Solaire};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class XMLInstallationReader extends XMLReader
 {

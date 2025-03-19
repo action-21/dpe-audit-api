@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Eclairage;
 
 use App\Database\Opendata\XMLOpendataRepository;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Eclairage\{Eclairage, EclairageRepository};
 
 final class XMLEclairageRepository implements EclairageRepository

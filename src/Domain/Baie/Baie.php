@@ -6,7 +6,7 @@ use App\Domain\Baie\Entity\{MasqueLointain, MasqueLointainCollection, MasqueProc
 use App\Domain\Baie\Enum\Mitoyennete;
 use App\Domain\Baie\Service\{MoteurEnsoleillement, MoteurPerformance};
 use App\Domain\Baie\ValueObject\{Caracteristique, DoubleFenetre, EnsoleillementCollection, Performance, Position};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Entity\Paroi;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Lnc\Lnc;

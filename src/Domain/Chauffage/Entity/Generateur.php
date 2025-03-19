@@ -6,7 +6,7 @@ use App\Domain\Chauffage\Chauffage;
 use App\Domain\Chauffage\Enum\{EnergieGenerateur, TypeGenerateur, UsageChauffage};
 use App\Domain\Chauffage\Service\{MoteurDimensionnement, MoteurPerformance, MoteurPerte};
 use App\Domain\Chauffage\ValueObject\{Combustion, Performance, PerteCollection, Signaletique};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Simulation\Simulation;
 use Webmozart\Assert\Assert;
 

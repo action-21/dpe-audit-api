@@ -6,11 +6,11 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeBaie: string implements Enum
 {
-    case POLYCARBONATE = 'POLYCARBONATE';
-    case FENETRE_BATTANTE = 'FENETRE_BATTANTE';
-    case FENETRE_COULISSANTE = 'FENETRE_COULISSANTE';
-    case PORTE_FENETRE_COULISSANTE = 'PORTE_FENETRE_COULISSANTE';
-    case PORTE_FENETRE_BATTANTE = 'PORTE_FENETRE_BATTANTE';
+    case POLYCARBONATE = 'polycarbonate';
+    case FENETRE_BATTANTE = 'fenetre_battante';
+    case FENETRE_COULISSANTE = 'fenetre_coulissante';
+    case PORTE_FENETRE_COULISSANTE = 'porte_fenetre_coulissante';
+    case PORTE_FENETRE_BATTANTE = 'porte_fenetre_battante';
 
     public static function from_tv_coef_transparence_ets_id(int $id): ?self
     {

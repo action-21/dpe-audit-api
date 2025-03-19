@@ -6,7 +6,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Api\Audit\GetAuditHandler;
 use App\Api\Audit\Resource\AuditResource;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * @implements ProviderInterface<AuditResource|null>

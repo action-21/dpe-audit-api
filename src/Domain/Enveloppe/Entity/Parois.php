@@ -3,7 +3,7 @@
 namespace App\Domain\Enveloppe\Entity;
 
 use App\Domain\Baie\{Baie, BaieCollection};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Mur\{Mur, MurCollection};
 use App\Domain\PlancherBas\{PlancherBas, PlancherBasCollection};
 use App\Domain\PlancherHaut\{PlancherHaut, PlancherHautCollection};

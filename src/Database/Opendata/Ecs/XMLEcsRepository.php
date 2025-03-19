@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Ecs;
 
 use App\Database\Opendata\XMLOpendataRepository;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Ecs\{Ecs, EcsRepository};
 
 final class XMLEcsRepository implements EcsRepository

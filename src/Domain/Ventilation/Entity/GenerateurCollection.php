@@ -3,7 +3,7 @@
 namespace App\Domain\Ventilation\Entity;
 
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * @property Generateur[] $elements

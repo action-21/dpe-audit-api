@@ -3,7 +3,7 @@
 namespace App\Api\Ventilation\Payload;
 
 use App\Api\Ventilation\Payload\Signaletique\{PuitClimatiquePayload, VentilationMecaniquePayload, VmcPayload, VmiPayload, VmrPayload};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class GenerateurPayload

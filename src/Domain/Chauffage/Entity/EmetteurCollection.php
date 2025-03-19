@@ -3,7 +3,7 @@
 namespace App\Domain\Chauffage\Entity;
 
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * @property Emetteur[] $elements

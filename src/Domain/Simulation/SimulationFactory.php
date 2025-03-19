@@ -4,7 +4,7 @@ namespace App\Domain\Simulation;
 
 use App\Domain\Audit\AuditRepository;
 use App\Domain\Chauffage\ChauffageRepository;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Eclairage\EclairageRepository;
 use App\Domain\Ecs\EcsRepository;
 use App\Domain\Enveloppe\EnveloppeRepository;

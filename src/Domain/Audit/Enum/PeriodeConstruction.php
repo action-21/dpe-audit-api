@@ -6,16 +6,16 @@ use App\Domain\Common\Enum\Enum;
 
 enum PeriodeConstruction: string implements Enum
 {
-    case AVANT_1948 = 'AVANT_1948';
-    case ENTRE_1948_1974 = 'ENTRE_1948_1974';
-    case ENTRE_1975_1977 = 'ENTRE_1975_1977';
-    case ENTRE_1978_1982 = 'ENTRE_1978_1982';
-    case ENTRE_1983_1988 = 'ENTRE_1983_1988';
-    case ENTRE_1989_2000 = 'ENTRE_1989_2000';
-    case ENTRE_2001_2005 = 'ENTRE_2001_2005';
-    case ENTRE_2006_2012 = 'ENTRE_2006_2012';
-    case ENTRE_2013_2021 = 'ENTRE_2013_2021';
-    case APRES_2021 = 'APRES_2021';
+    case AVANT_1948 = 'avant_1948';
+    case ENTRE_1948_1974 = '1948_1974';
+    case ENTRE_1975_1977 = '1975_1977';
+    case ENTRE_1978_1982 = '1978_1982';
+    case ENTRE_1983_1988 = '1983_1988';
+    case ENTRE_1989_2000 = '1989_2000';
+    case ENTRE_2001_2005 = '2001_2005';
+    case ENTRE_2006_2012 = '2006_2012';
+    case ENTRE_2013_2021 = '2013_2021';
+    case APRES_2021 = 'apres_2021';
 
     public function id(): int|string
     {

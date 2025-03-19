@@ -13,8 +13,14 @@ final class Occupation
 
     public static function create(float $nadeq, float $nmax): self
     {
-        Assert::greaterThanEq($nadeq, 0);
-        Assert::greaterThanEq($nmax, 0);
-        return new self(nadeq: $nadeq, nmax: $nmax,);
+        $value = new self(nadeq: $nadeq, nmax: $nmax,);
+        $value->controle();
+        return $value;
+    }
+
+    public function controle(): void
+    {
+        Assert::greaterThanEq($this->nadeq, 0);
+        Assert::greaterThanEq($this->nmax, 0);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Database\Opendata\Baie;
 
 use App\Database\Opendata\XMLReader;
 use App\Domain\Baie\Enum\TypeMasqueProche;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class XMLMasqueProcheReader extends XMLReader
 {

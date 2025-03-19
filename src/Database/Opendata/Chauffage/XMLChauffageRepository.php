@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\XMLOpendataRepository;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Chauffage\{Chauffage, ChauffageRepository};
 
 final class XMLChauffageRepository implements ChauffageRepository

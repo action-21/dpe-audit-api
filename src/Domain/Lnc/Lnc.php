@@ -2,43 +2,31 @@
 
 namespace App\Domain\Lnc;
 
+use App\Domain\Audit\Audit;
+use App\Domain\Audit\AuditTrait;
 use App\Domain\Enveloppe\Enveloppe;
-use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\Type\Id;
-use App\Domain\Lnc\Entity\{Baie, BaieCollection, Paroi, ParoiCollection};
+use App\Domain\Common\ValueObject\Id;
+use App\Domain\Lnc\Entity\{Baie, BaieCollection, Paroi, ParoiOpaqueCollection};
 use App\Domain\Lnc\Enum\TypeLnc;
 use App\Domain\Lnc\Service\{MoteurEnsoleillement, MoteurPerformance, MoteurSurfaceDeperditive};
-use App\Domain\Lnc\ValueObject\{EnsoleillementCollection, Performance};
+use App\Domain\Lnc\ValueObject\{Ensoleillement, Performance, SurfaceDeperditive};
 
 final class Lnc
 {
-    private ?float $aiu = null;
-    private ?float $aue = null;
-    private ?bool $isolation_aiu = null;
-    private ?bool $isolation_aue = null;
+    use AuditTrait;
+
+    private ?SurfaceDeperditive $surface_deperditive = null;
     private ?Performance $performance = null;
-    private ?EnsoleillementCollection $ensoleillement = null;
+    private ?Ensoleillement $ensoleillement = null;
 
     public function __construct(
         private readonly Id $id,
         private readonly Enveloppe $enveloppe,
         private string $description,
         private TypeLnc $type,
-        private ParoiCollection $parois,
+        private ParoiOpaqueCollection $parois,
         private BaieCollection $baies,
     ) {}
-
-    public static function create(Id $id, Enveloppe $enveloppe, string $description, TypeLnc $type): self
-    {
-        return new self(
-            id: $id,
-            enveloppe: $enveloppe,
-            description: $description,
-            type: $type,
-            parois: new ParoiCollection,
-            baies: new BaieCollection,
-        );
-    }
 
     public function controle(): void
     {
@@ -48,11 +36,7 @@ final class Lnc
 
     public function reinitialise(): void
     {
-        $this->aiu = null;
-        $this->aue = null;
-        $this->isolation_aiu = null;
-        $this->isolation_aue = null;
-        $this->performance = null;
+        $this->surface_deperditive = null;
         $this->ensoleillement = null;
         $this->parois->reinitialise();
         $this->baies->reinitialise();
@@ -60,25 +44,25 @@ final class Lnc
 
     public function calcule_surface_deperditive(MoteurSurfaceDeperditive $moteur): self
     {
-        $this->parois->calcule_surface_deperditive($moteur);
-        $this->aiu = $moteur->calcule_aiu($this);
-        $this->aue = $moteur->calcule_aue($this);
-        $this->isolation_aiu = $moteur->calcule_isolation_aiu($this);
-        $this->isolation_aue = $moteur->calcule_isolation_aue($this);
+        $this->surface_deperditive = $moteur($this);
         return $this;
     }
 
     public function calcule_performance(MoteurPerformance $moteur): self
     {
-        $this->performance = $moteur->calcule_performance($this);
+        $this->performance = $moteur($this);
         return $this;
     }
 
     public function calcule_ensoleillement(MoteurEnsoleillement $moteur): self
     {
-        $this->baies->calcule_ensoleillement($moteur);
-        $this->ensoleillement = $moteur->calcule_ensoleillement($this);
+        $this->ensoleillement = $moteur($this);
         return $this;
+    }
+
+    public function audit(): Audit
+    {
+        return $this->enveloppe->audit();
     }
 
     public function id(): Id
@@ -99,6 +83,11 @@ final class Lnc
     public function type(): TypeLnc
     {
         return $this->type;
+    }
+
+    public function surface_deperditive(): SurfaceDeperditive
+    {
+        return $this->surface_deperditive;
     }
 
     public function est_ets(): bool
@@ -126,7 +115,7 @@ final class Lnc
         return $this;
     }
 
-    public function parois(): ParoiCollection
+    public function parois(): ParoiOpaqueCollection
     {
         return $this->parois;
     }
@@ -137,38 +126,13 @@ final class Lnc
         return $this;
     }
 
-    public function zone_climatique(): ZoneClimatique
-    {
-        return $this->enveloppe->audit()->zone_climatique();
-    }
-
     public function performance(): ?Performance
     {
         return $this->performance;
     }
 
-    public function ensoleillement(): ?EnsoleillementCollection
+    public function ensoleillement(): ?Ensoleillement
     {
         return $this->ensoleillement;
-    }
-
-    public function aue(): ?float
-    {
-        return $this->aue;
-    }
-
-    public function aiu(): ?float
-    {
-        return $this->aiu;
-    }
-
-    public function isolation_aue(): ?bool
-    {
-        return $this->isolation_aue;
-    }
-
-    public function isolation_aiu(): ?bool
-    {
-        return $this->isolation_aiu;
     }
 }

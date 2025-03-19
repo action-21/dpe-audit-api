@@ -3,7 +3,7 @@
 namespace App\Domain\Baie\ValueObject;
 
 use App\Domain\Baie\Enum\Mitoyennete;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use Webmozart\Assert\Assert;
 
 final class Position

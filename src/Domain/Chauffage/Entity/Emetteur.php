@@ -4,7 +4,7 @@ namespace App\Domain\Chauffage\Entity;
 
 use App\Domain\Chauffage\Chauffage;
 use App\Domain\Chauffage\Enum\{TemperatureDistribution, TypeEmetteur, TypeEmission};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use Webmozart\Assert\Assert;
 
 final class Emetteur

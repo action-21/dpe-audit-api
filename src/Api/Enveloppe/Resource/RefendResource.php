@@ -2,7 +2,7 @@
 
 namespace App\Api\Enveloppe\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Entity\{Refend as Entity, RefendCollection as EntityCollection};
 use App\Domain\Enveloppe\Enum\Inertie;
 

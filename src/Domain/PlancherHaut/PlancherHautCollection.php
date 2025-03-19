@@ -3,7 +3,7 @@
 namespace App\Domain\PlancherHaut;
 
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Entity\ParoiCollection;
 use App\Domain\PlancherHaut\Service\{MoteurPerformance, MoteurSurfaceDeperditive};
 use App\Domain\Simulation\Simulation;

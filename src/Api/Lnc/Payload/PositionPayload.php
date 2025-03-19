@@ -2,7 +2,7 @@
 
 namespace App\Api\Lnc\Payload;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Lnc\Enum\Mitoyennete;
 use App\Domain\Lnc\ValueObject\Position;
 use App\Services\Validator\Constraints as AppAssert;

@@ -2,7 +2,7 @@
 
 namespace App\Api\Ventilation\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVmc};
 use App\Domain\Ventilation\Entity\{Generateur as Entity, GenerateurCollection as EntityCollection};
 use App\Domain\Ventilation\ValueObject\Signaletique;

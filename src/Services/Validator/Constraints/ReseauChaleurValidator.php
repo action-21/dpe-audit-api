@@ -2,7 +2,7 @@
 
 namespace App\Services\Validator\Constraints;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\ReseauChaleur\ReseauChaleurRepository;
 use Symfony\Component\Validator\{Constraint, ConstraintValidator};
 use Symfony\Component\Validator\Exception\{UnexpectedTypeException, UnexpectedValueException};

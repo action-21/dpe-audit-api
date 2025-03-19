@@ -2,7 +2,7 @@
 
 namespace App\Domain\Visite\Entity;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Visite\Enum\Typologie;
 use App\Domain\Visite\Visite;
 use Webmozart\Assert\Assert;

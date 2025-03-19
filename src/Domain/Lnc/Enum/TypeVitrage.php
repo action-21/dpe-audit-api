@@ -6,11 +6,11 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeVitrage: string implements Enum
 {
-    case SIMPLE_VITRAGE = 'SIMPLE_VITRAGE';
-    case DOUBLE_VITRAGE = 'DOUBLE_VITRAGE';
-    case DOUBLE_VITRAGE_FE = 'DOUBLE_VITRAGE_FE';
-    case TRIPLE_VITRAGE = 'TRIPLE_VITRAGE';
-    case TRIPLE_VITRAGE_FE = 'TRIPLE_VITRAGE_FE';
+    case SIMPLE_VITRAGE = 'simple_vitrage';
+    case DOUBLE_VITRAGE = 'double_vitrage';
+    case DOUBLE_VITRAGE_FE = 'double_vitrage_fe';
+    case TRIPLE_VITRAGE = 'triple_vitrage';
+    case TRIPLE_VITRAGE_FE = 'triple_vitrage_fe';
 
     public static function from_tv_coef_transparence_ets_id(int $id): ?self
     {
@@ -40,7 +40,7 @@ enum TypeVitrage: string implements Enum
         };
     }
 
-    public function etat_isolation(): EtatIsolation
+    public function isolation(): EtatIsolation
     {
         return match ($this) {
             self::TRIPLE_VITRAGE, self::TRIPLE_VITRAGE_FE => EtatIsolation::ISOLE,

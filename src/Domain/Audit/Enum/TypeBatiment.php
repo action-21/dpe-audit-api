@@ -6,8 +6,8 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeBatiment: string implements Enum
 {
-    case MAISON = 'MAISON';
-    case IMMEUBLE = 'IMMEUBLE';
+    case MAISON = 'maison';
+    case IMMEUBLE = 'immeuble';
 
     public static function from_enum_methode_application_dpe_log_id(int $id): self
     {
@@ -17,6 +17,11 @@ enum TypeBatiment: string implements Enum
             20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
             34, 35, 36, 37, 38, 39, 40 => self::IMMEUBLE,
         };
+    }
+
+    public static function from_nombre_logements(int $logements): self
+    {
+        return $logements > 2 ? self::IMMEUBLE : self::MAISON;
     }
 
     public function id(): string
@@ -30,16 +35,6 @@ enum TypeBatiment: string implements Enum
             self::MAISON => 'Maison individuelle',
             self::IMMEUBLE => 'Immeuble'
         };
-    }
-
-    public function maison(): bool
-    {
-        return $this->valeur === self::MAISON;
-    }
-
-    public function immeuble(): bool
-    {
-        return $this->valeur === self::IMMEUBLE;
     }
 
     /**

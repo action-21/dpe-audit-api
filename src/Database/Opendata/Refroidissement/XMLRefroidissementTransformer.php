@@ -4,7 +4,7 @@ namespace App\Database\Opendata\Refroidissement;
 
 use App\Database\Opendata\Audit\XMLAuditTransformer;
 use App\Database\Opendata\XMLElement;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Refroidissement\Entity\{Generateur, Installation, Systeme, SystemeCollection};
 use App\Domain\Refroidissement\Refroidissement;
 

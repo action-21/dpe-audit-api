@@ -6,7 +6,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Api\Visite\GetVisiteHandler;
 use App\Api\Visite\Resource\VisiteResource;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * @implements ProviderInterface<VisiteResource|null>

@@ -4,7 +4,7 @@ namespace App\Api\Ventilation;
 
 use App\Api\Ventilation\Payload\VentilationPayload;
 use App\Domain\Audit\Audit;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Ventilation\Ventilation;
 use App\Domain\Ventilation\Entity\{Generateur, Installation, Systeme};
 

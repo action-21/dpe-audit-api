@@ -2,7 +2,7 @@
 
 namespace App\Domain\Production;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 interface ProductionRepository
 {

@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Enveloppe;
 
 use App\Database\Opendata\XMLOpendataRepository;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\{Enveloppe, EnveloppeRepository};
 
 final class XMLEnveloppeRepository implements EnveloppeRepository

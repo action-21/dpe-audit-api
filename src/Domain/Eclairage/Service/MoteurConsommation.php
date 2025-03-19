@@ -16,15 +16,6 @@ final class MoteurConsommation
 
     public function __construct(private NhjRepository $njecl_repository) {}
 
-    public function calcule_consommations(Eclairage $entity): ConsommationCollection
-    {
-        return ConsommationCollection::create(
-            usage: Usage::ECLAIRAGE,
-            energie: Energie::ELECTRICITE,
-            callback: fn(ScenarioUsage $scenario): float => $this->cecl(zone_climatique: $entity->zone_climatique()),
-        );
-    }
-
     /**
      * Consommation d'éclairage en kWh
      */
@@ -35,5 +26,14 @@ final class MoteurConsommation
             throw new \DomainException('Valeur forfaitaire Nhj non trouvée');
 
         return Mois::reduce(fn(float $carry, Mois $mois): float => $carry += (self::TAUX_UTILISATION * self::PUISSANCE_ECLAIRAGE * $collection->nhj(mois: $mois) * $mois->nj()) / 1000);
+    }
+
+    public function __invoke(Eclairage $entity): ConsommationCollection
+    {
+        return ConsommationCollection::create(
+            usage: Usage::ECLAIRAGE,
+            energie: Energie::ELECTRICITE,
+            callback: fn(ScenarioUsage $scenario): float => $this->cecl(zone_climatique: $entity->zone_climatique()),
+        );
     }
 }

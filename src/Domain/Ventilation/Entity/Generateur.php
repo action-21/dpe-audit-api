@@ -2,7 +2,7 @@
 
 namespace App\Domain\Ventilation\Entity;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Ventilation\ValueObject\Signaletique;
 use App\Domain\Ventilation\Ventilation;
 use Webmozart\Assert\Assert;

@@ -3,7 +3,7 @@
 namespace App\Domain\Mur;
 
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Entity\ParoiCollection;
 use App\Domain\Mur\Service\{MoteurPerformance, MoteurSurfaceDeperditive};
 use App\Domain\Simulation\Simulation;

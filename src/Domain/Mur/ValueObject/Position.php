@@ -2,7 +2,7 @@
 
 namespace App\Domain\Mur\ValueObject;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Mur\Enum\Mitoyennete;
 use Webmozart\Assert\Assert;
 

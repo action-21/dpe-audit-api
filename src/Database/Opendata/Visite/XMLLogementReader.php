@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Visite;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Visite\Enum\Typologie;
 
 final class XMLLogementReader extends XMLReader

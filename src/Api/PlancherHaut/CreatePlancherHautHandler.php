@@ -3,7 +3,7 @@
 namespace App\Api\PlancherHaut;
 
 use App\Api\PlancherHaut\Payload\PlancherHautPayload;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\PlancherHaut\PlancherHaut;
 

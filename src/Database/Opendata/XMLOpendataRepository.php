@@ -2,7 +2,7 @@
 
 namespace App\Database\Opendata;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class XMLOpendataRepository

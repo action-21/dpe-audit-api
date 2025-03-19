@@ -2,7 +2,7 @@
 
 namespace App\Api\Chauffage\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Chauffage\Entity\{Generateur as Entity, GenerateurCollection as EntityCollection};
 use App\Domain\Chauffage\Enum\{CategorieGenerateur, EnergieGenerateur, TypeGenerateur};
 use App\Domain\Chauffage\ValueObject\{Performance, Perte, Signaletique};

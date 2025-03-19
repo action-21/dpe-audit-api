@@ -4,7 +4,7 @@ namespace App\Api\Refroidissement;
 
 use App\Api\Refroidissement\Payload\RefroidissementPayload;
 use App\Domain\Audit\Audit;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Refroidissement\Refroidissement;
 use App\Domain\Refroidissement\Entity\{Generateur, Installation, Systeme};
 

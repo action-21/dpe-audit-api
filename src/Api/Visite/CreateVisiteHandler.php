@@ -4,7 +4,7 @@ namespace App\Api\Visite;
 
 use App\Api\Visite\Payload\VisitePayload;
 use App\Domain\Audit\Audit;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Visite\Visite;
 use App\Domain\Visite\Entity\Logement;
 

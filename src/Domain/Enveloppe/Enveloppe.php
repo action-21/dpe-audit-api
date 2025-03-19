@@ -3,6 +3,7 @@
 namespace App\Domain\Enveloppe;
 
 use App\Domain\Audit\Audit;
+use App\Domain\Audit\AuditTrait;
 use App\Domain\Enveloppe\Entity\{Parois, PlancherIntermediaire, PlancherIntermediaireCollection, Refend, RefendCollection};
 use App\Domain\Enveloppe\Enum\Exposition;
 use App\Domain\Enveloppe\Service\{MoteurApport, MoteurInertie, MoteurPerformance, MoteurSurfaceDeperditive};
@@ -17,20 +18,22 @@ use Webmozart\Assert\Assert;
  */
 final class Enveloppe
 {
+    use AuditTrait;
+
     private ?Inertie $inertie = null;
     private ?Permeabilite $permeabilite = null;
     private ?Performance $performance = null;
     private ?ApportCollection $apports = null;
 
     public function __construct(
-        private readonly Audit $audit,
-        private Exposition $exposition,
-        private ?float $q4pa_conv,
-        private LncCollection $locaux_non_chauffes,
-        private Parois $parois,
-        private PontThermiqueCollection $ponts_thermiques,
-        private RefendCollection $refends,
-        private PlancherIntermediaireCollection $planchers_intermediaires,
+        public readonly Audit $audit,
+        public Exposition $exposition,
+        public ?float $q4pa_conv,
+        public LncCollection $locaux_non_chauffes,
+        public Parois $parois,
+        public PontThermiqueCollection $ponts_thermiques,
+        public RefendCollection $refends,
+        public PlancherIntermediaireCollection $planchers_intermediaires,
     ) {}
 
     public static function create(Audit $audit, Exposition $exposition, ?float $q4pa_conv,): self
@@ -69,10 +72,7 @@ final class Enveloppe
 
     public function calcule_surface_deperditive(MoteurSurfaceDeperditive $moteur): self
     {
-        $this->parois->murs()->calcule_surface_deperditive($moteur->moteur_surface_deperditive_mur());
-        $this->parois->planchers_bas()->calcule_surface_deperditive($moteur->moteur_surface_deperditive_plancher_bas());
-        $this->parois->planchers_hauts()->calcule_surface_deperditive($moteur->moteur_surface_deperditive_plancher_haut());
-        $this->locaux_non_chauffes->calcule_surface_deperditive($moteur->moteur_surface_deperditive_lnc());
+        $moteur($this);
         return $this;
     }
 
@@ -186,12 +186,5 @@ final class Enveloppe
     public function apports(): ?ApportCollection
     {
         return $this->apports;
-    }
-
-    // * hepers
-
-    public function annee_construction_batiment(): int
-    {
-        return $this->audit->annee_construction_batiment();
     }
 }

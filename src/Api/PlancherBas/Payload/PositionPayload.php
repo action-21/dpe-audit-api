@@ -2,7 +2,7 @@
 
 namespace App\Api\PlancherBas\Payload;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\PlancherBas\Enum\Mitoyennete;
 use App\Domain\PlancherBas\ValueObject\Position;
 use Symfony\Component\Validator\Constraints as Assert;

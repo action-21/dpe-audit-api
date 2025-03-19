@@ -4,7 +4,7 @@ namespace App\Api\Baie\Payload;
 
 use App\Domain\Baie\Enum\Mitoyennete;
 use App\Domain\Baie\ValueObject\Position;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Services\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 

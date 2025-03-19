@@ -2,7 +2,7 @@
 
 namespace App\Api\Production\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Production\Entity\{PanneauPhotovoltaique as Entity, PanneauPhotovoltaiqueCollection as EntityCollection};
 use App\Domain\Production\ValueObject\ProductionPhotovoltaique;
 

@@ -2,7 +2,7 @@
 
 namespace App\Api\Visite\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Visite\Entity\{Logement as Entity, LogementCollection as EntityCollection};
 use App\Domain\Visite\Enum\Typologie;
 

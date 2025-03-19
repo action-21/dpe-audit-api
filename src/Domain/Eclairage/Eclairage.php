@@ -11,7 +11,7 @@ final class Eclairage
 {
     private ?ConsommationCollection $consommations = null;
 
-    public function __construct(private readonly Audit $audit) {}
+    public function __construct(public readonly Audit $audit) {}
 
     public static function create(Audit $audit): self
     {
@@ -27,13 +27,8 @@ final class Eclairage
 
     public function calcule_consommations(MoteurConsommation $moteur): self
     {
-        $this->consommations = $moteur->calcule_consommations($this);
+        $this->consommations = $moteur($this);
         return $this;
-    }
-
-    public function audit(): Audit
-    {
-        return $this->audit;
     }
 
     public function zone_climatique(): ZoneClimatique

@@ -2,7 +2,7 @@
 
 namespace App\Api\Porte\Payload;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Porte\Enum\Mitoyennete;
 use App\Domain\Porte\ValueObject\Position;
 use App\Services\Validator\Constraints as AppAssert;

@@ -3,7 +3,7 @@
 namespace App\Domain\Porte;
 
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Entity\ParoiCollection;
 use App\Domain\Porte\Service\MoteurPerformance;
 
@@ -31,12 +31,12 @@ final class PorteCollection extends ArrayCollection implements ParoiCollection
 
     public function find(Id $id): ?Porte
     {
-        return $this->findFirst(fn(mixed $key, Porte $item): bool => $item->id()->compare($id));
+        return $this->findFirst(fn(mixed $key, Porte $item): bool => $item->id->compare($id));
     }
 
     public function filter_by_paroi(Id $id): static
     {
-        return $this->filter(fn(Porte $item): bool => $item->paroi()?->id()->compare($id) ?? false);
+        return $this->filter(fn(Porte $item): bool => $item->paroi()?->id->compare($id) ?? false);
     }
 
     public function filter_by_local_non_chauffe(Id $id): static
@@ -46,22 +46,22 @@ final class PorteCollection extends ArrayCollection implements ParoiCollection
 
     public function filter_by_isolation(bool $isolation): static
     {
-        return $this->filter(fn(Porte $item): bool => $item->est_isole() === $isolation);
+        return $this->filter(fn(Porte $item): bool => $item->isolation(defaut: true)->est_isole() === $isolation);
     }
 
     public function filter_by_presence_joint(bool $presence_joint): static
     {
-        return $this->filter(fn(Porte $item): bool => $item->caracteristique()->menuiserie->presence_joint === $presence_joint);
+        return $this->filter(fn(Porte $item): bool => $item->menuiserie()->presence_joint === $presence_joint);
     }
 
     public function surface(): float
     {
-        return $this->reduce(fn(float $carry, Porte $item): float => $carry += $item->caracteristique()->surface);
+        return $this->reduce(fn(float $carry, Porte $item): float => $carry += $item->position()->surface);
     }
 
     public function surface_deperditive(): float
     {
-        return $this->reduce(fn(float $carry, Porte $item): float => $carry += $item->surface_deperditive());
+        return $this->reduce(fn(float $carry, Porte $item): float => $carry += $item->performance()?->sdep);
     }
 
     public function u(): float

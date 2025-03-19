@@ -2,7 +2,7 @@
 
 namespace App\Api\Porte\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Porte\{Porte as Entity, PorteCollection as EntityCollection};
 use App\Domain\Porte\ValueObject\{Caracteristique, Performance, Position};
 

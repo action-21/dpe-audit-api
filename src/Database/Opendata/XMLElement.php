@@ -2,7 +2,7 @@
 
 namespace App\Database\Opendata;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Database\Opendata\Audit\XMLAuditReader;
 use App\Database\Opendata\Chauffage\XMLChauffageReader;
 use App\Database\Opendata\Ecs\XMLEcsReader;

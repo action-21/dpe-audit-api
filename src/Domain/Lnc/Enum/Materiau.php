@@ -4,12 +4,12 @@ namespace App\Domain\Lnc\Enum;
 
 use App\Domain\Common\Enum\Enum;
 
-enum NatureMenuiserie: string implements Enum
+enum Materiau: string implements Enum
 {
-    case BOIS = 'BOIS';
-    case BOIS_METAL = 'BOIS_METAL';
-    case PVC = 'PVC';
-    case METAL = 'METAL';
+    case BOIS = 'bois';
+    case BOIS_METAL = 'bois_metal';
+    case PVC = 'pvc';
+    case METAL = 'metal';
 
     public static function from_tv_coef_transparence_ets_id(int $id): ?self
     {

@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Refroidissement;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Refroidissement\Enum\{EnergieGenerateur, TypeGenerateur};
 use App\Domain\Refroidissement\ValueObject\Signaletique;
 

@@ -1,146 +1,146 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<table name="lnc.bver">
+<?xml version="1.0" encoding="utf-8"?>
+<table name="local_non_chauffe.bver">
     <row>
-        <zone_climatique>H1</zone_climatique>
-        <orientation>SUD</orientation>
+        <zone_climatique>h1</zone_climatique>
+        <orientation>sud</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.58</bver>
     </row>
     <row>
-        <zone_climatique>H1</zone_climatique>
-        <orientation>SUD</orientation>
+        <zone_climatique>h1</zone_climatique>
+        <orientation>sud</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.55</bver>
     </row>
     <row>
-        <zone_climatique>H1</zone_climatique>
-        <orientation>NORD</orientation>
+        <zone_climatique>h1</zone_climatique>
+        <orientation>nord</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.95</bver>
     </row>
     <row>
-        <zone_climatique>H1</zone_climatique>
-        <orientation>NORD</orientation>
+        <zone_climatique>h1</zone_climatique>
+        <orientation>nord</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.85</bver>
     </row>
     <row>
-        <zone_climatique>H1</zone_climatique>
-        <orientation>EST</orientation>
+        <zone_climatique>h1</zone_climatique>
+        <orientation>est</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.63</bver>
     </row>
     <row>
-        <zone_climatique>H1</zone_climatique>
-        <orientation>EST</orientation>
+        <zone_climatique>h1</zone_climatique>
+        <orientation>est</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.6</bver>
     </row>
     <row>
-        <zone_climatique>H1</zone_climatique>
-        <orientation>OUEST</orientation>
+        <zone_climatique>h1</zone_climatique>
+        <orientation>ouest</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.63</bver>
     </row>
     <row>
-        <zone_climatique>H1</zone_climatique>
-        <orientation>OUEST</orientation>
+        <zone_climatique>h1</zone_climatique>
+        <orientation>ouest</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.6</bver>
     </row>
     <row>
-        <zone_climatique>H2</zone_climatique>
-        <orientation>SUD</orientation>
+        <zone_climatique>h2</zone_climatique>
+        <orientation>sud</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.57</bver>
     </row>
     <row>
-        <zone_climatique>H2</zone_climatique>
-        <orientation>SUD</orientation>
+        <zone_climatique>h2</zone_climatique>
+        <orientation>sud</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.55</bver>
     </row>
     <row>
-        <zone_climatique>H2</zone_climatique>
-        <orientation>NORD</orientation>
+        <zone_climatique>h2</zone_climatique>
+        <orientation>nord</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.95</bver>
     </row>
     <row>
-        <zone_climatique>H2</zone_climatique>
-        <orientation>NORD</orientation>
+        <zone_climatique>h2</zone_climatique>
+        <orientation>nord</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.85</bver>
     </row>
     <row>
-        <zone_climatique>H2</zone_climatique>
-        <orientation>EST</orientation>
+        <zone_climatique>h2</zone_climatique>
+        <orientation>est</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.6</bver>
     </row>
     <row>
-        <zone_climatique>H2</zone_climatique>
-        <orientation>EST</orientation>
+        <zone_climatique>h2</zone_climatique>
+        <orientation>est</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.58</bver>
     </row>
     <row>
-        <zone_climatique>H2</zone_climatique>
-        <orientation>OUEST</orientation>
+        <zone_climatique>h2</zone_climatique>
+        <orientation>ouest</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.6</bver>
     </row>
     <row>
-        <zone_climatique>H2</zone_climatique>
-        <orientation>OUEST</orientation>
+        <zone_climatique>h2</zone_climatique>
+        <orientation>ouest</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.58</bver>
     </row>
     <row>
-        <zone_climatique>H3</zone_climatique>
-        <orientation>SUD</orientation>
+        <zone_climatique>h3</zone_climatique>
+        <orientation>sud</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.48</bver>
     </row>
     <row>
-        <zone_climatique>H3</zone_climatique>
-        <orientation>SUD</orientation>
+        <zone_climatique>h3</zone_climatique>
+        <orientation>sud</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.55</bver>
     </row>
     <row>
-        <zone_climatique>H3</zone_climatique>
-        <orientation>NORD</orientation>
+        <zone_climatique>h3</zone_climatique>
+        <orientation>nord</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.95</bver>
     </row>
     <row>
-        <zone_climatique>H3</zone_climatique>
-        <orientation>NORD</orientation>
+        <zone_climatique>h3</zone_climatique>
+        <orientation>nord</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.85</bver>
     </row>
     <row>
-        <zone_climatique>H3</zone_climatique>
-        <orientation>EST</orientation>
+        <zone_climatique>h3</zone_climatique>
+        <orientation>est</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.53</bver>
     </row>
     <row>
-        <zone_climatique>H3</zone_climatique>
-        <orientation>EST</orientation>
+        <zone_climatique>h3</zone_climatique>
+        <orientation>est</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.53</bver>
     </row>
     <row>
-        <zone_climatique>H3</zone_climatique>
-        <orientation>OUEST</orientation>
+        <zone_climatique>h3</zone_climatique>
+        <orientation>ouest</orientation>
         <isolation_paroi>1</isolation_paroi>
         <bver>0.53</bver>
     </row>
     <row>
-        <zone_climatique>H3</zone_climatique>
-        <orientation>OUEST</orientation>
+        <zone_climatique>h3</zone_climatique>
+        <orientation>ouest</orientation>
         <isolation_paroi>0</isolation_paroi>
         <bver>0.53</bver>
     </row>

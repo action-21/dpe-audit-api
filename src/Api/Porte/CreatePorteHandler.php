@@ -3,7 +3,7 @@
 namespace App\Api\Porte;
 
 use App\Api\Porte\Payload\PortePayload;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Porte\Porte;
 

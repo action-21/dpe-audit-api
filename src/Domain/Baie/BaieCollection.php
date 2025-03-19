@@ -5,7 +5,7 @@ namespace App\Domain\Baie;
 use App\Domain\Baie\Service\{MoteurEnsoleillement, MoteurPerformance};
 use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\Enum\Mois;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Entity\ParoiCollection;
 
 /**

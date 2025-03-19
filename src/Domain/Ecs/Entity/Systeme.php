@@ -2,7 +2,7 @@
 
 namespace App\Domain\Ecs\Entity;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Common\ValueObject\ConsommationCollection;
 use App\Domain\Ecs\Ecs;
 use App\Domain\Ecs\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerte, MoteurRendement};

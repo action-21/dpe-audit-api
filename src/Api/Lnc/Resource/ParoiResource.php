@@ -2,7 +2,7 @@
 
 namespace App\Api\Lnc\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Lnc\Entity\{Paroi as Entity, ParoiCollection as EntityCollection};
 use App\Domain\Lnc\Enum\EtatIsolation;
 use App\Domain\Lnc\ValueObject\Position;

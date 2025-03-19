@@ -2,7 +2,7 @@
 
 namespace App\Domain\Ventilation\Entity;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Common\ValueObject\ConsommationCollection;
 use App\Domain\Ventilation\Enum\TypeVentilation;
 use App\Domain\Ventilation\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance};

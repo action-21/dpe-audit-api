@@ -2,7 +2,7 @@
 
 namespace App\Api\Lnc\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Lnc\{Lnc as Entity, LncCollection as EntityCollection};
 use App\Domain\Lnc\Enum\TypeLnc;
 use App\Domain\Lnc\ValueObject\{Ensoleillement, Performance};

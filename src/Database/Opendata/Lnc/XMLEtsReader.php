@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Lnc;
 
 use App\Database\Opendata\{XMLElement, XMLReader};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Lnc\Enum\{NatureMenuiserie, TypeBaie, TypeVitrage};
 
 final class XMLEtsReader extends XMLReader

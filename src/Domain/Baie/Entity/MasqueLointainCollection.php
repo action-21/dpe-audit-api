@@ -5,7 +5,7 @@ namespace App\Domain\Baie\Entity;
 use App\Domain\Baie\Enum\SecteurChampsVision;
 use App\Domain\Baie\Enum\TypeMasqueLointain;
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * @property MasqueLointain[] $elements

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Common\Type;
+namespace App\Domain\Common\ValueObject;
 
 use Symfony\Component\Uid\{AbstractUid, Uuid};
 

@@ -2,7 +2,7 @@
 
 namespace App\Api\Ecs\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Ecs\Entity\{Generateur as Entity, GenerateurCollection as EntityCollection};
 use App\Domain\Ecs\Enum\UsageEcs;
 use App\Domain\Ecs\ValueObject\{Performance, Perte, Signaletique};

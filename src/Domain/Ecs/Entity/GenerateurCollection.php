@@ -3,7 +3,7 @@
 namespace App\Domain\Ecs\Entity;
 
 use App\Domain\Common\Collection\ArrayCollection;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Ecs\Service\{MoteurPerformance, MoteurPerte};
 use App\Domain\Ecs\ValueObject\PerteCollection;
 use App\Domain\Simulation\Simulation;

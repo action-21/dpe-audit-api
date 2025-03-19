@@ -2,7 +2,7 @@
 
 namespace App\Api\Mur\Payload;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Mur\Enum\TypeIsolation;
 use App\Domain\Mur\ValueObject\Isolation;
 use Symfony\Component\Validator\Constraints as Assert;

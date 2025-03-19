@@ -6,11 +6,11 @@ use App\Domain\Common\Enum\Enum;
 
 enum Inertie: string implements Enum
 {
-    case INCONNUE = 'INCONNUE';
-    case TRES_LOURDE = 'TRES_LOURDE';
-    case LOURDE = 'LOURDE';
-    case MOYENNE = 'MOYENNE';
-    case LEGERE = 'LEGERE';
+    case INCONNUE = 'inconnue';
+    case TRES_LOURDE = 'tres_lourde';
+    case LOURDE = 'lourde';
+    case MOYENNE = 'moyenne';
+    case LEGERE = 'legere';
 
     public static function from_inertie_parois(
         bool $inertie_planchers_bas,

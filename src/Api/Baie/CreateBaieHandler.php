@@ -3,7 +3,7 @@
 namespace App\Api\Baie;
 
 use App\Api\Baie\Payload\BaiePayload;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Baie\Baie;
 use App\Domain\Baie\Entity\{MasqueLointain, MasqueProche};

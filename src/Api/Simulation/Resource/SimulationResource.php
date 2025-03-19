@@ -10,7 +10,7 @@ use App\Api\Ventilation\Resource\VentilationResource;
 use App\Api\Refroidissement\Resource\RefroidissementResource;
 use App\Api\Eclairage\Resource\EclairageResource;
 use App\Api\Visite\Resource\VisiteResource;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Simulation\Simulation as Entity;
 use App\Domain\Simulation\ValueObject\{Bilan, Performance};
 

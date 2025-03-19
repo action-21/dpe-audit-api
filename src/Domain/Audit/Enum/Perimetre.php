@@ -6,8 +6,8 @@ use App\Domain\Common\Enum\Enum;
 
 enum Perimetre: string implements Enum
 {
-    case BATIMENT = 'BATIMENT';
-    case LOGEMENT = 'LOGEMENT';
+    case BATIMENT = 'batiment';
+    case LOGEMENT = 'logement';
 
     public static function from_enum_methode_application_dpe_log_id(int $id): self
     {

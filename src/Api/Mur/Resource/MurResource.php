@@ -2,7 +2,7 @@
 
 namespace App\Api\Mur\Resource;
 
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Mur\{Mur as Entity, MurCollection as EntityCollection};
 use App\Domain\Mur\ValueObject\{Caracteristique, Performance, Isolation, Position};
 

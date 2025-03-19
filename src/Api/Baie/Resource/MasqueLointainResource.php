@@ -4,7 +4,7 @@ namespace App\Api\Baie\Resource;
 
 use App\Domain\Baie\Entity\{MasqueLointain as Entity, MasqueLointainCollection as EntityCollection};
 use App\Domain\Baie\Enum\TypeMasqueLointain;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 final class MasqueLointainResource
 {

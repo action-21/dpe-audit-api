@@ -6,7 +6,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Api\Refroidissement\GetRefroidissementHandler;
 use App\Api\Refroidissement\Resource\RefroidissementResource;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * @implements ProviderInterface<RefroidissementResource|null>

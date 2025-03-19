@@ -2,26 +2,40 @@
 
 namespace App\Domain\Lnc\ValueObject;
 
-use App\Domain\Common\Enum\Mois;
-use Webmozart\Assert\Assert;
+use App\Domain\Common\Collection\ArrayCollection;
+use App\Domain\Common\Enum\{Mois};
 
-final class EnsoleillementBaie
+/**
+ * @property EnsoleillementBaieItem[] $elements
+ */
+final class EnsoleillementBaie extends ArrayCollection
 {
-    public function __construct(
-        public readonly Mois $mois,
-        public readonly float $fe,
-        public readonly float $t,
-        public readonly float $c1,
-        public readonly float $sst,
-    ) {}
-
-    public static function create(Mois $mois, float $fe, float $t, float $c1, float $sst,): self
+    public static function create(\Closure $callback): self
     {
-        Assert::greaterThanEq($fe, 0);
-        Assert::greaterThanEq($t, 0);
-        Assert::greaterThanEq($c1, 0);
-        Assert::greaterThanEq($sst, 0);
+        $collection = [];
+        foreach (Mois::cases() as $mois) {
+            $collection[] = $callback(mois: $mois);
+        }
+        return new self($collection);
+    }
 
-        return new self(mois: $mois, fe: $fe, t: $t, c1: $c1, sst: $sst);
+    public function find(Mois $mois): ?EnsoleillementBaieItem
+    {
+        foreach ($this->elements as $item) {
+            if ($item->mois === $mois) {
+                return $item;
+            }
+        }
+        return null;
+    }
+
+    public function t(Mois $mois): ?float
+    {
+        return $this->find(mois: $mois)?->t;
+    }
+
+    public function sst(Mois $mois): ?float
+    {
+        return $this->find(mois: $mois)?->sst;
     }
 }

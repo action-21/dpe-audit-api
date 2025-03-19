@@ -4,7 +4,7 @@ namespace App\Api\Ecs;
 
 use App\Api\Ecs\Payload\EcsPayload;
 use App\Domain\Audit\Audit;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Ecs\Ecs;
 use App\Domain\Ecs\Entity\{Generateur, Installation, Systeme};
 

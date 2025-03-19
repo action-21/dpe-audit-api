@@ -3,6 +3,7 @@
 namespace App\Domain\Lnc\Service;
 
 use App\Domain\Common\Enum\{Orientation, ZoneClimatique};
+use App\Domain\Common\Service\MoteurCalcul;
 use App\Domain\Lnc\Data\{BRepository, BverCollection, BVerRepository, C1Repository, TRepository, UvueRepository};
 use App\Domain\Lnc\Enum\TypeLnc;
 use App\Domain\Lnc\Lnc;
@@ -11,7 +12,7 @@ use App\Domain\Lnc\ValueObject\Performance;
 /**
  * @uses \App\Domain\Lnc\Service\MoteurSurfaceDeperditive
  */
-final class MoteurPerformance
+final class MoteurPerformance extends MoteurCalcul
 {
     public function __construct(
         private UvueRepository $uvue_repository,
@@ -20,26 +21,6 @@ final class MoteurPerformance
         private C1Repository $c1_repository,
         private TRepository $t_repository,
     ) {}
-
-    public function calcule_performance(Lnc $entity): Performance
-    {
-        if ($entity->type() === TypeLnc::ESPACE_TAMPON_SOLARISE) {
-            return Performance::create_ets(bvers: $this->bver(
-                zone_climatique: $entity->zone_climatique(),
-                orientations: $entity->baies()->orientations(),
-            ));
-        }
-        return Performance::create(
-            uvue: ($uvue = $this->uvue(type_lnc: $entity->type())),
-            b: $this->b(
-                uvue: $uvue,
-                aiu: $entity->aiu(),
-                aue: $entity->aue(),
-                isolation_aiu: $entity->isolation_aiu(),
-                isolation_aue: $entity->isolation_aue(),
-            ),
-        );
-    }
 
     public function uvue(TypeLnc $type_lnc): float
     {
@@ -75,5 +56,25 @@ final class MoteurPerformance
             throw throw new \DomainException("Valeur forfaitaire bver non trouvée");
 
         return $collection;
+    }
+
+    public function __invoke(Lnc $entity): Performance
+    {
+        if ($entity->type() === TypeLnc::ESPACE_TAMPON_SOLARISE) {
+            return Performance::create_ets(bvers: $this->bver(
+                zone_climatique: $entity->zone_climatique(),
+                orientations: $entity->baies()->orientations(),
+            ));
+        }
+        return Performance::create(
+            uvue: ($uvue = $this->uvue(type_lnc: $entity->type())),
+            b: $this->b(
+                uvue: $uvue,
+                aiu: $entity->surface_deperditive()->aiu,
+                aue: $entity->surface_deperditive()->aue,
+                isolation_aiu: $entity->surface_deperditive()->isolation_aiu->boolval(),
+                isolation_aue: $entity->surface_deperditive()->isolation_aue->boolval(),
+            ),
+        );
     }
 }

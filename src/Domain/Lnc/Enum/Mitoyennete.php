@@ -6,15 +6,15 @@ use App\Domain\Common\Enum\Enum;
 
 enum Mitoyennete: string implements Enum
 {
-    case EXTERIEUR = 'EXTERIEUR';
-    case ENTERRE = 'ENTERRE';
-    case VIDE_SANITAIRE = 'VIDE_SANITAIRE';
-    case TERRE_PLEIN = 'TERRE_PLEIN';
-    case SOUS_SOL_NON_CHAUFFE = 'SOUS_SOL_NON_CHAUFFE';
-    case LOCAL_NON_CHAUFFE = 'LOCAL_NON_CHAUFFE';
-    case LOCAL_NON_RESIDENTIEL = 'LOCAL_NON_RESIDENTIEL';
-    case LOCAL_RESIDENTIEL = 'LOCAL_RESIDENTIEL';
-    case LOCAL_NON_ACCESSIBLE = 'LOCAL_NON_ACCESSIBLE';
+    case EXTERIEUR = 'exterieur';
+    case ENTERRE = 'enterre';
+    case VIDE_SANITAIRE = 'vide_sanitaire';
+    case TERRE_PLEIN = 'terre_plein';
+    case SOUS_SOL_NON_CHAUFFE = 'sous_sol_non_chauffe';
+    case LOCAL_NON_CHAUFFE = 'local_non_chauffe';
+    case LOCAL_NON_RESIDENTIEL = 'local_non_residentiel';
+    case LOCAL_RESIDENTIEL = 'local_residentiel';
+    case LOCAL_NON_ACCESSIBLE = 'local_non_accessible';
 
     public static function from_type_adjacence_id(int $id): self
     {

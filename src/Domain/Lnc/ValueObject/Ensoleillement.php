@@ -2,22 +2,30 @@
 
 namespace App\Domain\Lnc\ValueObject;
 
-use App\Domain\Common\Enum\Mois;
-use Webmozart\Assert\Assert;
+use App\Domain\Common\Collection\ArrayCollection;
+use App\Domain\Common\Enum\{Mois};
 
-final class Ensoleillement
+/**
+ * @property EnsoleillementItem[] $elements
+ */
+final class Ensoleillement extends ArrayCollection
 {
-    public function __construct(
-        public readonly Mois $mois,
-        public readonly float $t,
-        public readonly float $sst,
-    ) {}
-
-    public static function create(Mois $mois, float $t, float $sst,): self
+    public static function create(\Closure $callback): self
     {
-        Assert::greaterThanEq($t, 0);
-        Assert::greaterThanEq($sst, 0);
+        $collection = [];
+        foreach (Mois::cases() as $mois) {
+            $collection[] = $callback(mois: $mois);
+        }
+        return new self($collection);
+    }
 
-        return new self($mois, $t, $sst);
+    public function find(Mois $mois): ?EnsoleillementItem
+    {
+        foreach ($this->elements as $item) {
+            if ($item->mois === $mois) {
+                return $item;
+            }
+        }
+        return null;
     }
 }

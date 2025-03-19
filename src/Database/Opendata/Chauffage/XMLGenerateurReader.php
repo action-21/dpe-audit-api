@@ -5,7 +5,7 @@ namespace App\Database\Opendata\Chauffage;
 use App\Database\Opendata\XMLReader;
 use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, PositionChaudiere, TypeCombustion, TypeDistribution, TypeGenerateur};
 use App\Domain\Chauffage\ValueObject\{Combustion, Reseau, Signaletique};
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 
 /**
  * Par défaut, les types de générateurs "PAC Hybride - partie ..." sont considérés comme des PAC hybrides air/eau

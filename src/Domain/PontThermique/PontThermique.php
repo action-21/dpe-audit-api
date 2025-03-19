@@ -4,7 +4,7 @@ namespace App\Domain\PontThermique;
 
 use App\Domain\Baie\Baie;
 use App\Domain\Common\Enum\Enum;
-use App\Domain\Common\Type\Id;
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Mur\Mur;
 use App\Domain\PlancherBas\PlancherBas;
