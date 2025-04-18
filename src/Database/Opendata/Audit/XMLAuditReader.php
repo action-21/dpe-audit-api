@@ -2,64 +2,67 @@
 
 namespace App\Database\Opendata\Audit;
 
-use App\Database\Opendata\XMLReader;
+use App\Database\Opendata\{XMLReader, XMLElement};
 use App\Domain\Audit\Enum\{Perimetre, TypeBatiment};
-use App\Domain\Audit\ValueObject\{Adresse, Batiment, Logement};
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Audit\ValueObject\{Adresse, Batiment};
+use App\Domain\Common\ValueObject\{Annee, Id};
 
 final class XMLAuditReader extends XMLReader
 {
+    public static function from(XMLElement $xml): static
+    {
+        return parent::from(static::root($xml));
+    }
+
     public function id(): Id
     {
-        return $this->xml()->findOneOf(['//numero_dpe', '//reference_interne_projet'])?->id() ?? Id::create();
+        return $this->findOneOf(['//numero_dpe', '//reference_interne_projet'])?->id() ?? Id::create();
     }
 
     public function audit_batiment_id(): ?Id
     {
-        return ($value = $this->xml()->findOne('//dpe_immeuble_associe')?->strval()) ? Id::from($value) : null;
+        return ($value = $this->findOne('//dpe_immeuble_associe')?->strval()) ? Id::from($value) : null;
     }
 
     public function reference(): ?string
     {
-        return $this->xml()->findOneOf(['//numero_dpe', '//reference_interne_projet'])?->strval();
+        return $this->findOneOf(['//numero_dpe', '//reference_interne_projet'])?->strval();
     }
 
     public function adresse(): Adresse
     {
         return Adresse::create(
-            libelle: $this->libelle(),
+            numero: null,
+            nom: $this->libelle(),
             code_postal: $this->code_postal(),
+            code_commune: $this->code_postal(),
             commune: $this->commune(),
             ban_id: $this->ban_id(),
-            rnb_id: null,
         );
     }
 
     public function batiment(): Batiment
     {
         return Batiment::create(
-            type: $this->type_batiment(),
             annee_construction: $this->annee_construction(),
             altitude: $this->altitude(),
             logements: $this->nombre_appartement() ?? 1,
             surface_habitable: $this->surface_habitable_batiment(),
             hauteur_sous_plafond: $this->hauteur_sous_plafond(),
+            materiaux_anciens: $this->batiment_materiaux_anciens(),
+            rnb_id: null,
         );
-    }
-
-    public function logement(): ?Logement
-    {
-        return $this->surface_habitable_logement() ? Logement::create(
-            description: 'Logement',
-            surface_habitable: $this->surface_habitable_logement(),
-            hauteur_sous_plafond: $this->hauteur_sous_plafond(),
-        ) : null;
     }
 
     public function date_etablissement(): \DateTimeImmutable
     {
-        $date = $this->xml()->findOneOfOrError(['//date_etablissement_audit', '//date_etablissement_dpe'])->strval();
+        $date = $this->findOneOfOrError(['//date_etablissement_audit', '//date_etablissement_dpe'])->strval();
         return new \DateTimeImmutable($date);
+    }
+
+    public function annee_etablissement(): Annee
+    {
+        return Annee::from((int) $this->date_etablissement()->format('Y'));
     }
 
     public function perimetre(): Perimetre
@@ -74,7 +77,7 @@ final class XMLAuditReader extends XMLReader
 
     public function altitude(): int
     {
-        if ($value = $this->xml()->findOne('//altitude')) {
+        if ($value = $this->findOne('//altitude')) {
             return $value->intval();
         }
         return match ($this->enum_classe_altitude_id()) {
@@ -84,22 +87,27 @@ final class XMLAuditReader extends XMLReader
         };
     }
 
-    public function annee_construction(): int
+    public function batiment_materiaux_anciens(): bool
     {
-        if ($value = $this->xml()->findOne('//annee_construction')) {
-            return $value->intval();
+        return $this->findOneOrError('//batiment_materiaux_anciens')->boolval();
+    }
+
+    public function annee_construction(): Annee
+    {
+        if ($value = $this->findOne('//annee_construction')) {
+            return Annee::from($value->intval());
         }
         return match ($this->enum_periode_construction_id()) {
-            1 => 1947,
-            2 => 1974,
-            3 => 1977,
-            4 => 1982,
-            5 => 1988,
-            6 => 2000,
-            7 => 2005,
-            8 => 2012,
-            9 => 2021,
-            10 => (int) $this->date_etablissement()->format('Y'),
+            1 => Annee::from(1947),
+            2 => Annee::from(1974),
+            3 => Annee::from(1977),
+            4 => Annee::from(1982),
+            5 => Annee::from(1988),
+            6 => Annee::from(2000),
+            7 => Annee::from(2005),
+            8 => Annee::from(2012),
+            9 => Annee::from(2021),
+            10 => Annee::from((int) $this->date_etablissement()->format('Y')),
         };
     }
 
@@ -110,12 +118,12 @@ final class XMLAuditReader extends XMLReader
 
     public function surface_habitable_batiment(): float
     {
-        return $this->xml()->findOneOfOrError(['//surface_habitable_immeuble', '//surface_habitable_logement'])->floatval();
+        return $this->findOneOfOrError(['//surface_habitable_immeuble', '//surface_habitable_logement'])->floatval();
     }
 
     public function surface_habitable_logement(): ?float
     {
-        return $this->xml()->findOne('//surface_habitable_logement')?->floatval();
+        return $this->findOne('//surface_habitable_logement')?->floatval();
     }
 
     public function hauteur_sous_plafond(): float
@@ -125,51 +133,69 @@ final class XMLAuditReader extends XMLReader
 
     public function enum_methode_application_dpe_log_id(): int
     {
-        return $this->xml()->findOneOrError('//enum_methode_application_dpe_log_id')->intval();
+        return $this->findOneOrError('//enum_methode_application_dpe_log_id')->intval();
     }
 
     public function enum_classe_altitude_id(): int
     {
-        return $this->xml()->findOneOrError('//enum_classe_altitude_id')->intval();
+        return $this->findOneOrError('//enum_classe_altitude_id')->intval();
     }
 
     public function enum_periode_construction_id(): int
     {
-        return $this->xml()->findOneOrError('//enum_periode_construction_id')->intval();
+        return $this->findOneOrError('//enum_periode_construction_id')->intval();
     }
 
     public function nombre_appartement(): ?int
     {
-        return $this->xml()->findOne('//nombre_appartement')?->intval();
+        return $this->findOne('//nombre_appartement')?->intval();
     }
 
     public function nombre_niveau(): int
     {
-        return $this->xml()->findOne('//nombre_niveau_immeuble')?->intval() ?? 1;
+        return $this->findOne('//nombre_niveau_immeuble')?->intval() ?? 1;
     }
 
     public function hsp(): float
     {
-        return $this->xml()->findOneOrError('//hsp')->floatval();
+        return $this->findOneOrError('//hsp')->floatval();
     }
 
     public function libelle(): string
     {
-        return $this->xml()->findOneOrError('//adresse_bien')->findOneOfOrError(['.//ban_label', './/adresse_brut'])->strval();
+        return $this->findOneOfOrError([
+            '//adresse_bien//ban_label',
+            '//adresse_bien//adresse_brut',
+        ])->strval();
     }
 
     public function code_postal(): string
     {
-        return $this->xml()->findOneOrError('//adresse_bien')->findOneOfOrError(['.//ban_postcode', './/code_postal_brut'])->strval();
+        return $this->findOneOfOrError([
+            '//adresse_bien//ban_postcode',
+            '//adresse_bien//code_postal_brut',
+        ])->strval();
+    }
+
+    public function code_commune(): string
+    {
+        return $this->findOneOfOrError([
+            '//adresse_bien//ban_citycode',
+            '//adresse_bien//ban_postcode',
+            '//adresse_bien//code_postal_brut',
+        ])->strval();
     }
 
     public function commune(): string
     {
-        return $this->xml()->findOneOrError('//adresse_bien')->findOneOfOrError(['.//ban_city', './/nom_commune_brut'])->strval();
+        return $this->findOneOfOrError([
+            '//adresse_bien//ban_city',
+            '//adresse_bien//nom_commune_brut',
+        ])->strval();
     }
 
     public function ban_id(): ?string
     {
-        return $this->xml()->findOneOrError('//adresse_bien')->findOne('.//ban_id')?->strval();
+        return $this->findOne('//adresse_bien//ban_id')?->strval();
     }
 }

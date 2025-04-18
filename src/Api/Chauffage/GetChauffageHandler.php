@@ -2,8 +2,7 @@
 
 namespace App\Api\Chauffage;
 
-use App\Domain\Chauffage\Chauffage;
-use App\Domain\Chauffage\ChauffageRepository;
+use App\Domain\Chauffage\{Chauffage, ChauffageRepository};
 use App\Domain\Common\ValueObject\Id;
 
 final class GetChauffageHandler

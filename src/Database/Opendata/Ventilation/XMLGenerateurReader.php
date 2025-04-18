@@ -3,39 +3,29 @@
 namespace App\Database\Opendata\Ventilation;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\ValueObject\{Annee, Id};
 use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVentilation, TypeVmc};
-use App\Domain\Ventilation\ValueObject\Signaletique;
 
 final class XMLGenerateurReader extends XMLReader
 {
-    public function apply(): bool
+    public function supports(): bool
     {
         return $this->type_ventilation() === TypeVentilation::VENTILATION_MECANIQUE;
     }
 
     public function id(): Id
     {
-        return $this->xml()->findOneOrError('.//reference')->id();
+        return $this->findOneOrError('.//reference')->id();
     }
 
     public function description(): string
     {
-        return $this->xml()->findOne('.//description')?->strval() ?? 'Ventilation non décrite';
+        return $this->findOne('.//description')?->strval() ?? 'Ventilation non décrite';
     }
 
     public function type_ventilation(): TypeVentilation
     {
         return TypeVentilation::from_enum_type_ventilation_id($this->enum_type_ventilation_id());
-    }
-
-    public function signaletique(): ?Signaletique
-    {
-        return $this->type_generateur() ? new Signaletique(
-            type: $this->type_generateur(),
-            type_vmc: $this->type_vmc(),
-            presence_echangeur_thermique: $this->presence_echangeur_thermique(),
-        ) : null;
     }
 
     public function type_generateur(): ?TypeGenerateur
@@ -53,13 +43,13 @@ final class XMLGenerateurReader extends XMLReader
         return null;
     }
 
-    public function annee_installation(): ?int
+    public function annee_installation(): ?Annee
     {
         return match ($this->enum_type_ventilation_id()) {
-            3 => 1981,
-            4, 7, 10, 13, 26, 29 => 2000,
-            5, 8, 11, 14, 19, 21, 23, 27, 30, 32, 35, 37 => 2012,
-            6, 9, 12, 15, 20, 22, 24, 28, 31, 33, 36, 38 => $this->xml()->annee_etablissement(),
+            3 => Annee::from(1981),
+            4, 7, 10, 13, 26, 29 => Annee::from(2000),
+            5, 8, 11, 14, 19, 21, 23, 27, 30, 32, 35, 37 => Annee::from(2012),
+            6, 9, 12, 15, 20, 22, 24, 28, 31, 33, 36, 38 => $this->audit()->annee_etablissement(),
             default => null,
         };
     }
@@ -83,11 +73,11 @@ final class XMLGenerateurReader extends XMLReader
 
     public function enum_type_ventilation_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_type_ventilation_id')->intval();
+        return $this->findOneOrError('.//enum_type_ventilation_id')->intval();
     }
 
     public function pvent_moy(): ?float
     {
-        return $this->xml()->findOne('.//pvent_moy')?->floatval();
+        return $this->findOne('.//pvent_moy')?->floatval();
     }
 }

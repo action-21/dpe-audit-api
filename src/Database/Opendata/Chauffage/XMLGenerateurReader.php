@@ -3,129 +3,134 @@
 namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, PositionChaudiere, TypeCombustion, TypeDistribution, TypeGenerateur};
-use App\Domain\Chauffage\ValueObject\{Combustion, Reseau, Signaletique};
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, ModeCombustion, TypeChaudiere, TypeGenerateur, UsageChauffage};
+use App\Domain\Common\ValueObject\{Annee, Id, Pourcentage};
 
-/**
- * Par défaut, les types de générateurs "PAC Hybride - partie ..." sont considérés comme des PAC hybrides air/eau
- */
 final class XMLGenerateurReader extends XMLReader
 {
-    public function apply(): bool
+    /**
+     * Les caractéristiques des générateurs de type "PAC Hybride - partie chaudière" sont agrégées aux
+     * générateurs associés de type "PAC Hybride - partie pompe à chaleur".
+     */
+    public function supports(): bool
     {
-        return false === \in_array($this->enum_type_generateur_ch_id(), [145, 146, 147, 162, 163, 164, 165, 166, 167, 168, 169, 170]);
+        return false === $this->is_pac_hybride_partie_chaudiere();
     }
 
-    public function read_installation(): XMLInstallationReader
+    public function is_pac_hybride(): bool
     {
-        return XMLInstallationReader::from($this->xml()->findOneOrError('./ancestor::installation_chauffage'));
+        return \in_array($this->enum_type_generateur_ch_id(), [143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170,]);
     }
 
-    /** @return XMLEmetteurReader[] */
-    public function read_emetteurs(): array
+    public function is_pac_hybride_partie_pac(): bool
     {
-        return \array_filter(
-            $this->read_installation()->read_emetteurs(),
-            fn(XMLEmetteurReader $item): bool => $item->apply() && $item->enum_lien_generateur_emetteur_id() === $this->enum_lien_generateur_emetteur_id(),
+        return $this->is_pac_hybride() && false === $this->is_pac_hybride_partie_chaudiere();
+    }
+
+    public function is_pac_hybride_partie_chaudiere(): bool
+    {
+        return \in_array($this->enum_type_generateur_ch_id(), [148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161]);
+    }
+
+    public function match(array $references): bool
+    {
+        return count(array_intersect($this->references(), $references)) > 0;
+    }
+
+    public function references(): array
+    {
+        return [
+            $this->reference(),
+            $this->reference_generateur_mixte(),
+            \preg_replace('/(#\d+)/', '', $this->reference()),
+            \preg_replace('/(#\d+)/', '', $this->reference_generateur_mixte()),
+            $this->findOne('.//description')?->reference(),
+        ];
+    }
+
+    public function installation(): XMLInstallationReader
+    {
+        return XMLInstallationReader::from($this->findOneOrError('./ancestor::installation_chauffage'));
+    }
+
+    /**
+     * @return XMLEmetteurReader[]
+     */
+    public function emetteurs(): array
+    {
+        return array_filter(
+            $this->chauffage()->emetteurs(),
+            fn(XMLEmetteurReader $item): bool => $item->supports() && $item->enum_lien_generateur_emetteur_id() === $this->enum_lien_generateur_emetteur_id(),
         );
     }
 
-    public function match(string $reference): bool
+    /**
+     * Générateur de type "PAC Hybride - partie chaudière" associé pour les générateurs de type "PAC Hybride - partie pompe à chaleur"
+     */
+    public function generateur_hybride_partie_chaudiere(): ?self
     {
-        $patterns = [
-            $this->reference(),
-            $this->generateur_mixte_reference(),
-            \preg_replace('/(#\d+)/', '', $this->reference()),
-            \preg_replace('/(#\d+)/', '', $this->generateur_mixte_reference()),
-            $this->xml()->findOne('.//description')?->reference(),
-        ];
-
-        foreach ($patterns as $p) {
-            if ($p === $reference) {
-                return true;
-            }
+        if (false === $this->is_pac_hybride_partie_pac()) {
+            return null;
         }
-        return false;
+        foreach ($this->chauffage()->generateurs() as $reader) {
+            if (false === $reader->is_pac_hybride_partie_chaudiere()) {
+                continue;
+            }
+            if (false === $reader->match($this->references())) {
+                continue;
+            }
+            return $reader;
+        }
+        throw new \RuntimeException("Générateur hybride associé non trouvé pour {$this->reference()}");
     }
 
     public function id(): Id
     {
-        return $this->xml()->findOneOrError('.//reference')->id();
+        return Id::from($this->reference());
     }
 
     public function reference(): string
     {
-        return $this->xml()->findOneOrError('.//reference')->reference();
+        return $this->findOneOrError('.//reference')->reference();
     }
 
     public function generateur_mixte_id(): ?Id
     {
-        return $this->xml()->findOne('.//reference_generateur_mixte')?->id();
-    }
-
-    public function match_generateur_mixte(): ?Id
-    {
-        if (null === $reference = $this->generateur_mixte_reference()) {
+        if (null === $reference = $this->reference_generateur_mixte()) {
             return null;
         }
-        foreach ($this->xml()->etat_initial()->read_ecs()->read_generateurs() as $item) {
-            if ($item->match($reference)) {
+        foreach ($this->ecs()->generateurs() as $item) {
+            if ($item->match($this->references())) {
                 return $item->id();
             }
         }
         throw new \RuntimeException("Générateur mixte {$reference} non trouvé");
     }
 
-    public function generateur_mixte_reference(): ?string
+    public function reference_generateur_mixte(): ?string
     {
-        return $this->xml()->findOne('.//reference_generateur_mixte')?->reference();
+        return $this->findOne('.//reference_generateur_mixte')?->reference();
     }
 
     public function reseau_chaleur_id(): ?Id
     {
-        return $this->xml()->findOne('.//identifiant_reseau_chaleur')?->id();
+        return $this->findOne('.//identifiant_reseau_chaleur')?->id();
     }
 
     public function description(): string
     {
-        return $this->xml()->findOne('.//description')?->strval() ?? 'Générateur non décrit';
+        return $this->findOne('.//description')?->strval() ?? 'Générateur non décrit';
     }
 
-    public function signaletique(): Signaletique
+    public function usage(): UsageChauffage
     {
-        return new Signaletique(
-            type: $this->type_generateur(),
-            energie: $this->energie_generateur(),
-            type_partie_chaudiere: $this->type_partie_chaudiere(),
-            energie_partie_chaudiere: $this->energie_partie_chaudiere(),
-            position_chaudiere: $this->position_chaudiere(),
-            label: $this->label(),
-            priorite_cascade: $this->priorite_generateur_cascade(),
-            pn: $this->pn_saisi(),
-            scop: $this->scop_saisi(),
-            combustion: $this->combustion(),
-        );
+        return $this->generateur_mixte_id() ? UsageChauffage::CHAUFFAGE_ECS : UsageChauffage::CHAUFFAGE_ECS;
     }
 
-    public function combustion(): ?Combustion
+    public function mode_combustion(): ?ModeCombustion
     {
-        return $this->type_combustion() ? new Combustion(
-            type: $this->type_combustion(),
-            presence_ventouse: $this->presence_ventouse(),
-            presence_regulation_combustion: $this->presence_regulation_combustion(),
-            pveilleuse: $this->pveilleuse_saisi(),
-            qp0: $this->qp0_saisi(),
-            rpn: $this->rpn_saisi(),
-            rpint: $this->rpint_saisi(),
-            tfonc30: $this->tfonc30_saisi(),
-            tfonc100: $this->tfonc100_saisi(),
-        ) : null;
-    }
-
-    public function type_combustion(): ?TypeCombustion
-    {
-        return TypeCombustion::from_enum_type_generateur_ch_id($this->enum_type_generateur_ch_id());
+        return $this->generateur_hybride_partie_chaudiere()?->mode_combustion()
+            ?? ModeCombustion::from_enum_type_generateur_ch_id($this->enum_type_generateur_ch_id());
     }
 
     public function generateur_appoint(): bool
@@ -140,7 +145,7 @@ final class XMLGenerateurReader extends XMLReader
 
     public function generateur_collectif(): bool
     {
-        return $this->enum_lien_generateur_emetteur_id() === 1 && $this->read_installation()->installation_collective();
+        return $this->enum_lien_generateur_emetteur_id() === 1 && $this->installation()->installation_collective();
     }
 
     public function type_generateur(): TypeGenerateur
@@ -148,65 +153,59 @@ final class XMLGenerateurReader extends XMLReader
         return TypeGenerateur::from_type_generateur_ch_id($this->enum_type_generateur_ch_id());
     }
 
-    public function position_chaudiere(): ?PositionChaudiere
-    {
-        return $this->type_generateur()->is_chaudiere() ? match (true) {
-            ($this->pn() < 18) => PositionChaudiere::CHAUDIERE_MURALE,
-            ($this->pn() >= 18) => PositionChaudiere::CHAUDIERE_SOL,
-            default =>  PositionChaudiere::CHAUDIERE_SOL,
-        } : null;
-    }
-
-    public function type_partie_chaudiere(): ?TypeGenerateur
+    public function generateur_multi_batiment(): bool
     {
         return match ($this->enum_type_generateur_ch_id()) {
-            148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161 => TypeGenerateur::CHAUDIERE,
-            default => null,
+            109, 110, 111, 112, 171 => true,
+            default => false,
         };
+    }
+
+    public function type_chaudiere(): ?TypeChaudiere
+    {
+        return $this->type_generateur()->is_chaudiere() ? match (true) {
+            ($this->pn() < 18) => TypeChaudiere::CHAUDIERE_MURALE,
+            ($this->pn() >= 18) => TypeChaudiere::CHAUDIERE_SOL,
+            default =>  TypeChaudiere::CHAUDIERE_SOL,
+        } : null;
     }
 
     public function energie_generateur(): EnergieGenerateur
     {
-        return match ($this->enum_type_generateur_ch_id()) {
-            148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161 => EnergieGenerateur::ELECTRICITE,
-            default => EnergieGenerateur::from_enum_type_energie_id($this->enum_type_energie_id()),
-        };
+        return EnergieGenerateur::from_enum_type_energie_id($this->enum_type_energie_id());
     }
 
     public function energie_partie_chaudiere(): ?EnergieGenerateur
     {
-        return match ($this->enum_type_generateur_ch_id()) {
-            148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161 => EnergieGenerateur::from_enum_type_energie_id($this->enum_type_energie_id()),
-            default => null,
-        };
+        return $this->generateur_hybride_partie_chaudiere()?->energie_generateur();
     }
 
-    public function annee_installation(): ?int
+    public function annee_installation(): ?Annee
     {
         return match ($this->enum_type_generateur_ch_id()) {
-            75 => 1969,
-            76 => 1975,
-            55, 62, 69, 120 => 1977,
-            77, 85, 127 => 1980,
-            86, 94, 128, 136 => 1985,
-            20, 21, 22, 23 => 1989,
-            78, 87, 129 => 1990,
-            56, 63, 70, 121 => 1994,
-            88, 91, 95, 130, 133, 137 => 2000,
-            57, 64, 71, 122 => 2003,
-            24, 25, 26, 27 => 2004,
-            50, 53 => 2005,
-            32, 33, 34, 35 => 2006,
-            1, 4, 8, 12, 16 => 2007,
-            44, 48, 140 => 2011,
-            58, 65, 72, 123 => 2012,
-            2, 5, 9, 13, 17, 145, 162, 165, 168 => 2014,
-            79, 81, 83, 89, 92, 96, 131, 134, 138, 148, 150, 160 => 2015,
-            6, 10, 14, 18, 146, 163, 166, 169 => 2016,
-            36, 37, 38, 39, 59, 66, 124, 154, 157 => 2017,
-            45, 60, 67, 73, 125, 152, 155, 158 => 2019,
+            75 => Annee::from(1969),
+            76 => Annee::from(1975),
+            55, 62, 69, 120 => Annee::from(1977),
+            77, 85, 127 => Annee::from(1980),
+            86, 94, 128, 136 => Annee::from(1985),
+            20, 21, 22, 23 => Annee::from(1989),
+            78, 87, 129 => Annee::from(1990),
+            56, 63, 70, 121 => Annee::from(1994),
+            88, 91, 95, 130, 133, 137 => Annee::from(2000),
+            57, 64, 71, 122 => Annee::from(2003),
+            24, 25, 26, 27 => Annee::from(2004),
+            50, 53 => Annee::from(2005),
+            32, 33, 34, 35 => Annee::from(2006),
+            1, 4, 8, 12, 16 => Annee::from(2007),
+            44, 48, 140 => Annee::from(2011),
+            58, 65, 72, 123 => Annee::from(2012),
+            2, 5, 9, 13, 17, 145, 162, 165, 168 => Annee::from(2014),
+            79, 81, 83, 89, 92, 96, 131, 134, 138, 148, 150, 160 => Annee::from(2015),
+            6, 10, 14, 18, 146, 163, 166, 169 => Annee::from(2016),
+            36, 37, 38, 39, 59, 66, 124, 154, 157 => Annee::from(2017),
+            45, 60, 67, 73, 125, 152, 155, 158 => Annee::from(2019),
             3, 7, 11, 15, 19, 28, 29, 30, 31, 40, 41, 42, 43, 46, 49, 51, 52, 54, 61, 68, 74, 80, 82,
-            84, 90, 93, 97, 126, 132, 135, 139, 141, 147, 149, 151, 153, 156, 159, 161, 164, 167, 170 => $this->xml()->annee_etablissement(),
+            84, 90, 93, 97, 126, 132, 135, 139, 141, 147, 149, 151, 153, 156, 159, 161, 164, 167, 170 => $this->audit()->annee_etablissement(),
             default => null,
         };
     }
@@ -214,26 +213,6 @@ final class XMLGenerateurReader extends XMLReader
     public function label(): ?LabelGenerateur
     {
         return LabelGenerateur::from_enum_type_generateur_ch_id($this->enum_type_generateur_ch_id());
-    }
-
-    public function reseau(): ?Reseau
-    {
-        $installation = $this->read_installation();
-
-        return ($type_distribution = $this->type_distribution()) && $this->type_generateur()->is_chauffage_central() ? new Reseau(
-            type_distribution: $type_distribution,
-            presence_circulateur_externe: $installation->presence_circulateur_externe(),
-            niveaux_desservis: $installation->niveaux_desservis(),
-            isolation_reseau: $installation->isolation_reseau(),
-        ) : null;
-    }
-
-    public function type_distribution(): ?TypeDistribution
-    {
-        foreach ($this->read_emetteurs() as $emetteur_reader) {
-            return $emetteur_reader->type_distribution();
-        }
-        return null;
     }
 
     public function pn_saisi(): ?float
@@ -244,7 +223,7 @@ final class XMLGenerateurReader extends XMLReader
         };
     }
 
-    public function rpn_saisi(): ?float
+    public function rpn_saisi(): ?Pourcentage
     {
         return match ($this->enum_methode_saisie_carac_sys_id()) {
             2, 3, 4, 5, 6 => $this->rpn(),
@@ -252,7 +231,7 @@ final class XMLGenerateurReader extends XMLReader
         };
     }
 
-    public function rpint_saisi(): ?float
+    public function rpint_saisi(): ?Pourcentage
     {
         return match ($this->enum_methode_saisie_carac_sys_id()) {
             2, 3, 4, 5, 6 => $this->rpint(),
@@ -302,107 +281,109 @@ final class XMLGenerateurReader extends XMLReader
 
     public function enum_type_generateur_ch_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_type_generateur_ch_id')->intval();
+        return $this->findOneOrError('.//enum_type_generateur_ch_id')->intval();
     }
 
     public function enum_usage_generateur_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_usage_generateur_id')->intval();
+        return $this->findOneOrError('.//enum_usage_generateur_id')->intval();
     }
 
     public function enum_type_energie_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_type_energie_id')->intval();
+        return $this->findOneOrError('.//enum_type_energie_id')->intval();
     }
 
     public function enum_lien_generateur_emetteur_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_lien_generateur_emetteur_id')->intval();
+        return $this->findOneOrError('.//enum_lien_generateur_emetteur_id')->intval();
     }
 
     public function enum_methode_saisie_carac_sys_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_methode_saisie_carac_sys_id')->intval();
+        return $this->findOneOrError('.//enum_methode_saisie_carac_sys_id')->intval();
     }
 
     public function surface_chauffee(): float
     {
-        return $this->xml()->findOneOrError('.//surface_chauffee')->floatval();
+        return $this->findOneOrError('.//surface_chauffee')->floatval();
     }
 
     public function position_volume_chauffe(): bool
     {
-        return $this->xml()->findOneOrError('.//position_volume_chauffe')->boolval();
+        return $this->findOneOrError('.//position_volume_chauffe')->boolval();
     }
 
     public function presence_ventouse(): ?bool
     {
-        return $this->xml()->findOne('.//presence_ventouse')?->boolval();
+        return $this->findOne('.//presence_ventouse')?->boolval();
     }
 
     public function presence_regulation_combustion(): ?bool
     {
-        return $this->xml()->findOne('.//presence_regulation_combustion')?->boolval();
+        return $this->findOne('.//presence_regulation_combustion')?->boolval();
     }
 
-    public function priorite_generateur_cascade(): ?bool
+    public function priorite_cascade(): ?bool
     {
-        return $this->xml()->findOne('.//priorite_generateur_cascade')?->intval();
+        return $this->findOne('.//priorite_generateur_cascade')?->intval();
     }
 
     public function n_radiateurs_gaz(): ?int
     {
-        return $this->xml()->findOne('.//n_radiateurs_gaz')?->intval();
+        return $this->findOne('.//n_radiateurs_gaz')?->intval();
     }
 
     // Données intermédiaires
 
     public function scop(): ?float
     {
-        return $this->xml()->findOne('.//scop')?->floatval();
+        return $this->findOne('.//scop')?->floatval();
     }
 
     public function pn(): ?float
     {
-        return $this->xml()->findOne('.//pn')?->floatval();
+        return $this->findOne('.//pn')?->floatval();
     }
 
     public function qp0(): ?float
     {
-        return $this->xml()->findOne('.//qp0')?->floatval();
+        return $this->findOne('.//qp0')?->floatval();
     }
 
     public function pveilleuse(): ?float
     {
-        return $this->xml()->findOne('.//pveilleuse')?->floatval();
+        return $this->findOne('.//pveilleuse')?->floatval();
     }
 
     public function temp_fonc_30(): ?float
     {
-        return $this->xml()->findOne('.//temp_fonc_30')?->floatval();
+        return $this->findOne('.//temp_fonc_30')?->floatval();
     }
 
     public function temp_fonc_100(): ?float
     {
-        return $this->xml()->findOne('.//temp_fonc_100')?->floatval();
+        return $this->findOne('.//temp_fonc_100')?->floatval();
     }
 
-    public function rpn(): ?float
+    public function rpn(): ?Pourcentage
     {
-        $value = $this->xml()->findOne('.//rpn')?->floatval();
-        $value = $value && $value <= 2 ? $value * 100 : $value;
-        return $value;
+        if (null === $value = $this->findOne('.//rpn')?->floatval()) {
+            return null;
+        }
+        return $value <= 2 ? Pourcentage::from($value * 100) : Pourcentage::from($value);
     }
 
-    public function rpint(): ?float
+    public function rpint(): ?Pourcentage
     {
-        $value = $this->xml()->findOne('.//rpint')?->floatval();
-        $value = $value && $value <= 2 ? $value * 100 : $value;
-        return $value;
+        if (null === $value = $this->findOne('.//rpint')?->floatval()) {
+            return null;
+        }
+        return $value <= 2 ? Pourcentage::from($value * 100) : Pourcentage::from($value);
     }
 
     public function rendement_generation(): ?float
     {
-        return $this->xml()->findOne('.//rendement_generation')?->floatval();
+        return $this->findOne('.//rendement_generation')?->floatval();
     }
 }

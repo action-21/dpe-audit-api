@@ -9,11 +9,11 @@ use App\Domain\Common\Enum\Enum;
  */
 enum TypeEmetteur: string implements Enum
 {
-    case PLANCHER_CHAUFFANT = 'PLANCHER_CHAUFFANT';
-    case PLAFOND_CHAUFFANT = 'PLAFOND_CHAUFFANT';
-    case RADIATEUR_MONOTUBE = 'RADIATEUR_MONOTUBE';
-    case RADIATEUR_BITUBE = 'RADIATEUR_BITUBE';
-    case RADIATEUR = 'RADIATEUR';
+    case PLANCHER_CHAUFFANT = 'plancher_chauffant';
+    case PLAFOND_CHAUFFANT = 'plafond_chauffant';
+    case RADIATEUR_MONOTUBE = 'radiateur_monotube';
+    case RADIATEUR_BITUBE = 'radiateur_bitube';
+    case RADIATEUR = 'radiateur';
 
     public static function from_type_emission_distribution_id(int $id): ?self
     {
@@ -44,9 +44,9 @@ enum TypeEmetteur: string implements Enum
     }
 
     /**
-     * Perte de charge de l'émetteur en kPa
+     * Pertes de charge de l'émetteur exprimées en kPa
      */
-    public function perte_charge(): float
+    public function pertes_charge(): float
     {
         return match ($this) {
             self::PLANCHER_CHAUFFANT => 15,

@@ -7,18 +7,18 @@ use App\Domain\Common\Enum\Enum;
 
 enum Configuration: string implements Enum
 {
-    case BASE = 'BASE';
-    case BASE_APPOINT = 'BASE_APPOINT';
-    case BASE_BOIS_RELEVE_PAC = 'BASE_BOIS_RELEVE_PAC';
-    case BASE_BOIS_RELEVE_CHAUDIERE = 'BASE_BOIS_RELEVE_CHAUDIERE';
-    case BASE_PAC_RELEVE_CHAUDIERE = 'BASE_PAC_RELEVE_CHAUDIERE';
-    case AUTRES = 'AUTRES';
+    case BASE = 'base';
+    case BASE_APPOINT = 'base_appoint';
+    case BASE_BOIS_RELEVE_PAC = 'base_bois_releve_pac';
+    case BASE_BOIS_RELEVE_CHAUDIERE = 'base_bois_releve_chaudiere';
+    case BASE_PAC_RELEVE_CHAUDIERE = 'base_pac_releve_chaudiere';
+    case AUTRES = 'autres';
 
     public static function determine(Installation $entity): self
     {
         $systemes_chauffage_central = $entity->installation_collective()
-            ? $entity->systemes()->filter_by_systeme_collectif()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)
-            : $entity->systemes()->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL);
+            ? $entity->systemes()->with_systeme_collectif()->with_type(TypeChauffage::CHAUFFAGE_CENTRAL)
+            : $entity->systemes()->with_type(TypeChauffage::CHAUFFAGE_CENTRAL);
 
         $is_chauffage_central = $systemes_chauffage_central->has_systeme_central();
         $has_pac = $systemes_chauffage_central->has_pac();

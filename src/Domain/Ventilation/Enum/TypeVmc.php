@@ -6,9 +6,9 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeVmc: string implements Enum
 {
-    case AUTOREGLABLE = 'AUTOREGLABLE';
-    case HYGROREGLABLE_TYPE_A = 'HYGROREGLABLE_TYPE_A';
-    case HYGROREGLABLE_TYPE_B = 'HYGROREGLABLE_TYPE_B';
+    case AUTOREGLABLE = 'autoreglable';
+    case HYGROREGLABLE_TYPE_A = 'hygroreglable_type_a';
+    case HYGROREGLABLE_TYPE_B = 'hygroreglable_type_b';
 
     public static function from_enum_type_ventilation_id(int $id): ?self
     {

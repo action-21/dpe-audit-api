@@ -2,69 +2,57 @@
 
 namespace App\Domain\Production\Entity;
 
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\ValueObject\{Id, Inclinaison, Orientation};
+use App\Domain\Production\Data\PanneauPhotovoltaiqueData;
 use App\Domain\Production\Production;
-use App\Domain\Production\Service\MoteurProduction;
-use App\Domain\Production\ValueObject\ProductionPhotovoltaiqueCollection;
-use App\Domain\Simulation\Simulation;
 use Webmozart\Assert\Assert;
 
 final class PanneauPhotovoltaique
 {
-    private ?ProductionPhotovoltaiqueCollection $productions = null;
-
     public function __construct(
         private readonly Id $id,
         private readonly Production $production,
-        private float $orientation,
-        private float $inclinaison,
+        private string $description,
+        private Orientation $orientation,
+        private Inclinaison $inclinaison,
         private int $modules,
-        private ?float $surface_capteurs,
+        private ?float $surface,
+        private PanneauPhotovoltaiqueData $data,
     ) {}
 
     public static function create(
         Id $id,
         Production $production,
-        float $orientation,
-        float $inclinaison,
+        string $description,
+        Orientation $orientation,
+        Inclinaison $inclinaison,
         int $modules,
-        ?float $surface_capteurs,
+        ?float $surface,
     ): self {
         Assert::greaterThan($modules, 0);
-        Assert::greaterThanEq($orientation, 0);
-        Assert::lessThan($orientation, 360);
-        Assert::greaterThanEq($inclinaison, 0);
-        Assert::lessThanEq($inclinaison, 90);
-        Assert::nullOrGreaterThan($surface_capteurs, 0);
+        Assert::nullOrGreaterThan($surface, 0);
 
         return new self(
             id: $id,
             production: $production,
+            description: $description,
             orientation: $orientation,
             inclinaison: $inclinaison,
             modules: $modules,
-            surface_capteurs: $surface_capteurs,
+            surface: $surface,
+            data: PanneauPhotovoltaiqueData::create(),
         );
     }
 
-    public function controle(): void
+    public function calcule(PanneauPhotovoltaiqueData $data): self
     {
-        Assert::greaterThan($this->modules, 0);
-        Assert::greaterThanEq($this->orientation, 0);
-        Assert::lessThan($this->orientation, 360);
-        Assert::greaterThanEq($this->inclinaison, 0);
-        Assert::lessThanEq($this->inclinaison, 90);
-        Assert::nullOrGreaterThan($this->surface_capteurs, 0);
+        $this->data = $data;
+        return $this;
     }
 
-    public function reinitialise(): void
+    public function reinitialise(): self
     {
-        $this->productions = null;
-    }
-
-    public function calcule_production(MoteurProduction $moteur, Simulation $simulation): self
-    {
-        $this->productions = $moteur->calcule_production_photovoltaique($this, $simulation);
+        $this->data = PanneauPhotovoltaiqueData::create();
         return $this;
     }
 
@@ -78,12 +66,17 @@ final class PanneauPhotovoltaique
         return $this->production;
     }
 
-    public function inclinaison(): float
+    public function description(): string
+    {
+        return $this->description;
+    }
+
+    public function inclinaison(): Inclinaison
     {
         return $this->inclinaison;
     }
 
-    public function orientation(): float
+    public function orientation(): Orientation
     {
         return $this->orientation;
     }
@@ -93,13 +86,13 @@ final class PanneauPhotovoltaique
         return $this->modules;
     }
 
-    public function surface_capteurs(): ?float
+    public function surface(): ?float
     {
-        return $this->surface_capteurs;
+        return $this->surface;
     }
 
-    public function productions(): ?ProductionPhotovoltaiqueCollection
+    public function data(): PanneauPhotovoltaiqueData
     {
-        return $this->productions;
+        return $this->data;
     }
 }

@@ -3,26 +3,20 @@
 namespace App\Domain\Ecs\Entity;
 
 use App\Domain\Common\ValueObject\Id;
+use App\Domain\Ecs\Data\InstallationData;
 use App\Domain\Ecs\Ecs;
-use App\Domain\Ecs\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerte, MoteurRendement};
 use App\Domain\Ecs\ValueObject\Solaire;
-use App\Domain\Simulation\Simulation;
 use Webmozart\Assert\Assert;
 
-/**
- * TODO: Associer l'installation à un logement ou plusieurs logements visités
- */
 final class Installation
 {
-    private ?float $rdim = null;
-
     public function __construct(
         private readonly Id $id,
         private readonly Ecs $ecs,
         private string $description,
         private float $surface,
-        private ?Solaire $solaire,
-        private SystemeCollection $systemes,
+        private ?Solaire $solaire_thermique,
+        private InstallationData $data,
     ) {}
 
     public static function create(
@@ -30,55 +24,29 @@ final class Installation
         Ecs $ecs,
         string $description,
         float $surface,
-        ?Solaire $solaire,
+        ?Solaire $solaire_thermique,
     ): self {
         Assert::greaterThan($surface, 0);
-        Assert::nullOrGreaterThanEq($solaire?->annee_installation, $ecs->annee_construction_batiment());
 
         return new self(
             id: $id,
             ecs: $ecs,
             description: $description,
             surface: $surface,
-            solaire: $solaire,
-            systemes: new SystemeCollection(),
+            solaire_thermique: $solaire_thermique,
+            data: InstallationData::create(),
         );
     }
 
-    public function controle(): void
+    public function reinitialise(): self
     {
-        Assert::greaterThan($this->surface, 0);
-        Assert::nullOrGreaterThanEq($this->solaire->annee_installation, $this->ecs->annee_construction_batiment());
-    }
-
-    public function reinitialise(): void
-    {
-        $this->rdim = null;
-        $this->systemes->reinitialise();
-    }
-
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
-    {
-        $this->rdim = $moteur->calcule_dimensionnement_installation($this);
-        $this->systemes->calcule_dimensionnement($moteur);
+        $this->data = InstallationData::create();
         return $this;
     }
 
-    public function calcule_pertes(MoteurPerte $moteur, Simulation $simulation): self
+    public function calcule(InstallationData $data): self
     {
-        $this->systemes->calcule_pertes($moteur, $simulation);
-        return $this;
-    }
-
-    public function calcule_rendement(MoteurRendement $moteur): self
-    {
-        $this->systemes->calcule_rendement($moteur);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur): self
-    {
-        $this->systemes->calcule_consommations($moteur);
+        $this->data = $data;
         return $this;
     }
 
@@ -102,24 +70,21 @@ final class Installation
         return $this->surface;
     }
 
-    public function solaire(): ?Solaire
+    public function solaire_thermique(): ?Solaire
     {
-        return $this->solaire;
+        return $this->solaire_thermique;
     }
 
-    public function rdim(): ?float
-    {
-        return $this->rdim;
-    }
-
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
     public function systemes(): SystemeCollection
     {
-        return $this->systemes;
+        return $this->ecs->systemes()->with_installation($this->id);
     }
 
-    public function add_systeme(Systeme $entity): self
+    public function data(): InstallationData
     {
-        $this->systemes->add($entity);
-        return $this;
+        return $this->data;
     }
 }

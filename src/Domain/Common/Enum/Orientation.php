@@ -4,10 +4,10 @@ namespace App\Domain\Common\Enum;
 
 enum Orientation: string implements Enum
 {
-    case NORD = 'NORD';
-    case EST = 'EST';
-    case SUD = 'SUD';
-    case OUEST = 'OUEST';
+    case NORD = 'N';
+    case EST = 'E';
+    case SUD = 'S';
+    case OUEST = 'O';
 
     public function id(): string
     {

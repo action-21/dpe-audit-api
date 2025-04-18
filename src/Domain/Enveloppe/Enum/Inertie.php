@@ -6,24 +6,18 @@ use App\Domain\Common\Enum\Enum;
 
 enum Inertie: string implements Enum
 {
-    case INCONNUE = 'inconnue';
     case TRES_LOURDE = 'tres_lourde';
     case LOURDE = 'lourde';
     case MOYENNE = 'moyenne';
     case LEGERE = 'legere';
 
-    public static function from_inertie_parois(
-        bool $inertie_planchers_bas,
-        bool $inertie_planchers_hauts,
-        bool $inertie_parois_verticales,
-    ): self {
-        $counter = (int) $inertie_planchers_bas + (int) $inertie_planchers_hauts + (int) $inertie_parois_verticales;
-
-        return match ($counter) {
-            3 => self::TRES_LOURDE,
+    public static function from_enum_classe_inertie_id(int $id): self
+    {
+        return match ($id) {
+            1 => self::TRES_LOURDE,
             2 => self::LOURDE,
-            1 => self::MOYENNE,
-            0 => self::LEGERE,
+            3 => self::MOYENNE,
+            4 => self::LEGERE,
         };
     }
 
@@ -35,7 +29,6 @@ enum Inertie: string implements Enum
     public function lib(): string
     {
         return match ($this) {
-            self::INCONNUE => 'Inertie inconnue',
             self::TRES_LOURDE => 'Inertie très lourde',
             self::LOURDE => 'Inertie lourde',
             self::MOYENNE => 'Inertie moyenne',

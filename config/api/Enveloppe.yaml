@@ -1,9 +1,8 @@
 resources:
-  App\Domain\Enveloppe\Enveloppe:
+  App\Api\Enveloppe\Model\Enveloppe:
     shortName: Enveloppe
     operations:
       enveloppe.get:
         uriTemplate: /audit/{id}/enveloppe
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Enveloppe\State\EnveloppeProvider
-        output: App\Api\Enveloppe\Resource\EnveloppeResource

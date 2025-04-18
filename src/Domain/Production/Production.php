@@ -2,70 +2,60 @@
 
 namespace App\Domain\Production;
 
-use App\Domain\Audit\Audit;
 use App\Domain\Common\ValueObject\Id;
 use App\Domain\Production\Entity\{PanneauPhotovoltaique, PanneauPhotovoltaiqueCollection};
-use App\Domain\Production\Service\MoteurProduction;
-use App\Domain\Simulation\Simulation;
 
-/**
- * @see App\Domain\Audit\Audit::production()
- */
 final class Production
 {
     public function __construct(
-        private readonly Audit $audit,
+        private readonly Id $id,
         private PanneauPhotovoltaiqueCollection $panneaux_photovoltaiques,
+        private ProductionData $data,
     ) {}
 
-    public static function create(Audit $audit): self
+    public static function create(): self
     {
         return new self(
-            audit: $audit,
+            id: Id::create(),
             panneaux_photovoltaiques: new PanneauPhotovoltaiqueCollection(),
+            data: ProductionData::create(),
         );
     }
 
-    public function controle(): void
+    public function calcule(ProductionData $data): self
     {
-        $this->panneaux_photovoltaiques->controle();
+        $this->data = $data;
+        return $this;
     }
 
     public function reinitialise(): void
     {
+        $this->data = ProductionData::create();
         $this->panneaux_photovoltaiques->reinitialise();
     }
 
-    public function calcule_production(MoteurProduction $moteur, Simulation $simulation): self
+    public function id(): Id
     {
-        $this->panneaux_photovoltaiques->calcule_production($moteur, $simulation);
-        return $this;
+        return $this->id;
     }
 
-    public function audit(): Audit
-    {
-        return $this->audit;
-    }
-
+    /**
+     * @return PanneauPhotovoltaiqueCollection|PanneauPhotovoltaique[]
+     */
     public function panneaux_photovoltaiques(): PanneauPhotovoltaiqueCollection
     {
         return $this->panneaux_photovoltaiques;
     }
 
-    public function panneau_photovoltaique(Id $id): ?PanneauPhotovoltaique
+    public function add_panneau_photovoltaique(PanneauPhotovoltaique $entity): self
     {
-        return $this->panneaux_photovoltaiques->find($id);
-    }
-
-    public function add_panneau_photovoltaique(PanneauPhotovoltaique $panneau): self
-    {
-        $this->panneaux_photovoltaiques->add($panneau);
+        $this->panneaux_photovoltaiques->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function remove_panneau_photovoltaique(PanneauPhotovoltaique $panneau): self
+    public function data(): ProductionData
     {
-        $this->panneaux_photovoltaiques->remove($panneau);
-        return $this;
+        return $this->data;
     }
 }

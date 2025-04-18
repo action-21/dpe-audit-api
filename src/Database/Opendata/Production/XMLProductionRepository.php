@@ -10,11 +10,13 @@ final class XMLProductionRepository implements ProductionRepository
 {
     public function __construct(
         private XMLOpendataRepository $opendata_repository,
-        private XMLProductionTransformer $transformer
+        private XMLProductionDeserializer $deserializer,
     ) {}
 
-    public function find(Id $audit_id): ?Production
+    public function find(Id $id): ?Production
     {
-        return ($xml = $this->opendata_repository->find($audit_id)) ? $this->transformer->transform($xml) : null;
+        return ($xml = $this->opendata_repository->find($id))
+            ? $this->deserializer->deserialize($xml)
+            : null;
     }
 }

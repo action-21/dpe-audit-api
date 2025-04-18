@@ -61,7 +61,7 @@ final class ImportCommand extends Command
                         $output->writeln("Failed");
                         continue;
                     }
-                    $xml->saveXML("{$this->projectDir}/etc/audits/{$id}.xml");
+                    $xml->saveXML("{$this->projectDir}/data/audits/{$id}.xml");
                     $output->writeln("Done");
                 }
             }

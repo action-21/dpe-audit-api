@@ -3,65 +3,46 @@
 namespace App\Domain\Ventilation\Entity;
 
 use App\Domain\Common\ValueObject\Id;
-use App\Domain\Ventilation\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance};
+use App\Domain\Ventilation\Data\InstallationData;
 use App\Domain\Ventilation\Ventilation;
 use Webmozart\Assert\Assert;
 
-/**
- * TODO: Associer l'installation à un logement visité
- */
 final class Installation
 {
-    private ?float $rdim = null;
-
     public function __construct(
         private readonly Id $id,
         private readonly Ventilation $ventilation,
+        private string $description,
         private float $surface,
-        private SystemeCollection $systemes,
+        private InstallationData $data,
     ) {}
 
-    public static function create(Id $id, Ventilation $ventilation, float $surface,): Installation
-    {
+    public static function create(
+        Id $id,
+        Ventilation $ventilation,
+        string $description,
+        float $surface,
+    ): self {
         Assert::greaterThan($surface, 0);
 
-        return new Installation(
+        return new self(
             id: $id,
             ventilation: $ventilation,
+            description: $description,
             surface: $surface,
-            systemes: new SystemeCollection(),
+            data: InstallationData::create(),
         );
     }
 
-    public function controle(): void
+    public function calcule(InstallationData $data): self
     {
-        Assert::greaterThan($this->surface, 0);
-        $this->systemes->controle();
+        $this->data = $data;
+        return $this;
     }
 
     public function reinitialise(): void
     {
-        $this->rdim = null;
-        $this->systemes->reinitialise();
-    }
-
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
-    {
-        $this->systemes->calcule_dimensionnement($moteur);
-        $this->rdim = $moteur->calcule_dimensionnement_installation($this);
-        return $this;
-    }
-
-    public function calcule_performance(MoteurPerformance $moteur): self
-    {
-        $this->systemes->calcule_performance($moteur);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur): self
-    {
-        $this->systemes->calcule_consommations($moteur);
-        return $this;
+        $this->data = InstallationData::create();
     }
 
     public function id(): Id
@@ -74,32 +55,26 @@ final class Installation
         return $this->ventilation;
     }
 
+    public function description(): string
+    {
+        return $this->description;
+    }
+
     public function surface(): float
     {
         return $this->surface;
     }
 
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
     public function systemes(): SystemeCollection
     {
-        return $this->systemes;
+        return $this->ventilation->systemes()->with_installation($this->id);
     }
 
-    public function add_systeme(Systeme $entity): self
+    public function data(): InstallationData
     {
-        $this->systemes->add($entity);
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function remove_systeme(Systeme $entity): self
-    {
-        $this->systemes->remove($entity);
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function rdim(): ?float
-    {
-        return $this->rdim;
+        return $this->data;
     }
 }

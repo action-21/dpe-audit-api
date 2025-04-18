@@ -2,7 +2,7 @@
 
 namespace App\Database\Local;
 
-class XMLTableElement extends \SimpleXMLElement
+final class XMLTableElement extends \SimpleXMLElement
 {
     public function id(): ?int
     {
@@ -14,28 +14,42 @@ class XMLTableElement extends \SimpleXMLElement
         return $this->{$property};
     }
 
+    public function isEmpty(): bool
+    {
+        return (string) $this === '';
+    }
+
     public function get(string $property): self
     {
         return $this->{$property};
     }
 
-    public function strval(): ?string
+    public function strval(?string $property = null): ?string
     {
-        return '' === (string) $this ? null : (string) $this;
+        $value = $property ? $this->get($property) : $this;
+        return '' === (string) $value ? null : (string) $value;
     }
 
-    public function intval(): ?int
+    public function intval(?string $property = null): ?int
     {
-        return '' === (string) $this ? null : (int) $this;
+        $value = $property ? $this->get($property) : $this;
+        return '' === (string) $value ? null : (int) $value;
     }
 
-    public function floatval(): ?float
+    public function floatval(?string $property = null): ?float
     {
-        return '' === (string) $this ? null : (float) $this;
+        $value = $property ? $this->get($property) : $this;
+        return '' === (string) $value ? null : (float) $value;
     }
 
-    public function boolval(): ?bool
+    public function boolval(?string $property = null): ?bool
     {
-        return '' === (string) $this ? null : (bool)(int) $this;
+        $value = $property ? $this->get($property) : $this;
+        return '' === (string) $value ? null : (bool)(int) $value;
+    }
+
+    public function to(\Closure $callback): mixed
+    {
+        return $callback($this);
     }
 }

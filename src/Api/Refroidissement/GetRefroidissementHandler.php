@@ -2,8 +2,7 @@
 
 namespace App\Api\Refroidissement;
 
-use App\Domain\Refroidissement\Refroidissement;
-use App\Domain\Refroidissement\RefroidissementRepository;
+use App\Domain\Refroidissement\{Refroidissement, RefroidissementRepository};
 use App\Domain\Common\ValueObject\Id;
 
 final class GetRefroidissementHandler

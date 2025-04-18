@@ -2,62 +2,53 @@
 
 namespace App\Domain\Ventilation;
 
-use App\Domain\Audit\Audit;
-use App\Domain\Common\ValueObject\ConsommationCollection;
-use App\Domain\Ventilation\Entity\{Generateur, GenerateurCollection, Installation, InstallationCollection};
-use App\Domain\Ventilation\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerformance};
+use App\Domain\Common\ValueObject\Id;
+use App\Domain\Ventilation\Entity\{Generateur, GenerateurCollection};
+use App\Domain\Ventilation\Entity\{Installation, InstallationCollection};
+use App\Domain\Ventilation\Entity\{Systeme, SystemeCollection};
 
 final class Ventilation
 {
     public function __construct(
-        private readonly Audit $audit,
+        private readonly Id $id,
         private GenerateurCollection $generateurs,
         private InstallationCollection $installations,
+        private SystemeCollection $systemes,
+        private VentilationData $data,
     ) {}
 
-    public static function create(Audit $audit): self
+    public static function create(): self
     {
         return new self(
-            audit: $audit,
+            id: Id::create(),
             generateurs: new GenerateurCollection(),
             installations: new InstallationCollection(),
+            systemes: new SystemeCollection(),
+            data: VentilationData::create(),
         );
+    }
+
+    public function calcule(VentilationData $data): self
+    {
+        $this->data = $data;
+        return $this;
     }
 
     public function reinitialise(): void
     {
         $this->installations->reinitialise();
+        $this->generateurs->reinitialise();
+        $this->systemes->reinitialise();
     }
 
-    public function controle(): void
+    public function id(): Id
     {
-        $this->generateurs->controle();
-        $this->installations->controle();
+        return $this->id;
     }
 
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
-    {
-        $this->installations->calcule_dimensionnement($moteur);
-        return $this;
-    }
-
-    public function calcule_performance(MoteurPerformance $moteur): self
-    {
-        $this->installations->calcule_performance($moteur);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur): self
-    {
-        $this->installations->calcule_consommations($moteur);
-        return $this;
-    }
-
-    public function audit(): Audit
-    {
-        return $this->audit;
-    }
-
+    /**
+     * @return GenerateurCollection|Generateur[]
+     */
     public function generateurs(): GenerateurCollection
     {
         return $this->generateurs;
@@ -70,13 +61,9 @@ final class Ventilation
         return $this;
     }
 
-    public function remove_generateur(Generateur $entity): self
-    {
-        $this->generateurs->remove($entity);
-        $this->reinitialise();
-        return $this;
-    }
-
+    /**
+     * @return InstallationCollection|Installation[]
+     */
     public function installations(): InstallationCollection
     {
         return $this->installations;
@@ -89,22 +76,23 @@ final class Ventilation
         return $this;
     }
 
-    public function remove_installation(Installation $entity): self
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
+    public function systemes(): SystemeCollection
     {
-        $this->installations->remove($entity);
+        return $this->systemes;
+    }
+
+    public function add_systeme(Systeme $entity): self
+    {
+        $this->systemes->add($entity);
         $this->reinitialise();
         return $this;
     }
 
-    public function consommations(): ConsommationCollection
+    public function data(): VentilationData
     {
-        return $this->installations->consommations();
-    }
-
-    // * helpers
-
-    public function annee_construction_batiment(): int
-    {
-        return $this->audit->annee_construction_batiment();
+        return $this->data;
     }
 }

@@ -1,0 +1,8 @@
+resources:
+  App\Api\Eclairage\Model\Eclairage:
+    shortName: Eclairage
+    operations:
+      ventilation.get:
+        uriTemplate: /audit/{id}/eclairage
+        class: ApiPlatform\Metadata\Get
+        provider: App\Api\Eclairage\State\EclairageProvider

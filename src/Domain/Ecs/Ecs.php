@@ -2,86 +2,55 @@
 
 namespace App\Domain\Ecs;
 
-use App\Domain\Audit\Audit;
-use App\Domain\Common\ValueObject\{BesoinCollection, ConsommationCollection};
-use App\Domain\Ecs\Entity\{Generateur, GenerateurCollection, Installation, InstallationCollection};
-use App\Domain\Ecs\Service\{MoteurBesoin, MoteurConsommation, MoteurDimensionnement, MoteurPerformance, MoteurPerte, MoteurRendement};
-use App\Domain\Simulation\Simulation;
+use App\Domain\Common\ValueObject\Id;
+use App\Domain\Ecs\Entity\{Generateur, GenerateurCollection};
+use App\Domain\Ecs\Entity\{Installation, InstallationCollection};
+use App\Domain\Ecs\Entity\{Systeme, SystemeCollection};
 
 final class Ecs
 {
-    private ?BesoinCollection $besoins = null;
-
     public function __construct(
-        private readonly Audit $audit,
+        private readonly Id $id,
         private InstallationCollection $installations,
         private GenerateurCollection $generateurs,
+        private SystemeCollection $systemes,
+        private EcsData $data,
     ) {}
 
-    public static function create(Audit $audit): self
+    public static function create(): self
     {
         return new self(
-            audit: $audit,
+            id: Id::create(),
             generateurs: new GenerateurCollection(),
             installations: new InstallationCollection(),
+            systemes: new SystemeCollection(),
+            data: EcsData::create(),
         );
     }
 
-    public function reinitialise(): void
+    public function reinitialise(): self
     {
-        $this->besoins = null;
+        $this->data = EcsData::create();
         $this->generateurs->reinitialise();
         $this->installations->reinitialise();
-    }
-
-    public function controle(): void
-    {
-        $this->generateurs->controle();
-        $this->installations->controle();
-    }
-
-    public function calcule_besoins(MoteurBesoin $moteur, Simulation $simulation): self
-    {
-        $this->besoins = $moteur->calcule_besoins($this, $simulation);
+        $this->systemes->reinitialise();
         return $this;
     }
 
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
+    public function calcule(EcsData $data): self
     {
-        $this->installations->calcule_dimensionnement($moteur);
+        $this->data = $data;
         return $this;
     }
 
-    public function calcule_performance(MoteurPerformance $moteur, Simulation $simulation): self
+    public function id(): Id
     {
-        $this->generateurs->calcule_performance($moteur, $simulation);
-        return $this;
+        return $this->id;
     }
 
-    public function calcule_pertes(MoteurPerte $moteur, Simulation $simulation): self
-    {
-        $this->generateurs->calcule_pertes($moteur, $simulation);
-        $this->installations->calcule_pertes($moteur, $simulation);
-        return $this;
-    }
-
-    public function calcule_rendement(MoteurRendement $moteur): self
-    {
-        $this->installations->calcule_rendement($moteur);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur): self
-    {
-        $this->installations->calcule_consommations($moteur);
-        return $this;
-    }
-
-    public function audit(): Audit
-    {
-        return $this->audit;
-    }
-
+    /**
+     * @return InstallationCollection|Installation[]
+     */
     public function installations(): InstallationCollection
     {
         return $this->installations;
@@ -90,15 +59,13 @@ final class Ecs
     public function add_installation(Installation $entity): self
     {
         $this->installations->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function remove_installation(Installation $entity): self
-    {
-        $this->installations->remove($entity);
-        return $this;
-    }
-
+    /**
+     * @return GenerateurCollection|Generateur[]
+     */
     public function generateurs(): GenerateurCollection
     {
         return $this->generateurs;
@@ -107,29 +74,27 @@ final class Ecs
     public function add_generateur(Generateur $entity): self
     {
         $this->generateurs->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function remove_generateur(Generateur $entity): self
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
+    public function systemes(): SystemeCollection
     {
-        $this->generateurs->remove($entity);
+        return $this->systemes;
+    }
+
+    public function add_systeme(Systeme $entity): self
+    {
+        $this->systemes->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function besoins(): ?BesoinCollection
+    public function data(): EcsData
     {
-        return $this->besoins;
-    }
-
-    public function consommations(): ConsommationCollection
-    {
-        return $this->installations->consommations();
-    }
-
-    // * helpers
-
-    public function annee_construction_batiment(): int
-    {
-        return $this->audit->annee_construction_batiment();
+        return $this->data;
     }
 }

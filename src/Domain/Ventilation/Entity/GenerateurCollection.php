@@ -15,13 +15,11 @@ final class GenerateurCollection extends ArrayCollection
         return $this->walk(fn(Generateur $item) => $item->reinitialise());
     }
 
-    public function controle(): void
-    {
-        $this->walk(fn(Generateur $item) => $item->controle());
-    }
-
     public function find(Id $id): ?Generateur
     {
-        return $this->findFirst(fn(mixed $key, Generateur $item): bool => $item->id()->compare($id));
+        return array_find(
+            $this->elements,
+            fn(Generateur $item) => $item->id()->compare($id),
+        );
     }
 }

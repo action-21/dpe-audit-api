@@ -3,11 +3,11 @@
 namespace App\Database\Opendata\Production;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\ValueObject\{Id, Inclinaison, Orientation};
 
 final class XMLPanneauPvReader extends XMLReader
 {
-    public function apply(): bool
+    public function supports(): bool
     {
         return ($this->enum_orientation_pv_id() && $this->enum_inclinaison_pv_id()) || $this->tv_coef_orientation_pv_id();
     }
@@ -22,36 +22,36 @@ final class XMLPanneauPvReader extends XMLReader
         return 'Panneau photovoltaïque non décrit';
     }
 
-    public function orientation(): float
+    public function orientation(): Orientation
     {
         return match ($this->enum_orientation_pv_id()) {
-            1 => 90,
-            2 => 135,
-            3 => 180,
-            4 => 225,
-            5 => 270,
+            1 => Orientation::from(90),
+            2 => Orientation::from(135),
+            3 => Orientation::from(180),
+            4 => Orientation::from(225),
+            5 => Orientation::from(270),
             default => match ($this->tv_coef_orientation_pv_id()) {
-                1, 6, 11, 16 => 90,
-                2, 7, 12, 17 => 135,
-                3, 8, 13, 18 => 180,
-                4, 9, 14, 19 => 225,
-                5, 10, 15, 20 => 270,
+                1, 6, 11, 16 => Orientation::from(90),
+                2, 7, 12, 17 => Orientation::from(135),
+                3, 8, 13, 18 => Orientation::from(180),
+                4, 9, 14, 19 => Orientation::from(225),
+                5, 10, 15, 20 => Orientation::from(270),
             }
         };
     }
 
-    public function inclinaison(): float
+    public function inclinaison(): Inclinaison
     {
         return match ($this->enum_inclinaison_pv_id()) {
-            1 => 10,
-            2 => 30,
-            3 => 60,
-            4 => 80,
+            1 => Inclinaison::from(10),
+            2 => Inclinaison::from(30),
+            3 => Inclinaison::from(60),
+            4 => Inclinaison::from(80),
             default => match ($this->tv_coef_orientation_pv_id()) {
-                1, 2, 3, 4, 5 => 10,
-                6, 7, 8, 9, 10 => 30,
-                11, 12, 13, 14, 15 => 60,
-                16, 17, 18, 19, 20 => 80,
+                1, 2, 3, 4, 5 => Inclinaison::from(10),
+                6, 7, 8, 9, 10 => Inclinaison::from(30),
+                11, 12, 13, 14, 15 => Inclinaison::from(60),
+                16, 17, 18, 19, 20 => Inclinaison::from(80),
             }
         };
     }
@@ -63,26 +63,26 @@ final class XMLPanneauPvReader extends XMLReader
 
     public function surface_totale_capteurs(): ?float
     {
-        return $this->xml()->findOne('.//surface_totale_capteurs')?->floatval();
+        return $this->findOne('.//surface_totale_capteurs')?->floatval();
     }
 
     public function modules(): int
     {
-        return $this->xml()->findOne('.//nombre_module')?->intval() ?? 1;
+        return $this->findOne('.//nombre_module')?->intval() ?? 1;
     }
 
     public function enum_orientation_pv_id(): ?int
     {
-        return $this->xml()->findOne('.//enum_orientation_pv_id')?->intval();
+        return $this->findOne('.//enum_orientation_pv_id')?->intval();
     }
 
     public function enum_inclinaison_pv_id(): ?int
     {
-        return $this->xml()->findOne('.//enum_inclinaison_pv_id')?->intval();
+        return $this->findOne('.//enum_inclinaison_pv_id')?->intval();
     }
 
     public function tv_coef_orientation_pv_id(): ?int
     {
-        return $this->xml()->findOne('.//tv_coef_orientation_pv_id')?->intval();
+        return $this->findOne('.//tv_coef_orientation_pv_id')?->intval();
     }
 }

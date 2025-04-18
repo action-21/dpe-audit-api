@@ -1,9 +1,8 @@
 resources:
-  App\Domain\Refroidissement\Refroidissement:
+  App\Api\Refroidissement\Model\Refroidissement:
     shortName: Refroidissement
     operations:
       refroidissement.get:
         uriTemplate: /audit/{id}/refroidissement
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Refroidissement\State\RefroidissementProvider
-        output: App\Api\Refroidissement\Resource\RefroidissementResource

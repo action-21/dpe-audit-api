@@ -4,14 +4,14 @@ namespace App\Domain\Common\Enum;
 
 enum Energie: string implements Enum
 {
-    case ELECTRICITE = 'ELECTRICITE';
-    case GAZ_NATUREL = 'GAZ_NATUREL';
-    case GPL = 'GPL';
-    case FIOUL = 'FIOUL';
-    case BOIS = 'BOIS';
-    case CHARBON = 'CHARBON';
-    case RESEAU_CHALEUR = 'RESEAU_CHALEUR';
-    case RESEAU_FROID = 'RESEAU_FROID';
+    case ELECTRICITE = 'electricite';
+    case GAZ_NATUREL = 'gaz_naturel';
+    case GPL = 'gpl';
+    case FIOUL = 'fioul';
+    case BOIS = 'bois';
+    case CHARBON = 'charbon';
+    case RESEAU_CHALEUR = 'reseau_chaleur';
+    case RESEAU_FROID = 'reseau_froid';
 
     public static function from_enum_energie_id(int $id): self
     {
@@ -74,7 +74,7 @@ enum Energie: string implements Enum
         };
     }
 
-    public function combustible(): bool
+    public function is_combustible(): bool
     {
         return \in_array($this, [
             self::GAZ_NATUREL,

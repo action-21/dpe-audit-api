@@ -6,41 +6,38 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeGenerateur: string implements Enum
 {
-    case CHAUDIERE = 'CHAUDIERE';
-    case CHAUDIERE_MULTI_BATIMENT = 'CHAUDIERE_MULTI_BATIMENT';
-    case CONVECTEUR_BI_JONCTION = 'CONVECTEUR_BI_JONCTION';
-    case CONVECTEUR_ELECTRIQUE = 'CONVECTEUR_ELECTRIQUE';
-    case CUISINIERE = 'CUISINIERE';
-    case FOYER_FERME = 'FOYER_FERME';
-    case GENERATEUR_AIR_CHAUD = 'GENERATEUR_AIR_CHAUD';
-    case INSERT = 'INSERT';
-    case PAC_AIR_AIR = 'PAC_AIR_AIR';
-    case PAC_AIR_EAU = 'PAC_AIR_EAU';
-    case PAC_EAU_EAU = 'PAC_EAU_EAU';
-    case PAC_EAU_GLYCOLEE_EAU = 'PAC_EAU_GLYCOLEE_EAU';
-    case PAC_GEOTHERMIQUE = 'PAC_GEOTHERMIQUE';
-    case PAC_HYBRIDE_AIR_EAU = 'PAC_HYBRIDE_AIR_EAU';
-    case PAC_HYBRIDE_EAU_EAU = 'PAC_HYBRIDE_EAU_EAU';
-    case PAC_HYBRIDE_EAU_GLYCOLEE_EAU = 'PAC_HYBRIDE_EAU_GLYCOLEE_EAU';
-    case PAC_HYBRIDE_GEOTHERMIQUE = 'PAC_HYBRIDE_GEOTHERMIQUE';
-    case PAC_MULTI_BATIMENT = 'PAC_MULTI_BATIMENT';
-    case PANNEAU_RAYONNANT_ELECTRIQUE = 'PANNEAU_RAYONNANT_ELECTRIQUE';
-    case PLAFOND_RAYONNANT_ELECTRIQUE = 'PLAFOND_RAYONNANT_ELECTRIQUE';
-    case PLANCHER_RAYONNANT_ELECTRIQUE = 'PLANCHER_RAYONNANT_ELECTRIQUE';
-    case POELE = 'POELE';
-    case POELE_BOUILLEUR = 'POELE_BOUILLEUR';
-    case RADIATEUR_ELECTRIQUE = 'RADIATEUR_ELECTRIQUE';
-    case RADIATEUR_ELECTRIQUE_ACCUMULATION = 'RADIATEUR_ELECTRIQUE_ACCUMULATION';
-    case RADIATEUR_GAZ = 'RADIATEUR_GAZ';
-    case RESEAU_CHALEUR = 'RESEAU_CHALEUR';
+    case CHAUDIERE = 'chaudiere';
+    case CONVECTEUR_BI_JONCTION = 'convecteur_bi_jonction';
+    case CONVECTEUR_ELECTRIQUE = 'convecteur_electrique';
+    case CUISINIERE = 'cuisiniere';
+    case FOYER_FERME = 'foyer_ferme';
+    case GENERATEUR_AIR_CHAUD = 'generateur_air_chaud';
+    case INSERT = 'insert';
+    case PAC_AIR_AIR = 'pac_air_air';
+    case PAC_AIR_EAU = 'pac_air_eau';
+    case PAC_EAU_EAU = 'pac_eau_eau';
+    case PAC_EAU_GLYCOLEE_EAU = 'pac_eau_glycolee_eau';
+    case PAC_GEOTHERMIQUE = 'pac_geothermique';
+    case PAC_HYBRIDE_AIR_EAU = 'pac_hybride_air_eau';
+    case PAC_HYBRIDE_EAU_EAU = 'pac_hybride_eau_eau';
+    case PAC_HYBRIDE_EAU_GLYCOLEE_EAU = 'pac_hybride_eau_glycolee_eau';
+    case PAC_HYBRIDE_GEOTHERMIQUE = 'pac_hybride_geothermique';
+    case PANNEAU_RAYONNANT_ELECTRIQUE = 'panneau_rayonnant_electrique';
+    case PLAFOND_RAYONNANT_ELECTRIQUE = 'plafond_rayonnant_electrique';
+    case PLANCHER_RAYONNANT_ELECTRIQUE = 'plancher_rayonnant_electrique';
+    case POELE = 'poele';
+    case POELE_BOUILLEUR = 'poele_bouilleur';
+    case RADIATEUR_ELECTRIQUE = 'radiateur_electrique';
+    case RADIATEUR_ELECTRIQUE_ACCUMULATION = 'radiateur_electrique_accumulation';
+    case RADIATEUR_GAZ = 'radiateur_gaz';
+    case RESEAU_CHALEUR = 'reseau_chaleur';
 
     public static function from_type_generateur_ch_id(int $id): ?self
     {
         return match ($id) {
             55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
-            81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 106, 119, 120, 121, 122, 123, 124, 125,
-            126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139 => self::CHAUDIERE,
-            109, 110, 111, 171 => self::CHAUDIERE_MULTI_BATIMENT,
+            81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 106, 109, 110, 111, 119, 120, 121, 122, 123, 124, 125,
+            126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 171 => self::CHAUDIERE,
             105 => self::CONVECTEUR_BI_JONCTION,
             98, 99, 100, 101 => self::CONVECTEUR_ELECTRIQUE,
             20, 24, 28, 32, 36, 40 => self::CUISINIERE,
@@ -48,12 +45,11 @@ enum TypeGenerateur: string implements Enum
             50, 51, 52 => self::GENERATEUR_AIR_CHAUD,
             23, 27, 31, 35, 39, 43 => self::INSERT,
             1, 2, 3 => self::PAC_AIR_AIR,
-            4, 5, 6, 7 => self::PAC_AIR_EAU,
+            4, 5, 6, 7, 112 => self::PAC_AIR_EAU,
             8, 9, 10, 11 => self::PAC_EAU_EAU,
             12, 13, 14, 15 => self::PAC_EAU_GLYCOLEE_EAU,
             16, 17, 18, 19 => self::PAC_GEOTHERMIQUE,
             148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161 => self::PAC_HYBRIDE_AIR_EAU,
-            112 => self::PAC_MULTI_BATIMENT,
             102 => self::PANNEAU_RAYONNANT_ELECTRIQUE,
             103 => self::PLANCHER_RAYONNANT_ELECTRIQUE,
             22, 26, 30, 34, 38, 42, 44, 45, 46, 47 => self::POELE,
@@ -83,8 +79,6 @@ enum TypeGenerateur: string implements Enum
             self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU => 'Pompe à chaleur hybride eau glycolee/eau',
             self::PAC_HYBRIDE_GEOTHERMIQUE => 'Pompe à chaleur hybride geothermique',
             self::CHAUDIERE => 'Chaudiere',
-            self::CHAUDIERE_MULTI_BATIMENT => 'Chaudiere multi bâtiment',
-            self::PAC_MULTI_BATIMENT => 'Pompe(s) à chaleur multi bâtiment modelisee comme un reseau de chaleur',
             self::CONVECTEUR_ELECTRIQUE => 'Convecteur electrique',
             self::PANNEAU_RAYONNANT_ELECTRIQUE => 'Panneau rayonnant electrique',
             self::RADIATEUR_ELECTRIQUE => 'Radiateur electrique',
@@ -124,16 +118,14 @@ enum TypeGenerateur: string implements Enum
         ]);
     }
 
+    public function is_radiateur_gaz(): bool
+    {
+        return $this === self::RADIATEUR_GAZ;
+    }
+
     public function is_chaudiere(): bool
     {
-        return \in_array($this, [
-            self::CHAUDIERE,
-            self::CHAUDIERE_MULTI_BATIMENT,
-            self::PAC_HYBRIDE_AIR_EAU,
-            self::PAC_HYBRIDE_EAU_EAU,
-            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
-            self::PAC_HYBRIDE_GEOTHERMIQUE,
-        ]);
+        return $this === self::CHAUDIERE;
     }
 
     public function is_pac(): bool
@@ -148,7 +140,6 @@ enum TypeGenerateur: string implements Enum
             self::PAC_HYBRIDE_EAU_EAU,
             self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
             self::PAC_HYBRIDE_GEOTHERMIQUE,
-            self::PAC_MULTI_BATIMENT,
         ]);
     }
 
@@ -162,6 +153,16 @@ enum TypeGenerateur: string implements Enum
         ]);
     }
 
+    public function is_generateur_air_chaud(): bool
+    {
+        return $this === self::GENERATEUR_AIR_CHAUD;
+    }
+
+    public function is_poele_bouilleur(): bool
+    {
+        return $this === self::POELE_BOUILLEUR;
+    }
+
     public function is_reseau_chaleur(): bool
     {
         return $this === self::RESEAU_CHALEUR;
@@ -171,7 +172,6 @@ enum TypeGenerateur: string implements Enum
     {
         return \in_array($this, [
             self::CHAUDIERE,
-            self::CHAUDIERE_MULTI_BATIMENT,
             self::PAC_AIR_EAU,
             self::PAC_EAU_EAU,
             self::PAC_EAU_GLYCOLEE_EAU,
@@ -180,17 +180,44 @@ enum TypeGenerateur: string implements Enum
             self::PAC_HYBRIDE_EAU_EAU,
             self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
             self::PAC_HYBRIDE_GEOTHERMIQUE,
-            self::PAC_MULTI_BATIMENT,
             self::POELE_BOUILLEUR,
             self::RESEAU_CHALEUR,
         ]);
+    }
+
+    public function is_combustion(): bool
+    {
+        return \in_array($this, [
+            self::CHAUDIERE,
+            self::CUISINIERE,
+            self::FOYER_FERME,
+            self::GENERATEUR_AIR_CHAUD,
+            self::INSERT,
+            self::PAC_HYBRIDE_AIR_EAU,
+            self::PAC_HYBRIDE_EAU_EAU,
+            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
+            self::PAC_HYBRIDE_GEOTHERMIQUE,
+            self::POELE,
+            self::POELE_BOUILLEUR,
+            self::RADIATEUR_GAZ,
+        ]);
+    }
+
+    public function is_multi_batiment(): ?bool
+    {
+        if ($this->is_reseau_chaleur()) {
+            return true;
+        }
+        if ($this->is_chauffage_electrique() || $this->is_poele_insert() || $this->is_radiateur_gaz()) {
+            return false;
+        }
+        return null;
     }
 
     public function is_chauffage_central(): bool
     {
         return \in_array($this, [
             self::CHAUDIERE,
-            self::CHAUDIERE_MULTI_BATIMENT,
             self::GENERATEUR_AIR_CHAUD,
             self::PAC_AIR_AIR,
             self::PAC_AIR_EAU,
@@ -201,7 +228,6 @@ enum TypeGenerateur: string implements Enum
             self::PAC_HYBRIDE_EAU_EAU,
             self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
             self::PAC_HYBRIDE_GEOTHERMIQUE,
-            self::PAC_MULTI_BATIMENT,
             self::POELE_BOUILLEUR,
             self::RESEAU_CHALEUR,
         ]);
@@ -234,7 +260,7 @@ enum TypeGenerateur: string implements Enum
         }
         return match ($this) {
             self::RADIATEUR_GAZ => false,
-            self::CHAUDIERE_MULTI_BATIMENT, self::PAC_MULTI_BATIMENT, self::RESEAU_CHALEUR => true,
+            self::RESEAU_CHALEUR => true,
             default => null,
         };
     }
@@ -245,47 +271,8 @@ enum TypeGenerateur: string implements Enum
             return true;
         }
         return match ($this) {
-            self::CHAUDIERE_MULTI_BATIMENT, self::PAC_MULTI_BATIMENT, self::RESEAU_CHALEUR => false,
+            self::RESEAU_CHALEUR => false,
             default => null,
         };
-    }
-
-    /**
-     * @deprecated
-     */
-    public function combustion_applicable(): bool
-    {
-        return \in_array($this, [
-            self::CHAUDIERE,
-            self::POELE_BOUILLEUR,
-            self::RADIATEUR_GAZ,
-            self::GENERATEUR_AIR_CHAUD,
-            self::PAC_HYBRIDE_AIR_EAU,
-            self::PAC_HYBRIDE_EAU_EAU,
-            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
-            self::PAC_HYBRIDE_GEOTHERMIQUE,
-        ]);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function scop_applicable(): bool
-    {
-        return $this->is_pac() && $this !== self::PAC_MULTI_BATIMENT;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function tfonc_applicable(): bool
-    {
-        return \in_array($this, [
-            self::CHAUDIERE,
-            self::PAC_HYBRIDE_AIR_EAU,
-            self::PAC_HYBRIDE_EAU_EAU,
-            self::PAC_HYBRIDE_EAU_GLYCOLEE_EAU,
-            self::PAC_HYBRIDE_GEOTHERMIQUE,
-        ]);
     }
 }

@@ -8,25 +8,25 @@ use Webmozart\Assert\Assert;
 final class Reseau
 {
     public function __construct(
-        public readonly bool $alimentation_contigues,
+        public readonly bool $alimentation_contigue,
         public readonly int $niveaux_desservis,
-        public readonly IsolationReseau $isolation_reseau,
-        public readonly BouclageReseau $type_bouclage,
+        public readonly ?IsolationReseau $isolation,
+        public readonly ?BouclageReseau $bouclage,
     ) {}
 
     public static function create(
-        bool $alimentation_contigues,
+        bool $alimentation_contigue,
         int $niveaux_desservis,
-        IsolationReseau $isolation_reseau,
-        BouclageReseau $type_bouclage,
+        ?IsolationReseau $isolation,
+        ?BouclageReseau $bouclage,
     ): self {
         Assert::greaterThan($niveaux_desservis, 0);
 
         return new self(
-            alimentation_contigues: $alimentation_contigues,
+            alimentation_contigue: $alimentation_contigue,
             niveaux_desservis: $niveaux_desservis,
-            isolation_reseau: $isolation_reseau,
-            type_bouclage: $type_bouclage,
+            isolation: $isolation,
+            bouclage: $bouclage,
         );
     }
 }

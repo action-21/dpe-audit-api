@@ -5,9 +5,6 @@ namespace App\Domain\Common\ValueObject;
 use App\Domain\Common\Enum\{Energie, ScenarioUsage, Usage};
 use Webmozart\Assert\Assert;
 
-/**
- * Les consommations sont exprimées sur l'année
- */
 final class Consommation
 {
     public function __construct(

@@ -6,8 +6,8 @@ use App\Domain\Common\Enum\Enum;
 
 enum Exposition: string implements Enum
 {
-    case EXPOSITION_SIMPLE = 'SIMPLE';
-    case EXPOSITION_MULTIPLE = 'MULTIPLE';
+    case EXPOSITION_SIMPLE = 'exposition_simple';
+    case EXPOSITION_MULTIPLE = 'exposition_multiple';
 
     public static function from_plusieurs_facades_exposées(bool $plusieurs_facades_exposées): self
     {

@@ -2,64 +2,40 @@
 
 namespace App\Domain\Refroidissement\Entity;
 
+use App\Domain\Common\ValueObject\{Annee, Id};
 use App\Domain\Refroidissement\Refroidissement;
+use App\Domain\Refroidissement\Data\GenerateurData;
 use App\Domain\Refroidissement\Enum\{EnergieGenerateur, TypeGenerateur};
-use App\Domain\Common\ValueObject\Id;
-use App\Domain\Refroidissement\Service\MoteurPerformance;
-use App\Domain\Refroidissement\ValueObject\{Performance, Signaletique};
-use Webmozart\Assert\Assert;
+use App\Domain\Refroidissement\Factory\GenerateurFactory;
 
-/**
- * TODO: Méthode travaux
- */
 final class Generateur
 {
-    private ?Performance $performance = null;
-
     public function __construct(
         private readonly Id $id,
         private readonly Refroidissement $refroidissement,
+        private readonly ?ReseauFroid $reseau_froid,
         private string $description,
-        private Signaletique $signaletique,
-        private ?int $annee_installation,
-        private ?Id $reseau_froid_id,
+        private TypeGenerateur $type,
+        private EnergieGenerateur $energie,
+        private ?Annee $annee_installation,
+        private ?float $seer,
+        private GenerateurData $data,
     ) {}
 
-    public static function create(
-        Id $id,
-        Refroidissement $refroidissement,
-        string $description,
-        Signaletique $signaletique,
-        ?int $annee_installation,
-        ?Id $reseau_froid_id,
-    ): Generateur {
-        Assert::nullOrLessThanEq($annee_installation, (int) date('Y'));
-        Assert::nullOrGreaterThanEq($annee_installation, $refroidissement->annee_construction_batiment());
-
-        return new Generateur(
-            id: $id,
-            refroidissement: $refroidissement,
-            description: $description,
-            signaletique: $signaletique,
-            annee_installation: $annee_installation,
-            reseau_froid_id: $signaletique->type_generateur === TypeGenerateur::RESEAU_FROID ? $reseau_froid_id : null,
-        );
+    public static function create(GenerateurFactory $factory): self
+    {
+        return $factory->build();
     }
 
-    public function controle(): void
+    public function reinitialise(): self
     {
-        Assert::nullOrLessThanEq($this->annee_installation, (int) date('Y'));
-        Assert::nullOrGreaterThanEq($this->annee_installation, $this->refroidissement->annee_construction_batiment());
+        $this->data = GenerateurData::create();
+        return $this;
     }
 
-    public function reinitialise(): void
+    public function calcule(GenerateurData $data): self
     {
-        $this->performance = null;
-    }
-
-    public function calcule_performance(MoteurPerformance $moteur): self
-    {
-        $this->performance = $moteur->calcule_performance($this);
+        $this->data = $data;
         return $this;
     }
 
@@ -78,54 +54,41 @@ final class Generateur
         return $this->description;
     }
 
-    public function type_generateur(): TypeGenerateur
+    public function type(): TypeGenerateur
     {
-        return $this->signaletique->type_generateur;
+        return $this->type;
     }
 
     public function energie(): EnergieGenerateur
     {
-        return $this->signaletique->energie_generateur;
+        return $this->energie;
     }
 
-    public function annee_installation(): ?int
+    public function annee_installation(): ?Annee
     {
         return $this->annee_installation;
     }
 
     public function seer(): ?float
     {
-        return $this->signaletique->seer;
+        return $this->seer;
     }
 
-    public function signaletique(): Signaletique
+    public function reseau_froid(): ?ReseauFroid
     {
-        return $this->signaletique;
+        return $this->reseau_froid;
     }
 
-    public function reseau_froid_id(): ?Id
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
+    public function systemes(): SystemeCollection
     {
-        return $this->reseau_froid_id;
+        return $this->refroidissement->systemes()->with_generateur($this->id);
     }
 
-    public function reference_reseau_froid(Id $reseau_froid_id): self
+    public function data(): GenerateurData
     {
-        if ($this->type_generateur() === TypeGenerateur::RESEAU_FROID) {
-            $this->reseau_froid_id = $reseau_froid_id;
-            $this->reinitialise();
-        }
-        return $this;
-    }
-
-    public function dereference_reseau_froid(): self
-    {
-        $this->reseau_froid_id = null;
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function performance(): ?Performance
-    {
-        return $this->performance;
+        return $this->data;
     }
 }

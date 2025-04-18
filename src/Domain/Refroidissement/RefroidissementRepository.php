@@ -6,5 +6,5 @@ use App\Domain\Common\ValueObject\Id;
 
 interface RefroidissementRepository
 {
-    public function find(Id $audit_id): ?Refroidissement;
+    public function find(Id $id): ?Refroidissement;
 }

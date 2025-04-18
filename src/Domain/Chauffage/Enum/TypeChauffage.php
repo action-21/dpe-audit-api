@@ -10,13 +10,13 @@ enum TypeChauffage: string implements Enum
      * Un système de chauffage divisé est un système pour lequel la génération et l’émission sont confondues. C’est
      * le cas des convecteurs électriques, planchers chauffants électriques...
      */
-    case CHAUFFAGE_DIVISE = 'CHAUFFAGE_DIVISE';
+    case CHAUFFAGE_DIVISE = 'chauffage_divise';
 
     /**
      * Un système de chauffage central comporte un générateur central, individuel ou collectif, et une distribution par
      * fluide chauffant : air ou eau.
      */
-    case CHAUFFAGE_CENTRAL = 'CHAUFFAGE_CENTRAL';
+    case CHAUFFAGE_CENTRAL = 'chauffage_central';
 
     public static function from_enum_type_chauffage_id(int $id): self
     {
@@ -37,5 +37,10 @@ enum TypeChauffage: string implements Enum
             self::CHAUFFAGE_DIVISE => 'Chauffage divisé',
             self::CHAUFFAGE_CENTRAL => 'Chauffage central'
         };
+    }
+
+    public function is(self $value): bool
+    {
+        return $this === $value;
     }
 }

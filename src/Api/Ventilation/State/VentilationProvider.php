@@ -5,21 +5,20 @@ namespace App\Api\Ventilation\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Api\Ventilation\GetVentilationHandler;
-use App\Api\Ventilation\Resource\VentilationResource;
+use App\Api\Ventilation\Model\Ventilation;
 use App\Domain\Common\ValueObject\Id;
 
 /**
- * @implements ProviderInterface<VentilationResource|null>
+ * @implements ProviderInterface<Ventilation|null>
  */
 final class VentilationProvider implements ProviderInterface
 {
     public function __construct(private GetVentilationHandler $handler) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?VentilationResource
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?Ventilation
     {
         $id = $uriVariables['id'] ? Id::from($uriVariables['id']) : null;
         $entity = $id ? ($this->handler)($id) : null;
-        dump($entity->installations());
-        return $entity ? VentilationResource::from($entity) : null;
+        return $entity ? Ventilation::from($entity) : null;
     }
 }

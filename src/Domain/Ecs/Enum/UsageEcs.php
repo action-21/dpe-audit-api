@@ -6,8 +6,8 @@ use App\Domain\Common\Enum\Enum;
 
 enum UsageEcs: string implements Enum
 {
-    case ECS = 'ECS';
-    case CHAUFFAGE_ECS = 'CHAUFFAGE_ECS';
+    case ECS = 'ecs';
+    case CHAUFFAGE_ECS = 'chauffage_ecs';
 
     public static function from_enum_usage_generateur_id(int $id): ?self
     {

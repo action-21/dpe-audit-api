@@ -1,5 +1,5 @@
 
-/etc/audits/*
+/data/*
 
 ###> symfony/framework-bundle ###
 /.env

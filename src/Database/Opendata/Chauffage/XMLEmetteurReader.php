@@ -3,40 +3,45 @@
 namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\XMLReader;
-use App\Domain\Chauffage\Enum\{TemperatureDistribution, TypeDistribution, TypeEmetteur};
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Chauffage\Enum\{TemperatureDistribution, TypeDistribution, TypeEmetteur, TypeEmission};
+use App\Domain\Common\ValueObject\{Annee, Id};
 
 final class XMLEmetteurReader extends XMLReader
 {
-    public function apply(): bool
+    public function supports(): bool
     {
         return null !== TypeEmetteur::from_type_emission_distribution_id($this->enum_type_emission_distribution_id())
             && null !== $this->temperature_distribution();
     }
 
-    public function read_installation(): XMLInstallationReader
+    public function installation(): XMLInstallationReader
     {
-        return XMLInstallationReader::from($this->xml()->findOneOrError('./ancestor::installation_chauffage'));
+        return XMLInstallationReader::from($this->findOneOrError('./ancestor::installation_chauffage'));
     }
 
     public function id(): Id
     {
-        return $this->xml()->findOneOrError('.//reference')->id();
+        return Id::from($this->reference());
     }
 
     public function reference(): string
     {
-        return $this->xml()->findOneOrError('.//reference')->strval();
+        return $this->findOneOrError('.//reference')->strval();
     }
 
     public function description(): string
     {
-        return $this->xml()->findOne('.//description')?->strval() ?? 'Emetteur non décrit';
+        return $this->findOne('.//description')?->strval() ?? 'Emetteur non décrit';
     }
 
     public function type_emetteur(): TypeEmetteur
     {
         return TypeEmetteur::from_type_emission_distribution_id($this->enum_type_emission_distribution_id());
+    }
+
+    public function type_emission(): TypeEmission
+    {
+        return TypeEmission::from_type_emetteur($this->type_emetteur());
     }
 
     public function type_distribution(): TypeDistribution
@@ -68,6 +73,20 @@ final class XMLEmetteurReader extends XMLReader
             default => false,
         };
     }
+
+    public function annee_installation(): ?Annee
+    {
+        return match ($this->enum_periode_installation_emetteur_id()) {
+            1 => Annee::from(1980),
+            2 => Annee::from(2000),
+            3 => $this->audit()->annee_etablissement(),
+            default => null,
+        };
+    }
+
+
+
+
 
     public function presence_regulation_centrale(): bool
     {
@@ -117,16 +136,6 @@ final class XMLEmetteurReader extends XMLReader
         };
     }
 
-    public function annee_installation(): ?int
-    {
-        return match ($this->enum_periode_installation_emetteur_id()) {
-            1 => 1980,
-            2 => 2000,
-            3 => $this->xml()->annee_etablissement(),
-            default => null,
-        };
-    }
-
     public function comptage_individuel(): ?bool
     {
         return match ($this->tv_intermittence_id()) {
@@ -138,73 +147,73 @@ final class XMLEmetteurReader extends XMLReader
 
     public function enum_type_emission_distribution_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_type_emission_distribution_id')->intval();
+        return $this->findOneOrError('.//enum_type_emission_distribution_id')->intval();
     }
 
     public function enum_equipement_intermittence_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_equipement_intermittence_id')->intval();
+        return $this->findOneOrError('.//enum_equipement_intermittence_id')->intval();
     }
 
     public function enum_type_regulation_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_type_regulation_id')->intval();
+        return $this->findOneOrError('.//enum_type_regulation_id')->intval();
     }
 
     public function enum_type_chauffage_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_type_chauffage_id')->intval();
+        return $this->findOneOrError('.//enum_type_chauffage_id')->intval();
     }
 
     public function enum_temp_distribution_ch_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_temp_distribution_ch_id')->intval();
+        return $this->findOneOrError('.//enum_temp_distribution_ch_id')->intval();
     }
 
     public function enum_lien_generateur_emetteur_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_lien_generateur_emetteur_id')->intval();
+        return $this->findOneOrError('.//enum_lien_generateur_emetteur_id')->intval();
     }
 
     public function enum_periode_installation_emetteur_id(): ?int
     {
-        return $this->xml()->findOne('.//enum_periode_installation_emetteur_id')?->intval();
+        return $this->findOne('.//enum_periode_installation_emetteur_id')?->intval();
     }
 
     public function tv_intermittence_id(): int
     {
-        return $this->xml()->findOneOrError('.//tv_intermittence_id')->intval();
+        return $this->findOneOrError('.//tv_intermittence_id')->intval();
     }
 
     public function surface_chauffee(): float
     {
-        return $this->xml()->findOneOrError('.//surface_chauffee')->floatval();
+        return $this->findOneOrError('.//surface_chauffee')->floatval();
     }
 
     public function reseau_distribution_isole(): ?bool
     {
-        return $this->xml()->findOne('.//reseau_distribution_isole')?->boolval();
+        return $this->findOne('.//reseau_distribution_isole')?->boolval();
     }
 
     // Données intermédiaires
 
     public function i0(): float
     {
-        return $this->xml()->findOneOrError('.//i0')->floatval();
+        return $this->findOneOrError('.//i0')->floatval();
     }
 
     public function rendement_emission(): float
     {
-        return $this->xml()->findOneOrError('.//rendement_emission')->floatval();
+        return $this->findOneOrError('.//rendement_emission')->floatval();
     }
 
     public function rendement_distribution(): float
     {
-        return $this->xml()->findOneOrError('.//rendement_distribution')->floatval();
+        return $this->findOneOrError('.//rendement_distribution')->floatval();
     }
 
     public function rendement_regulation(): float
     {
-        return $this->xml()->findOneOrError('.//rendement_regulation')->floatval();
+        return $this->findOneOrError('.//rendement_regulation')->floatval();
     }
 }

@@ -1,9 +1,8 @@
 resources:
-  App\Domain\Production\Production:
+  App\Api\Production\Model\Production:
     shortName: Production
     operations:
       production.get:
         uriTemplate: /audit/{id}/production
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Production\State\ProductionProvider
-        output: App\Api\Production\Resource\ProductionResource

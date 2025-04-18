@@ -6,14 +6,14 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeGenerateur: string implements Enum
 {
-    case PAC_AIR_AIR = 'PAC_AIR_AIR';
-    case PAC_AIR_EAU = 'PAC_AIR_EAU';
-    case PAC_EAU_EAU = 'PAC_EAU_EAU';
-    case PAC_EAU_GLYCOLEE_EAU = 'PAC_EAU_GLYCOLEE_EAU';
-    case PAC_GEOTHERMIQUE = 'PAC_GEOTHERMIQUE';
-    case RESEAU_FROID = 'RESEAU_FROID';
-    case AUTRE_SYSTEME_THERMODYNAMIQUE = 'AUTRE_SYSTEME_THERMODYNAMIQUE';
-    case AUTRE = 'AUTRE';
+    case PAC_AIR_AIR = 'pac_air_air';
+    case PAC_AIR_EAU = 'pac_air_eau';
+    case PAC_EAU_EAU = 'pac_eau_eau';
+    case PAC_EAU_GLYCOLEE_EAU = 'pac_eau_glycolee_eau';
+    case PAC_GEOTHERMIQUE = 'pac_geothermique';
+    case RESEAU_FROID = 'reseau_froid';
+    case AUTRE_SYSTEME_THERMODYNAMIQUE = 'autre_systeme_thermodynamique';
+    case AUTRE = 'autre';
 
     public static function from_enum_type_generateur_fr_id(int $id): self
     {
@@ -49,7 +49,12 @@ enum TypeGenerateur: string implements Enum
         };
     }
 
-    public function is_thermodynamique(): bool
+    public function is_climatiseur(): bool
+    {
+        return $this === self::AUTRE;
+    }
+
+    public function is_pac(): bool
     {
         return \in_array($this, [
             self::PAC_AIR_AIR,
@@ -61,7 +66,12 @@ enum TypeGenerateur: string implements Enum
         ]);
     }
 
-    public function seer_applicable(): bool
+    public function is_reseau_froid(): bool
+    {
+        return $this === self::RESEAU_FROID;
+    }
+
+    public function is_thermodynamique(): bool
     {
         return \in_array($this, [
             self::PAC_AIR_AIR,

@@ -2,82 +2,42 @@
 
 namespace App\Domain\Ecs\Entity;
 
-use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\ValueObject\{Annee, Id};
+use App\Domain\Ecs\Data\GenerateurData;
 use App\Domain\Ecs\Ecs;
 use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur, UsageEcs};
-use App\Domain\Ecs\Service\{MoteurPerformance, MoteurPerte};
-use App\Domain\Ecs\ValueObject\{Combustion, Performance, PerteCollection, Signaletique};
-use App\Domain\Simulation\Simulation;
-use Webmozart\Assert\Assert;
+use App\Domain\Ecs\Factory\GenerateurFactory;
+use App\Domain\Ecs\ValueObject\Generateur\{Combustion, Position, Signaletique};
 
 final class Generateur
 {
-    private ?Performance $performance = null;
-    private ?PerteCollection $pertes_generation = null;
-    private ?PerteCollection $pertes_stockage = null;
-
     public function __construct(
         private readonly Id $id,
         private readonly Ecs $ecs,
         private string $description,
-        private ?Id $generateur_mixte_id,
-        private ?Id $reseau_chaleur_id,
-        private ?int $annee_installation,
-        private bool $position_volume_chauffe,
-        private bool $generateur_collectif,
+        private TypeGenerateur $type,
+        private EnergieGenerateur $energie,
+        private UsageEcs $usage,
+        private ?Annee $annee_installation,
+        private Position $position,
         private Signaletique $signaletique,
+        private GenerateurData $data,
     ) {}
 
-    public static function create(
-        Id $id,
-        Ecs $ecs,
-        string $description,
-        ?Id $generateur_mixte_id,
-        ?Id $reseau_chaleur_id,
-        ?int $annee_installation,
-        bool $position_volume_chauffe,
-        bool $generateur_collectif,
-        Signaletique $signaletique,
-    ): self {
-        Assert::nullOrLessThanEq($annee_installation, (int) date('Y'));
-        Assert::nullOrGreaterThanEq($annee_installation, $ecs->annee_construction_batiment());
-
-        return new self(
-            id: $id,
-            ecs: $ecs,
-            description: $description,
-            generateur_mixte_id: $signaletique->type->is_usage_mixte() ? $generateur_mixte_id : null,
-            reseau_chaleur_id: $signaletique->type->is_reseau_chaleur() ? $reseau_chaleur_id : null,
-            annee_installation: $annee_installation,
-            position_volume_chauffe: $signaletique->type->position_volume_chauffe() ?? $position_volume_chauffe,
-            generateur_collectif: $signaletique->type->is_generateur_collectif() ?? $generateur_collectif,
-            signaletique: $signaletique,
-        );
+    public static function create(GenerateurFactory $factory): self
+    {
+        return $factory->build();
     }
 
-    public function controle(): void
+    public function reinitialise(): self
     {
-        Assert::nullOrLessThanEq($this->annee_installation, (int) date('Y'));
-        Assert::nullOrGreaterThanEq($this->annee_installation, $this->ecs->annee_construction_batiment());
-    }
-
-    public function reinitialise(): void
-    {
-        $this->performance = null;
-        $this->pertes_generation = null;
-        $this->pertes_stockage = null;
-    }
-
-    public function calcule_performance(MoteurPerformance $moteur, Simulation $simulation): self
-    {
-        $this->performance = $moteur->calcule_performance($this, $simulation);
+        $this->data = GenerateurData::create();
         return $this;
     }
 
-    public function calcule_pertes(MoteurPerte $moteur, Simulation $simulation): self
+    public function calcule(GenerateurData $data): self
     {
-        $this->pertes_generation = $moteur->calcule_pertes_generation($this, $simulation);
-        $this->pertes_stockage = $moteur->calcule_pertes_stockage_generateur($this, $simulation);
+        $this->data = $data;
         return $this;
     }
 
@@ -98,32 +58,27 @@ final class Generateur
 
     public function type(): TypeGenerateur
     {
-        return $this->signaletique->type;
+        return $this->type;
     }
 
     public function energie(): EnergieGenerateur
     {
-        return $this->signaletique->energie;
+        return $this->energie;
     }
 
-    public function volume_stockage(): int
+    public function usage(): UsageEcs
     {
-        return $this->signaletique->volume_stockage;
+        return $this->usage;
     }
 
-    public function position_volume_chauffe(): bool
+    public function annee_installation(): ?Annee
     {
-        return $this->position_volume_chauffe;
+        return $this->annee_installation;
     }
 
-    public function generateur_collectif(): bool
+    public function position(): Position
     {
-        return $this->generateur_collectif;
-    }
-
-    public function combustion(): ?Combustion
-    {
-        return $this->signaletique->combustion;
+        return $this->position;
     }
 
     public function signaletique(): Signaletique
@@ -131,76 +86,29 @@ final class Generateur
         return $this->signaletique;
     }
 
-    public function usage(): UsageEcs
+    public function combustion(): ?Combustion
     {
-        return $this->generateur_mixte_id ? UsageEcs::CHAUFFAGE_ECS : UsageEcs::ECS;
+        return $this->signaletique->combustion;
     }
 
-    public function annee_installation(): ?int
+    /**
+     * @return InstallationCollection|Installation[]
+     */
+    public function installations(): InstallationCollection
     {
-        return $this->annee_installation;
+        return $this->ecs->installations()->with_generateur($this->id);
     }
 
-    public function reseau_chaleur_id(): ?Id
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
+    public function systemes(): SystemeCollection
     {
-        return $this->reseau_chaleur_id;
+        return $this->ecs->systemes()->with_generateur($this->id);
     }
 
-    public function reference_reseau_chaleur(Id $reseau_chaleur_id): self
+    public function data(): GenerateurData
     {
-        if ($this->signaletique->type === TypeGenerateur::RESEAU_CHALEUR) {
-            $this->reseau_chaleur_id = $reseau_chaleur_id;
-            $this->reinitialise();
-        }
-        return $this;
-    }
-
-    public function dereference_reseau_chaleur(): self
-    {
-        $this->reseau_chaleur_id = null;
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function generateur_mixte_id(): ?Id
-    {
-        return $this->generateur_mixte_id;
-    }
-
-    public function reference_generateur_mixte(Id $generateur_mixte_id): self
-    {
-        if (\in_array($this->signaletique->type, [
-            TypeGenerateur::CHAUDIERE,
-            TypeGenerateur::CHAUDIERE_MULTI_BATIMENT,
-            TypeGenerateur::PAC_DOUBLE_SERVICE,
-            TypeGenerateur::PAC_MULTI_BATIMENT,
-            TypeGenerateur::POELE_BOUILLEUR,
-            TypeGenerateur::RESEAU_CHALEUR,
-        ])) $this->generateur_mixte_id = $generateur_mixte_id;
-
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function dereference_generateur_mixte(): self
-    {
-        $this->generateur_mixte_id = null;
-        $this->reinitialise();
-        return $this;
-    }
-
-    public function performance(): ?Performance
-    {
-        return $this->performance;
-    }
-
-    public function pertes_generation(): ?PerteCollection
-    {
-        return $this->pertes_generation;
-    }
-
-    public function pertes_stockage(): ?PerteCollection
-    {
-        return $this->pertes_stockage;
+        return $this->data;
     }
 }

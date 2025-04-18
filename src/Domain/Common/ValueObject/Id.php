@@ -4,7 +4,7 @@ namespace App\Domain\Common\ValueObject;
 
 use Symfony\Component\Uid\{AbstractUid, Uuid};
 
-final class Id
+final class Id implements \Stringable
 {
     public function __construct(public readonly string $value) {}
 

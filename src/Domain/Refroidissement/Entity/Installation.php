@@ -3,23 +3,18 @@
 namespace App\Domain\Refroidissement\Entity;
 
 use App\Domain\Common\ValueObject\Id;
+use App\Domain\Refroidissement\Data\InstallationData;
 use App\Domain\Refroidissement\Refroidissement;
-use App\Domain\Refroidissement\Service\{MoteurConsommation, MoteurDimensionnement};
 use Webmozart\Assert\Assert;
 
-/**
- * TODO: Associer l'installation à un logement visité
- */
 final class Installation
 {
-    private ?float $rdim = null;
-
     public function __construct(
         private readonly Id $id,
         private readonly Refroidissement $refroidissement,
         private string $description,
         private float $surface,
-        private SystemeCollection $systemes,
+        private InstallationData $data,
     ) {}
 
     public static function create(
@@ -27,39 +22,27 @@ final class Installation
         Refroidissement $refroidissement,
         string $description,
         float $surface,
-    ): Installation {
+    ): self {
         Assert::greaterThan($surface, 0);
 
-        return new Installation(
+        return new self(
             id: $id,
             refroidissement: $refroidissement,
             description: $description,
             surface: $surface,
-            systemes: new SystemeCollection(),
+            data: InstallationData::create(),
         );
     }
 
-    public function controle(): void
+    public function reinitialise(): self
     {
-        Assert::greaterThan($this->surface, 0);
-    }
-
-    public function reinitialise(): void
-    {
-        $this->rdim = null;
-        $this->systemes->reinitialise();
-    }
-
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
-    {
-        $this->systemes->calcule_dimensionnement($moteur);
-        $this->rdim = $moteur->calcule_dimensionnement_installation($this);
+        $this->data = InstallationData::create();
         return $this;
     }
 
-    public function calcule_consommations(MoteurConsommation $moteur): self
+    public function calcule(InstallationData $data): self
     {
-        $this->systemes->calcule_consommations($moteur);
+        $this->data = $data;
         return $this;
     }
 
@@ -83,19 +66,16 @@ final class Installation
         return $this->surface;
     }
 
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
     public function systemes(): SystemeCollection
     {
-        return $this->systemes;
+        return $this->refroidissement->systemes()->with_installation($this->id);
     }
 
-    public function add_systeme(Systeme $entity): self
+    public function data(): InstallationData
     {
-        $this->systemes->add($entity);
-        return $this;
-    }
-
-    public function rdim(): ?float
-    {
-        return $this->rdim;
+        return $this->data;
     }
 }

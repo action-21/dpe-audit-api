@@ -34,6 +34,11 @@ enum Mois: string implements Enum
         return array_reduce(self::cases(), $func, $initial);
     }
 
+    public static function each(\Closure $func): array
+    {
+        return \array_map($func, self::cases());
+    }
+
     public function id(): string
     {
         return $this->value;

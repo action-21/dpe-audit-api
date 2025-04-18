@@ -10,11 +10,13 @@ final class XMLEclairageRepository implements EclairageRepository
 {
     public function __construct(
         private XMLOpendataRepository $opendata_repository,
-        private XMLEclairageTransformer $transformer
+        private XMLEclairageDeserializer $deserializer
     ) {}
 
-    public function find(Id $audit_id): ?Eclairage
+    public function find(Id $id): ?Eclairage
     {
-        return ($xml = $this->opendata_repository->find($audit_id)) ? $this->transformer->transform($xml) : null;
+        return ($xml = $this->opendata_repository->find($id))
+            ? $this->deserializer->deserialize($xml)
+            : null;
     }
 }

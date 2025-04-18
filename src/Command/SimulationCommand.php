@@ -2,19 +2,14 @@
 
 namespace App\Command;
 
-use App\Api\Simulation\Resource\SimulationResource;
-use App\Database\Opendata\Audit\XMLAuditTransformer;
-use App\Database\Opendata\Chauffage\XMLChauffageTransformer;
-use App\Database\Opendata\Eclairage\XMLEclairageTransformer;
-use App\Database\Opendata\Ecs\XMLEcsTransformer;
-use App\Database\Opendata\Enveloppe\XMLEnveloppeTransformer;
-use App\Database\Opendata\Production\XMLProductionTransformer;
-use App\Database\Opendata\Refroidissement\XMLRefroidissementTransformer;
-use App\Database\Opendata\Ventilation\XMLVentilationTransformer;
-use App\Database\Opendata\Visite\XMLVisiteTransformer;
+use App\Api\Audit\ComputeAuditHandler;
+use App\Api\Audit\Model\Audit as Resource;
+use App\Database\Opendata\Audit\XMLAuditDeserializer;
+use App\Database\Opendata\Audit\XMLAuditReader;
 use App\Database\Opendata\XMLElement;
+use App\Domain\Audit\Audit;
 use App\Domain\Common\Enum\ScenarioUsage;
-use App\Domain\Simulation\{Simulation, SimulationFactory, SimulationService};
+use App\Domain\Enveloppe\Enum\TypeDeperdition;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -28,36 +23,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class SimulationCommand extends Command
 {
-    public final const PATH = '/etc/audits';
-    public final const OUTPUT = '/var/output';
+    public final const INPUT = '/data/audits';
+    public final const OUTPUT = '/data/simulations';
+
+    public array $rapport = [];
 
     public function __construct(
-        private string $projectDir,
-        private XMLAuditTransformer $xml_audit_transformer,
-        private XMLEnveloppeTransformer $xml_enveloppe_transformer,
-        private XMLChauffageTransformer $xml_chauffage_transformer,
-        private XMLEcsTransformer $xml_ecs_transformer,
-        private XMLRefroidissementTransformer $xml_refroidissement_transformer,
-        private XMLVentilationTransformer $xml_ventilation_transformer,
-        private XMLProductionTransformer $xml_production_transformer,
-        private XMLEclairageTransformer $xml_eclairage_transformer,
-        private XMLVisiteTransformer $xml_visite_transformer,
-        private SimulationFactory $simulation_factory,
-        private SimulationService $simulation_service,
+        private readonly string $projectDir,
+        private readonly XMLAuditDeserializer $deserializer,
+        private readonly ComputeAuditHandler $handler,
     ) {
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $counter = 0;
         $success = 0;
         $rapport = [];
         $search = $input->getArgument('numero_dpe') ? $input->getArgument('numero_dpe') . '.xml' : null;
-        $time = new \DateTime();
 
-        foreach (scandir($this->projectDir . self::PATH) as $filename) {
-            $path = $this->projectDir . self::PATH . '/' . $filename;
+        foreach (scandir($this->projectDir . self::INPUT) as $filename) {
+            $path = $this->projectDir . self::INPUT . '/' . $filename;
             if (!\is_file($path)) {
                 continue;
             }
@@ -65,19 +51,10 @@ final class SimulationCommand extends Command
                 continue;
             }
             $output->writeln("Processing {$filename}...");
-            $counter++;
 
             try {
                 $xml = \simplexml_load_file($path, XMLElement::class);
-                $audit = $this->xml_audit_transformer->transform($xml);
-                $enveloppe = $this->xml_enveloppe_transformer->transform($xml);
-                $chauffage = $this->xml_chauffage_transformer->transform($xml);
-                $ecs = $this->xml_ecs_transformer->transform($xml);
-                $refroidissement = $this->xml_refroidissement_transformer->transform($xml);
-                $ventilation = $this->xml_ventilation_transformer->transform($xml);
-                $eclairage = $this->xml_eclairage_transformer->transform($xml);
-                $production = $this->xml_production_transformer->transform($xml);
-                $visite = $this->xml_visite_transformer->transform($xml);
+                $audit = $this->deserializer->deserialize($xml);
                 $success++;
             } catch (\Throwable $th) {
                 if ($th->getCode() !== 400) {
@@ -86,50 +63,70 @@ final class SimulationCommand extends Command
                 }
             }
 
-            $simulation = $this->simulation_factory->build(
-                audit: $audit,
-                enveloppe: $enveloppe,
-                chauffage: $chauffage,
-                ecs: $ecs,
-                refroidissement: $refroidissement,
-                ventilation: $ventilation,
-                eclairage: $eclairage,
-                production: $production,
-                visite: $visite,
-            );
-            $this->simulation_service->calcule($simulation);
-            $view = SimulationResource::from($simulation);
-            $this->setRapport($xml, $simulation, $rapport);
-        }
-        $timer = $time->diff(new \DateTime);
-        $output->writeln("{$success}/{$counter} audits processed in {$timer->f} ms");
-        $output = $this->projectDir . self::OUTPUT . '/rapport.json';
-        file_put_contents($output, json_encode($rapport));
+            $this->save($audit);
 
+            $handle = $this->handler;
+            $audit = $handle($audit);
+            $output->writeln("Etiquette énergie: {$audit->data()->etiquette_energie->id()}");
+            $output->writeln("Etiquette climat: {$audit->data()->etiquette_climat->id()}");
+            $output->writeln("Cef: {$audit->data()->consommations->get()}");
+            $output->writeln("Cch: {$audit->chauffage()->data()->consommations->get()}");
+            $output->writeln("Cecs: {$audit->ecs()->data()->consommations->get()}");
+            $output->writeln("Cfr: {$audit->refroidissement()->data()->consommations->get()}");
+            $output->writeln("Cecl: {$audit->eclairage()->data()->consommations->get()}");
+
+            $output->writeln("Bch: {$audit->chauffage()->data()->besoins->get()}");
+            $output->writeln("Becs: {$audit->ecs()->data()->besoins->get()}");
+
+            $output->writeln("GV: {$audit->enveloppe()->data()->deperditions->get()}");
+            $output->writeln("F: {$audit->enveloppe()->data()->apports->f()}");
+            $output->writeln("Apports: {$audit->enveloppe()->data()->apports->apports()}");
+            $output->writeln("Sse: {$audit->enveloppe()->data()->apports->sse()}");
+
+            $this->addLine($xml, $audit, $rapport);
+            $this->save($audit);
+        }
         return Command::SUCCESS;
     }
 
-    protected function setRapport(XMLElement $xml, Simulation $simulation, array &$rapport): void
+    private function save(Audit $entity): void
     {
-        $rapport['gv'][] = [$xml->read_enveloppe()->deperdition_enveloppe(), $simulation->enveloppe()->performance()->gv];
-        $rapport['dp_murs'][] = [$xml->read_enveloppe()->deperdition_mur(), $simulation->enveloppe()->parois()->murs()->dp()];
-        $rapport['dp_pb'][] = [$xml->read_enveloppe()->deperdition_plancher_bas(), $simulation->enveloppe()->parois()->planchers_bas()->dp()];
-        $rapport['dp_ph'][] = [$xml->read_enveloppe()->deperdition_plancher_haut(), $simulation->enveloppe()->parois()->planchers_hauts()->dp()];
-        $rapport['dp_baies'][] = [$xml->read_enveloppe()->deperdition_baie(), $simulation->enveloppe()->parois()->baies()->dp()];
-        $rapport['dp_portes'][] = [$xml->read_enveloppe()->deperdition_porte(), $simulation->enveloppe()->parois()->portes()->dp()];
-        $rapport['pt'][] = [$xml->read_enveloppe()->deperdition_pont_thermique(), $simulation->enveloppe()->performance()->pt];
-        $rapport['dr'][] = [$xml->read_enveloppe()->deperdition_renouvellement_air(), $simulation->enveloppe()->performance()->dr];
-        $rapport['hperm'][] = [$xml->read_enveloppe()->hperm(), $simulation->enveloppe()->permeabilite()->hperm];
-        $rapport['hvent'][] = [$xml->read_enveloppe()->hvent(), $simulation->enveloppe()->permeabilite()->hvent];
+        $resource = Resource::from($entity);
+        file_put_contents("{$this->projectDir}/data/simulations/{$entity->id()}.json", json_encode($resource, JSON_UNESCAPED_UNICODE));
+    }
 
-        $rapport['besoin_ch'][] = [$xml->read_chauffage()->besoin_ch(), $simulation->chauffage()->besoins()->besoins(scenario: ScenarioUsage::CONVENTIONNEL)];
-        $rapport['besoin_ch_depensier'][] = [$xml->read_chauffage()->besoin_ch(scenario_depensier: true), $simulation->chauffage()->besoins()->besoins(scenario: ScenarioUsage::DEPENSIER)];
+    private function addLine(XMLElement $xml, Audit $entity): void
+    {
+        $reader = XMLAuditReader::from($xml);
 
-        $rapport['besoin_ecs'][] = [$xml->read_ecs()->besoin_ecs(), $simulation->ecs()->besoins()->besoins(scenario: ScenarioUsage::CONVENTIONNEL)];
-        $rapport['besoin_ecs_depensier'][] = [$xml->read_ecs()->besoin_ecs(scenario_depensier: true), $simulation->ecs()->besoins()->besoins(scenario: ScenarioUsage::DEPENSIER)];
+        $this->setLine('gv', $reader->enveloppe()->deperdition_enveloppe(), $entity->enveloppe()->data()->deperditions->get());
+        $this->setLine('dp_murs', $reader->enveloppe()->deperdition_mur(), $entity->enveloppe()->data()->deperditions->get(TypeDeperdition::MUR));
+        $this->setLine('dp_planchers_bas', $reader->enveloppe()->deperdition_plancher_bas(), $entity->enveloppe()->data()->deperditions->get(TypeDeperdition::PLANCHER_BAS));
+        $this->setLine('dp_planchers_hauts', $reader->enveloppe()->deperdition_plancher_haut(), $entity->enveloppe()->data()->deperditions->get(TypeDeperdition::PLANCHER_HAUT));
+        $this->setLine('dp_baies', $reader->enveloppe()->deperdition_baie(), $entity->enveloppe()->data()->deperditions->get(TypeDeperdition::BAIE));
+        $this->setLine('dp_portes', $reader->enveloppe()->deperdition_porte(), $entity->enveloppe()->data()->deperditions->get(TypeDeperdition::PORTE));
+        $this->setLine('pt', $reader->enveloppe()->deperdition_pont_thermique(), $entity->enveloppe()->data()->deperditions->get(TypeDeperdition::PONT_THERMIQUE));
+        $this->setLine('dr', $reader->enveloppe()->deperdition_renouvellement_air(), $entity->enveloppe()->data()->deperditions->get(TypeDeperdition::RENOUVELEMENT_AIR));
 
-        $rapport['besoin_fr'][] = [$xml->read_refroidissement()->besoin_fr(), $simulation->refroidissement()->besoins()->besoins(scenario: ScenarioUsage::CONVENTIONNEL)];
-        $rapport['besoin_fr_depensier'][] = [$xml->read_refroidissement()->besoin_fr(scenario_depensier: true), $simulation->refroidissement()->besoins()->besoins(scenario: ScenarioUsage::DEPENSIER)];
+        $this->setLine('hperm', $reader->enveloppe()->hperm(), $entity->enveloppe()->data()->permeabilite->hperm);
+        $this->setLine('hvent', $reader->enveloppe()->hvent(), $entity->enveloppe()->data()->permeabilite->hvent);
+
+        $this->setLine('besoin_ch', $reader->chauffage()->besoin_ch(), $entity->chauffage()->data()->besoins->get(ScenarioUsage::CONVENTIONNEL));
+        $this->setLine('besoin_ch_depensier', $reader->chauffage()->besoin_ch(scenario_depensier: true), $entity->chauffage()->data()->besoins->get(ScenarioUsage::DEPENSIER));
+
+        $this->setLine('besoin_ecs', $reader->ecs()->besoin_ecs(), $entity->ecs()->data()->besoins->get(ScenarioUsage::CONVENTIONNEL));
+        $this->setLine('besoin_ecs_depensier', $reader->ecs()->besoin_ecs(scenario_depensier: true), $entity->ecs()->data()->besoins->get(ScenarioUsage::DEPENSIER));
+
+        $this->setLine('besoin_fr', $reader->refroidissement()->besoin_fr(), $entity->refroidissement()->data()->besoins->get(ScenarioUsage::CONVENTIONNEL));
+        $this->setLine('besoin_fr', $reader->refroidissement()->besoin_fr(scenario_depensier: true), $entity->refroidissement()->data()->besoins->get(ScenarioUsage::DEPENSIER));
+    }
+
+    private function setLine(string $name, float $origin, float $value): void
+    {
+        if (!isset($this->rapport[$name])) {
+            $this->rapport[$name] = [];
+        }
+        $this->rapport[$name][] = [$origin, $value];
     }
 
     protected function configure(): void

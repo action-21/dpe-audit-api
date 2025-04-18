@@ -6,5 +6,5 @@ use App\Domain\Common\ValueObject\Id;
 
 interface EclairageRepository
 {
-    public function find(Id $audit_id): ?Eclairage;
+    public function find(Id $id): ?Eclairage;
 }

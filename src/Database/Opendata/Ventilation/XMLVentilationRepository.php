@@ -10,11 +10,13 @@ final class XMLVentilationRepository implements VentilationRepository
 {
     public function __construct(
         private XMLOpendataRepository $opendata_repository,
-        private XMLVentilationTransformer $transformer
+        private XMLVentilationDeserializer $deserializer,
     ) {}
 
-    public function find(Id $audit_id): ?Ventilation
+    public function find(Id $id): ?Ventilation
     {
-        return ($xml = $this->opendata_repository->find($audit_id)) ? $this->transformer->transform($xml) : null;
+        return ($xml = $this->opendata_repository->find($id))
+            ? $this->deserializer->deserialize($xml)
+            : null;
     }
 }

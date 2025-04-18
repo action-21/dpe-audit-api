@@ -10,11 +10,13 @@ final class XMLAuditRepository implements AuditRepository
 {
     public function __construct(
         private XMLOpendataRepository $opendata_repository,
-        private XMLAuditTransformer $transformer,
+        private XMLAuditDeserializer $deserializer,
     ) {}
 
     public function find(Id $id): ?Audit
     {
-        return ($xml = $this->opendata_repository->find($id)) ? $this->transformer->transform($xml) : null;
+        return ($xml = $this->opendata_repository->find($id))
+            ? $this->deserializer->deserialize($xml)
+            : null;
     }
 }

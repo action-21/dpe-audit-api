@@ -6,10 +6,10 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeEmission: string implements Enum
 {
-    case AIR_SOUFFLE = 'AIR_SOUFFLE';
-    case PLANCHER_CHAUFFANT = 'PLANCHER_CHAUFFANT';
-    case PLAFOND_CHAUFFANT = 'PLAFOND_CHAUFFANT';
-    case RADIATEUR = 'RADIATEUR';
+    case AIR_SOUFFLE = 'air_souffle';
+    case PLANCHER_CHAUFFANT = 'plancher_chauffant';
+    case PLAFOND_CHAUFFANT = 'plafond_chauffant';
+    case RADIATEUR = 'radiateur';
 
     public static function from_type_emetteur(TypeEmetteur $type_emetteur): self
     {

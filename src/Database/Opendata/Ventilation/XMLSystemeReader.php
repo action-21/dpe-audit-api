@@ -10,7 +10,7 @@ final class XMLSystemeReader extends XMLReader
 {
     public function id(): Id
     {
-        return $this->xml()->findOneOrError('.//reference')->id();
+        return $this->findOneOrError('.//reference')->id();
     }
 
     public function generateur_id(): ?Id
@@ -18,9 +18,14 @@ final class XMLSystemeReader extends XMLReader
         return $this->type_ventilation() === TypeVentilation::VENTILATION_MECANIQUE ? $this->id() : null;
     }
 
+    public function installation_id(): Id
+    {
+        return $this->id();
+    }
+
     public function description(): string
     {
-        return $this->xml()->findOne('.//description')?->strval() ?? 'Système non décrit';
+        return $this->findOne('.//description')?->strval() ?? 'Système non décrit';
     }
 
     public function type_ventilation(): TypeVentilation
@@ -30,6 +35,6 @@ final class XMLSystemeReader extends XMLReader
 
     public function enum_type_ventilation_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_type_ventilation_id')->intval();
+        return $this->findOneOrError('.//enum_type_ventilation_id')->intval();
     }
 }

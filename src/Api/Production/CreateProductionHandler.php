@@ -2,28 +2,25 @@
 
 namespace App\Api\Production;
 
-use App\Api\Production\Payload\ProductionPayload;
-use App\Domain\Audit\Audit;
-use App\Domain\Common\ValueObject\Id;
-use App\Domain\Production\Entity\PanneauPhotovoltaique;
+use App\Api\Production\Handler\CreatePanneauPhotovoltaiqueHandler;
+use App\Api\Production\Model\Production as Payload;
 use App\Domain\Production\Production;
 
 final class CreateProductionHandler
 {
-    public function __invoke(ProductionPayload $payload, Audit $audit): Production
-    {
-        $production = Production::create(audit: $audit);
+    public function __construct(
+        private readonly CreatePanneauPhotovoltaiqueHandler $panneau_photovoltaique_handler,
+    ) {}
 
-        foreach ($payload->panneaux_photovoltaiques as $panneau_photovotaique_payload) {
-            $production->add_panneau_photovoltaique(PanneauPhotovoltaique::create(
-                id: Id::from($panneau_photovotaique_payload->id),
-                production: $production,
-                orientation: $panneau_photovotaique_payload->orientation,
-                inclinaison: $panneau_photovotaique_payload->inclinaison,
-                modules: $panneau_photovotaique_payload->modules,
-                surface_capteurs: $panneau_photovotaique_payload->surface_capteurs,
-            ));
+    public function __invoke(Payload $payload): Production
+    {
+        $entity = Production::create();
+
+        foreach ($payload->panneaux_photovoltaiques as $panneau_photovoltaique) {
+            $handle = $this->panneau_photovoltaique_handler;
+            $entity->add_panneau_photovoltaique($handle(payload: $panneau_photovoltaique, production: $entity));
         }
-        return $production;
+
+        return $entity;
     }
 }

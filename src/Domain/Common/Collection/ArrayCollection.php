@@ -57,7 +57,7 @@ class ArrayCollection implements Collection
 
     public function has(\Closure $p): bool
     {
-        return $this->findFirst($p) !== null;
+        return array_find($this->elements, $p) !== null;
     }
 
     public function containsKey(string|int $key)
@@ -72,12 +72,7 @@ class ArrayCollection implements Collection
 
     public function exists(\Closure $p)
     {
-        foreach ($this->elements as $key => $element) {
-            if ($p($key, $element)) {
-                return true;
-            }
-        }
-        return false;
+        return array_find($this->elements, $p) !== null;
     }
 
     public function usort(\Closure $p): static
@@ -122,16 +117,6 @@ class ArrayCollection implements Collection
             $collection = \array_merge($collection, $item ? $item->values() : []);
         }
         return new static($collection);
-    }
-
-    public function findFirst(\Closure $p): mixed
-    {
-        foreach ($this->elements as $key => $element) {
-            if ($p($key, $element)) {
-                return $element;
-            }
-        }
-        return null;
     }
 
     public function values(): array

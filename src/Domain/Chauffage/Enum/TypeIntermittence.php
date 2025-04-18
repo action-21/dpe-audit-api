@@ -7,12 +7,12 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeIntermittence: string implements Enum
 {
-    case ABSENT = 'ABSENT';
-    case CENTRAL = 'CENTRAL';
-    case CENTRAL_MINIMUM_TEMPERATURE = 'CENTRAL_MINIMUM_TEMPERATURE';
-    case TERMINAL_DETECTION_PRESENCE = 'TERMINAL_DETECTION_PRESENCE';
-    case TERMINAL_MINIMUM_TEMPERATURE = 'TERMINAL_MINIMUM_TEMPERATURE';
-    case TERMINAL_MINIMUM_TEMPERATURE_DETECTION_PRESENCE = 'TERMINAL_MINIMUM_TEMPERATURE_DETECTION_PRESENCE';
+    case ABSENT = 'absent';
+    case CENTRAL = 'central';
+    case CENTRAL_MINIMUM_TEMPERATURE = 'central_minimum_temperature';
+    case TERMINAL_DETECTION_PRESENCE = 'terminal_detection_presence';
+    case TERMINAL_MINIMUM_TEMPERATURE = 'terminal_minimum_temperature';
+    case TERMINAL_MINIMUM_TEMPERATURE_DETECTION_PRESENCE = 'terminal_minimum_temperature_detection_presence';
 
     public static function determine(
         Regulation $regulation_centrale,

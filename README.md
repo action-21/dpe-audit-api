@@ -83,3 +83,13 @@ performance:
       qvasouf_conv: 0
       smea_conv: 3
 ```
+
+## Documentation
+
+- [Arrêté du 15 septembre 2006 relatif au diagnostic de performance énergétique pour les bâtiments ou parties de bâtiment autres que d'habitation existants proposés à la vente en France métropolitaine](https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000788395/)
+
+- [Arrêté du 31 mars 2021 relatif au diagnostic de performance énergétique pour les bâtiments ou parties de bâtiments à usage d'habitation en France métropolitaine](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000043353335)
+
+- [Arrêté du 8 octobre 2021 modifiant la méthode de calcul et les modalités d'établissement du diagnostic de performance énergétique](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000044202205)
+
+- [Guide à l'attention des diagnostiqueurs](https://www.planbatimentdurable.developpement-durable.gouv.fr/IMG/pdf/v2_guide_diagnostiqueurs_dpe_logement_2021.pdf)

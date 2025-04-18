@@ -6,8 +6,8 @@ use App\Domain\Common\Enum\Enum;
 
 enum UsageChauffage: string implements Enum
 {
-    case CHAUFFAGE = 'CHAUFFAGE';
-    case CHAUFFAGE_ECS = 'CHAUFFAGE_ECS';
+    case CHAUFFAGE = 'chauffage';
+    case CHAUFFAGE_ECS = 'chauffage_ecs';
 
     public static function from_enum_usage_generateur_id(int $id): self
     {

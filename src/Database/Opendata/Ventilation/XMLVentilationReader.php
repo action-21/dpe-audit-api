@@ -6,23 +6,39 @@ use App\Database\Opendata\{XMLElement, XMLReader};
 
 final class XMLVentilationReader extends XMLReader
 {
-    /** @return XMLGenerateurReader[] */
-    public function read_generateurs(): array
+    public static function from(XMLElement $xml): static
     {
-        $readers = \array_map(
-            fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
-            $this->xml()->findMany('.//ventilation_collection//ventilation')
-        );
+        return parent::from(static::root($xml));
+    }
 
-        return \array_filter($readers, fn(XMLGenerateurReader $reader): bool => $reader->apply());
+    /** @return XMLGenerateurReader[] */
+    public function generateurs(): array
+    {
+        return \array_filter(\array_map(
+            fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
+            $this->findMany('.//ventilation_collection//ventilation')
+        ), fn(XMLGenerateurReader $reader): bool => $reader->supports());
     }
 
     /** @return XMLInstallationReader[] */
-    public function read_installations(): array
+    public function installations(): array
     {
         return \array_map(
             fn(XMLElement $xml): XMLInstallationReader => XMLInstallationReader::from($xml),
-            $this->xml()->findMany('.//ventilation_collection//ventilation')
+            $this->findMany('.//ventilation_collection//ventilation')
+        );
+    }
+
+    /**
+     * Reconstitution des systèmes à partir des installations
+     * 
+     * @return XMLSystemeReader[]
+     */
+    public function systemes(): array
+    {
+        return array_map(
+            fn(XMLInstallationReader $reader): XMLSystemeReader => XMLSystemeReader::from($reader->xml()),
+            $this->installations(),
         );
     }
 }

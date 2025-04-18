@@ -6,9 +6,9 @@ use App\Domain\Common\Enum\Enum;
 
 enum TemperatureDistribution: string implements Enum
 {
-    case BASSE = 'BASSE';
-    case MOYENNE = 'MOYENNE';
-    case HAUTE = 'HAUTE';
+    case BASSE = 'basse';
+    case MOYENNE = 'moyenne';
+    case HAUTE = 'haute';
 
     public static function from_enum_temp_distribution_ch_id(int $id): ?self
     {

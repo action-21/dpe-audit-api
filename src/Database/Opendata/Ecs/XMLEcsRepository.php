@@ -10,11 +10,13 @@ final class XMLEcsRepository implements EcsRepository
 {
     public function __construct(
         private XMLOpendataRepository $opendata_repository,
-        private XMLEcsTransformer $transformer
+        private XMLEcsDeserializer $deserializer,
     ) {}
 
-    public function find(Id $audit_id): ?Ecs
+    public function find(Id $id): ?Ecs
     {
-        return ($xml = $this->opendata_repository->find($audit_id)) ? $this->transformer->transform($xml) : null;
+        return ($xml = $this->opendata_repository->find($id))
+            ? $this->deserializer->deserialize($xml)
+            : null;
     }
 }

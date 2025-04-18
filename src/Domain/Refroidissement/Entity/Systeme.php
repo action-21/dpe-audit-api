@@ -3,53 +3,54 @@
 namespace App\Domain\Refroidissement\Entity;
 
 use App\Domain\Common\ValueObject\Id;
-use App\Domain\Common\ValueObject\ConsommationCollection;
-use App\Domain\Refroidissement\Service\{MoteurConsommation, MoteurDimensionnement};
+use App\Domain\Refroidissement\Data\SystemeData;
+use App\Domain\Refroidissement\Refroidissement;
 
 final class Systeme
 {
-    private ?float $rdim = null;
-    private ?ConsommationCollection $consommations = null;
-
     public function __construct(
-        private Id $id,
-        private Installation $installation,
-        private Generateur $generateur,
+        private readonly Id $id,
+        private readonly Refroidissement $refroidissement,
+        private readonly Installation $installation,
+        private readonly Generateur $generateur,
+        private SystemeData $data,
     ) {}
 
     public static function create(
         Id $id,
+        Refroidissement $refroidissement,
         Installation $installation,
         Generateur $generateur,
-    ): Systeme {
-        return new Systeme(
+    ): self {
+        return new self(
             id: $id,
+            refroidissement: $refroidissement,
             installation: $installation,
             generateur: $generateur,
+            data: SystemeData::create(),
         );
     }
 
-    public function reinitialise(): void
+    public function reinitialise(): self
     {
-        $this->rdim = null;
-        $this->consommations = null;
-    }
-
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
-    {
-        $this->rdim = $moteur->calcule_dimensionnement_systeme($this);
+        $this->data = SystemeData::create();
         return $this;
     }
 
-    public function calcule_consommations(MoteurConsommation $moteur): self
+    public function calcule(SystemeData $data): self
     {
-        $this->consommations = $moteur->calcule_consommations($this);
+        $this->data = $data;
         return $this;
     }
 
     public function id(): Id
     {
         return $this->id;
+    }
+
+    public function refroidissement(): Refroidissement
+    {
+        return $this->refroidissement;
     }
 
     public function installation(): Installation
@@ -62,13 +63,8 @@ final class Systeme
         return $this->generateur;
     }
 
-    public function rdim(): ?float
+    public function data(): SystemeData
     {
-        return $this->rdim;
-    }
-
-    public function consommations(): ?ConsommationCollection
-    {
-        return $this->consommations;
+        return $this->data;
     }
 }

@@ -2,73 +2,55 @@
 
 namespace App\Domain\Refroidissement;
 
-use App\Domain\Audit\Audit;
-use App\Domain\Common\ValueObject\{BesoinCollection, ConsommationCollection};
-use App\Domain\Refroidissement\Entity\{Generateur, GenerateurCollection, Installation, InstallationCollection};
-use App\Domain\Refroidissement\Service\{MoteurBesoin, MoteurConsommation, MoteurDimensionnement, MoteurPerformance};
-use App\Domain\Simulation\Simulation;
+use App\Domain\Common\ValueObject\Id;
+use App\Domain\Refroidissement\Entity\{Generateur, GenerateurCollection};
+use App\Domain\Refroidissement\Entity\{Installation, InstallationCollection};
+use App\Domain\Refroidissement\Entity\{Systeme, SystemeCollection};
 
 final class Refroidissement
 {
-    private ?BesoinCollection $besoins = null;
-
     public function __construct(
-        private readonly Audit $audit,
+        private readonly Id $id,
         private GenerateurCollection $generateurs,
         private InstallationCollection $installations,
+        private SystemeCollection $systemes,
+        private RefroidissementData $data,
     ) {}
 
-    public static function create(Audit $audit): self
+    public static function create(): self
     {
         return new self(
-            audit: $audit,
+            id: Id::create(),
             generateurs: new GenerateurCollection(),
             installations: new InstallationCollection(),
+            systemes: new SystemeCollection(),
+            data: RefroidissementData::create(),
         );
     }
 
-    public function controle(): void
+    public function calcule(RefroidissementData $data): self
     {
-        $this->generateurs->controle();
-        $this->installations->controle();
+        $this->data = $data;
+        return $this;
     }
 
-    public function reinitialise(): void
+    public function reinitialise(): self
     {
-        $this->besoins = null;
+        $this->data = RefroidissementData::create();
         $this->generateurs->reinitialise();
         $this->installations->reinitialise();
-    }
-
-    public function calcule_besoins(MoteurBesoin $moteur, Simulation $simulation): self
-    {
-        $this->besoins = $moteur->calcule_besoins($this, $simulation);
+        $this->systemes->reinitialise();
         return $this;
     }
 
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
+    public function id(): Id
     {
-        $this->installations->calcule_dimensionnement($moteur);
-        return $this;
+        return $this->id;
     }
 
-    public function calcule_performance(MoteurPerformance $moteur): self
-    {
-        $this->generateurs->calcule_performance($moteur);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur): self
-    {
-        $this->installations->calcule_consommations($moteur);
-        return $this;
-    }
-
-    public function audit(): Audit
-    {
-        return $this->audit;
-    }
-
+    /**
+     * @return InstallationCollection|Installation[]
+     */
     public function installations(): InstallationCollection
     {
         return $this->installations;
@@ -77,15 +59,13 @@ final class Refroidissement
     public function add_installation(Installation $entity): self
     {
         $this->installations->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function remove_installation(Installation $entity): self
-    {
-        $this->installations->remove($entity);
-        return $this;
-    }
-
+    /**
+     * @return GenerateurCollection|Generateur[]
+     */
     public function generateurs(): GenerateurCollection
     {
         return $this->generateurs;
@@ -94,27 +74,27 @@ final class Refroidissement
     public function add_generateur(Generateur $entity): self
     {
         $this->generateurs->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function remove_generateur(Generateur $entity): self
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
+    public function systemes(): SystemeCollection
     {
-        $this->generateurs->remove($entity);
+        return $this->systemes;
+    }
+
+    public function add_systeme(Systeme $entity): self
+    {
+        $this->systemes->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function annee_construction_batiment(): int
+    public function data(): RefroidissementData
     {
-        return $this->audit->annee_construction_batiment();
-    }
-
-    public function besoins(): ?BesoinCollection
-    {
-        return $this->besoins;
-    }
-
-    public function consommations(): ConsommationCollection
-    {
-        return $this->installations->consommations();
+        return $this->data;
     }
 }

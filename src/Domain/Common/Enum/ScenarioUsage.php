@@ -21,4 +21,9 @@ enum ScenarioUsage: string implements Enum
             self::DEPENSIER => 'Scénario dépensier',
         };
     }
+
+    public static function each(\Closure $func): array
+    {
+        return \array_map($func, self::cases());
+    }
 }

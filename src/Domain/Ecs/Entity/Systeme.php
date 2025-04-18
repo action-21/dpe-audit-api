@@ -3,31 +3,25 @@
 namespace App\Domain\Ecs\Entity;
 
 use App\Domain\Common\ValueObject\Id;
-use App\Domain\Common\ValueObject\ConsommationCollection;
+use App\Domain\Ecs\Data\SystemeData;
 use App\Domain\Ecs\Ecs;
-use App\Domain\Ecs\Service\{MoteurConsommation, MoteurDimensionnement, MoteurPerte, MoteurRendement};
-use App\Domain\Ecs\ValueObject\{PerteCollection, RendementCollection, Reseau, Stockage};
-use App\Domain\Simulation\Simulation;
+use App\Domain\Ecs\ValueObject\{Reseau, Stockage};
 
 final class Systeme
 {
-    private ?float $rdim = null;
-    private ?PerteCollection $pertes_distribution = null;
-    private ?PerteCollection $pertes_stockage = null;
-    private ?RendementCollection $rendements = null;
-    private ?ConsommationCollection $consommations = null;
-    private ?ConsommationCollection $consommations_auxiliaires = null;
-
     public function __construct(
         private readonly Id $id,
+        private readonly Ecs $ecs,
         private readonly Installation $installation,
-        private Generateur $generateur,
+        private readonly Generateur $generateur,
         private Reseau $reseau,
         private ?Stockage $stockage,
+        private SystemeData $data,
     ) {}
 
     public static function create(
         Id $id,
+        Ecs $ecs,
         Installation $installation,
         Generateur $generateur,
         Reseau $reseau,
@@ -35,47 +29,24 @@ final class Systeme
     ): self {
         return new self(
             id: $id,
+            ecs: $ecs,
             installation: $installation,
             generateur: $generateur,
             reseau: $reseau,
             stockage: $stockage,
+            data: SystemeData::create(),
         );
     }
 
-    public function reinitialise(): void
+    public function reinitialise(): self
     {
-        $this->rdim = null;
-        $this->pertes_distribution = null;
-        $this->pertes_stockage = null;
-        $this->rendements = null;
-        $this->consommations = null;
-    }
-
-    public function controle(): void {}
-
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
-    {
-        $this->rdim = $moteur->calcule_dimensionnement_systeme($this);
+        $this->data = SystemeData::create();
         return $this;
     }
 
-    public function calcule_pertes(MoteurPerte $moteur, Simulation $simulation): self
+    public function calcule(SystemeData $data): self
     {
-        $this->pertes_distribution = $moteur->calcule_pertes_distribution($this, $simulation);
-        $this->pertes_stockage = $moteur->calcule_pertes_stockage_systeme($this, $simulation);
-        return $this;
-    }
-
-    public function calcule_rendement(MoteurRendement $moteur): self
-    {
-        $this->rendements = $moteur->calcule_rendement($this);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur): self
-    {
-        $this->consommations = $moteur->calcule_consommations($this);
-        $this->consommations_auxiliaires = $moteur->calcule_consommations_auxiliaires($this);
+        $this->data = $data;
         return $this;
     }
 
@@ -86,7 +57,7 @@ final class Systeme
 
     public function ecs(): Ecs
     {
-        return $this->installation->ecs();
+        return $this->ecs;
     }
 
     public function installation(): Installation
@@ -99,12 +70,6 @@ final class Systeme
         return $this->generateur;
     }
 
-    public function reference_generateur(Generateur $entity): self
-    {
-        $this->generateur = $entity;
-        return $this;
-    }
-
     public function reseau(): Reseau
     {
         return $this->reseau;
@@ -115,33 +80,8 @@ final class Systeme
         return $this->stockage;
     }
 
-    public function rdim(): ?float
+    public function data(): SystemeData
     {
-        return $this->rdim;
-    }
-
-    public function pertes_distribution(): ?PerteCollection
-    {
-        return $this->pertes_distribution;
-    }
-
-    public function pertes_stockage(): ?PerteCollection
-    {
-        return $this->pertes_stockage;
-    }
-
-    public function rendements(): ?RendementCollection
-    {
-        return $this->rendements;
-    }
-
-    public function consommations(): ?ConsommationCollection
-    {
-        return $this->consommations;
-    }
-
-    public function consommations_auxiliaires(): ?ConsommationCollection
-    {
-        return $this->consommations_auxiliaires;
+        return $this->data;
     }
 }

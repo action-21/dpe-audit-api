@@ -2,111 +2,78 @@
 
 namespace App\Domain\Enveloppe;
 
-use App\Domain\Audit\Audit;
-use App\Domain\Audit\AuditTrait;
-use App\Domain\Enveloppe\Entity\{Parois, PlancherIntermediaire, PlancherIntermediaireCollection, Refend, RefendCollection};
+use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\Exposition;
-use App\Domain\Enveloppe\Service\{MoteurApport, MoteurInertie, MoteurPerformance, MoteurSurfaceDeperditive};
-use App\Domain\Enveloppe\ValueObject\{ApportCollection, Inertie, Performance, Permeabilite};
-use App\Domain\Lnc\{Lnc, LncCollection};
-use App\Domain\PontThermique\{PontThermique, PontThermiqueCollection};
-use App\Domain\Simulation\Simulation;
+use App\Domain\Enveloppe\Entity\{Lnc, LncCollection};
+use App\Domain\Enveloppe\Entity\{Baie, BaieCollection};
+use App\Domain\Enveloppe\Entity\{Mur, MurCollection};
+use App\Domain\Enveloppe\Entity\{Niveau, NiveauCollection};
+use App\Domain\Enveloppe\Entity\{Paroi, ParoiCollection};
+use App\Domain\Enveloppe\Entity\{PlancherBas, PlancherBasCollection};
+use App\Domain\Enveloppe\Entity\{PlancherHaut, PlancherHautCollection};
+use App\Domain\Enveloppe\Entity\{Porte, PorteCollection};
+use App\Domain\Enveloppe\Entity\{PontThermique, PontThermiqueCollection};
+use App\Domain\Enveloppe\Enum\TypeParoi;
 use Webmozart\Assert\Assert;
 
-/**
- * @see App\Domain\Audit\Audit::enveloppe()
- */
 final class Enveloppe
 {
-    use AuditTrait;
-
-    private ?Inertie $inertie = null;
-    private ?Permeabilite $permeabilite = null;
-    private ?Performance $performance = null;
-    private ?ApportCollection $apports = null;
-
     public function __construct(
-        public readonly Audit $audit,
-        public Exposition $exposition,
-        public ?float $q4pa_conv,
-        public LncCollection $locaux_non_chauffes,
-        public Parois $parois,
-        public PontThermiqueCollection $ponts_thermiques,
-        public RefendCollection $refends,
-        public PlancherIntermediaireCollection $planchers_intermediaires,
+        private readonly Id $id,
+        private Exposition $exposition,
+        private ?float $q4pa_conv,
+        private LncCollection $locaux_non_chauffes,
+        private BaieCollection $baies,
+        private MurCollection $murs,
+        private PlancherBasCollection $planchers_bas,
+        private PlancherHautCollection $planchers_hauts,
+        private PorteCollection $portes,
+        private PontThermiqueCollection $ponts_thermiques,
+        private NiveauCollection $niveaux,
+        private EnveloppeData $data,
     ) {}
 
-    public static function create(Audit $audit, Exposition $exposition, ?float $q4pa_conv,): self
+    public static function create(Exposition $exposition, ?float $q4pa_conv,): self
     {
         Assert::nullOrGreaterThan($q4pa_conv, 0);
 
         return new self(
-            audit: $audit,
+            id: Id::create(),
             exposition: $exposition,
             q4pa_conv: $q4pa_conv,
-            locaux_non_chauffes: new LncCollection(),
-            parois: Parois::create(),
-            ponts_thermiques: new PontThermiqueCollection(),
-            refends: new RefendCollection(),
-            planchers_intermediaires: new PlancherIntermediaireCollection(),
+            niveaux: new NiveauCollection,
+            locaux_non_chauffes: new LncCollection,
+            baies: new BaieCollection,
+            murs: new MurCollection,
+            planchers_bas: new PlancherBasCollection,
+            planchers_hauts: new PlancherHautCollection,
+            portes: new PorteCollection,
+            ponts_thermiques: new PontThermiqueCollection,
+            data: EnveloppeData::create(),
         );
-    }
-
-    public function controle(): void
-    {
-        Assert::nullOrGreaterThan($this->q4pa_conv, 0);
-        $this->locaux_non_chauffes->controle();
-        $this->ponts_thermiques->controle();
-        $this->refends->controle();
-        $this->planchers_intermediaires->controle();
-        $this->parois->controle();
     }
 
     public function reinitialise(): void
     {
-        $this->inertie = null;
-        $this->permeabilite = null;
-        $this->performance = null;
-        $this->apports = null;
+        $this->data = EnveloppeData::create();
+        $this->niveaux->reinitialise();
+        $this->locaux_non_chauffes->reinitialise();
+        $this->baies->reinitialise();
+        $this->murs->reinitialise();
+        $this->planchers_bas->reinitialise();
+        $this->planchers_hauts->reinitialise();
+        $this->portes->reinitialise();
     }
 
-    public function calcule_surface_deperditive(MoteurSurfaceDeperditive $moteur): self
+    public function calcule(EnveloppeData $data): self
     {
-        $moteur($this);
+        $this->data = $data;
         return $this;
     }
 
-    public function calcule_inertie(MoteurInertie $moteur): self
+    public function id(): Id
     {
-        $this->inertie = $moteur->calcule_inertie($this);
-        return $this;
-    }
-
-    public function calcule_performance(MoteurPerformance $moteur, Simulation $simulation): self
-    {
-        $this->locaux_non_chauffes->calcule_performance($moteur->moteur_performance_lnc());
-        $this->parois->murs()->calcule_performance($moteur->moteur_performance_mur(), $simulation);
-        $this->parois->planchers_bas()->calcule_performance($moteur->moteur_performance_plancher_bas(), $simulation);
-        $this->parois->planchers_hauts()->calcule_performance($moteur->moteur_performance_plancher_haut(), $simulation);
-        $this->parois->baies()->calcule_performance($moteur->moteur_performance_baie());
-        $this->parois->portes()->calcule_performance($moteur->moteur_performance_porte());
-        $this->ponts_thermiques->calcule_performance($moteur->moteur_performance_pont_thermique());
-        $this->permeabilite = $moteur->calcule_permeabilite($this, $simulation);
-        $this->performance = $moteur->calcule_performance($this);
-        return $this;
-    }
-
-    public function calcule_apport(MoteurApport $moteur, Simulation $simulation): self
-    {
-        $this->locaux_non_chauffes->calcule_ensoleillement($moteur->moteur_ensoleillement_lnc());
-        $this->parois->baies()->calcule_ensoleillement($moteur->moteur_ensoleillement_baie());
-        $this->apports = $moteur->calcule_apport($this, $simulation);
-        return $this;
-    }
-
-    public function audit(): Audit
-    {
-        return $this->audit;
+        return $this->id;
     }
 
     public function exposition(): Exposition
@@ -119,11 +86,24 @@ final class Enveloppe
         return $this->q4pa_conv;
     }
 
-    public function parois(): Parois
+    /**
+     * @return NiveauCollection|Niveau[]
+     */
+    public function niveaux(): NiveauCollection
     {
-        return $this->parois;
+        return $this->niveaux;
     }
 
+    public function add_niveau(Niveau $entity): self
+    {
+        $this->niveaux->add($entity);
+        $this->reinitialise();
+        return $this;
+    }
+
+    /**
+     * @return LncCollection|Lnc[]
+     */
     public function locaux_non_chauffes(): LncCollection
     {
         return $this->locaux_non_chauffes;
@@ -132,9 +112,112 @@ final class Enveloppe
     public function add_local_non_chauffe(Lnc $entity): self
     {
         $this->locaux_non_chauffes->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
+    /**
+     * @return ParoiCollection|Paroi[]
+     */
+    public function parois(TypeParoi $type_paroi): ParoiCollection
+    {
+        return match ($type_paroi) {
+            TypeParoi::MUR => $this->murs,
+            TypeParoi::PLANCHER_BAS => $this->planchers_bas,
+            TypeParoi::PLANCHER_HAUT => $this->planchers_hauts,
+            TypeParoi::PORTE => $this->portes,
+            TypeParoi::BAIE => $this->baies,
+        };
+    }
+
+    public function paroi(Id $id): ?Paroi
+    {
+        foreach (TypeParoi::cases() as $type_paroi) {
+            if ($paroi = $this->parois($type_paroi)->find($id)) {
+                return $paroi;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return BaieCollection|Baie[]
+     */
+    public function baies(): BaieCollection
+    {
+        return $this->baies;
+    }
+
+    public function add_baie(Baie $entity): self
+    {
+        $this->baies->add($entity);
+        $this->reinitialise();
+        return $this;
+    }
+
+    /**
+     * @return MurCollection|Mur[]
+     */
+    public function murs(): MurCollection
+    {
+        return $this->murs;
+    }
+
+    public function add_mur(Mur $entity): self
+    {
+        $this->murs->add($entity);
+        $this->reinitialise();
+        return $this;
+    }
+
+    /**
+     * @return PlancherBasCollection|PlancherBas[]
+     */
+    public function planchers_bas(): PlancherBasCollection
+    {
+        return $this->planchers_bas;
+    }
+
+    public function add_plancher_bas(PlancherBas $entity): self
+    {
+        $this->planchers_bas->add($entity);
+        $this->reinitialise();
+        return $this;
+    }
+
+    /**
+     * @return PlancherHautCollection|PlancherHaut[]
+     */
+    public function planchers_hauts(): PlancherHautCollection
+    {
+        return $this->planchers_hauts;
+    }
+
+    public function add_plancher_haut(PlancherHaut $entity): self
+    {
+        $this->planchers_hauts->add($entity);
+        $this->reinitialise();
+        return $this;
+    }
+
+    /**
+     * @return PorteCollection|Porte[]
+     */
+    public function portes(): PorteCollection
+    {
+        return $this->portes;
+    }
+
+    public function add_porte(Porte $entity): self
+    {
+        $this->portes->add($entity);
+        $this->reinitialise();
+        return $this;
+    }
+
+    /**
+     * @return PontThermiqueCollection|PontThermique[]
+     */
     public function ponts_thermiques(): PontThermiqueCollection
     {
         return $this->ponts_thermiques;
@@ -143,48 +226,12 @@ final class Enveloppe
     public function add_pont_thermique(PontThermique $entity): self
     {
         $this->ponts_thermiques->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function refends(): RefendCollection
+    public function data(): EnveloppeData
     {
-        return $this->refends;
-    }
-
-    public function add_refend(Refend $entity): self
-    {
-        $this->refends->add($entity);
-        return $this;
-    }
-
-    public function planchers_intermediaires(): PlancherIntermediaireCollection
-    {
-        return $this->planchers_intermediaires;
-    }
-
-    public function add_plancher_intermediaire(PlancherIntermediaire $entity): self
-    {
-        $this->planchers_intermediaires->add($entity);
-        return $this;
-    }
-
-    public function inertie(): ?Inertie
-    {
-        return $this->inertie;
-    }
-
-    public function permeabilite(): ?Permeabilite
-    {
-        return $this->permeabilite;
-    }
-
-    public function performance(): ?Performance
-    {
-        return $this->performance;
-    }
-
-    public function apports(): ?ApportCollection
-    {
-        return $this->apports;
+        return $this->data;
     }
 }

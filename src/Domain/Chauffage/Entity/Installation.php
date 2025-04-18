@@ -3,34 +3,24 @@
 namespace App\Domain\Chauffage\Entity;
 
 use App\Domain\Chauffage\Chauffage;
+use App\Domain\Chauffage\Data\InstallationData;
 use App\Domain\Chauffage\Enum\TypeChauffage;
-use App\Domain\Chauffage\Service\{MoteurConsommation, MoteurDimensionnement, MoteurRendement};
 use App\Domain\Chauffage\ValueObject\{Regulation, Solaire};
 use App\Domain\Common\ValueObject\Id;
-use App\Domain\Common\ValueObject\ConsommationCollection;
-use App\Domain\Simulation\Simulation;
 use Webmozart\Assert\Assert;
 
-/**
- * TODO: Associer l'installation à un logement visité
- * 
- * On limite le nombre de systèmes centraux à 2 par installation
- */
 final class Installation
 {
-    private ?float $rdim = null;
-    private ?ConsommationCollection $consommations = null;
-
     public function __construct(
         private readonly Id $id,
         private readonly Chauffage $chauffage,
         private string $description,
         private float $surface,
         private bool $comptage_individuel,
-        private ?Solaire $solaire,
+        private ?Solaire $solaire_thermique,
         private Regulation $regulation_centrale,
         private Regulation $regulation_terminale,
-        private SystemeCollection $systemes,
+        private InstallationData $data,
     ) {}
 
     public static function create(
@@ -39,7 +29,7 @@ final class Installation
         string $description,
         float $surface,
         bool $comptage_individuel,
-        Solaire $solaire,
+        Solaire $solaire_thermique,
         Regulation $regulation_centrale,
         Regulation $regulation_terminale,
     ): self {
@@ -50,43 +40,23 @@ final class Installation
             chauffage: $chauffage,
             description: $description,
             surface: $surface,
-            solaire: $solaire,
+            solaire_thermique: $solaire_thermique,
             regulation_centrale: $regulation_centrale,
             regulation_terminale: $regulation_terminale,
             comptage_individuel: $comptage_individuel,
-            systemes: new SystemeCollection(),
+            data: InstallationData::create(),
         );
     }
 
-    public function controle(): void
+    public function reinitialise(): self
     {
-        Assert::greaterThan($this->surface, 0);
-        $this->systemes->controle();
-    }
-
-    public function reinitialise(): void
-    {
-        $this->rdim = null;
-        $this->consommations = null;
-        $this->systemes->reinitialise();
-    }
-
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
-    {
-        $this->systemes->calcule_dimensionnement($moteur);
-        $this->rdim = $moteur->calcule_dimensionnement_installation($this);
+        $this->data = InstallationData::create();
         return $this;
     }
 
-    public function calcule_rendement(MoteurRendement $moteur, Simulation $simulation): self
+    public function calcule(InstallationData $data): self
     {
-        $this->systemes->calcule_rendement($moteur, $simulation);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur, Simulation $simulation): self
-    {
-        $this->systemes->calcule_consommations($moteur, $simulation);
+        $this->data = $data;
         return $this;
     }
 
@@ -105,9 +75,9 @@ final class Installation
         return $this->description;
     }
 
-    public function solaire(): ?Solaire
+    public function solaire_thermique(): ?Solaire
     {
-        return $this->solaire;
+        return $this->solaire_thermique;
     }
 
     public function regulation_centrale(): Regulation
@@ -132,46 +102,32 @@ final class Installation
 
     public function installation_collective(): bool
     {
-        return $this->systemes->filter_by_type_chauffage(TypeChauffage::CHAUFFAGE_CENTRAL)->has_generateur_collectif();
+        return $this->systemes()->with_type(TypeChauffage::CHAUFFAGE_CENTRAL)->has_generateur_collectif();
     }
 
     public function effet_joule(): bool
     {
-        return $this->systemes->effet_joule();
+        return $this->systemes()->effet_joule();
     }
 
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
     public function systemes(): SystemeCollection
     {
-        return $this->systemes;
+        return $this->chauffage->systemes()->with_installation($this->id);
     }
 
-    public function add_systeme(Systeme $entity): self
-    {
-        $this->systemes->add($entity);
-        $this->controle();
-        return $this;
-    }
-
-    public function remove_systeme(Systeme $entity): self
-    {
-        $this->systemes->remove($entity);
-        return $this;
-    }
-
-    public function rdim(): float
-    {
-        return $this->rdim;
-    }
-
-    public function consommations(): ConsommationCollection
-    {
-        return $this->consommations;
-    }
-
-    // * helpers
-
+    /**
+     * @return EmetteurCollection|Emetteur[]
+     */
     public function emetteurs(): EmetteurCollection
     {
-        return EmetteurCollection::fromCollections(...$this->systemes()->map(fn(Systeme $systeme) => $systeme->emetteurs())->values());
+        return $this->chauffage->emetteurs()->with_installation($this->id);
+    }
+
+    public function data(): InstallationData
+    {
+        return $this->data;
     }
 }

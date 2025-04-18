@@ -10,7 +10,7 @@ final class XMLOpendataRepository
     private static array $cache = [];
 
     public function __construct(
-        private HttpClientInterface $client,
+        private readonly HttpClientInterface $client,
     ) {}
 
     public function find(Id $id): ?XMLElement
@@ -20,8 +20,9 @@ final class XMLOpendataRepository
 
         $response = $this->client->request('GET', "https://observatoire-dpe-audit.ademe.fr/pub/dpe/{$id}/zip");
 
-        if ($response->getStatusCode() !== 200)
+        if ($response->getStatusCode() !== 200) {
             return null;
+        }
 
         $temp = tempnam(sys_get_temp_dir(), 'zip');
         file_put_contents($temp, $response->getContent());

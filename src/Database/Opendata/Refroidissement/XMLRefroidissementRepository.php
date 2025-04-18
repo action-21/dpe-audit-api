@@ -10,11 +10,13 @@ final class XMLRefroidissementRepository implements RefroidissementRepository
 {
     public function __construct(
         private XMLOpendataRepository $opendata_repository,
-        private XMLRefroidissementTransformer $transformer
+        private XMLRefroidissementDeserializer $deserializer,
     ) {}
 
-    public function find(Id $audit_id): ?Refroidissement
+    public function find(Id $id): ?Refroidissement
     {
-        return ($xml = $this->opendata_repository->find($audit_id)) ? $this->transformer->transform($xml) : null;
+        return ($xml = $this->opendata_repository->find($id))
+            ? $this->deserializer->deserialize($xml)
+            : null;
     }
 }

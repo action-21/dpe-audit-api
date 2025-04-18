@@ -2,93 +2,56 @@
 
 namespace App\Domain\Chauffage;
 
-use App\Domain\Audit\Audit;
-use App\Domain\Chauffage\Entity\{Emetteur, EmetteurCollection, Generateur, GenerateurCollection, Installation, InstallationCollection};
-use App\Domain\Chauffage\Service\{MoteurBesoin, MoteurConsommation, MoteurDimensionnement, MoteurPerformance, MoteurPerte, MoteurRendement};
-use App\Domain\Common\ValueObject\{BesoinCollection, ConsommationCollection};
-use App\Domain\Simulation\Simulation;
+use App\Domain\Chauffage\Entity\{Emetteur, EmetteurCollection};
+use App\Domain\Chauffage\Entity\{Generateur, GenerateurCollection};
+use App\Domain\Chauffage\Entity\{Installation, InstallationCollection};
+use App\Domain\Chauffage\Entity\{Systeme, SystemeCollection};
+use App\Domain\Chauffage\Enum\TypeChauffage;
+use App\Domain\Common\ValueObject\Id;
+use Webmozart\Assert\Assert;
 
-/**
- * @see App\Domain\Audit\Audit::chauffage()
- */
 final class Chauffage
 {
-    private ?BesoinCollection $besoins = null;
-    private ?BesoinCollection $besoins_bruts = null;
-
     public function __construct(
-        private readonly Audit $audit,
+        private readonly Id $id,
         private GenerateurCollection $generateurs,
         private EmetteurCollection $emetteurs,
         private InstallationCollection $installations,
+        private SystemeCollection $systemes,
+        private ChauffageData $data,
     ) {}
 
-    public static function create(Audit $audit): self
+    public static function create(): self
     {
         return new self(
-            audit: $audit,
+            id: Id::create(),
             generateurs: new GenerateurCollection(),
             emetteurs: new EmetteurCollection(),
             installations: new InstallationCollection(),
+            systemes: new SystemeCollection(),
+            data: ChauffageData::create(),
         );
     }
 
-    public function controle(): void
+    public function reinitialise(): self
     {
-        $this->installations->controle();
-        $this->emetteurs->controle();
-        $this->generateurs->controle();
-    }
-
-    public function reinitialise(): void
-    {
-        $this->besoins = null;
+        $this->data = ChauffageData::create();
         $this->generateurs->reinitialise();
-        $this->installations->reinitialise();
         $this->emetteurs->reinitialise();
-    }
-
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur, Simulation $simulation): self
-    {
-        $this->generateurs->calcule_dimensionnement($moteur, $simulation);
-        $this->installations->calcule_dimensionnement($moteur);
+        $this->installations->reinitialise();
+        $this->systemes->reinitialise();
         return $this;
     }
 
-    public function calcule_performance(MoteurPerformance $moteur, Simulation $simulation): self
+    public function calcule(ChauffageData $data): self
     {
-        $this->generateurs->calcule_performance($moteur, $simulation);
+        $this->data = $data;
         return $this;
     }
 
-    public function calcule_pertes(MoteurPerte $moteur, Simulation $simulation): self
+    public function id(): Id
     {
-        $this->generateurs->calcule_pertes($moteur, $simulation);
-        return $this;
-    }
-
-    public function calcule_besoins(MoteurBesoin $moteur, Simulation $simulation): self
-    {
-        $this->besoins_bruts = $moteur->calcule_besoins_bruts($this, $simulation);
-        $this->besoins = $moteur->calcule_besoins($this, $simulation);
-        return $this;
-    }
-
-    public function calcule_rendement(MoteurRendement $moteur, Simulation $simulation): self
-    {
-        $this->installations->calcule_rendement($moteur, $simulation);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur, Simulation $simulation): self
-    {
-        $this->installations->calcule_consommations($moteur, $simulation);
-        return $this;
-    }
-
-    public function audit(): Audit
-    {
-        return $this->audit;
+        return $this->id;
     }
 
     public function effet_joule(): bool
@@ -96,76 +59,76 @@ final class Chauffage
         return $this->installations->effet_joule();
     }
 
+    /**
+     * @return GenerateurCollection|Generateur[]
+     */
     public function generateurs(): GenerateurCollection
     {
         return $this->generateurs;
     }
 
-    public function add_generateur(Generateur $generateur): self
+    public function add_generateur(Generateur $entity): self
     {
-        $this->generateurs->add($generateur);
+        $this->generateurs->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function remove_generateur(Generateur $generateur): self
-    {
-        $this->generateurs->remove($generateur);
-        return $this;
-    }
-
+    /**
+     * @return InstallationCollection|Installation[]
+     */
     public function installations(): InstallationCollection
     {
         return $this->installations;
     }
 
-    public function add_installation(Installation $installation): self
+    public function add_installation(Installation $entity): self
     {
-        $this->installations->add($installation);
+        $this->installations->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function remove_installation(Installation $installation): self
-    {
-        $this->installations->remove($installation);
-        return $this;
-    }
-
+    /**
+     * @return EmetteurCollection|Emetteur[]
+     */
     public function emetteurs(): EmetteurCollection
     {
         return $this->emetteurs;
     }
 
-    public function add_emetteur(Emetteur $emetteur): self
+    public function add_emetteur(Emetteur $entity): self
     {
-        $this->emetteurs->add($emetteur);
+        $this->emetteurs->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function remove_emetteur(Emetteur $emetteur): self
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
+    public function systemes(): SystemeCollection
     {
-        $this->emetteurs->remove($emetteur);
+        return $this->systemes;
+    }
+
+    /**
+     * On limite le nombre de systèmes centraux à 2 par installation
+     */
+    public function add_systeme(Systeme $entity): self
+    {
+        $installation = $this->installations->find($entity->installation()->id());
+        $systemes = $installation->systemes()->with_type(TypeChauffage::CHAUFFAGE_CENTRAL);
+
+        Assert::lessThan($systemes->count(), 2);
+
+        $this->systemes->add($entity);
+        $this->reinitialise();
         return $this;
     }
 
-    public function besoins(): ?BesoinCollection
+    public function data(): ChauffageData
     {
-        return $this->besoins;
-    }
-
-    public function besoins_bruts(): ?BesoinCollection
-    {
-        return $this->besoins_bruts;
-    }
-
-    public function consommations(): ConsommationCollection
-    {
-        return $this->installations->consommations();
-    }
-
-    // * helpers
-
-    public function annee_construction_batiment(): int
-    {
-        return $this->audit->annee_construction_batiment();
+        return $this->data;
     }
 }

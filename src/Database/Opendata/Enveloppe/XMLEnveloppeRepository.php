@@ -10,11 +10,13 @@ final class XMLEnveloppeRepository implements EnveloppeRepository
 {
     public function __construct(
         private XMLOpendataRepository $opendata_repository,
-        private XMLEnveloppeTransformer $transformer
+        private XMLEnveloppeDeserializer $deserializer
     ) {}
 
-    public function find(Id $audit_id): ?Enveloppe
+    public function find(Id $id): ?Enveloppe
     {
-        return ($xml = $this->opendata_repository->find($audit_id)) ? $this->transformer->transform($xml) : null;
+        return ($xml = $this->opendata_repository->find($id))
+            ? $this->deserializer->deserialize($xml)
+            : null;
     }
 }

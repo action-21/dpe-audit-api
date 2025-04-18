@@ -2,10 +2,10 @@
 
 namespace App\Domain\Ventilation\Entity;
 
-use App\Domain\Common\ValueObject\Id;
-use App\Domain\Ventilation\ValueObject\Signaletique;
+use App\Domain\Common\ValueObject\{Annee, Id};
+use App\Domain\Ventilation\Data\GenerateurData;
+use App\Domain\Ventilation\Enum\{TypeGenerateur, TypeVmc};
 use App\Domain\Ventilation\Ventilation;
-use Webmozart\Assert\Assert;
 
 final class Generateur
 {
@@ -13,39 +13,47 @@ final class Generateur
         private readonly Id $id,
         private readonly Ventilation $ventilation,
         private string $description,
-        private Signaletique $signaletique,
+        private TypeGenerateur $type,
+        private bool $presence_echangeur_thermique,
         private bool $generateur_collectif,
-        private ?int $annee_installation,
+        private ?Annee $annee_installation,
+        private ?TypeVmc $type_vmc,
+        private GenerateurData $data,
     ) {}
 
     public static function create(
         Id $id,
         Ventilation $ventilation,
         string $description,
-        Signaletique $signaletique,
+        TypeGenerateur $type,
+        bool $presence_echangeur_thermique,
         bool $generateur_collectif,
-        ?int $annee_installation,
-    ): Generateur {
-        Assert::nullOrlessThanEq($annee_installation, (int) date('Y'));
-        Assert::nullOrGreaterThanEq($annee_installation, $ventilation->annee_construction_batiment());
-
-        return new Generateur(
+        ?Annee $annee_installation,
+        ?TypeVmc $type_vmc,
+    ): self {
+        return new self(
             id: $id,
             ventilation: $ventilation,
             description: $description,
-            signaletique: $signaletique,
-            generateur_collectif: $signaletique->type->is_generateur_collectif() ?? $generateur_collectif,
+            type: $type,
+            presence_echangeur_thermique: $presence_echangeur_thermique,
+            generateur_collectif: $type->is_generateur_collectif() ?? $generateur_collectif,
             annee_installation: $annee_installation,
+            type_vmc: $type->is_vmc() ? $type_vmc : null,
+            data: GenerateurData::create(),
         );
     }
 
-    public function controle(): void
+    public function calcule(GenerateurData $data): self
     {
-        Assert::nullOrlessThanEq($this->annee_installation, (int) date('Y'));
-        Assert::nullOrGreaterThanEq($this->annee_installation, $this->ventilation->annee_construction_batiment());
+        $this->data = $data;
+        return $this;
     }
 
-    public function reinitialise(): void {}
+    public function reinitialise(): void
+    {
+        $this->data = GenerateurData::create();
+    }
 
     public function id(): Id
     {
@@ -62,9 +70,9 @@ final class Generateur
         return $this->description;
     }
 
-    public function signaletique(): Signaletique
+    public function type(): TypeGenerateur
     {
-        return $this->signaletique;
+        return $this->type;
     }
 
     public function generateur_collectif(): bool
@@ -72,8 +80,31 @@ final class Generateur
         return $this->generateur_collectif;
     }
 
-    public function annee_installation(): ?int
+    public function presence_echangeur_thermique(): bool
+    {
+        return $this->presence_echangeur_thermique;
+    }
+
+    public function annee_installation(): ?Annee
     {
         return $this->annee_installation;
+    }
+
+    public function type_vmc(): ?TypeVmc
+    {
+        return $this->type_vmc;
+    }
+
+    /**
+     * @return SystemeCollection|Systeme[]
+     */
+    public function systemes(): SystemeCollection
+    {
+        return $this->ventilation->systemes()->with_generateur($this->id);
+    }
+
+    public function data(): GenerateurData
+    {
+        return $this->data;
     }
 }

@@ -11,14 +11,14 @@ final class Reseau
         public readonly TypeDistribution $type_distribution,
         public readonly bool $presence_circulateur_externe,
         public readonly int $niveaux_desservis,
-        public readonly IsolationReseau $isolation_reseau,
+        public readonly ?IsolationReseau $isolation,
     ) {}
 
     public static function create(
         TypeDistribution $type_distribution,
         bool $presence_circulateur_externe,
         int $niveaux_desservis,
-        IsolationReseau $isolation_reseau,
+        ?IsolationReseau $isolation,
     ): self {
         Assert::greaterThan($niveaux_desservis, 0);
 
@@ -26,7 +26,7 @@ final class Reseau
             type_distribution: $type_distribution,
             presence_circulateur_externe: $presence_circulateur_externe,
             niveaux_desservis: $niveaux_desservis,
-            isolation_reseau: $isolation_reseau,
+            isolation: $isolation,
         );
     }
 }

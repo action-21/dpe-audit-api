@@ -3,13 +3,13 @@
 namespace App\Services\Validator\Constraints;
 
 use App\Domain\Common\ValueObject\Id;
-use App\Domain\ReseauChaleur\ReseauChaleurRepository;
+use App\Domain\Refroidissement\Repository\ReseauFroidRepository;
 use Symfony\Component\Validator\{Constraint, ConstraintValidator};
 use Symfony\Component\Validator\Exception\{UnexpectedTypeException, UnexpectedValueException};
 
 final class ReseauFroidValidator extends ConstraintValidator
 {
-    public function __construct(private ReseauChaleurRepository $repository) {}
+    public function __construct(private ReseauFroidRepository $repository) {}
 
     public function validate(mixed $value, Constraint $constraint): void
     {

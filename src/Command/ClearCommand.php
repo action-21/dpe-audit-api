@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ClearCommand extends Command
 {
-    public final const PATH = '/etc/audits';
+    public final const PATH = '/data/audits';
 
     public function __construct(
         private string $projectDir,

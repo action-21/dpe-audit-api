@@ -2,8 +2,7 @@
 
 namespace App\Api\Audit;
 
-use App\Domain\Audit\Audit;
-use App\Domain\Audit\AuditRepository;
+use App\Domain\Audit\{Audit, AuditRepository};
 use App\Domain\Common\ValueObject\Id;
 
 final class GetAuditHandler

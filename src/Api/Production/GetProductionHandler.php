@@ -2,8 +2,7 @@
 
 namespace App\Api\Production;
 
-use App\Domain\Production\Production;
-use App\Domain\Production\ProductionRepository;
+use App\Domain\Production\{Production, ProductionRepository};
 use App\Domain\Common\ValueObject\Id;
 
 final class GetProductionHandler

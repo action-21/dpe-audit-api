@@ -6,9 +6,11 @@ use App\Domain\Common\Enum\Enum;
 
 enum TypeDistribution: string implements Enum
 {
-    case HYDRAULIQUE = 'HYDRAULIQUE';
-    case AERAULIQUE = 'AERAULIQUE';
-    case FLUIDE_FRIGORIGENE = 'FLUIDE_FRIGORIGENE';
+    case HYDRAULIQUE = 'hydraulique';
+    case AERAULIQUE = 'aeraulique';
+
+    #[\Deprecated]
+    case FLUIDE_FRIGORIGENE = 'fluide_frigorigene';
 
     public static function from_type_emission_distribution_id(int $id): ?self
     {

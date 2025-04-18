@@ -1,9 +1,12 @@
 resources:
-  App\Domain\Audit\Audit:
+  App\Api\Audit\Model\Audit:
     shortName: Audit
     operations:
       audit.get:
         uriTemplate: /audit/{id}
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Audit\State\AuditProvider
-        output: App\Api\Audit\Resource\AuditResource
+      audit.post:
+        uriTemplate: /audit
+        class: ApiPlatform\Metadata\Post
+        processor: App\Api\Audit\State\AuditProcessor

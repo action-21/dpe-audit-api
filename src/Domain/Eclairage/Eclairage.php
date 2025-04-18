@@ -2,42 +2,41 @@
 
 namespace App\Domain\Eclairage;
 
-use App\Domain\Audit\Audit;
-use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\ValueObject\ConsommationCollection;
-use App\Domain\Eclairage\Service\MoteurConsommation;
+use App\Domain\Common\ValueObject\Id;
 
 final class Eclairage
 {
-    private ?ConsommationCollection $consommations = null;
+    public function __construct(
+        private readonly Id $id,
+        private EclairageData $data,
+    ) {}
 
-    public function __construct(public readonly Audit $audit) {}
-
-    public static function create(Audit $audit): self
+    public static function create(): self
     {
-        return new self($audit);
+        return new self(
+            id: Id::create(),
+            data: EclairageData::create(),
+        );
     }
 
     public function reinitialise(): void
     {
-        $this->consommations = null;
+        $this->data = EclairageData::create();
     }
 
-    public function controle(): void {}
-
-    public function calcule_consommations(MoteurConsommation $moteur): self
+    public function calcule(EclairageData $data): self
     {
-        $this->consommations = $moteur($this);
+        $this->data = $data;
         return $this;
     }
 
-    public function zone_climatique(): ZoneClimatique
+    public function id(): Id
     {
-        return $this->audit->zone_climatique();
+        return $this->id;
     }
 
-    public function consommations(): ?ConsommationCollection
+    public function data(): EclairageData
     {
-        return $this->consommations;
+        return $this->data;
     }
 }

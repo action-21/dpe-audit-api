@@ -10,11 +10,13 @@ final class XMLChauffageRepository implements ChauffageRepository
 {
     public function __construct(
         private XMLOpendataRepository $opendata_repository,
-        private XMLChauffageTransformer $transformer
+        private XMLChauffageDeserializer $deserializer
     ) {}
 
-    public function find(Id $audit_id): ?Chauffage
+    public function find(Id $id): ?Chauffage
     {
-        return ($xml = $this->opendata_repository->find($audit_id)) ? $this->transformer->transform($xml) : null;
+        return ($xml = $this->opendata_repository->find($id))
+            ? $this->deserializer->deserialize($xml)
+            : null;
     }
 }

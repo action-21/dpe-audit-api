@@ -6,9 +6,8 @@ use App\Domain\Common\Enum\Enum;
 
 enum IsolationReseau: string implements Enum
 {
-    case ISOLE = 'ISOLE';
-    case NON_ISOLE = 'NON_ISOLE';
-    case INCONNU = 'INCONNU';
+    case ISOLE = 'isole';
+    case NON_ISOLE = 'non_isole';
 
     public function id(): string
     {
@@ -20,7 +19,6 @@ enum IsolationReseau: string implements Enum
         return match ($this) {
             self::ISOLE => 'Réseau d\'ECS isolé',
             self::NON_ISOLE => 'Réseau d\'ECS non isolé',
-            self::INCONNU => 'Inconnu'
         };
     }
 }

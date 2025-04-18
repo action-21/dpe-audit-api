@@ -3,81 +3,59 @@
 namespace App\Domain\Chauffage\Entity;
 
 use App\Domain\Chauffage\Chauffage;
-use App\Domain\Chauffage\Enum\{TypeChauffage};
-use App\Domain\Chauffage\Service\{MoteurConsommation, MoteurDimensionnement, MoteurRendement};
-use App\Domain\Chauffage\ValueObject\{RendementCollection, Reseau};
+use App\Domain\Chauffage\Data\SystemeData;
+use App\Domain\Chauffage\Enum\TypeChauffage;
+use App\Domain\Chauffage\ValueObject\Reseau;
 use App\Domain\Common\ValueObject\Id;
-use App\Domain\Common\ValueObject\ConsommationCollection;
-use App\Domain\Simulation\Simulation;
 use Webmozart\Assert\Assert;
 
 final class Systeme
 {
-    private ?float $rdim = null;
-    private ?RendementCollection $rendements = null;
-    private ?ConsommationCollection $consommations = null;
-    private ?ConsommationCollection $consommations_auxiliaires = null;
-
     public function __construct(
         private readonly Id $id,
+        private readonly Chauffage $chauffage,
         private readonly Installation $installation,
-        private Generateur $generateur,
+        private readonly Generateur $generateur,
+        private TypeChauffage $type_chauffage,
         private ?Reseau $reseau,
         private EmetteurCollection $emetteurs,
+        private SystemeData $data,
     ) {}
 
     public static function create(
         Id $id,
+        Chauffage $chauffage,
         Installation $installation,
         Generateur $generateur,
         ?Reseau $reseau,
     ): self {
         if (false === $generateur->type()->is_chauffage_divise()) {
             Assert::notNull($reseau);
+        } else {
+            Assert::null($reseau);
         }
+
         return new self(
             id: $id,
+            chauffage: $chauffage,
             installation: $installation,
             generateur: $generateur,
+            type_chauffage: $reseau ? TypeChauffage::CHAUFFAGE_CENTRAL : TypeChauffage::CHAUFFAGE_DIVISE,
             reseau: $generateur->type()->is_chauffage_central() ? $reseau : null,
             emetteurs: new EmetteurCollection(),
+            data: SystemeData::create(),
         );
     }
 
-    public function controle(): void
+    public function reinitialise(): self
     {
-        if (false === $this->generateur->type()->is_chauffage_central()) {
-            Assert::null($this->reseau);
-        }
-        if (false === $this->generateur->type()->is_chauffage_divise()) {
-            Assert::notNull($this->reseau);
-        }
-    }
-
-    public function reinitialise(): void
-    {
-        $this->rdim = null;
-        $this->rendements = null;
-        $this->consommations = null;
-        $this->consommations_auxiliaires = null;
-    }
-
-    public function calcule_dimensionnement(MoteurDimensionnement $moteur): self
-    {
-        $this->rdim = $moteur->calcule_dimensionnement_systeme($this);
+        $this->data = SystemeData::create();
         return $this;
     }
 
-    public function calcule_rendement(MoteurRendement $moteur, Simulation $simulation): self
+    public function calcule(SystemeData $data): self
     {
-        $this->rendements = $moteur->calcule_rendement($this, $simulation);
-        return $this;
-    }
-
-    public function calcule_consommations(MoteurConsommation $moteur, Simulation $simulation): self
-    {
-        $this->consommations = $moteur->calcule_consommations($this, $simulation);
-        $this->consommations_auxiliaires = $moteur->calcule_consommations_auxiliaires($this);
+        $this->data = $data;
         return $this;
     }
 
@@ -88,7 +66,7 @@ final class Systeme
 
     public function chauffage(): Chauffage
     {
-        return $this->installation->chauffage();
+        return $this->chauffage;
     }
 
     public function installation(): Installation
@@ -108,7 +86,7 @@ final class Systeme
 
     public function type_chauffage(): TypeChauffage
     {
-        return $this->reseau ? TypeChauffage::CHAUFFAGE_CENTRAL : TypeChauffage::CHAUFFAGE_DIVISE;
+        return $this->type_chauffage;
     }
 
     public function reseau(): ?Reseau
@@ -116,6 +94,9 @@ final class Systeme
         return $this->reseau;
     }
 
+    /**
+     * @return EmetteurCollection|Emetteur[]
+     */
     public function emetteurs(): EmetteurCollection
     {
         return $this->emetteurs;
@@ -125,38 +106,13 @@ final class Systeme
     {
         if ($this->type_chauffage() === TypeChauffage::CHAUFFAGE_CENTRAL) {
             $this->emetteurs->add($entity);
+            $this->reinitialise();
         }
         return $this;
     }
 
-    public function dereference_emetteur(Emetteur $entity): self
+    public function data(): SystemeData
     {
-        $this->emetteurs->remove($entity);
-        return $this;
-    }
-
-    public function rdim(): ?float
-    {
-        return $this->rdim;
-    }
-
-    public function pn(): ?float
-    {
-        return $this->generateur->signaletique()?->pn ?? $this->generateur->performance()?->pn;
-    }
-
-    public function rendements(): ?RendementCollection
-    {
-        return $this->rendements;
-    }
-
-    public function consommations(): ?ConsommationCollection
-    {
-        return $this->consommations;
-    }
-
-    public function consommations_auxiliaires(): ?ConsommationCollection
-    {
-        return $this->consommations_auxiliaires;
+        return $this->data;
     }
 }

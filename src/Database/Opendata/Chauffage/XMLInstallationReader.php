@@ -3,28 +3,35 @@
 namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\{XMLElement, XMLReader};
-use App\Domain\Chauffage\Enum\IsolationReseau;
-use App\Domain\Chauffage\ValueObject\{Regulation, Solaire};
+use App\Domain\Chauffage\Enum\UsageChauffage;
 use App\Domain\Common\ValueObject\Id;
+use App\Domain\Common\ValueObject\Pourcentage;
 
 final class XMLInstallationReader extends XMLReader
 {
-    /** @return XMLGenerateurReader[] */
-    public function read_generateurs(): array
+    public bool $is_appoint_electrique_sdb = false;
+
+    /**
+     * Les installations avec vhauffage électrique dans la salle de bain sont considérées
+     * comme deux installations distinctes
+     */
+    public function supports(): bool
     {
-        return \array_filter(\array_map(
-            fn(XMLElement $xml): XMLGenerateurReader => XMLGenerateurReader::from($xml),
-            $this->xml()->findMany('.//generateur_chauffage_collection//generateur_chauffage')
-        ), fn(XMLGenerateurReader $reader): bool => $reader->apply());
+        return false === $this->has_appoint_electrique_sdb();
     }
 
-    /** @return XMLEmetteurReader[] */
-    public function read_emetteurs(): array
+    /**
+     * @return XMLEmetteurReader[]
+     */
+    public function emetteurs(): array
     {
-        return \array_filter(\array_map(
-            fn(XMLElement $xml): XMLEmetteurReader => XMLEmetteurReader::from($xml),
-            $this->xml()->findMany('.//emetteur_chauffage_collection//emetteur_chauffage')
-        ), fn(XMLEmetteurReader $reader): bool => $reader->apply());
+        return array_filter(
+            array_map(
+                fn(XMLElement $xml): XMLEmetteurReader => XMLEmetteurReader::from($xml),
+                $this->findMany('.//emetteur_chauffage_collection//emetteur_chauffage'),
+            ),
+            fn(XMLEmetteurReader $reader): bool => $reader->supports(),
+        );
     }
 
     /**
@@ -37,59 +44,115 @@ final class XMLInstallationReader extends XMLReader
 
     public function id(): Id
     {
-        return $this->xml()->findOneOrError('.//reference')->id();
+        return Id::from($this->reference());
+    }
+
+    public function reference(): string
+    {
+        return $this->findOneOrError('.//reference')->reference();
     }
 
     public function description(): string
     {
-        return $this->xml()->findOne('.//description')?->strval() ?? 'Installation non décrite';
+        return $this->findOne('.//description')?->strval() ?? 'Installation non décrite';
     }
 
+    /**
+     * En présence d'un appoint électrique dans la salle de bain, on considère une surface déduite de 10%
+     */
     public function surface(): float
     {
-        return $this->xml()->findOneOrError('.//surface_chauffee')->floatval();
-    }
-
-    public function regulation_centrale(): Regulation
-    {
-        return new Regulation(
-            presence_regulation: $this->presence_regulation_centrale(),
-            minimum_temperature: $this->regulation_centrale_minimum_temperature(),
-            detection_presence: $this->regulation_centrale_detection_presence()
-        );
-    }
-
-    public function regulation_terminale(): Regulation
-    {
-        return new Regulation(
-            presence_regulation: $this->presence_regulation_terminale(),
-            minimum_temperature: $this->regulation_terminale_minimum_temperature(),
-            detection_presence: $this->regulation_terminale_detection_presence()
-        );
-    }
-
-    public function isolation_reseau(): ?IsolationReseau
-    {
-        foreach ($this->read_emetteurs() as $item) {
-            if (false === $item->apply())
-                continue;
-            if ($item->reseau_distribution_isole() !== null)
-                return $item->reseau_distribution_isole() ? IsolationReseau::ISOLE : IsolationReseau::NON_ISOLE;
-
-            return IsolationReseau::INCONNU;
+        if ($this->is_appoint_electrique_sdb) {
+            return $this->findOneOrError('.//surface_chauffee')->floatval() * 0.1;
         }
-        return null;
+        return $this->has_appoint_electrique_sdb()
+            ? $this->findOneOrError('.//surface_chauffee')->floatval() * 0.9
+            : $this->findOneOrError('.//surface_chauffee')->floatval();
     }
 
+    /**
+     * En l'absence d'émetteurs, on considère la présence d'un comptage individuel (émission directe)
+     */
     public function comptage_individuel(): ?bool
     {
-        foreach ($this->read_emetteurs() as $item) {
-            if (false === $item->apply())
-                continue;
-            if ($item->comptage_individuel() !== null)
+        foreach ($this->emetteurs() as $item) {
+            if ($item->comptage_individuel() !== null) {
                 return $item->comptage_individuel();
+            }
         }
+        return true;
+    }
+
+    public function usage_solaire(): ?UsageChauffage
+    {
+        return \in_array($this->enum_cfg_installation_ch_id(), [2, 7])
+            ? UsageChauffage::CHAUFFAGE
+            : null;
+    }
+
+    public function annee_installation_solaire(): ?Id
+    {
         return null;
+    }
+
+    public function presence_regulation_centrale(): bool
+    {
+        foreach ($this->emetteurs() as $reader) {
+            if (true === $reader->presence_regulation_centrale()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function regulation_centrale_minimum_temperature(): bool
+    {
+        foreach ($this->emetteurs() as $reader) {
+            if (true === $reader->regulation_centrale_minimum_temperature()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function regulation_centrale_detection_presence(): bool
+    {
+        foreach ($this->emetteurs() as $reader) {
+            if (true === $reader->regulation_centrale_detection_presence()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function presence_regulation_terminale(): bool
+    {
+        foreach ($this->emetteurs() as $reader) {
+            if (true === $reader->presence_regulation_terminale()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function regulation_terminale_minimum_temperature(): bool
+    {
+        foreach ($this->emetteurs() as $reader) {
+            if (true === $reader->regulation_terminale_minimum_temperature()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function regulation_terminale_detection_presence(): bool
+    {
+        foreach ($this->emetteurs() as $reader) {
+            if (true === $reader->regulation_terminale_detection_presence()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function installation_collective(): bool
@@ -97,92 +160,25 @@ final class XMLInstallationReader extends XMLReader
         return $this->enum_type_installation_id() === 2;
     }
 
-    public function solaire(): ?Solaire
-    {
-        return \in_array($this->enum_cfg_installation_ch_id(), [2, 7]) ? new Solaire(
-            fch: $this->fch_saisi(),
-        ) : null;
-    }
-
-    public function presence_circulateur_externe(): bool
-    {
-        return true === $this->installation_collective() && $this->xml()->findOne('//conso_auxiliaire_distribution_ch')?->floatval() > 0;
-    }
-
-    public function presence_regulation_centrale(): bool
-    {
-        foreach ($this->read_emetteurs() as $item) {
-            if (true === $item->presence_regulation_centrale())
-                return true;
-        }
-        return false;
-    }
-
-    public function regulation_centrale_minimum_temperature(): bool
-    {
-        foreach ($this->read_emetteurs() as $item) {
-            if (true === $item->regulation_centrale_minimum_temperature())
-                return true;
-        }
-        return false;
-    }
-
-    public function regulation_centrale_detection_presence(): bool
-    {
-        foreach ($this->read_emetteurs() as $item) {
-            if (true === $item->regulation_centrale_detection_presence())
-                return true;
-        }
-        return false;
-    }
-
-    public function presence_regulation_terminale(): bool
-    {
-        foreach ($this->read_emetteurs() as $item) {
-            if (true === $item->presence_regulation_terminale())
-                return true;
-        }
-        return false;
-    }
-
-    public function regulation_terminale_minimum_temperature(): bool
-    {
-        foreach ($this->read_emetteurs() as $item) {
-            if (true === $item->regulation_terminale_minimum_temperature())
-                return true;
-        }
-        return false;
-    }
-
-    public function regulation_terminale_detection_presence(): bool
-    {
-        foreach ($this->read_emetteurs() as $item) {
-            if (true === $item->regulation_terminale_detection_presence())
-                return true;
-        }
-        return false;
-    }
-
     public function niveaux_desservis(): int
     {
-        return $this->xml()->findOneOrError('.//nombre_niveau_installation_ch')->intval();
+        return $this->findOneOrError('.//nombre_niveau_installation_ch')->intval();
     }
 
     public function enum_cfg_installation_ch_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_cfg_installation_ch_id')->intval();
+        return $this->findOneOrError('.//enum_cfg_installation_ch_id')->intval();
     }
 
     public function enum_type_installation_id(): int
     {
-        return $this->xml()->findOneOrError('.//enum_type_installation_id')->intval();
+        return $this->findOneOrError('.//enum_type_installation_id')->intval();
     }
 
-    public function fch_saisi(): ?float
+    public function fch_saisi(): ?Pourcentage
     {
-        return $this->xml()->findOne('.//fch_saisi')?->floatval();
+        return ($value = $this->findOne('.//fch_saisi')?->floatval())
+            ? Pourcentage::from($value)
+            : null;
     }
-
-    // Données intermédiaires
-
 }

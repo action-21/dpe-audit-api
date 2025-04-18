@@ -3,7 +3,7 @@
 namespace App\Services\Validator\Constraints;
 
 use App\Domain\Common\ValueObject\Id;
-use App\Domain\ReseauChaleur\ReseauChaleurRepository;
+use App\Domain\Chauffage\Repository\ReseauChaleurRepository;
 use Symfony\Component\Validator\{Constraint, ConstraintValidator};
 use Symfony\Component\Validator\Exception\{UnexpectedTypeException, UnexpectedValueException};
 
