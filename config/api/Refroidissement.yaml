@@ -1,6 +1,10 @@
 resources:
   App\Api\Refroidissement\Model\Refroidissement:
     shortName: Refroidissement
+    normalizationContext:
+      groups: ["read"]
+    denormalizationContext:
+      groups: ["write"]
     operations:
       refroidissement.get:
         uriTemplate: /audit/{id}/refroidissement

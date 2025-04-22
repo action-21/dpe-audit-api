@@ -31,6 +31,8 @@ final class Systeme
             new Assert\Uuid,
         ])]
         public readonly array $emetteurs,
+
+        public readonly ?SystemeData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -42,6 +44,7 @@ final class Systeme
             type: $entity->type_chauffage(),
             reseau: Reseau::from($entity),
             emetteurs: $entity->emetteurs()->map(fn(EmetteurEntity $item) => $item->id()->value)->to_array(),
+            data: SystemeData::from($entity),
         );
     }
 

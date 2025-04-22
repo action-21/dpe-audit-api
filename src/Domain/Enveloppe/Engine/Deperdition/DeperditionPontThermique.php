@@ -134,22 +134,24 @@ final class DeperditionPontThermique extends EngineRule
      */
     public function kpt(): float
     {
-        if (null !== $this->pont_thermique->kpt()) {
-            return $this->pont_thermique->kpt();
-        }
-        if (null === $value = $this->table_repository->kpt(
-            type_liaison: $this->pont_thermique->liaison()->type,
-            etat_isolation_mur: $this->etat_isolation_mur(),
-            type_isolation_mur: $this->type_isolation_mur(),
-            etat_isolation_plancher: $this->etat_isolation_plancher_bas() ?? $this->etat_isolation_plancher_haut(),
-            type_isolation_plancher: $this->type_isolation_plancher_bas() ?? $this->type_isolation_plancher_haut(),
-            type_pose: $this->type_pose(),
-            presence_retour_isolation: $this->presence_retour_isolation(),
-            largeur_dormant: $this->largeur_dormant(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire kpt non trouvée');
-        }
-        return $value;
+        return $this->get('kpt', function () {
+            if (null !== $this->pont_thermique->kpt()) {
+                return $this->pont_thermique->kpt();
+            }
+            if (null === $value = $this->table_repository->kpt(
+                type_liaison: $this->pont_thermique->liaison()->type,
+                etat_isolation_mur: $this->etat_isolation_mur(),
+                type_isolation_mur: $this->type_isolation_mur(),
+                etat_isolation_plancher: $this->etat_isolation_plancher_bas() ?? $this->etat_isolation_plancher_haut(),
+                type_isolation_plancher: $this->type_isolation_plancher_bas() ?? $this->type_isolation_plancher_haut(),
+                type_pose: $this->type_pose(),
+                presence_retour_isolation: $this->presence_retour_isolation(),
+                largeur_dormant: $this->largeur_dormant(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire kpt non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -170,8 +172,11 @@ final class DeperditionPontThermique extends EngineRule
     public function apply(Audit $entity): void
     {
         $this->audit = $entity;
+
         foreach ($entity->enveloppe()->ponts_thermiques() as $pont_thermique) {
             $this->pont_thermique = $pont_thermique;
+            $this->clear();
+
             $pont_thermique->calcule(PontThermiqueData::create(
                 kpt: $this->kpt(),
                 pt: $this->pt(),

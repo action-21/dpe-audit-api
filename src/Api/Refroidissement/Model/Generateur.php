@@ -27,6 +27,8 @@ final class Generateur
 
         #[Assert\Uuid]
         public readonly ?string $reseau_froid_id,
+
+        public readonly ?GenerateurData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -39,6 +41,7 @@ final class Generateur
             annee_installation: $entity->annee_installation()?->value,
             seer: $entity->seer(),
             reseau_froid_id: $entity->reseau_froid()?->id(),
+            data: GenerateurData::from($entity),
         );
     }
 

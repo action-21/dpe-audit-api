@@ -1,0 +1,10 @@
+App\Api\Enveloppe\Model\Niveau:
+  attributes:
+    surface:
+      groups: ["read", "write"]
+    inertie_paroi_verticale:
+      groups: ["read", "write"]
+    inertie_plancher_bas:
+      groups: ["read", "write"]
+    inertie_plancher_haut:
+      groups: ["read", "write"]

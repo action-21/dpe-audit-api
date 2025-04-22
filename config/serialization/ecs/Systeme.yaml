@@ -1,0 +1,47 @@
+App\Api\Ecs\Model\Systeme:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    installation_id:
+      groups: ["read", "write"]
+    generateur_id:
+      groups: ["read", "write"]
+    reseau:
+      groups: ["read", "write"]
+    stockage:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Ecs\Model\SystemeData:
+  attributes:
+    rdim:
+      groups: ["read"]
+    rendements:
+      groups: ["read"]
+    pertes:
+      groups: ["read"]
+    pertes_recuperables:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]
+
+App\Api\Ecs\Model\Reseau:
+  attributes:
+    alimentation_contigue:
+      groups: ["read", "write"]
+    niveaux_desservis:
+      groups: ["read", "write"]
+    isolation:
+      groups: ["read", "write"]
+    bouclage:
+      groups: ["read", "write"]
+
+App\Api\Ecs\Model\Stockage:
+  attributes:
+    volume:
+      groups: ["read", "write"]
+    position_volume_chauffe:
+      groups: ["read", "write"]

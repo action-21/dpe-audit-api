@@ -1,6 +1,10 @@
 resources:
   App\Api\Ventilation\Model\Ventilation:
     shortName: Ventilation
+    normalizationContext:
+      groups: ["read"]
+    denormalizationContext:
+      groups: ["write"]
     operations:
       ventilation.get:
         uriTemplate: /audit/{id}/ventilation

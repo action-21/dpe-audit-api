@@ -79,9 +79,11 @@ final class DeperditionBaie extends DeperditionParoi
      */
     public function ug(): float
     {
-        return $this->paroi->double_fenetre()
-            ? min($this->ug1(), $this->paroi->double_fenetre()->data()->ug)
-            : $this->ug1();
+        return $this->get('ug', function () {
+            return $this->paroi->double_fenetre()
+                ? min($this->ug1(), $this->paroi->double_fenetre()->data()->ug)
+                : $this->ug1();
+        });
     }
 
     /**
@@ -89,19 +91,21 @@ final class DeperditionBaie extends DeperditionParoi
      */
     public function ug1(): float
     {
-        if ($this->paroi->performance()->ug) {
-            return $this->paroi->performance()->ug;
-        }
-        if (null === $value = $this->table_repository->ug(
-            type_baie: $this->paroi->type_baie(),
-            type_vitrage: $this->type_vitrage(),
-            nature_gaz_lame: $this->nature_gaz_lame(),
-            inclinaison_vitrage: $this->paroi->position()->inclinaison,
-            epaisseur_lame_air: $this->epaisseur_lame_air(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire ug non trouvée');
-        }
-        return $value;
+        return $this->get('ug1', function () {
+            if ($this->paroi->performance()->ug) {
+                return $this->paroi->performance()->ug;
+            }
+            if (null === $value = $this->table_repository->ug(
+                type_baie: $this->paroi->type_baie(),
+                type_vitrage: $this->type_vitrage(),
+                nature_gaz_lame: $this->nature_gaz_lame(),
+                inclinaison_vitrage: $this->paroi->position()->inclinaison,
+                epaisseur_lame_air: $this->epaisseur_lame_air(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire ug non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -109,28 +113,33 @@ final class DeperditionBaie extends DeperditionParoi
      */
     public function uw(): float
     {
-        return $this->paroi->double_fenetre()
-            ? 1 / (1 / $this->uw1() + 1 / $this->paroi->double_fenetre()->data()->uw + 0.07)
-            : $this->uw1();
+        return $this->get('uw', function () {
+            return $this->paroi->double_fenetre()
+                ? 1 / (1 / $this->uw1() + 1 / $this->paroi->double_fenetre()->data()->uw + 0.07)
+                : $this->uw1();
+        });
     }
+
     /**
      * Coefficient de transmission thermique de la menuiserie exprimé en W/m².K
      */
     public function uw1(): float
     {
-        if ($this->paroi->performance()->uw) {
-            return $this->paroi->performance()->uw;
-        }
-        if (null === $uw = $this->table_repository->uw(
-            ug: $this->ug1(),
-            type_baie: $this->paroi->type_baie(),
-            presence_soubassement: $this->paroi->presence_soubassement(),
-            materiau: $this->materiau(),
-            presence_rupteur_pont_thermique: $this->paroi->menuiserie()?->presence_rupteur_pont_thermique,
-        )) {
-            throw new \DomainException('Valeur forfaitaire uw non trouvée');
-        }
-        return $uw;
+        return $this->get('uw1', function () {
+            if ($this->paroi->performance()->uw) {
+                return $this->paroi->performance()->uw;
+            }
+            if (null === $uw = $this->table_repository->uw(
+                ug: $this->ug1(),
+                type_baie: $this->paroi->type_baie(),
+                presence_soubassement: $this->paroi->presence_soubassement(),
+                materiau: $this->materiau(),
+                presence_rupteur_pont_thermique: $this->paroi->menuiserie()?->presence_rupteur_pont_thermique,
+            )) {
+                throw new \DomainException('Valeur forfaitaire uw non trouvée');
+            }
+            return $uw;
+        });
     }
 
     /**
@@ -138,15 +147,17 @@ final class DeperditionBaie extends DeperditionParoi
      */
     public function deltar(): float
     {
-        if ($this->paroi->type_fermeture() === TypeFermeture::SANS_FERMETURE) {
-            return 0;
-        }
-        if (null === $deltar = $this->table_repository->deltar(
-            type_fermeture: $this->paroi->type_fermeture(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire deltar non trouvée');
-        }
-        return $deltar;
+        return $this->get('deltar', function () {
+            if ($this->paroi->type_fermeture() === TypeFermeture::SANS_FERMETURE) {
+                return 0;
+            }
+            if (null === $deltar = $this->table_repository->deltar(
+                type_fermeture: $this->paroi->type_fermeture(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire deltar non trouvée');
+            }
+            return $deltar;
+        });
     }
 
     /**
@@ -154,19 +165,21 @@ final class DeperditionBaie extends DeperditionParoi
      */
     public function ujn(): float
     {
-        if ($this->paroi->performance()->ujn) {
-            return $this->paroi->performance()->ujn;
-        }
-        if ($this->paroi->type_fermeture() === TypeFermeture::SANS_FERMETURE) {
-            return $this->uw();
-        }
-        if (null === $ujn = $this->table_repository->ujn(
-            deltar: $this->deltar(),
-            uw: $this->uw(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire ujn non trouvée');
-        }
-        return $ujn;
+        return $this->get('ujn', function () {
+            if ($this->paroi->performance()->ujn) {
+                return $this->paroi->performance()->ujn;
+            }
+            if ($this->paroi->type_fermeture() === TypeFermeture::SANS_FERMETURE) {
+                return $this->uw();
+            }
+            if (null === $ujn = $this->table_repository->ujn(
+                deltar: $this->deltar(),
+                uw: $this->uw(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire ujn non trouvée');
+            }
+            return $ujn;
+        });
     }
 
     /** @inheritdoc */
@@ -182,14 +195,15 @@ final class DeperditionBaie extends DeperditionParoi
      */
     public function performance(): Performance
     {
-        $u = $this->u();
-
-        return match (true) {
-            $u >= 3 => Performance::INSUFFISANTE,
-            $u >= 2.2 => Performance::MOYENNE,
-            $u >= 1.6 => Performance::BONNE,
-            $u < 1.6 => Performance::TRES_BONNE,
-        };
+        return $this->get('performance', function () {
+            $u = $this->u();
+            return match (true) {
+                $u >= 3 => Performance::INSUFFISANTE,
+                $u >= 2.2 => Performance::MOYENNE,
+                $u >= 1.6 => Performance::BONNE,
+                $u < 1.6 => Performance::TRES_BONNE,
+            };
+        });
     }
 
     public function apply(Audit $entity): void
@@ -197,6 +211,7 @@ final class DeperditionBaie extends DeperditionParoi
         $this->audit = $entity;
 
         foreach ($entity->enveloppe()->baies() as $paroi) {
+            $this->clear();
             $this->paroi = $paroi;
 
             $paroi->calcule($paroi->data()->with(

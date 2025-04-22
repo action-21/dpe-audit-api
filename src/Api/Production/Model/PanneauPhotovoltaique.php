@@ -26,6 +26,8 @@ final class PanneauPhotovoltaique
 
         #[Assert\Positive]
         public readonly ?float $surface,
+
+        public readonly ?PanneauPhotovoltaiqueData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -37,6 +39,7 @@ final class PanneauPhotovoltaique
             inclinaison: $entity->inclinaison()->value,
             modules: $entity->modules(),
             surface: $entity->surface(),
+            data: PanneauPhotovoltaiqueData::from($entity),
         );
     }
 

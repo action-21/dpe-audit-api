@@ -1,0 +1,185 @@
+App\Api\Enveloppe\Model\Baie:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type_baie:
+      groups: ["read", "write"]
+    presence_protection_solaire:
+      groups: ["read", "write"]
+    type_fermeture:
+      groups: ["read", "write"]
+    materiau:
+      groups: ["read", "write"]
+    type_pose:
+      groups: ["read", "write"]
+    presence_soubassement:
+      groups: ["read", "write"]
+    annee_installation:
+      groups: ["read", "write"]
+    ug:
+      groups: ["read", "write"]
+    uw:
+      groups: ["read", "write"]
+    ujn:
+      groups: ["read", "write"]
+    sw:
+      groups: ["read", "write"]
+    position:
+      groups: ["read", "write"]
+    menuiserie:
+      groups: ["read", "write"]
+    vitrage:
+      groups: ["read", "write"]
+    double_fenetre:
+      groups: ["read", "write"]
+    masques_lointains:
+      groups: ["read", "write"]
+    masques_proches:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Baie\Data:
+  attributes:
+    sdep:
+      groups: ["read"]
+    ug:
+      groups: ["read"]
+    uw:
+      groups: ["read"]
+    u:
+      groups: ["read"]
+    b:
+      groups: ["read"]
+    dp:
+      groups: ["read"]
+    performance:
+      groups: ["read"]
+    isolation:
+      groups: ["read"]
+    sw:
+      groups: ["read"]
+    fe:
+      groups: ["read"]
+    c1:
+      groups: ["read"]
+    sse:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\DoubleFenetre:
+  attributes:
+    type_baie:
+      groups: ["read", "write"]
+    materiau:
+      groups: ["read", "write"]
+    type_pose:
+      groups: ["read", "write"]
+    presence_soubassement:
+      groups: ["read", "write"]
+    ug:
+      groups: ["read", "write"]
+    uw:
+      groups: ["read", "write"]
+    sw:
+      groups: ["read", "write"]
+    menuiserie:
+      groups: ["read", "write"]
+    vitrage:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Baie\DoubleFenetreData:
+  attributes:
+    ug:
+      groups: ["read"]
+    uw:
+      groups: ["read"]
+    sw:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\MasqueLointain:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type_masque:
+      groups: ["read", "write"]
+    hauteur:
+      groups: ["read", "write"]
+    orientation:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Baie\MasqueLointainData:
+  attributes:
+    fe2:
+      groups: ["read"]
+    omb:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\MasqueProche:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type_masque:
+      groups: ["read", "write"]
+    profondeur:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Baie\MasqueProcheData:
+  attributes:
+    fe1:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Baie\Menuiserie:
+  attributes:
+    largeur_dormant:
+      groups: ["read", "write"]
+    presence_joint:
+      groups: ["read", "write"]
+    presence_retour_isolation:
+      groups: ["read", "write"]
+    presence_rupteur_pont_thermique:
+      groups: ["read", "write"]
+
+App\Api\Enveloppe\Model\Baie\Position:
+  attributes:
+    paroi_id:
+      groups: ["read", "write"]
+    local_non_chauffe_id:
+      groups: ["read", "write"]
+    surface:
+      groups: ["read", "write"]
+    inclinaison:
+      groups: ["read", "write"]
+    orientation:
+      groups: ["read", "write"]
+    mitoyennete:
+      groups: ["read", "write"]
+
+App\Api\Enveloppe\Model\Baie\Survitrage:
+  attributes:
+    type_survitrage:
+      groups: ["read", "write"]
+    epaisseur_lame:
+      groups: ["read", "write"]
+
+App\Api\Enveloppe\Model\Baie\Vitrage:
+  attributes:
+    type_vitrage:
+      groups: ["read", "write"]
+    nature_lame:
+      groups: ["read", "write"]
+    epaisseur_lame:
+      groups: ["read", "write"]
+    survitrage:
+      groups: ["read", "write"]

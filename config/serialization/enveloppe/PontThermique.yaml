@@ -1,0 +1,34 @@
+App\Api\Enveloppe\Model\PontThermique:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    longueur:
+      groups: ["read", "write"]
+    kpt:
+      groups: ["read", "write"]
+    liaison:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\PontThermique\Data:
+  attributes:
+    kpt:
+      groups: ["read"]
+    pt:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\PontThermique\Liaison:
+  attributes:
+    type_liaison:
+      groups: ["read", "write"]
+    mur_id:
+      groups: ["read", "write"]
+    plancher_id:
+      groups: ["read", "write"]
+    ouverture_id:
+      groups: ["read", "write"]
+    pont_thermique_partiel:
+      groups: ["read", "write"]

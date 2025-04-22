@@ -1,0 +1,11 @@
+App\Api\Eclairage\Model\Eclairage:
+  attributes:
+    data:
+      groups: ["read"]
+
+App\Api\Eclairage\Model\EclairageData:
+  attributes:
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

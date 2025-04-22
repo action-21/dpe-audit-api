@@ -3,6 +3,7 @@
 namespace App\Domain\Enveloppe\ValueObject;
 
 use App\Domain\Enveloppe\Enum\TypeDeperdition;
+use Webmozart\Assert\Assert;
 
 /**
  * @property Deperdition[] $values
@@ -13,12 +14,32 @@ final class Deperditions
 
     public static function create(Deperdition ...$values): self
     {
+        Assert::uniqueValues(array_map(fn(Deperdition $value) => $value->type->id(), $values));
         return new self($values);
+    }
+
+    public function add(Deperdition $value): self
+    {
+        $values = [Deperdition::create(
+            type: $value->type,
+            deperdition: $value->deperdition + $this->get(type: $value->type),
+        )];
+
+        foreach ($this->values as $item) {
+            if ($item->type === $value->type) {
+                continue;
+            }
+            $values[] = $item;
+        }
+        return static::create(...$values);
     }
 
     public function merge(self $value): self
     {
-        return static::create(...array_merge($this->values, $value->values));
+        foreach ($this->values as $item) {
+            $value = $value->add($item);
+        }
+        return $value;
     }
 
     public function get(?TypeDeperdition $type = null): float

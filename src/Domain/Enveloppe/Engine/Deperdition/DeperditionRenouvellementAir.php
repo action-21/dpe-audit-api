@@ -203,25 +203,28 @@ final class DeperditionRenouvellementAir extends EngineRule
      */
     public function q4pa_conv(): float
     {
-        if ($this->enveloppe->q4pa_conv()) {
-            return $this->enveloppe->q4pa_conv();
-        }
-        if (null === $q4pa_conv = $this->table_repository->q4pa_conv(
-            type_batiment: $this->audit->batiment()->type,
-            annee_construction: $this->audit->batiment()->annee_construction,
-            presence_joints_menuiserie: $this->presence_joints_menuiserie(),
-            isolation_murs_plafonds: $this->isolation_murs_plafonds(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Q4PaConv non trouvée');
-        }
+        return $this->get('q4pa_conv', function () {
+            if ($this->enveloppe->q4pa_conv()) {
+                return $this->enveloppe->q4pa_conv();
+            }
+            if (null === $q4pa_conv = $this->table_repository->q4pa_conv(
+                type_batiment: $this->audit->batiment()->type,
+                annee_construction: $this->audit->batiment()->annee_construction,
+                presence_joints_menuiserie: $this->presence_joints_menuiserie(),
+                isolation_murs_plafonds: $this->isolation_murs_plafonds(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Q4PaConv non trouvée');
+            }
 
-        return $q4pa_conv;
+            return $q4pa_conv;
+        });
     }
 
     public function apply(Audit $entity): void
     {
         $this->audit = $entity;
         $this->enveloppe = $entity->enveloppe();
+        $this->clear();
 
         $entity->enveloppe()->calcule($entity->enveloppe()->data()->with(
             permeabilite: Permeabilite::create(

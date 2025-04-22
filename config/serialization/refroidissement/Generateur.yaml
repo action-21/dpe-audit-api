@@ -1,0 +1,27 @@
+App\Api\Refroidissement\Model\Generateur:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type:
+      groups: ["read", "write"]
+    energie:
+      groups: ["read", "write"]
+    annee_installation:
+      groups: ["read", "write"]
+    seer:
+      groups: ["read", "write"]
+    reseau_froid_id:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Refroidissement\Model\GenerateurData:
+  attributes:
+    eer:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

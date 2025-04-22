@@ -29,28 +29,29 @@ final class PerteStockageIntegre extends EngineRule
     /**
      * Pertes mensuelles de stockage exprimées en Wh
      */
-    public function pertes_stockage(ScenarioUsage $scenario, Mois $mois): float
+    public function pertes_stockage(): float
     {
-        $vs = $this->generateur->signaletique()->volume_stockage;
+        return $this->get("pertes_stockage", function () {
+            $vs = $this->generateur->signaletique()->volume_stockage;
 
-        if (0 === $vs) {
-            return 0;
-        }
-        if (false === \in_array($this->generateur->type(), [
-            TypeGenerateur::CHAUFFE_EAU_HORIZONTAL,
-            TypeGenerateur::CHAUFFE_EAU_VERTICAL,
-        ])) {
-            return (67662 * \pow($vs, 0.55)) / 12;
-        }
-        if (null === $cr = $this->table_repository->cr(
-            type_generateur: $this->generateur->type(),
-            label_generateur: $this->generateur->signaletique()->label,
-            volume_stockage: $vs,
-        )) {
-            dd($this->generateur->type(), $this->generateur->signaletique()->label, $vs);
-            throw new \DomainException("Valeur forfaitaire Cr non trouvée");
-        }
-        return (8592 * (45 / 24) * $vs * $cr) / 12;
+            if (0 === $vs) {
+                return 0;
+            }
+            if (false === \in_array($this->generateur->type(), [
+                TypeGenerateur::CHAUFFE_EAU_HORIZONTAL,
+                TypeGenerateur::CHAUFFE_EAU_VERTICAL,
+            ])) {
+                return (67662 * \pow($vs, 0.55)) / 12;
+            }
+            if (null === $cr = $this->table_repository->cr(
+                type_generateur: $this->generateur->type(),
+                label_generateur: $this->generateur->signaletique()->label,
+                volume_stockage: $vs,
+            )) {
+                throw new \DomainException("Valeur forfaitaire Cr non trouvée");
+            }
+            return (8592 * (45 / 24) * $vs * $cr) / 12;
+        });
     }
 
     /**
@@ -62,7 +63,7 @@ final class PerteStockageIntegre extends EngineRule
             return 0;
         }
         $nref = $this->nref(scenario: $scenario, mois: $mois);
-        return 0.48 * $nref * ($this->pertes_stockage(scenario: $scenario, mois: $mois) / 8760);
+        return 0.48 * $nref * ($this->pertes_stockage() / 8760);
     }
 
     public function apply(Audit $entity): void
@@ -75,10 +76,7 @@ final class PerteStockageIntegre extends EngineRule
             $pertes = Pertes::create(
                 usage: Usage::ECS,
                 type: TypePerte::STOCKAGE,
-                callback: fn(ScenarioUsage $scenario, Mois $mois) => $this->pertes_stockage(
-                    scenario: $scenario,
-                    mois: $mois,
-                ),
+                callback: fn(ScenarioUsage $scenario, Mois $mois) => $this->pertes_stockage(),
             );
             $pertes_recuperables = Pertes::create(
                 usage: Usage::ECS,

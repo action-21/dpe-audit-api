@@ -13,18 +13,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Ventilation
 {
     public function __construct(
-
+        /** @var Generateur[] */
         #[Assert\All([new Assert\Type(Generateur::class)])]
         #[Assert\Valid]
         public readonly array $generateurs,
 
+        /** @var Installation[] */
         #[Assert\All([new Assert\Type(Installation::class)])]
         #[Assert\Valid]
         public readonly array $installations,
 
+        /** @var Systeme[] */
         #[Assert\All([new Assert\Type(Systeme::class)])]
         #[Assert\Valid]
         public readonly array $systemes,
+
+        public readonly ?VentilationData $data,
     ) {}
 
     #[Assert\IsTrue]
@@ -64,6 +68,7 @@ final class Ventilation
             generateurs: Generateur::from_collection($entity->generateurs()),
             installations: Installation::from_collection($entity->installations()),
             systemes: Systeme::from_collection($entity->systemes()),
+            data: VentilationData::from($entity),
         );
     }
 }

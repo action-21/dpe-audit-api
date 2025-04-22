@@ -72,17 +72,19 @@ abstract class RendementSysteme extends EngineRule
     /**
      * Rendement annuel de distribution
      */
-    public function rd(ScenarioUsage $scenario): float
+    final public function rd(ScenarioUsage $scenario): float
     {
-        if (null === $rd = $this->table_repository->rd(
-            production_volume_habitable: $this->production_volume_habitable(),
-            reseau_collectif: $this->reseau_collectif(),
-            bouclage_reseau: $this->systeme->reseau()->bouclage,
-            alimentation_contigue: $this->systeme->reseau()->alimentation_contigue,
-        )) {
-            throw new \RuntimeException('Valeur forfaitaire Rd non trouvée');
-        }
-        return $rd;
+        return $this->get("rd", function () {
+            if (null === $rd = $this->table_repository->rd(
+                production_volume_habitable: $this->production_volume_habitable(),
+                reseau_collectif: $this->reseau_collectif(),
+                bouclage_reseau: $this->systeme->reseau()->bouclage,
+                alimentation_contigue: $this->systeme->reseau()->alimentation_contigue,
+            )) {
+                throw new \RuntimeException('Valeur forfaitaire Rd non trouvée');
+            }
+            return $rd;
+        });
     }
 
     /**
@@ -121,6 +123,7 @@ abstract class RendementSysteme extends EngineRule
                 continue;
             }
             $this->systeme = $systeme;
+            $this->clear();
 
             $rendements = ScenarioUsage::each(fn(ScenarioUsage $scenario) => Rendement::create(
                 scenario: $scenario,

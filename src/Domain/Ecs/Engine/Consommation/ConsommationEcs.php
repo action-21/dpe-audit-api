@@ -89,6 +89,9 @@ final class ConsommationEcs extends EngineRule
             $systeme->ecs()->calcule($systeme->ecs()->data()->with(
                 consommations: $consommations,
             ));
+            $entity->calcule($entity->data()->with(
+                consommations: $consommations,
+            ));
         }
     }
 

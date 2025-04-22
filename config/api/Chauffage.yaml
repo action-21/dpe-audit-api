@@ -1,6 +1,10 @@
 resources:
   App\Api\Chauffage\Model\Chauffage:
     shortName: Chauffage
+    normalizationContext:
+      groups: ["read"]
+    denormalizationContext:
+      groups: ["write"]
     operations:
       chauffage.get:
         uriTemplate: /audit/{id}/chauffage

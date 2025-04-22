@@ -11,7 +11,7 @@ use App\Domain\Enveloppe\Entity\Baie\MasqueLointain;
 use App\Domain\Enveloppe\Enum\Baie\{Materiau, TypeMasqueLointain, TypeSurvitrage, TypeVitrage};
 use App\Domain\Enveloppe\Service\BaieTableValeurRepository;
 use App\Domain\Enveloppe\ValueObject\Baie\{Ensoleillement, Ensoleillements};
-use DpeAuditApi\Domain\Enveloppe\Engine\Apport\EnsoleillementDoubleFenetre;
+use App\Domain\Enveloppe\Engine\Apport\EnsoleillementDoubleFenetre;
 
 final class EnsoleillementBaie extends EngineRule
 {
@@ -63,14 +63,16 @@ final class EnsoleillementBaie extends EngineRule
      */
     public function fe1(): float
     {
-        $fe1 = 1;
+        return $this->get('fe1', function () {
+            $fe1 = 1;
 
-        foreach ($this->baie->masques_proches() as $masque) {
-            if ($masque->data()->fe1 < $fe1) {
-                $fe1 = $masque->data()->fe1;
+            foreach ($this->baie->masques_proches() as $masque) {
+                if ($masque->data()->fe1 < $fe1) {
+                    $fe1 = $masque->data()->fe1;
+                }
             }
-        }
-        return $fe1;
+            return $fe1;
+        });
     }
 
     /**
@@ -78,17 +80,19 @@ final class EnsoleillementBaie extends EngineRule
      */
     public function fe2(): float
     {
-        $fe2 = 1;
+        return $this->get('fe2', function () {
+            $fe2 = 1;
 
-        foreach ($this->baie->masques_lointains()->with_type(TypeMasqueLointain::MASQUE_LOINTAIN_HOMOGENE) as $masque) {
-            if ($masque->data()->fe2 < $fe2) {
-                $fe2 = $masque->data()->fe2;
+            foreach ($this->baie->masques_lointains()->with_type(TypeMasqueLointain::MASQUE_LOINTAIN_HOMOGENE) as $masque) {
+                if ($masque->data()->fe2 < $fe2) {
+                    $fe2 = $masque->data()->fe2;
+                }
             }
-        }
 
-        $omb = (100 - $this->omb()) / 100;
+            $omb = (100 - $this->omb()) / 100;
 
-        return min($fe2, $omb);
+            return min($fe2, $omb);
+        });
     }
 
     /**
@@ -96,11 +100,13 @@ final class EnsoleillementBaie extends EngineRule
      */
     public function omb(): float
     {
-        $omb = $this->baie->masques_lointains()
-            ->with_type(TypeMasqueLointain::MASQUE_LOINTAIN_NON_HOMOGENE)
-            ->reduce(fn(float $omb, MasqueLointain $masque): float => $omb + $masque->data()->omb);
+        return $this->get('omb', function () {
+            $omb = $this->baie->masques_lointains()
+                ->with_type(TypeMasqueLointain::MASQUE_LOINTAIN_NON_HOMOGENE)
+                ->reduce(fn(float $omb, MasqueLointain $masque): float => $omb + $masque->data()->omb);
 
-        return min($omb, 100);
+            return min($omb, 100);
+        });
     }
 
     /**
@@ -108,9 +114,11 @@ final class EnsoleillementBaie extends EngineRule
      */
     public function sw(): Pourcentage
     {
-        return $this->baie->double_fenetre()
-            ? Pourcentage::from($this->sw1()->decimal() * $this->baie->double_fenetre()->data()->sw->decimal())
-            : $this->sw1();
+        return $this->get('sw', function () {
+            return $this->baie->double_fenetre()
+                ? Pourcentage::from($this->sw1()->decimal() * $this->baie->double_fenetre()->data()->sw->decimal())
+                : $this->sw1();
+        });
     }
 
     /**
@@ -118,20 +126,22 @@ final class EnsoleillementBaie extends EngineRule
      */
     public function sw1(): Pourcentage
     {
-        if ($this->baie->performance()->sw) {
-            return $this->baie->performance()->sw;
-        }
-        if (null === $sw = $this->table_repository->sw(
-            type_baie: $this->baie->type_baie(),
-            type_pose: $this->baie->type_pose(),
-            presence_soubassement: $this->baie->presence_soubassement(),
-            materiau: $this->materiau(),
-            type_vitrage: $this->type_vitrage(),
-            type_survitrage: $this->type_survitrage(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire sw non trouvée');
-        }
-        return $sw;
+        return $this->get('sw1', function () {
+            if ($this->baie->performance()->sw) {
+                return $this->baie->performance()->sw;
+            }
+            if (null === $sw = $this->table_repository->sw(
+                type_baie: $this->baie->type_baie(),
+                type_pose: $this->baie->type_pose(),
+                presence_soubassement: $this->baie->presence_soubassement(),
+                materiau: $this->materiau(),
+                type_vitrage: $this->type_vitrage(),
+                type_survitrage: $this->type_survitrage(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire sw non trouvée');
+            }
+            return $sw;
+        });
     }
 
     /**
@@ -139,15 +149,17 @@ final class EnsoleillementBaie extends EngineRule
      */
     public function c1(Mois $mois): float
     {
-        if (null === $c1 = $this->table_repository->c1(
-            mois: $mois,
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            inclinaison: $this->baie->position()->inclinaison,
-            orientation: $this->baie->position()->orientation?->enum(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire c1 non trouvée');
-        }
-        return $c1;
+        return $this->get('c1', function () use ($mois) {
+            if (null === $c1 = $this->table_repository->c1(
+                mois: $mois,
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                inclinaison: $this->baie->position()->inclinaison,
+                orientation: $this->baie->position()->orientation?->enum(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire c1 non trouvée');
+            }
+            return $c1;
+        });
     }
 
     /**
@@ -164,6 +176,8 @@ final class EnsoleillementBaie extends EngineRule
 
         foreach ($entity->enveloppe()->baies() as $baie) {
             $this->baie = $baie;
+            $this->clear();
+
             $ensoleillements = [];
 
             foreach (Mois::cases() as $mois) {

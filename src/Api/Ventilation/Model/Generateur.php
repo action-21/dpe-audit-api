@@ -25,6 +25,8 @@ final class Generateur
         public readonly ?int $annee_installation,
 
         public readonly ?TypeVmc $type_vmc,
+
+        public readonly ?GenerateurData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -37,6 +39,7 @@ final class Generateur
             presence_echangeur_thermique: $entity->presence_echangeur_thermique(),
             annee_installation: $entity->annee_installation()?->value,
             type_vmc: $entity->type_vmc(),
+            data: GenerateurData::from($entity),
         );
     }
 

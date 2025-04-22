@@ -1,0 +1,85 @@
+App\Api\Chauffage\Model\Generateur:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type:
+      groups: ["read", "write"]
+    energie:
+      groups: ["read", "write"]
+    energie_partie_chaudiere:
+      groups: ["read", "write"]
+    generateur_collectif:
+      groups: ["read", "write"]
+    position_volume_chauffe:
+      groups: ["read", "write"]
+    generateur_multi_batiment:
+      groups: ["read", "write"]
+    annee_installation:
+      groups: ["read", "write"]
+    pn:
+      groups: ["read", "write"]
+    scop:
+      groups: ["read", "write"]
+    label:
+      groups: ["read", "write"]
+    type_chaudiere:
+      groups: ["read", "write"]
+    priorite_cascade:
+      groups: ["read", "write"]
+    mode_combustion:
+      groups: ["read", "write"]
+    presence_ventouse:
+      groups: ["read", "write"]
+    presence_regulation_combustion:
+      groups: ["read", "write"]
+    pveilleuse:
+      groups: ["read", "write"]
+    qp0:
+      groups: ["read", "write"]
+    rpn:
+      groups: ["read", "write"]
+    rpint:
+      groups: ["read", "write"]
+    tfonc30:
+      groups: ["read", "write"]
+    tfonc100:
+      groups: ["read", "write"]
+    reseau_chaleur_id:
+      groups: ["read", "write"]
+    generateur_mixte_id:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Chauffage\Model\GenerateurData:
+  attributes:
+    pch:
+      groups: ["read"]
+    paux:
+      groups: ["read"]
+    pn:
+      groups: ["read"]
+    scop:
+      groups: ["read"]
+    rpn:
+      groups: ["read"]
+    rpint:
+      groups: ["read"]
+    qp0:
+      groups: ["read"]
+    pveilleuse:
+      groups: ["read"]
+    tfonc30:
+      groups: ["read"]
+    tfonc100:
+      groups: ["read"]
+    pertes:
+      groups: ["read"]
+    pertes_recuperables:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

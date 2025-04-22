@@ -1,6 +1,6 @@
 <?php
 
-namespace DpeAuditApi\Domain\Enveloppe\Engine\Apport;
+namespace App\Domain\Enveloppe\Engine\Apport;
 
 use App\Domain\Audit\Audit;
 use App\Domain\Common\EngineRule;

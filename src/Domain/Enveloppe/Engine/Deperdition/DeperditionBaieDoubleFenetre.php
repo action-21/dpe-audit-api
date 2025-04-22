@@ -66,19 +66,21 @@ final class DeperditionBaieDoubleFenetre extends EngineRule
      */
     public function ug(): float
     {
-        if ($this->double_fenetre->performance()->ug) {
-            return $this->double_fenetre->performance()->ug;
-        }
-        if (null === $value = $this->table_repository->ug(
-            type_baie: $this->double_fenetre->type_baie(),
-            type_vitrage: $this->type_vitrage(),
-            nature_gaz_lame: $this->nature_gaz_lame(),
-            inclinaison_vitrage: $this->baie->position()->inclinaison,
-            epaisseur_lame_air: $this->epaisseur_lame_air(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire ug non trouvée');
-        }
-        return $value;
+        return $this->get('ug', function () {
+            if ($this->double_fenetre->performance()->ug) {
+                return $this->double_fenetre->performance()->ug;
+            }
+            if (null === $value = $this->table_repository->ug(
+                type_baie: $this->double_fenetre->type_baie(),
+                type_vitrage: $this->type_vitrage(),
+                nature_gaz_lame: $this->nature_gaz_lame(),
+                inclinaison_vitrage: $this->baie->position()->inclinaison,
+                epaisseur_lame_air: $this->epaisseur_lame_air(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire ug non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -86,19 +88,21 @@ final class DeperditionBaieDoubleFenetre extends EngineRule
      */
     public function uw(): float
     {
-        if ($this->double_fenetre->performance()->uw) {
-            return $this->double_fenetre->performance()->uw;
-        }
-        if (null === $uw = $this->table_repository->uw(
-            ug: $this->ug(),
-            type_baie: $this->double_fenetre->type_baie(),
-            presence_soubassement: $this->double_fenetre->presence_soubassement(),
-            materiau: $this->materiau(),
-            presence_rupteur_pont_thermique: $this->double_fenetre->menuiserie()?->presence_rupteur_pont_thermique,
-        )) {
-            throw new \DomainException('Valeur forfaitaire uw non trouvée');
-        }
-        return $uw;
+        return $this->get('uw', function () {
+            if ($this->double_fenetre->performance()->uw) {
+                return $this->double_fenetre->performance()->uw;
+            }
+            if (null === $uw = $this->table_repository->uw(
+                ug: $this->ug(),
+                type_baie: $this->double_fenetre->type_baie(),
+                presence_soubassement: $this->double_fenetre->presence_soubassement(),
+                materiau: $this->materiau(),
+                presence_rupteur_pont_thermique: $this->double_fenetre->menuiserie()?->presence_rupteur_pont_thermique,
+            )) {
+                throw new \DomainException('Valeur forfaitaire uw non trouvée');
+            }
+            return $uw;
+        });
     }
 
     public function apply(Audit $entity): void
@@ -109,6 +113,8 @@ final class DeperditionBaieDoubleFenetre extends EngineRule
             }
             $this->baie = $baie;
             $this->double_fenetre = $baie->double_fenetre();
+            $this->clear();
+
             $baie->double_fenetre()->calcule($baie->double_fenetre()->data()->with(
                 ug: $this->ug(),
                 uw: $this->uw(),

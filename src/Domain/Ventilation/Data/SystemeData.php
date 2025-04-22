@@ -8,15 +8,15 @@ use Webmozart\Assert\Assert;
 final class SystemeData
 {
     public function __construct(
-        public readonly ?float $rdim = null,
-        public readonly ?float $qvarep_conv = null,
-        public readonly ?float $qvasouf_conv = null,
-        public readonly ?float $smea_conv = null,
-        public readonly ?float $ratio_utilisation = null,
-        public readonly ?float $pvent_moy = null,
-        public readonly ?float $pvent = null,
-        public readonly ?Consommations $consommations = null,
-        public readonly ?Emissions $emissions = null,
+        public readonly ?float $rdim,
+        public readonly ?float $qvarep_conv,
+        public readonly ?float $qvasouf_conv,
+        public readonly ?float $smea_conv,
+        public readonly ?float $ratio_utilisation,
+        public readonly ?float $pvent_moy,
+        public readonly ?float $pvent,
+        public readonly ?Consommations $consommations,
+        public readonly ?Emissions $emissions,
     ) {}
 
     public static function create(

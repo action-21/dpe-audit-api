@@ -1,0 +1,123 @@
+App\Api\Enveloppe\Model\Lnc:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type:
+      groups: ["read", "write"]
+    parois_opaques:
+      groups: ["read", "write"]
+    baies:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Lnc\Data:
+  attributes:
+    aiu:
+      groups: ["read"]
+    aue:
+      groups: ["read"]
+    isolation_aiu:
+      groups: ["read"]
+    isolation_aue:
+      groups: ["read"]
+    uvue:
+      groups: ["read"]
+    b:
+      groups: ["read"]
+    bver:
+      groups: ["read"]
+    t:
+      groups: ["read"]
+    fe:
+      groups: ["read"]
+    c1:
+      groups: ["read"]
+    sst:
+      groups: ["read"]
+    ssd:
+      groups: ["read"]
+    ssind:
+      groups: ["read"]
+    sse:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Lnc\Baie:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type_baie:
+      groups: ["read", "write"]
+    materiau:
+      groups: ["read", "write"]
+    type_vitrage:
+      groups: ["read", "write"]
+    presence_rupteur_pont_thermique:
+      groups: ["read", "write"]
+    position:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Lnc\BaieData:
+  attributes:
+    aue:
+      groups: ["read"]
+    aiu:
+      groups: ["read"]
+    isolation:
+      groups: ["read"]
+    t:
+      groups: ["read"]
+    fe:
+      groups: ["read"]
+    c1:
+      groups: ["read"]
+    sst:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Lnc\ParoiOpaque:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    isolation:
+      groups: ["read", "write"]
+    position:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Lnc\ParoiOpaqueData:
+  attributes:
+    aue:
+      groups: ["read"]
+    aiu:
+      groups: ["read"]
+    isolation:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Lnc\PositionBaie:
+  attributes:
+    paroi_id:
+      groups: ["read", "write"]
+    surface:
+      groups: ["read", "write"]
+    inclinaison:
+      groups: ["read", "write"]
+    orientation:
+      groups: ["read", "write"]
+    mitoyennete:
+      groups: ["read", "write"]
+
+App\Api\Enveloppe\Model\Lnc\PositionParoiOpaque:
+  attributes:
+    surface:
+      groups: ["read", "write"]
+    mitoyennete:
+      groups: ["read", "write"]

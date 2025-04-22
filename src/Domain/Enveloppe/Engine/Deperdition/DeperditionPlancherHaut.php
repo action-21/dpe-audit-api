@@ -47,6 +47,9 @@ final class DeperditionPlancherHaut extends DeperditionParoi
         if ($this->paroi->isolation()->annee_isolation) {
             return $this->paroi->isolation()->annee_isolation;
         }
+        if ($this->paroi->isolation()->etat_isolation !== EtatIsolation::ISOLE) {
+            return $this->paroi->annee_construction();
+        }
         $annee_construction = $this->annee_construction();
         return $annee_construction->less_than(1975) ? Annee::from(1975) : $annee_construction;
     }
@@ -77,15 +80,17 @@ final class DeperditionPlancherHaut extends DeperditionParoi
      */
     public function u0(): float
     {
-        if ($this->paroi->u0()) {
-            return $this->paroi->u0();
-        }
-        if (null === $value = $this->table_repository->u0(
-            type_structure: $this->paroi->type_structure(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire U0 non trouvée');
-        }
-        return \min($value, 2.5);
+        return $this->get('u0', function () {
+            if ($this->paroi->u0()) {
+                return $this->paroi->u0();
+            }
+            if (null === $value = $this->table_repository->u0(
+                type_structure: $this->paroi->type_structure(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire U0 non trouvée');
+            }
+            return \min($value, 2.5);
+        });
     }
 
     /**
@@ -93,29 +98,31 @@ final class DeperditionPlancherHaut extends DeperditionParoi
      */
     public function u(): float
     {
-        if ($this->paroi->u()) {
-            return $this->paroi->u();
-        }
-        if ($this->paroi->isolation()->etat_isolation === EtatIsolation::NON_ISOLE) {
-            return $this->u0();
-        }
-        if ($this->paroi->isolation()->etat_isolation === EtatIsolation::ISOLE) {
-            if ($r = $this->paroi->isolation()->resistance_thermique_isolation) {
-                return 1 / (1 / $this->u0() + $r);
+        return $this->get('u', function () {
+            if ($this->paroi->u()) {
+                return $this->paroi->u();
             }
-            if ($e = $this->paroi->isolation()->epaisseur_isolation) {
-                return 1 / (1 / $this->u0() + $e / 1000 / self::LAMBDA_ISOLATION_DEFAUT);
+            if ($this->paroi->isolation()->etat_isolation === EtatIsolation::NON_ISOLE) {
+                return $this->u0();
             }
-        }
-        if (null === $u = $this->table_repository->u(
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            configuration: $this->configuration(),
-            effet_joule: $this->audit->data()->effet_joule,
-            annee_construction_isolation: $this->annee_construction_isolation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Uph non trouvée');
-        }
-        return \min($this->u0(), $u);
+            if ($this->paroi->isolation()->etat_isolation === EtatIsolation::ISOLE) {
+                if ($r = $this->paroi->isolation()->resistance_thermique_isolation) {
+                    return 1 / (1 / $this->u0() + $r);
+                }
+                if ($e = $this->paroi->isolation()->epaisseur_isolation) {
+                    return 1 / (1 / $this->u0() + $e / 1000 / self::LAMBDA_ISOLATION_DEFAUT);
+                }
+            }
+            if (null === $u = $this->table_repository->u(
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                configuration: $this->configuration(),
+                effet_joule: $this->audit->data()->effet_joule,
+                annee_construction_isolation: $this->annee_construction_isolation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Uph non trouvée');
+            }
+            return \min($this->u0(), $u);
+        });
     }
 
     /**
@@ -153,6 +160,7 @@ final class DeperditionPlancherHaut extends DeperditionParoi
 
         foreach ($entity->enveloppe()->planchers_hauts() as $paroi) {
             $this->paroi = $paroi;
+            $this->clear();
 
             $paroi->calcule($paroi->data()->with(
                 sdep: $this->sdep(),

@@ -22,6 +22,8 @@ final class Systeme
 
         #[Assert\Valid]
         public readonly ?Stockage $stockage,
+
+        public readonly ?SystemeData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -32,6 +34,7 @@ final class Systeme
             generateur_id: $entity->generateur()?->id(),
             reseau: Reseau::from($entity),
             stockage: Stockage::from($entity),
+            data: SystemeData::from($entity),
         );
     }
 

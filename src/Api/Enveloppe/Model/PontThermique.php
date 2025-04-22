@@ -2,7 +2,7 @@
 
 namespace App\Api\Enveloppe\Model;
 
-use App\Api\Enveloppe\Model\PontThermique\Liaison;
+use App\Api\Enveloppe\Model\PontThermique\{Data, Liaison};
 use App\Domain\Enveloppe\Entity\{PontThermique as Entity, PontThermiqueCollection as EntityCollection};
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,6 +22,8 @@ final class PontThermique
 
         #[Assert\Valid]
         public readonly Liaison $liaison,
+
+        public readonly ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -32,6 +34,7 @@ final class PontThermique
             longueur: $entity->longueur(),
             kpt: $entity->kpt(),
             liaison: Liaison::from($entity),
+            data: Data::from($entity),
         );
     }
 

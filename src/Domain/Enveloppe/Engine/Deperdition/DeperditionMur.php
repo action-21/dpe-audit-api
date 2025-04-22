@@ -30,7 +30,10 @@ final class DeperditionMur extends DeperditionParoi
         if ($this->paroi->isolation()->annee_isolation) {
             return $this->paroi->isolation()->annee_isolation;
         }
-        $annee_construction =  $this->annee_construction();
+        if ($this->paroi->isolation()->etat_isolation !== EtatIsolation::ISOLE) {
+            return $this->paroi->annee_construction();
+        }
+        $annee_construction = $this->annee_construction();
         return $annee_construction->less_than(1975) ? Annee::from(1975) : $annee_construction;
     }
 
@@ -68,21 +71,23 @@ final class DeperditionMur extends DeperditionParoi
      */
     public function u0(): float
     {
-        if ($this->paroi->u0()) {
-            return $this->paroi->u0();
-        }
-        if (null === $u0 = $this->table_repository->u0(
-            type_structure: $this->paroi->type_structure(),
-            epaisseur_structure: $this->epaisseur_structure(),
-            annee_construction: $this->annee_construction(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Umur non trouvée');
-        }
+        return $this->get('u0', function () {
+            if ($this->paroi->u0()) {
+                return $this->paroi->u0();
+            }
+            if (null === $u0 = $this->table_repository->u0(
+                type_structure: $this->paroi->type_structure(),
+                epaisseur_structure: $this->epaisseur_structure(),
+                annee_construction: $this->annee_construction(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Umur non trouvée');
+            }
 
-        $u0 += $this->u0_doublage();
-        $u0 += $this->u0_enduit_isolant();
+            $u0 += $this->u0_doublage();
+            $u0 += $this->u0_enduit_isolant();
 
-        return \min($u0, 2.5);
+            return \min($u0, 2.5);
+        });
     }
 
     /**
@@ -117,28 +122,30 @@ final class DeperditionMur extends DeperditionParoi
      */
     public function u(): float
     {
-        if ($this->paroi->u()) {
-            return $this->paroi->u();
-        }
-        if ($this->paroi->isolation()->etat_isolation === EtatIsolation::NON_ISOLE) {
-            return $this->u0();
-        }
-        if ($this->paroi->isolation()->etat_isolation === EtatIsolation::ISOLE) {
-            if ($r = $this->paroi->isolation()->resistance_thermique_isolation) {
-                return 1 / (1 / $this->u0() + $r);
+        return $this->get('u', function () {
+            if ($this->paroi->u()) {
+                return $this->paroi->u();
             }
-            if ($e = $this->paroi->isolation()->epaisseur_isolation) {
-                return 1 / (1 / $this->u0() + $e / 1000 / self::LAMBDA_ISOLATION_DEFAUT);
+            if ($this->paroi->isolation()->etat_isolation === EtatIsolation::NON_ISOLE) {
+                return $this->u0();
             }
-        }
-        if (null === $u = $this->table_repository->u(
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            effet_joule: $this->audit->data()->effet_joule,
-            annee_construction_isolation: $this->annee_construction_isolation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Umur non trouvée');
-        }
-        return \min($this->u0(), $u);
+            if ($this->paroi->isolation()->etat_isolation === EtatIsolation::ISOLE) {
+                if ($r = $this->paroi->isolation()->resistance_thermique_isolation) {
+                    return 1 / (1 / $this->u0() + $r);
+                }
+                if ($e = $this->paroi->isolation()->epaisseur_isolation) {
+                    return 1 / (1 / $this->u0() + $e / 1000 / self::LAMBDA_ISOLATION_DEFAUT);
+                }
+            }
+            if (null === $u = $this->table_repository->u(
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                effet_joule: $this->audit->data()->effet_joule,
+                annee_construction_isolation: $this->annee_construction_isolation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Umur non trouvée');
+            }
+            return \min($this->u0(), $u);
+        });
     }
 
     /**
@@ -162,6 +169,7 @@ final class DeperditionMur extends DeperditionParoi
 
         foreach ($entity->enveloppe()->murs() as $paroi) {
             $this->paroi = $paroi;
+            $this->clear();
 
             $paroi->calcule($paroi->data()->with(
                 sdep: $this->sdep(),

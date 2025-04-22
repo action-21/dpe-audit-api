@@ -119,12 +119,14 @@ final class DeperditionLnc extends EngineRule
      */
     public function uvue(): float
     {
-        if (null === $value = $this->table_repository->uvue(
-            type_lnc: $this->lnc->type(),
-        )) {
-            throw new \DomainException("Valeur forfaitaire Uvue non trouvée");
-        }
-        return $value;
+        return $this->get('uvue', function () {
+            if (null === $value = $this->table_repository->uvue(
+                type_lnc: $this->lnc->type(),
+            )) {
+                throw new \DomainException("Valeur forfaitaire Uvue non trouvée");
+            }
+            return $value;
+        });
     }
 
     /**
@@ -132,22 +134,26 @@ final class DeperditionLnc extends EngineRule
      */
     public function b(): float
     {
-        if (null === $value = $this->table_repository->b(
-            uvue: $this->uvue(),
-            isolation_aiu: $this->isolation_aiu(),
-            isolation_aue: $this->isolation_aue(),
-            aiu: $this->aiu(),
-            aue: $this->aue(),
-        )) {
-            throw new \DomainException("Valeur forfaitaire b non trouvée");
-        }
-        return $value;
+        return $this->get('b', function () {
+            if (null === $value = $this->table_repository->b(
+                uvue: $this->uvue(),
+                isolation_aiu: $this->isolation_aiu(),
+                isolation_aue: $this->isolation_aue(),
+                aiu: $this->aiu(),
+                aue: $this->aue(),
+            )) {
+                throw new \DomainException("Valeur forfaitaire b non trouvée");
+            }
+            return $value;
+        });
     }
 
     public function apply(Audit $entity): void
     {
         foreach ($entity->enveloppe()->locaux_non_chauffes() as $lnc) {
             $this->lnc = $lnc;
+            $this->clear();
+
             $lnc->calcule($lnc->data()->with(
                 aue: $this->aue(),
                 aiu: $this->aiu(),

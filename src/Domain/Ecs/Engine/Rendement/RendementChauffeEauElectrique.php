@@ -24,13 +24,15 @@ final class RendementChauffeEauElectrique extends RendementSysteme
 
     public function rg(ScenarioUsage $scenario): float
     {
-        if (null === $rg = $this->table_repository->rg(
-            type_generateur: $this->generateur()->type(),
-            energie_generateur: $this->generateur()->energie(),
-        )) {
-            throw new \RuntimeException('Valeur forfaitaire Rg non trouvée');
-        }
-        return $rg;
+        return $this->get("rg", function () {
+            if (null === $rg = $this->table_repository->rg(
+                type_generateur: $this->generateur()->type(),
+                energie_generateur: $this->generateur()->energie(),
+            )) {
+                throw new \RuntimeException('Valeur forfaitaire Rg non trouvée');
+            }
+            return $rg;
+        });
     }
 
     public static function supports(Systeme $systeme): bool

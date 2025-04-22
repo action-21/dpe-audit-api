@@ -1,0 +1,25 @@
+App\Api\Chauffage\Model\Chauffage:
+  attributes:
+    generateurs:
+      groups: ["read", "write"]
+    emetteurs:
+      groups: ["read", "write"]
+    installations:
+      groups: ["read", "write"]
+    systemes:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Chauffage\Model\ChauffageData:
+  attributes:
+    besoins:
+      groups: ["read"]
+    pertes:
+      groups: ["read"]
+    pertes_recuperables:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

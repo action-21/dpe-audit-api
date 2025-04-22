@@ -1,0 +1,87 @@
+App\Api\Audit\Model\Audit:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    date_etablissement:
+      groups: ["read", "write"]
+    adresse:
+      groups: ["read", "write"]
+    batiment:
+      groups: ["read", "write"]
+    enveloppe:
+      groups: ["read", "write"]
+    chauffage:
+      groups: ["read", "write"]
+    ecs:
+      groups: ["read", "write"]
+    ventilation:
+      groups: ["read", "write"]
+    refroidissement:
+      groups: ["read", "write"]
+    production:
+      groups: ["read", "write"]
+    eclairage:
+      groups: ["read"]
+    data:
+      groups: ["read"]
+
+App\Api\Audit\Model\AuditData:
+  attributes:
+    volume_habitable:
+      groups: ["read"]
+    surface_habitable:
+      groups: ["read"]
+    hauteur_sous_plafond:
+      groups: ["read"]
+    nombre_logements:
+      groups: ["read"]
+    tbase:
+      groups: ["read"]
+    effet_joule:
+      groups: ["read"]
+    cef:
+      groups: ["read"]
+    cep:
+      groups: ["read"]
+    eges:
+      groups: ["read"]
+    etiquette_energie:
+      groups: ["read"]
+    etiquette_climat:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]
+
+App\Api\Audit\Model\Adresse:
+  attributes:
+    numero:
+      groups: ["read", "write"]
+    nom:
+      groups: ["read", "write"]
+    code_postal:
+      groups: ["read", "write"]
+    code_commune:
+      groups: ["read", "write"]
+    commune:
+      groups: ["read", "write"]
+    ban_id:
+      groups: ["read", "write"]
+
+App\Api\Audit\Model\Batiment:
+  attributes:
+    annee_construction:
+      groups: ["read", "write"]
+    altitude:
+      groups: ["read", "write"]
+    logements:
+      groups: ["read", "write"]
+    surface_habitable:
+      groups: ["read", "write"]
+    hauteur_sous_plafond:
+      groups: ["read", "write"]
+    materiaux_anciens:
+      groups: ["read", "write"]
+    rnb_id:
+      groups: ["read", "write"]

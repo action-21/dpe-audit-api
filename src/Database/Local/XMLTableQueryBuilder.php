@@ -4,42 +4,13 @@ namespace App\Database\Local;
 
 use App\Domain\Common\Enum\Enum;
 
-final class XMLTableRepository
+final class XMLTableQueryBuilder
 {
-    private static array $cache = [];
+    private string $query = '//';
 
-    private string $query = "";
-
-    public function __construct(private XMLTableElement $table) {}
-
-    private function execute(): XMLTableCollection
-    {
-        $key = \sha1($this->query);
-
-        if (false === isset(static::$cache[$key])) {
-            if (!$result = $this->table->xpath($this->query)) {
-                throw new \RuntimeException("Error on query {$this->query}");
-            }
-            static::$cache[$key] = $result;
-        }
-        return new XMLTableCollection(static::$cache[$key]);
-    }
-
-    public function getOne(): ?XMLTableElement
-    {
-        return $this->execute()->first();
-    }
-
-    public function getMany(): XMLTableCollection
-    {
-        return $this->execute();
-    }
-
-    public function createQuery(): static
-    {
-        $this->query = "//";
-        return $this;
-    }
+    public function __construct(
+        private readonly XMLTableDatabase $db,
+    ) {}
 
     public function and(string $attribute, mixed $value): static
     {
@@ -92,5 +63,20 @@ final class XMLTableRepository
         }
 
         return $this;
+    }
+
+    public function getQuery(): string
+    {
+        return $this->query;
+    }
+
+    public function getOne(): ?XMLTableElement
+    {
+        return $this->db->getOne($this);
+    }
+
+    public function getMany(): XMLTableCollection
+    {
+        return $this->db->getMany($this);
     }
 }

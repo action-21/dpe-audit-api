@@ -46,6 +46,8 @@ final class Audit
         public readonly Production $production,
 
         public readonly ?Eclairage $eclairage,
+
+        public readonly ?AuditData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -62,6 +64,7 @@ final class Audit
             refroidissement: Refroidissement::from($entity->refroidissement()),
             production: Production::from($entity->production()),
             eclairage: Eclairage::from($entity->eclairage()),
+            data: AuditData::from($entity),
         );
     }
 }

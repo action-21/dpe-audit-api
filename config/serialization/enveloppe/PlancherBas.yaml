@@ -1,0 +1,65 @@
+App\Api\Enveloppe\Model\PlancherBas:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type_structure:
+      groups: ["read", "write"]
+    inertie:
+      groups: ["read", "write"]
+    annee_construction:
+      groups: ["read", "write"]
+    annee_renovation:
+      groups: ["read", "write"]
+    u0:
+      groups: ["read", "write"]
+    u:
+      groups: ["read", "write"]
+    position:
+      groups: ["read", "write"]
+    isolation:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\PlancherBas\Data:
+  attributes:
+    sdep:
+      groups: ["read"]
+    u0:
+      groups: ["read"]
+    u:
+      groups: ["read"]
+    b:
+      groups: ["read"]
+    dp:
+      groups: ["read"]
+    isolation:
+      groups: ["read"]
+    performance:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\PlancherBas\Isolation:
+  attributes:
+    etat_isolation:
+      groups: ["read", "write"]
+    type_isolation:
+      groups: ["read", "write"]
+    epaisseur_isolation:
+      groups: ["read", "write"]
+    annee_isolation:
+      groups: ["read", "write"]
+    resistance_thermique_isolation:
+      groups: ["read", "write"]
+
+App\Api\Enveloppe\Model\PlancherBas\Position:
+  attributes:
+    local_non_chauffe_id:
+      groups: ["read", "write"]
+    surface:
+      groups: ["read", "write"]
+    perimetre:
+      groups: ["read", "write"]
+    mitoyennete:
+      groups: ["read", "write"]

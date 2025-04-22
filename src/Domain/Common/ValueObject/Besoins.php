@@ -17,14 +17,11 @@ final class Besoins
         $values = [];
         foreach (ScenarioUsage::cases() as $scenario) {
             foreach (Mois::cases() as $mois) {
-                $besoin = $callback(scenario: $scenario, mois: $mois);
-                Assert::greaterThanEq($besoin, 0);
-
                 $values[] = Besoin::create(
                     usage: $usage,
                     scenario: $scenario,
                     mois: $mois,
-                    besoin: $besoin,
+                    besoin: $callback(scenario: $scenario, mois: $mois),
                 );
             }
         }
@@ -33,15 +30,49 @@ final class Besoins
 
     public static function from(Besoin ...$values): self
     {
+        Assert::lessThanEq(
+            count($values),
+            count(ScenarioUsage::cases()) * count(Usage::cases()) * count(Mois::cases())
+        );
+        Assert::uniqueValues(array_map(
+            fn(Besoin $value) => "{$value->scenario->id()}{$value->usage->id()}{$value->mois->id()}",
+            $values
+        ));
+
         return new self($values);
     }
 
-    public function get(ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL, ?Mois $mois = null, ?Usage $usage = null): float
-    {
+    public function get(
+        ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL,
+        ?Mois $mois = null,
+        ?Usage $usage = null,
+    ): float {
         $values = array_filter($this->values, fn(Besoin $item) => $item->scenario === $scenario);
         $values = $mois ? array_filter($values, fn(Besoin $item) => $item->mois === $mois) : $values;
         $values = $usage ? array_filter($values, fn(Besoin $item) => $item->usage === $usage) : $values;
         return array_reduce($values, fn(float $carry, Besoin $item) => $carry += $item->besoin, 0);
+    }
+
+    /**
+     * @return Usage[]
+     */
+    public function usages(): array
+    {
+        return array_map(
+            fn (string $usage) => Usage::from($usage),
+            array_unique(array_map(fn(Besoin $value) => $value->usage->id(), $this->values))
+        );
+    }
+
+    /**
+     * @return ScenarioUsage[]
+     */
+    public function scenarios(): array
+    {
+        return array_map(
+            fn (string $scenario) => ScenarioUsage::from($scenario),
+            array_unique(array_map(fn(Besoin $value) => $value->scenario->id(), $this->values)),
+        );
     }
 
     /**

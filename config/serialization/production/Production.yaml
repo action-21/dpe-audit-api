@@ -1,0 +1,11 @@
+App\Api\Production\Model\Production:
+  attributes:
+    panneaux_photovoltaiques:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Production\Model\ProductionData:
+  attributes:
+    production:
+      groups: ["read"]

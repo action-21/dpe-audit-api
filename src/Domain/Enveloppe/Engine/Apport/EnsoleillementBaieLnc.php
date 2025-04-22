@@ -31,15 +31,17 @@ final class EnsoleillementBaieLnc extends EngineRule
      */
     public function t(): float
     {
-        if (null === $value = $this->table_repository->t(
-            type_baie: $this->baie->type(),
-            materiau: $this->baie->materiau(),
-            presence_rupteur_pont_thermique: $this->baie->presence_rupteur_pont_thermique(),
-            type_vitrage: $this->baie->type_vitrage(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire t non trouvée');
-        }
-        return $value;
+        return $this->get('t', function () {
+            if (null === $value = $this->table_repository->t(
+                type_baie: $this->baie->type(),
+                materiau: $this->baie->materiau(),
+                presence_rupteur_pont_thermique: $this->baie->presence_rupteur_pont_thermique(),
+                type_vitrage: $this->baie->type_vitrage(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire t non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -47,15 +49,17 @@ final class EnsoleillementBaieLnc extends EngineRule
      */
     public function c1(Mois $mois): float
     {
-        if (null === $value = $this->table_repository->c1(
-            mois: $mois,
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            inclinaison: $this->baie->position()->inclinaison,
-            orientation: $this->baie->position()->orientation,
-        )) {
-            throw new \DomainException('Valeur forfaitaire t non trouvée');
-        }
-        return $value;
+        return $this->get("c1::{$mois->id()}", function () use ($mois) {
+            if (null === $value = $this->table_repository->c1(
+                mois: $mois,
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                inclinaison: $this->baie->position()->inclinaison,
+                orientation: $this->baie->position()->orientation,
+            )) {
+                throw new \DomainException('Valeur forfaitaire t non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -78,6 +82,7 @@ final class EnsoleillementBaieLnc extends EngineRule
         foreach ($entity->enveloppe()->locaux_non_chauffes() as $lnc) {
             foreach ($lnc->baies() as $baie) {
                 $this->baie = $baie;
+                $this->clear();
 
                 $ensoleillements = [];
 

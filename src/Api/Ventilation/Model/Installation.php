@@ -15,6 +15,8 @@ final class Installation
 
         #[Assert\Positive]
         public readonly float $surface,
+
+        public readonly ?InstallationData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -23,6 +25,7 @@ final class Installation
             id: $entity->id(),
             description: $entity->description(),
             surface: $entity->surface(),
+            data: InstallationData::from($entity),
         );
     }
 

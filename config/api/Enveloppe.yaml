@@ -1,6 +1,10 @@
 resources:
   App\Api\Enveloppe\Model\Enveloppe:
     shortName: Enveloppe
+    normalizationContext:
+      groups: ["read"]
+    denormalizationContext:
+      groups: ["write"]
     operations:
       enveloppe.get:
         uriTemplate: /audit/{id}/enveloppe

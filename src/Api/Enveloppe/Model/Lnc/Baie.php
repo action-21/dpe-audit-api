@@ -24,6 +24,8 @@ final class Baie
 
         #[Assert\Valid]
         public readonly PositionBaie $position,
+
+        public readonly ?BaieData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -36,6 +38,7 @@ final class Baie
             type_vitrage: $entity->type_vitrage(),
             presence_rupteur_pont_thermique: $entity->presence_rupteur_pont_thermique(),
             position: PositionBaie::from($entity),
+            data: BaieData::from($entity),
         );
     }
 

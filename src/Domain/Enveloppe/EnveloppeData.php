@@ -3,7 +3,7 @@
 namespace App\Domain\Enveloppe;
 
 use App\Domain\Enveloppe\Enum\{Inertie, Performance};
-use App\Domain\Enveloppe\ValueObject\{Apports, Deperdition, Deperditions, Permeabilite, SurfaceDeperditive, SurfacesDeperditive, SurfacesDeperditives};
+use App\Domain\Enveloppe\ValueObject\{Apports, Deperdition, Deperditions, Permeabilite, SurfaceDeperditive, SurfacesDeperditives};
 
 final class EnveloppeData
 {
@@ -47,20 +47,20 @@ final class EnveloppeData
         ?Apports $apports = null,
     ): self {
         return self::create(
-            surfaces_deperditives: $surfaces_deperditives ?? $this->surfaces_deperditives,
-            deperditions: $deperditions ?? $this->deperditions,
             ubat: $ubat ?? $this->ubat,
             performance: $performance ?? $this->performance,
             inertie: $inertie ?? $this->inertie,
             permeabilite: $permeabilite ?? $this->permeabilite,
             apports: $apports ?? $this->apports,
+            surfaces_deperditives: $surfaces_deperditives ?? $this->surfaces_deperditives,
+            deperditions: $deperditions ?? $this->deperditions,
         );
     }
 
     public function add_surface_deperditive(SurfaceDeperditive $surface_deperditive): self
     {
         return $this->with(
-            surfaces_deperditives: $this->surfaces_deperditives?->merge(SurfacesDeperditives::create($surface_deperditive))
+            surfaces_deperditives: $this->surfaces_deperditives?->add($surface_deperditive)
                 ?? SurfacesDeperditives::create($surface_deperditive)
         );
     }
@@ -68,8 +68,7 @@ final class EnveloppeData
     public function add_deperdition(Deperdition $deperdition): self
     {
         return $this->with(
-            deperditions: $this->deperditions?->merge(Deperditions::create($deperdition))
-                ?? Deperditions::create($deperdition)
+            deperditions: $this->deperditions?->add($deperdition) ?? Deperditions::create($deperdition)
         );
     }
 }

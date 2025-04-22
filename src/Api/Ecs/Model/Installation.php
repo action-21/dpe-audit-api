@@ -18,6 +18,8 @@ final class Installation
 
         #[Assert\Valid]
         public readonly ?Solaire $solaire_thermique,
+
+        public readonly ?InstallationData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -27,6 +29,7 @@ final class Installation
             description: $entity->description(),
             surface: $entity->surface(),
             solaire_thermique: $entity->solaire_thermique() ? Solaire::from($entity) : null,
+            data: InstallationData::from($entity),
         );
     }
 

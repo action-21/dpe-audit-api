@@ -11,7 +11,7 @@ final class InstallationData
         public readonly ?float $rdim,
         public readonly ?Pourcentage $fch,
         public readonly ?Consommations $consommations,
-        private readonly ?Emissions $emissions,
+        public readonly ?Emissions $emissions,
     ) {}
 
     public static function create(

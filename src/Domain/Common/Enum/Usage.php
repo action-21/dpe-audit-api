@@ -4,26 +4,11 @@ namespace App\Domain\Common\Enum;
 
 enum Usage: string implements Enum
 {
-    case CHAUFFAGE = 'CHAUFFAGE';
-    case ECS = 'ECS';
-    case REFROIDISSEMENT = 'REFROIDISSEMENT';
-    case ECLAIRAGE = 'ECLAIRAGE';
-    case AUXILIAIRE = 'AUXILIAIRE';
-    case ENSEMBLE = 'ENSEMBLE';
-
-    /**
-     * @return self[]
-     */
-    public static function usages(): array
-    {
-        return [
-            self::CHAUFFAGE,
-            self::ECS,
-            self::REFROIDISSEMENT,
-            self::ECLAIRAGE,
-            self::AUXILIAIRE,
-        ];
-    }
+    case CHAUFFAGE = 'chauffage';
+    case ECS = 'ecs';
+    case REFROIDISSEMENT = 'refroidissement';
+    case ECLAIRAGE = 'eclairage';
+    case AUXILIAIRE = 'auxiliaire';
 
     public function id(): string
     {
@@ -38,7 +23,6 @@ enum Usage: string implements Enum
             self::REFROIDISSEMENT => 'Refroidissement',
             self::ECLAIRAGE => 'Eclairage',
             self::AUXILIAIRE => 'Auxiliaires',
-            self::ENSEMBLE => '5 usages',
         };
     }
 }

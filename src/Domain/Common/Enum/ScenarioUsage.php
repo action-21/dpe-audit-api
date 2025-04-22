@@ -6,8 +6,8 @@ use App\Domain\Common\Enum\Enum;
 
 enum ScenarioUsage: string implements Enum
 {
-    case CONVENTIONNEL = 'CONVENTIONNEL';
-    case DEPENSIER = 'DEPENSIER';
+    case CONVENTIONNEL = 'conventionnel';
+    case DEPENSIER = 'depensier';
 
     public function id(): string
     {

@@ -18,6 +18,8 @@ final class ParoiOpaque
 
         #[Assert\Valid]
         public readonly PositionParoiOpaque $position,
+
+        public readonly ?ParoiOpaqueData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -27,6 +29,7 @@ final class ParoiOpaque
             description: $entity->description(),
             isolation: $entity->isolation(),
             position: PositionParoiOpaque::from($entity),
+            data: ParoiOpaqueData::from($entity),
         );
     }
 

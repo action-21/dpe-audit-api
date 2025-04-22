@@ -16,6 +16,8 @@ final class Systeme
 
         #[Assert\Uuid]
         public readonly string $generateur_id,
+
+        public readonly ?SystemeData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -24,6 +26,7 @@ final class Systeme
             id: $entity->id(),
             installation_id: $entity->installation()->id(),
             generateur_id: $entity->generateur()?->id(),
+            data: SystemeData::from($entity),
         );
     }
 

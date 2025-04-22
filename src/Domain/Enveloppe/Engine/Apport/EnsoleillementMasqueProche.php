@@ -15,14 +15,16 @@ final class EnsoleillementMasqueProche extends EngineRule
 
     public function fe1(): float
     {
-        if (null === $fe1 = $this->table_repository->fe1(
-            type_masque_proche: $this->masque->type_masque(),
-            orientation: $this->masque->baie()->position()->orientation?->enum(),
-            avancee_masque: $this->masque->profondeur(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire fe1 non trouvée');
-        }
-        return $fe1;
+        return $this->get("fe1", function () {
+            if (null === $fe1 = $this->table_repository->fe1(
+                type_masque_proche: $this->masque->type_masque(),
+                orientation: $this->masque->baie()->position()->orientation?->enum(),
+                avancee_masque: $this->masque->profondeur(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire fe1 non trouvée');
+            }
+            return $fe1;
+        });
     }
 
     public function apply(Audit $entity): void
@@ -30,6 +32,8 @@ final class EnsoleillementMasqueProche extends EngineRule
         foreach ($entity->enveloppe()->baies() as $baie) {
             foreach ($baie->masques_proches() as $masque) {
                 $this->masque = $masque;
+                $this->clear();
+
                 $masque->calcule($masque->data()->with(
                     fe1: $this->fe1(),
                 ));

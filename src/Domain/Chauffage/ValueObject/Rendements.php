@@ -30,4 +30,12 @@ final class Rendements
     {
         return $this->find(scenario: $scenario)->rendement;
     }
+
+    /**
+     * @return Rendement[]
+     */
+    public function values(): array
+    {
+        return $this->values;
+    }
 }

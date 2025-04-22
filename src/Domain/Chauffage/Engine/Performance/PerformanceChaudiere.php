@@ -37,24 +37,26 @@ final class PerformanceChaudiere extends EngineRule
      */
     public function tfonc30(): float
     {
-        $tfonc30 = [];
+        return $this->get("tfonc30", function () {
+            $tfonc30 = [];
 
-        if (0 === count($this->generateur->emetteurs())) {
-            throw new \DomainException('Valeur forfaitaire Tfonc30 non trouvée');
-        }
-        foreach ($this->generateur->emetteurs() as $emetteur) {
-            if (null === $value = $this->table_repository->tfonc30(
-                type_generateur: $this->type_generateur(),
-                mode_combustion: $this->generateur->combustion()->mode_combustion,
-                temperature_distribution: $emetteur->temperature_distribution(),
-                annee_installation_emetteur: $emetteur->annee_installation() ?? $this->audit->batiment()->annee_construction,
-                annee_installation_generateur: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
-            )) {
+            if (0 === count($this->generateur->emetteurs())) {
                 throw new \DomainException('Valeur forfaitaire Tfonc30 non trouvée');
             }
-            $tfonc30[] = $value;
-        }
-        return max($tfonc30);
+            foreach ($this->generateur->emetteurs() as $emetteur) {
+                if (null === $value = $this->table_repository->tfonc30(
+                    type_generateur: $this->type_generateur(),
+                    mode_combustion: $this->generateur->combustion()->mode_combustion,
+                    temperature_distribution: $emetteur->temperature_distribution(),
+                    annee_installation_emetteur: $emetteur->annee_installation() ?? $this->audit->batiment()->annee_construction,
+                    annee_installation_generateur: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
+                )) {
+                    throw new \DomainException('Valeur forfaitaire Tfonc30 non trouvée');
+                }
+                $tfonc30[] = $value;
+            }
+            return max($tfonc30);
+        });
     }
 
     /**
@@ -62,21 +64,23 @@ final class PerformanceChaudiere extends EngineRule
      */
     public function tfonc100(): float
     {
-        $tfonc100 = [];
+        return $this->get("tfonc100", function () {
+            $tfonc100 = [];
 
-        if (0 === count($this->generateur->emetteurs())) {
-            throw new \DomainException('Valeur forfaitaire Tfonc100 non trouvée');
-        }
-        foreach ($this->generateur->emetteurs() as $emetteur) {
-            if (null === $value = $this->table_repository->tfonc100(
-                temperature_distribution: $emetteur->temperature_distribution(),
-                annee_installation_emetteur: $emetteur->annee_installation() ?? $this->audit->batiment()->annee_construction,
-            )) {
+            if (0 === count($this->generateur->emetteurs())) {
                 throw new \DomainException('Valeur forfaitaire Tfonc100 non trouvée');
             }
-            $tfonc100[] = $value;
-        }
-        return max($tfonc100);
+            foreach ($this->generateur->emetteurs() as $emetteur) {
+                if (null === $value = $this->table_repository->tfonc100(
+                    temperature_distribution: $emetteur->temperature_distribution(),
+                    annee_installation_emetteur: $emetteur->annee_installation() ?? $this->audit->batiment()->annee_construction,
+                )) {
+                    throw new \DomainException('Valeur forfaitaire Tfonc100 non trouvée');
+                }
+                $tfonc100[] = $value;
+            }
+            return max($tfonc100);
+        });
     }
 
     public static function supports(Generateur $generateur): bool
@@ -97,11 +101,13 @@ final class PerformanceChaudiere extends EngineRule
     public function apply(Audit $entity): void
     {
         $this->audit = $entity;
+
         foreach ($entity->chauffage()->generateurs() as $generateur) {
             if (false === self::supports($generateur)) {
                 continue;
             }
             $this->generateur = $generateur;
+            $this->clear();
 
             $generateur->calcule($generateur->data()->with(
                 tfonc30: $this->tfonc30(),

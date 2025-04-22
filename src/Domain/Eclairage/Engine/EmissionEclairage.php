@@ -26,11 +26,16 @@ final class EmissionEclairage extends EngineRule
     {
         $this->eclairage = $entity->eclairage();
 
+        $emissions = Emissions::create(
+            usage: Usage::ECLAIRAGE,
+            callback: fn(ScenarioUsage $scenario) => $this->eges($scenario),
+        );
+
         $entity->eclairage()->calcule($entity->eclairage()->data()->with(
-            emissions: Emissions::create(
-                usage: Usage::ECLAIRAGE,
-                callback: fn(ScenarioUsage $scenario) => $this->eges($scenario),
-            ),
+            emissions: $emissions,
+        ));
+        $entity->calcule($entity->data()->with(
+            emissions: $emissions,
         ));
     }
 

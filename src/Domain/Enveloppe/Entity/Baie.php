@@ -87,7 +87,7 @@ final class Baie extends Paroi
     /** @inheritdoc */
     public function type_paroi(): TypeParoi
     {
-        return TypeParoi::PORTE;
+        return TypeParoi::BAIE;
     }
 
     /** @inheritdoc */

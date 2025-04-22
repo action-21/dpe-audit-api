@@ -12,6 +12,7 @@ use App\Database\Opendata\Ventilation\XMLVentilationDeserializer;
 use App\Database\Opendata\XMLElement;
 use App\Domain\Audit\{Audit, AuditData};
 use App\Domain\Audit\Entity\LogementCollection;
+use App\Domain\Audit\Enum\Etat;
 
 final class XMLAuditDeserializer
 {
@@ -42,6 +43,8 @@ final class XMLAuditDeserializer
             refroidissement: $this->refroidissement_deserializer->deserialize($xml),
             eclairage: $this->eclairage_deserializer->deserialize($xml),
             production: $this->production_deserializer->deserialize($xml),
+            auditeur: null,
+            etat: Etat::PUBLIE,
             data: AuditData::create(),
         );
 

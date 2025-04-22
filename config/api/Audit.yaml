@@ -1,6 +1,10 @@
 resources:
   App\Api\Audit\Model\Audit:
     shortName: Audit
+    normalizationContext:
+      groups: ["read"]
+    denormalizationContext:
+      groups: ["write"]
     operations:
       audit.get:
         uriTemplate: /audit/{id}

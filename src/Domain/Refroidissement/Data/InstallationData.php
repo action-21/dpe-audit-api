@@ -8,9 +8,9 @@ use Webmozart\Assert\Assert;
 final class InstallationData
 {
     public function __construct(
-        public readonly ?float $rdim = null,
-        public readonly ?Consommations $consommations = null,
-        public readonly ?Emissions $emissions = null,
+        public readonly ?float $rdim,
+        public readonly ?Consommations $consommations,
+        public readonly ?Emissions $emissions,
     ) {}
 
     public static function create(

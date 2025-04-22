@@ -6,6 +6,7 @@ use App\Domain\Audit\Audit;
 use App\Domain\Common\EngineRule;
 use App\Domain\Enveloppe\Enum\Performance;
 use App\Domain\Enveloppe\Enveloppe;
+use App\Domain\Enveloppe\ValueObject\Deperditions;
 
 final class DeperditionEnveloppe extends EngineRule
 {
@@ -55,6 +56,13 @@ final class DeperditionEnveloppe extends EngineRule
     public function apply(Audit $entity): void
     {
         $this->enveloppe = $entity->enveloppe();
+
+        if (null === $entity->enveloppe()->data()->deperditions) {
+            $entity->enveloppe()->calcule($entity->enveloppe()->data()->with(
+                deperditions: Deperditions::create()
+            ));
+        }
+
         $entity->enveloppe()->calcule($entity->enveloppe()->data()->with(
             ubat: $this->ubat(),
             performance: $this->performance(),

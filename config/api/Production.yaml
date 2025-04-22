@@ -1,6 +1,10 @@
 resources:
   App\Api\Production\Model\Production:
     shortName: Production
+    normalizationContext:
+      groups: ["read"]
+    denormalizationContext:
+      groups: ["write"]
     operations:
       production.get:
         uriTemplate: /audit/{id}/production

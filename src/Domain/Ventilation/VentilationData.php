@@ -8,11 +8,11 @@ use Webmozart\Assert\Assert;
 final class VentilationData
 {
     public function __construct(
-        public readonly ?float $qvarep_conv = null,
-        public readonly ?float $qvasouf_conv = null,
-        public readonly ?float $smea_conv = null,
-        public readonly ?Consommations $consommations = null,
-        public readonly ?Emissions $emissions = null,
+        public readonly ?float $qvarep_conv,
+        public readonly ?float $qvasouf_conv,
+        public readonly ?float $smea_conv,
+        public readonly ?Consommations $consommations,
+        public readonly ?Emissions $emissions,
     ) {}
 
     public static function create(
@@ -27,6 +27,9 @@ final class VentilationData
         Assert::nullOrGreaterThanEq($smea_conv, 0);
 
         return new self(
+            qvarep_conv: $qvarep_conv,
+            qvasouf_conv: $qvasouf_conv,
+            smea_conv: $smea_conv,
             consommations: $consommations,
             emissions: $emissions,
         );

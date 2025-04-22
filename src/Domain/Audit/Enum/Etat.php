@@ -2,9 +2,25 @@
 
 namespace App\Domain\Audit\Enum;
 
-enum Etat
+use App\Domain\Common\Enum\Enum;
+
+enum Etat: string implements Enum
 {
-    case BROUILLON;
-    case ANNULE;
-    case PUBLIE;
+    case SIMULATION = 'simulation';
+    case ANNULE = 'annulé';
+    case PUBLIE = 'publié';
+
+    public function id(): int|string
+    {
+        return $this->value;
+    }
+
+    public function lib(): string
+    {
+        return match ($this) {
+            self::SIMULATION => 'Simulation',
+            self::ANNULE => 'Annulé',
+            self::PUBLIE => 'Publié',
+        };
+    }
 }

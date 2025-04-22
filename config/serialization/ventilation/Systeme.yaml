@@ -1,0 +1,33 @@
+App\Api\Ventilation\Model\Systeme:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    installation_id:
+      groups: ["read", "write"]
+    generateur_id:
+      groups: ["read", "write"]
+    type:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Ventilation\Model\SystemeData:
+  attributes:
+    rdim:
+      groups: ["read"]
+    qvarep_conv:
+      groups: ["read"]
+    qvasouf_conv:
+      groups: ["read"]
+    smea_conv:
+      groups: ["read"]
+    ratio_utilisation:
+      groups: ["read"]
+    pvent_moy:
+      groups: ["read"]
+    pvent:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

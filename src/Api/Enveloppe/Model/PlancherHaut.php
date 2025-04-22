@@ -2,7 +2,7 @@
 
 namespace App\Api\Enveloppe\Model;
 
-use App\Api\Enveloppe\Model\PlancherHaut\{Isolation, Position};
+use App\Api\Enveloppe\Model\PlancherHaut\{Data, Isolation, Position};
 use App\Domain\Enveloppe\Entity\{PlancherHaut as Entity, PlancherHautCollection as EntityCollection};
 use App\Domain\Enveloppe\Enum\InertieParoi;
 use App\Domain\Enveloppe\Enum\PlancherHaut\{Configuration, TypePlancherHaut};
@@ -40,6 +40,8 @@ final class PlancherHaut
 
         #[Assert\Valid]
         public readonly Isolation $isolation,
+
+        public readonly ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -56,6 +58,7 @@ final class PlancherHaut
             u: $entity->u(),
             position: Position::from($entity),
             isolation: Isolation::from($entity),
+            data: Data::from($entity),
         );
     }
 

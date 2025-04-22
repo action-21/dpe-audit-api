@@ -134,4 +134,12 @@ final class SollicitationsExterieures
     {
         return $this->find($mois)->tefs;
     }
+
+    /**
+     * @return SollicitationExterieure[]
+     */
+    public function values(): array
+    {
+        return $this->values;
+    }
 }

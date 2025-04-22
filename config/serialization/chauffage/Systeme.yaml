@@ -1,0 +1,50 @@
+App\Api\Chauffage\Model\Systeme:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    installation_id:
+      groups: ["read", "write"]
+    generateur_id:
+      groups: ["read", "write"]
+    type:
+      groups: ["read", "write"]
+    reseau:
+      groups: ["read", "write"]
+    emetteurs:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Chauffage\Model\SystemeData:
+  attributes:
+    configuration:
+      groups: ["read"]
+    rdim:
+      groups: ["read"]
+    rd:
+      groups: ["read"]
+    re:
+      groups: ["read"]
+    rr:
+      groups: ["read"]
+    rg:
+      groups: ["read"]
+    ich:
+      groups: ["read"]
+    intermittences:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]
+
+App\Api\Chauffage\Model\Reseau:
+  attributes:
+    type_distribution:
+      groups: ["read", "write"]
+    presence_circulateur_externe:
+      groups: ["read", "write"]
+    niveaux_desservis:
+      groups: ["read", "write"]
+    isolation:
+      groups: ["read", "write"]

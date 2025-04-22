@@ -24,37 +24,47 @@ final class Enveloppe
         #[Assert\Positive]
         public readonly ?float $q4pa_conv,
 
+        /** @var Lnc[] */
         #[Assert\All([new Assert\Type(Lnc::class)])]
         #[Assert\Valid]
         public readonly array $locaux_non_chauffes,
 
+        /** @var Baie[] */
         #[Assert\All([new Assert\Type(Baie::class)])]
         #[Assert\Valid]
         public readonly array $baies,
 
+        /** @var Mur[] */
         #[Assert\All([new Assert\Type(Mur::class)])]
         #[Assert\Valid]
         public readonly array $murs,
 
+        /** @var PlancherBas[] */
         #[Assert\All([new Assert\Type(PlancherBas::class)])]
         #[Assert\Valid]
         public readonly array $planchers_bas,
 
+        /** @var PlancherHaut[] */
         #[Assert\All([new Assert\Type(PlancherHaut::class)])]
         #[Assert\Valid]
         public readonly array $planchers_hauts,
 
+        /** @var Porte[] */
         #[Assert\All([new Assert\Type(Porte::class)])]
         #[Assert\Valid]
         public readonly array $portes,
 
+        /** @var PontThermique[] */
         #[Assert\All([new Assert\Type(PontThermique::class)])]
         #[Assert\Valid]
         public readonly array $ponts_thermiques,
 
+        /** @var Niveau[] */
         #[Assert\All([new Assert\Type(Niveau::class)])]
         #[Assert\Valid]
         public readonly array $niveaux,
+
+        public readonly ?EnveloppeData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -70,6 +80,7 @@ final class Enveloppe
             portes: Porte::from_collection($entity->portes()),
             ponts_thermiques: PontThermique::from_collection($entity->ponts_thermiques()),
             niveaux: Niveau::from_collection($entity->niveaux()),
+            data: EnveloppeData::from($entity),
         );
     }
 

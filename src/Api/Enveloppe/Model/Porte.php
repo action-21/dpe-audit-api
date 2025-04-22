@@ -2,7 +2,7 @@
 
 namespace App\Api\Enveloppe\Model;
 
-use App\Api\Enveloppe\Model\Porte\{Menuiserie, Position, Vitrage};
+use App\Api\Enveloppe\Model\Porte\{Data, Menuiserie, Position, Vitrage};
 use App\Domain\Enveloppe\Entity\{Porte as Entity, PorteCollection as EntityCollection};
 use App\Domain\Enveloppe\Enum\{EtatIsolation, TypePose};
 use App\Domain\Enveloppe\Enum\Porte\Materiau;
@@ -39,6 +39,8 @@ final class Porte
 
         #[Assert\Valid]
         public readonly Menuiserie $menuiserie,
+
+        public readonly ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -55,6 +57,7 @@ final class Porte
             position: Position::from($entity),
             vitrage: Vitrage::from($entity),
             menuiserie: Menuiserie::from($entity),
+            data: Data::from($entity),
         );
     }
 

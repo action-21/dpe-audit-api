@@ -41,24 +41,31 @@ final class ConsommationEclairage extends EngineRule
      */
     public function nhecl(): float
     {
-        if (null === $value = $this->table_repository->nhecl(
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-        )) {
-            throw new \DomainException('Valeur forfaitaires "nhecl" non trouvée');
-        }
-        return $value;
+        return $this->get("nhecl", function () {
+            if (null === $value = $this->table_repository->nhecl(
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+            )) {
+                throw new \DomainException('Valeur forfaitaires "nhecl" non trouvée');
+            }
+            return $value;
+        });
     }
 
     public function apply(Audit $entity): void
     {
         $this->audit = $entity;
+        $this->clear();
 
+        $consommations = Consommations::create(
+            usage: Usage::ECLAIRAGE,
+            energie: Energie::ELECTRICITE,
+            callback: fn(ScenarioUsage $scenario) => $this->cecl(),
+        );
         $entity->eclairage()->calcule($entity->eclairage()->data()->with(
-            consommations: Consommations::create(
-                usage: Usage::ECLAIRAGE,
-                energie: Energie::ELECTRICITE,
-                callback: fn(ScenarioUsage $scenario) => $this->cecl(),
-            ),
+            consommations: $consommations,
+        ));
+        $entity->calcule($entity->data()->with(
+            consommations: $consommations,
         ));
     }
 

@@ -25,14 +25,10 @@ final class PerteStockageIndependant extends EngineRule
     /**
      * Pertes mensuelles de stockage exprimées en Wh
      */
-    public function pertes_stockage(ScenarioUsage $scenario, Mois $mois): float
+    public function pertes_stockage(): float
     {
         $vs = $this->systeme->stockage()?->volume ?? 0;
-
-        if (0 === $vs) {
-            return 0;
-        }
-        return (67662 * \pow($vs, 0.55)) / 12;
+        return $vs ? (67662 * \pow($vs, 0.55)) / 12 : 0;
     }
 
     /**
@@ -44,7 +40,7 @@ final class PerteStockageIndependant extends EngineRule
             return 0;
         }
         $nref = $this->nref(scenario: $scenario, mois: $mois);
-        return 0.48 * $nref * ($this->pertes_stockage(scenario: $scenario, mois: $mois) / 8760);
+        return 0.48 * $nref * ($this->pertes_stockage() / 8760);
     }
 
     public function apply(Audit $entity): void
@@ -57,10 +53,7 @@ final class PerteStockageIndependant extends EngineRule
             $pertes = Pertes::create(
                 usage: Usage::ECS,
                 type: TypePerte::STOCKAGE,
-                callback: fn(ScenarioUsage $scenario, Mois $mois) => $this->pertes_stockage(
-                    scenario: $scenario,
-                    mois: $mois,
-                ),
+                callback: fn(ScenarioUsage $scenario, Mois $mois) => $this->pertes_stockage(),
             );
             $pertes_recuperables = Pertes::create(
                 usage: Usage::ECS,

@@ -7,9 +7,9 @@ use Webmozart\Assert\Assert;
 final class PanneauPhotovoltaiqueData
 {
     public function __construct(
-        public readonly ?float $kpv = null,
-        public readonly ?float $surface = null,
-        public readonly ?float $production = null,
+        public readonly ?float $kpv,
+        public readonly ?float $surface,
+        public readonly ?float $production,
     ) {}
 
     public static function create(

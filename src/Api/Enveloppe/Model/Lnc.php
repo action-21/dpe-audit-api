@@ -2,7 +2,7 @@
 
 namespace App\Api\Enveloppe\Model;
 
-use App\Api\Enveloppe\Model\Lnc\{Baie, ParoiOpaque};
+use App\Api\Enveloppe\Model\Lnc\{Baie, Data, ParoiOpaque};
 use App\Domain\Enveloppe\Entity\{Lnc as Entity, LncCollection as EntityCollection};
 use App\Domain\Enveloppe\Enum\Lnc\TypeLnc;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,13 +21,17 @@ final class Lnc
 
         public readonly TypeLnc $type,
 
+        /** @var ParoiOpaque[] */
         #[Assert\All([new Assert\Type(ParoiOpaque::class)])]
         #[Assert\Valid]
         public readonly array $parois_opaques,
 
+        /** @var Baie[] */
         #[Assert\All([new Assert\Type(Baie::class)])]
         #[Assert\Valid]
         public readonly array $baies,
+
+        public readonly ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -38,6 +42,7 @@ final class Lnc
             type: $entity->type(),
             parois_opaques: ParoiOpaque::from_collection($entity->parois_opaques()),
             baies: Baie::from_collection($entity->baies()),
+            data: Data::from($entity),
         );
     }
 

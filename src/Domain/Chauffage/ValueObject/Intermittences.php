@@ -35,4 +35,12 @@ final class Intermittences
     {
         return $this->find(scenario: $scenario)->int;
     }
+
+    /**
+     * @return Intermittence[]
+     */
+    public function values(): array
+    {
+        return $this->values;
+    }
 }

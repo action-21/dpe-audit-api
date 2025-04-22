@@ -2,13 +2,13 @@
 
 namespace App\Domain\Ventilation\Data;
 
-use App\Domain\Common\ValueObject\{Consommations, Emissions};
+use App\Domain\Common\ValueObject\{Consommation, Consommations, Emission, Emissions};
 
 final class GenerateurData
 {
     public function __construct(
-        public readonly ?Consommations $consommations = null,
-        public readonly ?Emissions $emissions = null,
+        public readonly ?Consommations $consommations,
+        public readonly ?Emissions $emissions,
     ) {}
 
     public static function create(

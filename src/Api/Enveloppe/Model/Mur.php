@@ -2,7 +2,7 @@
 
 namespace App\Api\Enveloppe\Model;
 
-use App\Api\Enveloppe\Model\Mur\{Isolation, Position};
+use App\Api\Enveloppe\Model\Mur\{Data, Isolation, Position};
 use App\Domain\Enveloppe\Entity\{Mur as Entity, MurCollection as EntityCollection};
 use App\Domain\Enveloppe\Enum\InertieParoi;
 use App\Domain\Enveloppe\Enum\Mur\{TypeDoublage, TypeMur};
@@ -47,6 +47,8 @@ final class Mur
 
         #[Assert\Valid]
         public readonly Isolation $isolation,
+
+        public readonly ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -66,6 +68,7 @@ final class Mur
             u: $entity->u(),
             position: Position::from($entity),
             isolation: Isolation::from($entity),
+            data: Data::from($entity),
         );
     }
 

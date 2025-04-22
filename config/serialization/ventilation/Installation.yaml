@@ -1,0 +1,25 @@
+App\Api\Ventilation\Model\Installation:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    surface:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Ventilation\Model\InstallationData:
+  attributes:
+    rdim:
+      groups: ["read"]
+    qvarep_conv:
+      groups: ["read"]
+    qvasouf_conv:
+      groups: ["read"]
+    smea_conv:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

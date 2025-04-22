@@ -1,0 +1,25 @@
+App\Api\Production\Model\PanneauPhotovoltaique:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    orientation:
+      groups: ["read", "write"]
+    inclinaison:
+      groups: ["read", "write"]
+    modules:
+      groups: ["read", "write"]
+    surface:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Production\Model\PanneauPhotovoltaiqueData:
+  attributes:
+    kpv:
+      groups: ["read"]
+    surface:
+      groups: ["read"]
+    production:
+      groups: ["read"]

@@ -19,6 +19,8 @@ final class Systeme
         public readonly ?string $generateur_id,
 
         public readonly TypeVentilation $type,
+
+        public readonly ?SystemeData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -28,6 +30,7 @@ final class Systeme
             installation_id: $entity->installation()->id(),
             generateur_id: $entity->generateur()?->id(),
             type: $entity->type(),
+            data: SystemeData::from($entity),
         );
     }
 

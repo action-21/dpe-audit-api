@@ -216,6 +216,9 @@ final class ConsommationChauffage extends EngineRule
             $systeme->chauffage()->calcule($systeme->chauffage()->data()->with(
                 consommations: $consommations,
             ));
+            $entity->calcule($entity->data()->with(
+                consommations: $consommations,
+            ));
         }
     }
 

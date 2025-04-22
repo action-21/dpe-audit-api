@@ -1,6 +1,10 @@
 resources:
   App\Api\Ecs\Model\Ecs:
     shortName: Ecs
+    normalizationContext:
+      groups: ["read"]
+    denormalizationContext:
+      groups: ["write"]
     operations:
       ecs.get:
         uriTemplate: /audit/{id}/ecs

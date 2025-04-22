@@ -1,0 +1,22 @@
+App\Api\Ventilation\Model\Ventilation:
+  attributes:
+    generateurs:
+      groups: ["read", "write"]
+    installations:
+      groups: ["read", "write"]
+    systemes:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+App\Api\Ventilation\Model\VentilationData:
+  attributes:
+    qvarep_conv:
+      groups: ["read"]
+    qvasouf_conv:
+      groups: ["read"]
+    smea_conv:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

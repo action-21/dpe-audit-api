@@ -28,17 +28,19 @@ final class PerformancePac extends EngineRule
      */
     public function cop(): float
     {
-        if ($this->generateur->signaletique()->cop) {
-            return $this->generateur->signaletique()->cop;
-        }
-        if (null === $cop = $this->table_repository->cop(
-            type_generateur: $this->generateur->type(),
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            annee_installation: $this->annee_installation(),
-        )) {
-            throw new \DomainException("Valeurs forfaitaires COP non trouvées");
-        }
-        return $cop;
+        return $this->get("cop", function () {
+            if ($this->generateur->signaletique()->cop) {
+                return $this->generateur->signaletique()->cop;
+            }
+            if (null === $cop = $this->table_repository->cop(
+                type_generateur: $this->generateur->type(),
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                annee_installation: $this->annee_installation(),
+            )) {
+                throw new \DomainException("Valeurs forfaitaires COP non trouvées");
+            }
+            return $cop;
+        });
     }
 
     public function apply(Audit $entity): void
@@ -53,6 +55,7 @@ final class PerformancePac extends EngineRule
                 continue;
             }
             $this->generateur = $generateur;
+            $this->clear();
 
             $generateur->calcule($generateur->data()->with(
                 cop: $this->cop(),

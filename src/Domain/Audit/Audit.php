@@ -3,7 +3,9 @@
 namespace App\Domain\Audit;
 
 use App\Domain\Audit\Entity\{Logement, LogementCollection};
+use App\Domain\Audit\Enum\Etat;
 use App\Domain\Audit\ValueObject\{Adresse, Batiment};
+use App\Domain\Auditeur\Auditeur;
 use App\Domain\Chauffage\Chauffage;
 use App\Domain\Common\ValueObject\Id;
 use App\Domain\Eclairage\Eclairage;
@@ -18,8 +20,10 @@ final class Audit
     public function __construct(
         protected readonly Id $id,
         private \DateTimeImmutable $date_etablissement,
+        private Etat $etat,
         private Adresse $adresse,
         private Batiment $batiment,
+        private ?Auditeur $auditeur,
         private LogementCollection $logements,
         private Enveloppe $enveloppe,
         private Ventilation $ventilation,
@@ -44,8 +48,10 @@ final class Audit
         return new self(
             id: Id::create(),
             date_etablissement: new \DateTimeImmutable(),
+            etat: Etat::SIMULATION,
             adresse: $adresse,
             batiment: $batiment,
+            auditeur: null,
             logements: new LogementCollection,
             enveloppe: $enveloppe,
             ventilation: $ventilation,
@@ -56,6 +62,14 @@ final class Audit
             production: $production,
             data: AuditData::create(),
         );
+    }
+
+    public function publie(Auditeur $auditeur): self
+    {
+        throw new \LogicException('Not implemented yet.');
+        $this->auditeur = $auditeur;
+        $this->etat = Etat::PUBLIE;
+        return $this;
     }
 
     public function reinitialise(): void

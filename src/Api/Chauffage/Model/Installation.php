@@ -26,6 +26,8 @@ final class Installation
 
         #[Assert\Valid]
         public readonly Regulation $regulation_terminale,
+
+        public readonly ?InstallationData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -38,6 +40,7 @@ final class Installation
             solaire_thermique: $entity->solaire_thermique() ? Solaire::from($entity) : null,
             regulation_centrale: Regulation::from($entity->regulation_centrale()),
             regulation_terminale: Regulation::from($entity->regulation_terminale()),
+            data: InstallationData::from($entity),
         );
     }
 

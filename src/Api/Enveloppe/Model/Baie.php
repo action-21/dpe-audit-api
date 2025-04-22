@@ -2,7 +2,7 @@
 
 namespace App\Api\Enveloppe\Model;
 
-use App\Api\Enveloppe\Model\Baie\{DoubleFenetre, MasqueLointain, MasqueProche, Menuiserie, Position, Vitrage};
+use App\Api\Enveloppe\Model\Baie\{DoubleFenetre, Data, MasqueLointain, MasqueProche, Menuiserie, Position, Vitrage};
 use App\Domain\Enveloppe\Entity\{Baie as Entity, BaieCollection as EntityCollection};
 use App\Domain\Enveloppe\Enum\Baie\{Materiau, TypeBaie, TypeFermeture};
 use App\Domain\Enveloppe\Enum\TypePose;
@@ -59,9 +59,13 @@ final class Baie
 
         public readonly ?DoubleFenetre $double_fenetre,
 
+        /** @var MasqueLointain[] */
         public readonly array $masques_lointains,
 
+        /** @var MasqueProche[] */
         public readonly array $masques_proches,
+
+        public readonly ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -86,6 +90,7 @@ final class Baie
             double_fenetre: $entity->double_fenetre() ? DoubleFenetre::from($entity->double_fenetre()) : null,
             masques_lointains: MasqueLointain::from_collection($entity->masques_lointains()),
             masques_proches: MasqueProche::from_collection($entity->masques_proches()),
+            data: Data::from($entity),
         );
     }
 

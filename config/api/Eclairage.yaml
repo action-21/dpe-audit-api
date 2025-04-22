@@ -1,8 +1,12 @@
 resources:
   App\Api\Eclairage\Model\Eclairage:
     shortName: Eclairage
+    normalizationContext:
+      groups: ["read"]
+    denormalizationContext:
+      groups: ["write"]
     operations:
-      ventilation.get:
+      eclairage.get:
         uriTemplate: /audit/{id}/eclairage
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Eclairage\State\EclairageProvider

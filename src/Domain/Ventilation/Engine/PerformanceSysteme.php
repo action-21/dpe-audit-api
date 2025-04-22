@@ -20,16 +20,18 @@ final class PerformanceSysteme extends EngineRule
      */
     public function ratio_utilisation(): float
     {
-        if (null === $value = $this->table_repository->ratio_utilisation(
-            type_ventilation: $this->systeme->type(),
-            type_generateur: $this->systeme->generateur()?->type(),
-            type_vmc: $this->systeme->generateur()?->type_vmc(),
-            generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
-            annee_installation: $this->systeme->generateur()?->annee_installation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire "ratio_utilisation" non trouvée');
-        }
-        return $value;
+        return $this->get('ratio_utilisation', function () {
+            if (null === $value = $this->table_repository->ratio_utilisation(
+                type_ventilation: $this->systeme->type(),
+                type_generateur: $this->systeme->generateur()?->type(),
+                type_vmc: $this->systeme->generateur()?->type_vmc(),
+                generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
+                annee_installation: $this->systeme->generateur()?->annee_installation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire "ratio_utilisation" non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -39,16 +41,18 @@ final class PerformanceSysteme extends EngineRule
      */
     public function pvent_moy(): float
     {
-        if (null === $value = $this->table_repository->pvent_moy(
-            type_ventilation: $this->systeme->type(),
-            type_generateur: $this->systeme->generateur()?->type(),
-            type_vmc: $this->systeme->generateur()?->type_vmc(),
-            generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
-            annee_installation: $this->systeme->generateur()?->annee_installation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire "pvent_moy" non trouvée');
-        }
-        return $value;
+        return $this->get('pvent_moy', function () {
+            if (null === $value = $this->table_repository->pvent_moy(
+                type_ventilation: $this->systeme->type(),
+                type_generateur: $this->systeme->generateur()?->type(),
+                type_vmc: $this->systeme->generateur()?->type_vmc(),
+                generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
+                annee_installation: $this->systeme->generateur()?->annee_installation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire "pvent_moy" non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -56,16 +60,18 @@ final class PerformanceSysteme extends EngineRule
      */
     public function pvent(): float
     {
-        if (null === $value = $this->table_repository->pvent(
-            type_ventilation: $this->systeme->type(),
-            type_generateur: $this->systeme->generateur()?->type(),
-            type_vmc: $this->systeme->generateur()?->type_vmc(),
-            generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
-            annee_installation: $this->systeme->generateur()?->annee_installation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire "pvent" non trouvée');
-        }
-        return $value;
+        return $this->get('pvent', function () {
+            if (null === $value = $this->table_repository->pvent(
+                type_ventilation: $this->systeme->type(),
+                type_generateur: $this->systeme->generateur()?->type(),
+                type_vmc: $this->systeme->generateur()?->type_vmc(),
+                generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
+                annee_installation: $this->systeme->generateur()?->annee_installation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire "pvent" non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -73,17 +79,19 @@ final class PerformanceSysteme extends EngineRule
      */
     public function qvarep_conv(): float
     {
-        if (null === $value = $this->table_repository->qvarep_conv(
-            type_ventilation: $this->systeme->type(),
-            type_generateur: $this->systeme->generateur()?->type(),
-            type_vmc: $this->systeme->generateur()?->type_vmc(),
-            presence_echangeur_thermique: $this->systeme->generateur()?->presence_echangeur_thermique(),
-            generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
-            annee_installation: $this->systeme->generateur()?->annee_installation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire "qvarep_conv" non trouvée');
-        }
-        return $value;
+        return $this->get('qvarep_conv', function () {
+            if (null === $value = $this->table_repository->qvarep_conv(
+                type_ventilation: $this->systeme->type(),
+                type_generateur: $this->systeme->generateur()?->type(),
+                type_vmc: $this->systeme->generateur()?->type_vmc(),
+                presence_echangeur_thermique: $this->systeme->generateur()?->presence_echangeur_thermique(),
+                generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
+                annee_installation: $this->systeme->generateur()?->annee_installation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire "qvarep_conv" non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -91,17 +99,19 @@ final class PerformanceSysteme extends EngineRule
      */
     public function qvasouf_conv(): float
     {
-        if (null === $value = $this->table_repository->qvasouf_conv(
-            type_ventilation: $this->systeme->type(),
-            type_generateur: $this->systeme->generateur()?->type(),
-            type_vmc: $this->systeme->generateur()?->type_vmc(),
-            presence_echangeur_thermique: $this->systeme->generateur()?->presence_echangeur_thermique(),
-            generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
-            annee_installation: $this->systeme->generateur()?->annee_installation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire "qvasouf_conv" non trouvée');
-        }
-        return $value;
+        return $this->get('qvasouf_conv', function () {
+            if (null === $value = $this->table_repository->qvasouf_conv(
+                type_ventilation: $this->systeme->type(),
+                type_generateur: $this->systeme->generateur()?->type(),
+                type_vmc: $this->systeme->generateur()?->type_vmc(),
+                presence_echangeur_thermique: $this->systeme->generateur()?->presence_echangeur_thermique(),
+                generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
+                annee_installation: $this->systeme->generateur()?->annee_installation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire "qvasouf_conv" non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -110,23 +120,27 @@ final class PerformanceSysteme extends EngineRule
      */
     public function smea_conv(): float
     {
-        if (null === $value = $this->table_repository->smea_conv(
-            type_ventilation: $this->systeme->type(),
-            type_generateur: $this->systeme->generateur()?->type(),
-            type_vmc: $this->systeme->generateur()?->type_vmc(),
-            presence_echangeur_thermique: $this->systeme->generateur()?->presence_echangeur_thermique(),
-            generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
-            annee_installation: $this->systeme->generateur()?->annee_installation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire "smea_conv" non trouvée');
-        }
-        return $value;
+        return $this->get('smea_conv', function () {
+            if (null === $value = $this->table_repository->smea_conv(
+                type_ventilation: $this->systeme->type(),
+                type_generateur: $this->systeme->generateur()?->type(),
+                type_vmc: $this->systeme->generateur()?->type_vmc(),
+                presence_echangeur_thermique: $this->systeme->generateur()?->presence_echangeur_thermique(),
+                generateur_collectif: $this->systeme->generateur()?->generateur_collectif(),
+                annee_installation: $this->systeme->generateur()?->annee_installation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire "smea_conv" non trouvée');
+            }
+            return $value;
+        });
     }
 
     public function apply(Audit $entity): void
     {
         foreach ($entity->ventilation()->systemes() as $systeme) {
             $this->systeme = $systeme;
+            $this->clear();
+
             $systeme->calcule($systeme->data()->with(
                 qvarep_conv: $this->qvarep_conv(),
                 qvasouf_conv: $this->qvasouf_conv(),

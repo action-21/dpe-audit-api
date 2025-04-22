@@ -26,28 +26,31 @@ final class DimensionnementAuxiliaire extends EngineRule
      */
     public function paux(): float
     {
-        if (false === $this->generateur->type()->is_combustion()) {
-            return 0;
-        }
-        if (false === $this->generateur->energie()->is_combustible()) {
-            return 0;
-        }
-        if (null === $paux = $this->table_repository->paux(
-            type_generateur: $this->generateur->type(),
-            energie_generateur: $this->generateur->energie(),
-            generateur_multi_batiment: $this->generateur->position()->generateur_multi_batiment,
-            presence_ventouse: $this->generateur->combustion()?->presence_ventouse ?? false,
-            pn: $this->pn(),
-        )) {
-            throw new \DomainException("Valeurs forfaitaires Paux non trouvées");
-        }
-        return $paux;
+        return $this->get("paux", function () {
+            if (false === $this->generateur->type()->is_combustion()) {
+                return 0;
+            }
+            if (false === $this->generateur->energie()->is_combustible()) {
+                return 0;
+            }
+            if (null === $paux = $this->table_repository->paux(
+                type_generateur: $this->generateur->type(),
+                energie_generateur: $this->generateur->energie(),
+                generateur_multi_batiment: $this->generateur->position()->generateur_multi_batiment,
+                presence_ventouse: $this->generateur->combustion()?->presence_ventouse ?? false,
+                pn: $this->pn(),
+            )) {
+                throw new \DomainException("Valeurs forfaitaires Paux non trouvées");
+            }
+            return $paux;
+        });
     }
 
     public function apply(Audit $entity): void
     {
         foreach ($entity->chauffage()->generateurs() as $generateur) {
             $this->generateur = $generateur;
+            $this->clear();
 
             $generateur->calcule($generateur->data()->with(
                 paux: $this->paux(),

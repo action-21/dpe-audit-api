@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Api\Audit\ComputeAuditHandler;
-use App\Database\Local\XMLTableRepository;
 use App\Database\Opendata\Audit\XMLAuditDeserializer;
 use App\Database\Opendata\XMLElement;
 use Symfony\Component\Console\Command\Command;
@@ -50,6 +49,7 @@ final class PerformanceCommand extends Command
         }
         $timer = $time->diff(new \DateTime);
         $output->writeln("{$counter} simulations processed in {$timer->f} seconds");
+
         return Command::SUCCESS;
     }
 

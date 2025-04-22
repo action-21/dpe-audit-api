@@ -31,19 +31,21 @@ final class PerformanceGenerateurCombustion extends EngineRule
      */
     public function rpn(): ?Pourcentage
     {
-        if ($this->generateur->combustion()?->rpn) {
-            return $this->generateur->combustion()->rpn;
-        }
-        if (null === $rpn = $this->table_repository->rpn(
-            type_generateur: $this->generateur->type(),
-            energie_generateur: $this->generateur->energie(),
-            mode_combustion: $this->generateur->combustion()->mode_combustion,
-            annee_installation: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
-            pn: $this->pn(),
-        )) {
-            throw new \DomainException("Valeurs forfaitaires Rpn non trouvées");
-        }
-        return $rpn;
+        return $this->get("rpn", function () {
+            if ($this->generateur->combustion()?->rpn) {
+                return $this->generateur->combustion()->rpn;
+            }
+            if (null === $rpn = $this->table_repository->rpn(
+                type_generateur: $this->generateur->type(),
+                energie_generateur: $this->generateur->energie(),
+                mode_combustion: $this->generateur->combustion()->mode_combustion,
+                annee_installation: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
+                pn: $this->pn(),
+            )) {
+                throw new \DomainException("Valeurs forfaitaires Rpn non trouvées");
+            }
+            return $rpn;
+        });
     }
 
     /**
@@ -51,24 +53,26 @@ final class PerformanceGenerateurCombustion extends EngineRule
      */
     public function qp0(): ?float
     {
-        if ($this->generateur->combustion()?->qp0) {
-            return $this->generateur->combustion()->qp0;
-        }
-        $e = $this->generateur->combustion()?->presence_ventouse ? 1.75 : 2.5;
-        $f = $this->generateur->combustion()?->presence_ventouse ? -0.55 : -0.8;
+        return $this->get("qp0", function () {
+            if ($this->generateur->combustion()?->qp0) {
+                return $this->generateur->combustion()->qp0;
+            }
+            $e = $this->generateur->combustion()?->presence_ventouse ? 1.75 : 2.5;
+            $f = $this->generateur->combustion()?->presence_ventouse ? -0.55 : -0.8;
 
-        if (null === $qp0 = $this->table_repository->qp0(
-            type_generateur: $this->generateur->type(),
-            energie_generateur: $this->generateur->energie(),
-            mode_combustion: $this->generateur->combustion()->mode_combustion,
-            annee_installation: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
-            pn: $this->pn(),
-            e: $e,
-            f: $f,
-        )) {
-            throw new \DomainException("Valeurs forfaitaires QP0 non trouvées");
-        }
-        return $qp0;
+            if (null === $qp0 = $this->table_repository->qp0(
+                type_generateur: $this->generateur->type(),
+                energie_generateur: $this->generateur->energie(),
+                mode_combustion: $this->generateur->combustion()->mode_combustion,
+                annee_installation: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
+                pn: $this->pn(),
+                e: $e,
+                f: $f,
+            )) {
+                throw new \DomainException("Valeurs forfaitaires QP0 non trouvées");
+            }
+            return $qp0;
+        });
     }
 
     /**
@@ -76,18 +80,20 @@ final class PerformanceGenerateurCombustion extends EngineRule
      */
     public function pveilleuse(): ?float
     {
-        if ($this->generateur->combustion()?->pveilleuse) {
-            return $this->generateur->combustion()->pveilleuse;
-        }
-        if (null === $pveilleuse = $this->table_repository->pveilleuse(
-            type_generateur: $this->generateur->type(),
-            energie_generateur: $this->generateur->energie(),
-            mode_combustion: $this->generateur->combustion()->mode_combustion,
-            annee_installation: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
-        )) {
-            throw new \DomainException("Valeurs forfaitaires Pveil non trouvées");
-        }
-        return $pveilleuse;
+        return $this->get("pveilleuse", function () {
+            if ($this->generateur->combustion()?->pveilleuse) {
+                return $this->generateur->combustion()->pveilleuse;
+            }
+            if (null === $pveilleuse = $this->table_repository->pveilleuse(
+                type_generateur: $this->generateur->type(),
+                energie_generateur: $this->generateur->energie(),
+                mode_combustion: $this->generateur->combustion()->mode_combustion,
+                annee_installation: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
+            )) {
+                throw new \DomainException("Valeurs forfaitaires Pveil non trouvées");
+            }
+            return $pveilleuse;
+        });
     }
 
     public function apply(Audit $entity): void
@@ -105,6 +111,7 @@ final class PerformanceGenerateurCombustion extends EngineRule
                 continue;
             }
             $this->generateur = $generateur;
+            $this->clear();
 
             $generateur->calcule($generateur->data()->with(
                 rpn: $this->rpn(),

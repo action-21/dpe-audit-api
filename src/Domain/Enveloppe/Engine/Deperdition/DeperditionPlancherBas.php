@@ -36,6 +36,9 @@ final class DeperditionPlancherBas extends DeperditionParoi
         if ($this->paroi->isolation()->annee_isolation) {
             return $this->paroi->isolation()->annee_isolation;
         }
+        if ($this->paroi->isolation()->etat_isolation !== EtatIsolation::ISOLE) {
+            return $this->paroi->annee_construction();
+        }
         $annee_construction = $this->annee_construction();
         return $annee_construction->less_than(1975) ? Annee::from(1975) : $annee_construction;
     }
@@ -57,15 +60,17 @@ final class DeperditionPlancherBas extends DeperditionParoi
      */
     public function u0(): float
     {
-        if ($this->paroi->u0()) {
-            return $this->paroi->u0();
-        }
-        if (null === $value = $this->table_repository->u0(
-            type_structure: $this->paroi->type_structure(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire U0 non trouvée');
-        }
-        return $value;
+        return $this->get('u0', function () {
+            if ($this->paroi->u0()) {
+                return $this->paroi->u0();
+            }
+            if (null === $value = $this->table_repository->u0(
+                type_structure: $this->paroi->type_structure(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire U0 non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -73,28 +78,30 @@ final class DeperditionPlancherBas extends DeperditionParoi
      */
     public function u(): float
     {
-        if ($this->paroi->u()) {
-            return $this->paroi->u();
-        }
-        if ($this->paroi->isolation()->etat_isolation === EtatIsolation::NON_ISOLE) {
-            return $this->u0();
-        }
-        if ($this->paroi->isolation()->etat_isolation === EtatIsolation::ISOLE) {
-            if ($r = $this->paroi->isolation()->resistance_thermique_isolation) {
-                return 1 / (1 / $this->u0() + $r);
+        return $this->get('u', function () {
+            if ($this->paroi->u()) {
+                return $this->paroi->u();
             }
-            if ($e = $this->paroi->isolation()->epaisseur_isolation) {
-                return 1 / (1 / $this->u0() + $e / 1000 / self::LAMBDA_ISOLATION_DEFAUT);
+            if ($this->paroi->isolation()->etat_isolation === EtatIsolation::NON_ISOLE) {
+                return $this->u0();
             }
-        }
-        if (null === $u = $this->table_repository->u(
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            effet_joule: $this->audit->data()->effet_joule,
-            annee_construction_isolation: $this->annee_construction_isolation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Upb non trouvée');
-        }
-        return \min($this->u0(), $u);
+            if ($this->paroi->isolation()->etat_isolation === EtatIsolation::ISOLE) {
+                if ($r = $this->paroi->isolation()->resistance_thermique_isolation) {
+                    return 1 / (1 / $this->u0() + $r);
+                }
+                if ($e = $this->paroi->isolation()->epaisseur_isolation) {
+                    return 1 / (1 / $this->u0() + $e / 1000 / self::LAMBDA_ISOLATION_DEFAUT);
+                }
+            }
+            if (null === $u = $this->table_repository->u(
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                effet_joule: $this->audit->data()->effet_joule,
+                annee_construction_isolation: $this->annee_construction_isolation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Upb non trouvée');
+            }
+            return \min($this->u0(), $u);
+        });
     }
 
     /**
@@ -102,21 +109,23 @@ final class DeperditionPlancherBas extends DeperditionParoi
      */
     public function u_final(): float
     {
-        $u = $this->u();
+        return $this->get('u_final', function () {
+            $u = $this->u();
 
-        $u_final = \in_array($this->paroi->mitoyennete(), [
-            Mitoyennete::TERRE_PLEIN,
-            Mitoyennete::VIDE_SANITAIRE,
-            Mitoyennete::SOUS_SOL_NON_CHAUFFE
-        ]) ? $this->table_repository->ue(
-            mitoyennete: $this->paroi->mitoyennete(),
-            annee_construction: $this->annee_construction(),
-            surface: $this->paroi->position()->surface,
-            perimetre: $this->paroi->position()->perimetre,
-            u: $u,
-        ) : $u;
+            $u_final = \in_array($this->paroi->mitoyennete(), [
+                Mitoyennete::TERRE_PLEIN,
+                Mitoyennete::VIDE_SANITAIRE,
+                Mitoyennete::SOUS_SOL_NON_CHAUFFE
+            ]) ? $this->table_repository->ue(
+                mitoyennete: $this->paroi->mitoyennete(),
+                annee_construction: $this->annee_construction(),
+                surface: $this->paroi->position()->surface,
+                perimetre: $this->paroi->position()->perimetre,
+                u: $u,
+            ) : $u;
 
-        return \min($u, $u_final);
+            return \min($u, $u_final);
+        });
     }
 
     /**
@@ -140,6 +149,7 @@ final class DeperditionPlancherBas extends DeperditionParoi
 
         foreach ($entity->enveloppe()->planchers_bas() as $paroi) {
             $this->paroi = $paroi;
+            $this->clear();
 
             $paroi->calcule($paroi->data()->with(
                 sdep: $this->sdep(),

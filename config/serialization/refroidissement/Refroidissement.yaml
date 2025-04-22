@@ -1,0 +1,19 @@
+App\Api\Refroidissement\Model\Refroidissement:
+  attributes:
+    generateurs:
+      groups: ["read", "write"]
+    installations:
+      groups: ["read", "write"]
+    systemes:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Refroidissement\Model\RefroidissementData:
+  attributes:
+    besoins:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

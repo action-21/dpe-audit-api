@@ -28,6 +28,11 @@ enum TypeParoi: string implements Enum
         };
     }
 
+    public static function each(\Closure $func): array
+    {
+        return \array_map($func, self::cases());
+    }
+
     /**
      * @return self[]
      */

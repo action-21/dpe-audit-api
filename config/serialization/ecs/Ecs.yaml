@@ -1,0 +1,27 @@
+App\Api\Ecs\Model\Ecs:
+  attributes:
+    generateurs:
+      groups: ["read", "write"]
+    installations:
+      groups: ["read", "write"]
+    systemes:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Ecs\Model\EcsData:
+  attributes:
+    nmax:
+      groups: ["read"]
+    nadeq:
+      groups: ["read"]
+    besoins:
+      groups: ["read"]
+    pertes:
+      groups: ["read"]
+    pertes_recuperables:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

@@ -28,26 +28,28 @@ final class PerformancePac extends EngineRule
      */
     public function scop(): float
     {
-        if ($this->generateur->signaletique()->scop) {
-            return $this->generateur->signaletique()->scop;
-        }
-        if (0 === $this->generateur->emetteurs()->count()) {
-            throw new \DomainException("Valeurs forfaitaires COP non trouvées");
-        }
-        $scops = [];
-
-        foreach ($this->generateur->emetteurs() as $emetteur) {
-            if (null === $scop = $this->table_repository->scop(
-                zone_climatique: $this->audit->adresse()->zone_climatique,
-                type_generateur: $this->generateur->type(),
-                annee_installation_generateur: $this->annee_installation(),
-                type_emission: $emetteur->type_emission(),
-            )) {
-                throw new \DomainException("Valeurs forfaitaires SCOP non trouvées");
+        return $this->get("scop", function () {
+            if ($this->generateur->signaletique()->scop) {
+                return $this->generateur->signaletique()->scop;
             }
-            $scops[] = $scop;
-        }
-        return max($scops);
+            if (0 === $this->generateur->emetteurs()->count()) {
+                throw new \DomainException("Valeurs forfaitaires COP non trouvées");
+            }
+            $scops = [];
+
+            foreach ($this->generateur->emetteurs() as $emetteur) {
+                if (null === $scop = $this->table_repository->scop(
+                    zone_climatique: $this->audit->adresse()->zone_climatique,
+                    type_generateur: $this->generateur->type(),
+                    annee_installation_generateur: $this->annee_installation(),
+                    type_emission: $emetteur->type_emission(),
+                )) {
+                    throw new \DomainException("Valeurs forfaitaires SCOP non trouvées");
+                }
+                $scops[] = $scop;
+            }
+            return max($scops);
+        });
     }
 
     public static function supports(Generateur $generateur): bool
@@ -58,11 +60,13 @@ final class PerformancePac extends EngineRule
     public function apply(Audit $entity): void
     {
         $this->audit = $entity;
+
         foreach ($entity->chauffage()->generateurs() as $generateur) {
             if (false === self::supports($generateur)) {
                 continue;
             }
             $this->generateur = $generateur;
+            $this->clear();
 
             $generateur->calcule($generateur->data()->with(
                 scop: $this->scop(),

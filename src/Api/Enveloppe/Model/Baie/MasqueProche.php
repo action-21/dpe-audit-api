@@ -18,6 +18,8 @@ final class MasqueProche
 
         #[Assert\Positive]
         public readonly ?float $profondeur,
+
+        public readonly ?MasqueProcheData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -27,6 +29,7 @@ final class MasqueProche
             description: $entity->description(),
             type_masque: $entity->type_masque(),
             profondeur: $entity->profondeur(),
+            data: MasqueProcheData::from($entity),
         );
     }
 

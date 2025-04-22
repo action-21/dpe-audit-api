@@ -73,6 +73,9 @@ final class EmissionEcs extends EngineRule
             $systeme->ecs()->calcule($systeme->ecs()->data()->with(
                 emissions: $emissions,
             ));
+            $entity->calcule($entity->data()->with(
+                emissions: $emissions,
+            ));
         }
     }
 

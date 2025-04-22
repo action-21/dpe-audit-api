@@ -29,7 +29,7 @@ final class EmissionRefroidissement extends EngineRule
     public function eges(ScenarioUsage $scenario): float
     {
         if ($this->systeme->generateur()->reseau_froid()) {
-            return $this->cfr($scenario) * $this->systeme->generateur()->reseau_froid()->contenu_co2()->number();
+            return $this->cfr($scenario) * $this->systeme->generateur()->reseau_froid()->contenu_co2()->decimal();
         }
         return $this->cfr($scenario) * match ($this->systeme->generateur()->energie()) {
             EnergieGenerateur::ELECTRICITE => 0.064,
@@ -65,6 +65,9 @@ final class EmissionRefroidissement extends EngineRule
             ));
             $systeme->refroidissement()->calcule($systeme->refroidissement()->data()->with(
                 emissions: $emissions
+            ));
+            $entity->calcule($entity->data()->with(
+                emissions: $emissions,
             ));
         }
     }

@@ -1,0 +1,38 @@
+App\Domain\Common\ValueObject\Consommation:
+  attributes:
+    usage:
+      groups: ["read"]
+    energie:
+      groups: ["read"]
+    scenario:
+      groups: ["read"]
+    consommation_ef:
+      groups: ["read"]
+    consommation_ep:
+      groups: ["read"]
+App\Domain\Common\ValueObject\Emission:
+  attributes:
+    usage:
+      groups: ["read"]
+    scenario:
+      groups: ["read"]
+    emission:
+      groups: ["read"]
+App\Api\Common\Model\Besoin:
+  attributes:
+    usage:
+      groups: ["read"]
+    scenario:
+      groups: ["read"]
+    besoin:
+      groups: ["read"]
+App\Api\Common\Model\Perte:
+  attributes:
+    usage:
+      groups: ["read"]
+    scenario:
+      groups: ["read"]
+    type:
+      groups: ["read"]
+    perte:
+      groups: ["read"]

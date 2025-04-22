@@ -14,16 +14,17 @@ final class Apports
 
     public static function create(Apport ...$values): self
     {
-        Assert::eq(count(Mois::cases()) * count(ScenarioUsage::cases()), count($values));
+        return self::from(...$values);
+    }
 
-        foreach (ScenarioUsage::cases() as $scenario) {
-            foreach (Mois::cases() as $mois) {
-                Assert::notNull(array_find(
-                    $values,
-                    fn(Apport $item) => $item->scenario === $scenario && $item->mois === $mois
-                ));
-            }
-        }
+    public static function from(Apport ...$values): self
+    {
+        Assert::eq(count(Mois::cases()) * count(ScenarioUsage::cases()), count($values));
+        Assert::uniqueValues(array_map(
+            fn(Apport $value) => "{$value->scenario->id()}{$value->mois->id()}",
+            $values,
+        ));
+
         return new self($values);
     }
 
@@ -41,16 +42,52 @@ final class Apports
 
     public function apports(ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL, ?Mois $mois = null): float
     {
-        $values = array_filter($this->values, fn(Apport $item) => $item->scenario === $scenario);
-        $values = $mois ? array_filter($values, fn(Apport $item) => $item->mois === $mois) : $values;
-        return array_reduce($values, fn(float $apports, Apport $item) => $apports + $item->apport(), 0);
+        return $this->apports_internes(scenario: $scenario, mois: $mois)
+            + $this->apports_solaires(scenario: $scenario, mois: $mois);
     }
 
-    public function apports_fr(ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL, ?Mois $mois = null): float
-    {
+    public function apports_internes(
+        ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL,
+        ?Mois $mois = null,
+    ): float {
         $values = array_filter($this->values, fn(Apport $item) => $item->scenario === $scenario);
         $values = $mois ? array_filter($values, fn(Apport $item) => $item->mois === $mois) : $values;
-        return array_reduce($values, fn(float $apports, Apport $item) => $apports + $item->apport_fr(), 0);
+        return array_reduce($values, fn(float $apports, Apport $item) => $apports + $item->apport_interne, 0);
+    }
+
+    public function apports_solaires(
+        ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL,
+        ?Mois $mois = null,
+    ): float {
+        $values = array_filter($this->values, fn(Apport $item) => $item->scenario === $scenario);
+        $values = $mois ? array_filter($values, fn(Apport $item) => $item->mois === $mois) : $values;
+        return array_reduce($values, fn(float $apports, Apport $item) => $apports + $item->apport_solaire, 0);
+    }
+
+    public function apports_fr(
+        ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL,
+        ?Mois $mois = null,
+    ): float {
+        return $this->apports_internes_fr(scenario: $scenario, mois: $mois)
+            + $this->apports_solaires_fr(scenario: $scenario, mois: $mois);
+    }
+
+    public function apports_internes_fr(
+        ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL,
+        ?Mois $mois = null,
+    ): float {
+        $values = array_filter($this->values, fn(Apport $item) => $item->scenario === $scenario);
+        $values = $mois ? array_filter($values, fn(Apport $item) => $item->mois === $mois) : $values;
+        return array_reduce($values, fn(float $apports, Apport $item) => $apports + $item->apport_interne_fr, 0);
+    }
+
+    public function apports_solaires_fr(
+        ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL,
+        ?Mois $mois = null,
+    ): float {
+        $values = array_filter($this->values, fn(Apport $item) => $item->scenario === $scenario);
+        $values = $mois ? array_filter($values, fn(Apport $item) => $item->mois === $mois) : $values;
+        return array_reduce($values, fn(float $apports, Apport $item) => $apports + $item->apport_solaire_fr, 0);
     }
 
     public function sse(ScenarioUsage $scenario = ScenarioUsage::CONVENTIONNEL, ?Mois $mois = null): float
@@ -58,5 +95,24 @@ final class Apports
         $values = array_filter($this->values, fn(Apport $item) => $item->scenario === $scenario);
         $values = $mois ? array_filter($values, fn(Apport $item) => $item->mois === $mois) : $values;
         return array_reduce($values, fn(float $sse, Apport $item) => $sse + $item->sse, 0);
+    }
+
+    /**
+     * @return ScenarioUsage[]
+     */
+    public function scenarios(): array
+    {
+        return array_map(
+            fn(string $scenario) => ScenarioUsage::from($scenario),
+            array_unique(array_map(fn(Apport $value) => $value->scenario->id(), $this->values)),
+        );
+    }
+
+    /**
+     * @return Apport[]
+     */
+    public function values(): array
+    {
+        return $this->values;
     }
 }

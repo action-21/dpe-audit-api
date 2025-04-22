@@ -1,0 +1,89 @@
+App\Api\Enveloppe\Model\Enveloppe:
+  attributes:
+    exposition:
+      groups: ["read", "write"]
+    q4pa_conv:
+      groups: ["read", "write"]
+    locaux_non_chauffes:
+      groups: ["read", "write"]
+    baies:
+      groups: ["read", "write"]
+    murs:
+      groups: ["read", "write"]
+    planchers_bas:
+      groups: ["read", "write"]
+    planchers_hauts:
+      groups: ["read", "write"]
+    portes:
+      groups: ["read", "write"]
+    ponts_thermiques:
+      groups: ["read", "write"]
+    niveaux:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\EnveloppeData:
+  attributes:
+    permeabilite:
+      groups: ["read"]
+    gv:
+      groups: ["read"]
+    ubat:
+      groups: ["read"]
+    performance:
+      groups: ["read"]
+    inertie:
+      groups: ["read"]
+    deperditions:
+      groups: ["read"]
+    surfaces_deperditives:
+      groups: ["read"]
+    apports:
+      groups: ["read"]
+
+App\Api\Enveloppe\Model\Apport:
+  attributes:
+    scenario:
+      groups: ["read"]
+    f:
+      groups: ["read"]
+    apport_interne:
+      groups: ["read"]
+    apport_interne_fr:
+      groups: ["read"]
+    apport_solaire:
+      groups: ["read"]
+    apport_solaire_fr:
+      groups: ["read"]
+    sse:
+      groups: ["read"]
+
+App\Domain\Enveloppe\ValueObject\Deperdition:
+  attributes:
+    type:
+      groups: ["read"]
+    deperdition:
+      groups: ["read"]
+
+App\Domain\Enveloppe\ValueObject\Permeabilite:
+  attributes:
+    presence_joints_menuiserie:
+      groups: ["read"]
+    isolation_murs_plafonds:
+      groups: ["read"]
+    hvent:
+      groups: ["read"]
+    hperm:
+      groups: ["read"]
+    q4pa_conv:
+      groups: ["read"]
+
+App\Domain\Enveloppe\ValueObject\SurfaceDeperditive:
+  attributes:
+    type:
+      groups: ["read"]
+    isolation:
+      groups: ["read"]
+    sdep:
+      groups: ["read"]

@@ -31,13 +31,15 @@ final class ScenarioClimatique extends EngineRule
      */
     public function tbase(): float
     {
-        if (null === $tbase = $this->table_repository->tbase(
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            altitude: $this->audit->batiment()->altitude,
-        )) {
-            throw new \DomainException("Valeur forfaitaire Tbase non trouvée");
-        }
-        return $tbase;
+        return $this->get("tbase", function () {
+            if (null === $tbase = $this->table_repository->tbase(
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                altitude: $this->audit->batiment()->altitude,
+            )) {
+                throw new \DomainException("Valeur forfaitaire Tbase non trouvée");
+            }
+            return $tbase;
+        });
     }
 
     /**
@@ -45,19 +47,23 @@ final class ScenarioClimatique extends EngineRule
      */
     public function sollicitations_exterieures(): SollicitationsExterieures
     {
-        if (null === $sollicitations_exterieures = $this->table_repository->sollicitations_exterieures(
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            altitude: $this->audit->batiment()->altitude,
-            parois_anciennes_lourdes: $this->parois_anciennes_lourdes(),
-        )) {
-            throw new \DomainException("Valeur forfaitaire Tbase non trouvée");
-        }
-        return $sollicitations_exterieures;
+        return $this->get("sollicitations_exterieures", function () {
+            if (null === $sollicitations_exterieures = $this->table_repository->sollicitations_exterieures(
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                altitude: $this->audit->batiment()->altitude,
+                parois_anciennes_lourdes: $this->parois_anciennes_lourdes(),
+            )) {
+                throw new \DomainException("Valeur forfaitaire Tbase non trouvée");
+            }
+            return $sollicitations_exterieures;
+        });
     }
 
     public function apply(Audit $entity): void
     {
         $this->audit = $entity;
+        $this->clear();
+
         $entity->calcule($entity->data()->with(
             sollicitations_exterieures: $this->sollicitations_exterieures(),
             tbase: $this->tbase(),

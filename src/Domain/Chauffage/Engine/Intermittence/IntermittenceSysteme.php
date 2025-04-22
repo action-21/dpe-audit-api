@@ -71,40 +71,42 @@ final class IntermittenceSysteme extends EngineRule
      */
     public function i0(): float
     {
-        if ($this->systeme->emetteurs()->count() === 0) {
-            if (null === $i0 = $this->table_repository->i0(
-                type_batiment: $this->audit->batiment()->type,
-                type_emission: TypeEmission::from_type_generateur($this->generateur()->type()),
-                type_intermittence: $this->type_intermittence(),
-                regulation_terminale: $this->installation()->regulation_terminale()->presence_regulation,
-                inertie_lourde: $this->inertie_lourde(),
-                comptage_individuel: $this->installation()->comptage_individuel(),
-                chauffage_collectif: $this->generateur()->position()->generateur_collectif,
-                chauffage_central: false,
-            )) {
-                throw new \DomainException('Valeur forfaitaire I0 non trouvée');
+        return $this->get("i0", function () {
+            if ($this->systeme->emetteurs()->count() === 0) {
+                if (null === $i0 = $this->table_repository->i0(
+                    type_batiment: $this->audit->batiment()->type,
+                    type_emission: TypeEmission::from_type_generateur($this->generateur()->type()),
+                    type_intermittence: $this->type_intermittence(),
+                    regulation_terminale: $this->installation()->regulation_terminale()->presence_regulation,
+                    inertie_lourde: $this->inertie_lourde(),
+                    comptage_individuel: $this->installation()->comptage_individuel(),
+                    chauffage_collectif: $this->generateur()->position()->generateur_collectif,
+                    chauffage_central: false,
+                )) {
+                    throw new \DomainException('Valeur forfaitaire I0 non trouvée');
+                }
+                return $i0;
             }
-            return $i0;
-        }
-        /** @var float[] */
-        $i0s = [];
+            /** @var float[] */
+            $i0s = [];
 
-        foreach ($this->systeme->emetteurs() as $emetteur) {
-            if (null === $i0 = $this->table_repository->i0(
-                type_batiment: $this->audit->batiment()->type,
-                type_emission: $emetteur->type_emission(),
-                type_intermittence: $this->type_intermittence(),
-                regulation_terminale: $this->installation()->regulation_terminale()->presence_regulation,
-                inertie_lourde: $this->inertie_lourde(),
-                comptage_individuel: $this->installation()->comptage_individuel(),
-                chauffage_collectif: $this->generateur()->position()->generateur_collectif,
-                chauffage_central: true,
-            )) {
-                throw new \DomainException('Valeur forfaitaire I0 non trouvée');
+            foreach ($this->systeme->emetteurs() as $emetteur) {
+                if (null === $i0 = $this->table_repository->i0(
+                    type_batiment: $this->audit->batiment()->type,
+                    type_emission: $emetteur->type_emission(),
+                    type_intermittence: $this->type_intermittence(),
+                    regulation_terminale: $this->installation()->regulation_terminale()->presence_regulation,
+                    inertie_lourde: $this->inertie_lourde(),
+                    comptage_individuel: $this->installation()->comptage_individuel(),
+                    chauffage_collectif: $this->generateur()->position()->generateur_collectif,
+                    chauffage_central: true,
+                )) {
+                    throw new \DomainException('Valeur forfaitaire I0 non trouvée');
+                }
+                $i0s[] = $i0;
             }
-            $i0s[] = $i0;
-        }
-        return array_sum($i0s) / count($i0s);
+            return array_sum($i0s) / count($i0s);
+        });
     }
 
     /**
@@ -123,6 +125,7 @@ final class IntermittenceSysteme extends EngineRule
 
         foreach ($entity->chauffage()->systemes() as $systeme) {
             $this->systeme = $systeme;
+            $this->clear();
 
             $intermittences = ScenarioUsage::each(fn(ScenarioUsage $scenario) => Intermittence::create(
                 scenario: $scenario,

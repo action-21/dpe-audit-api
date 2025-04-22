@@ -56,23 +56,25 @@ final class DimensionnementGenerateur extends EngineRule
      */
     public function pn(): float
     {
-        if (null !== $this->generateur->signaletique()->pn) {
-            return $this->generateur->signaletique()->pn;
-        }
-        if (false === $this->generateur->type()->is_chaudiere()) {
-            return $this->pecs();
-        }
-        if ($this->generateur->position()->generateur_multi_batiment) {
-            return $this->pecs();
-        }
-        if (null === $pn = $this->table_repository->pn(
-            type_chaudiere: $this->generateur->signaletique()->type_chaudiere,
-            annee_installation_generateur: $this->annee_installation(),
-            pdim: $this->pdim(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Pn non trouvée');
-        }
-        return $pn;
+        return $this->get("pn", function () {
+            if (null !== $this->generateur->signaletique()->pn) {
+                return $this->generateur->signaletique()->pn;
+            }
+            if (false === $this->generateur->type()->is_chaudiere()) {
+                return $this->pecs();
+            }
+            if ($this->generateur->position()->generateur_multi_batiment) {
+                return $this->pecs();
+            }
+            if (null === $pn = $this->table_repository->pn(
+                type_chaudiere: $this->generateur->signaletique()->type_chaudiere,
+                annee_installation_generateur: $this->annee_installation(),
+                pdim: $this->pdim(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Pn non trouvée');
+            }
+            return $pn;
+        });
     }
 
     public function apply(Audit $entity): void
@@ -81,6 +83,7 @@ final class DimensionnementGenerateur extends EngineRule
 
         foreach ($entity->ecs()->generateurs() as $generateur) {
             $this->generateur = $generateur;
+            $this->clear();
 
             $generateur->calcule($generateur->data()->with(
                 pn: $this->pn(),

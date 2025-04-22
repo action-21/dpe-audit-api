@@ -76,6 +76,9 @@ final class ConsommationVentilation extends EngineRule
             $systeme->ventilation()->calcule($systeme->ventilation()->data()->with(
                 consommations: $consommations
             ));
+            $entity->calcule($entity->data()->with(
+                consommations: $consommations,
+            ));
         }
     }
 

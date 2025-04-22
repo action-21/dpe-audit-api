@@ -59,6 +59,9 @@ final class EmissionAuxiliaire extends EngineRule
             $systeme->chauffage()->calcule($systeme->chauffage()->data()->with(
                 emissions: $emissions,
             ));
+            $entity->calcule($entity->data()->with(
+                emissions: $emissions,
+            ));
         }
     }
 

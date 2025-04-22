@@ -8,6 +8,19 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.engine_rule')]
 abstract class EngineRule
 {
+    private array $cache = [];
+
+    public function get(string $name, callable $callback): mixed
+    {
+        return $this->cache[$name] ?? $this->cache[$name] = $callback();
+    }
+
+    public function clear(): static
+    {
+        $this->cache = [];
+        return $this;
+    }
+
     abstract public function apply(Audit $entity): void;
 
     /**

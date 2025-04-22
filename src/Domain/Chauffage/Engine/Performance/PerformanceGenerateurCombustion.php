@@ -54,19 +54,21 @@ final class PerformanceGenerateurCombustion extends EngineRule
      */
     public function rpn(): Pourcentage
     {
-        if ($this->generateur->combustion()->rpn) {
-            return $this->generateur->combustion()->rpn;
-        }
-        if (null === $rpn = $this->table_repository->rpn(
-            type_generateur: $this->type_generateur(),
-            energie_generateur: $this->energie_generateur(),
-            mode_combustion: $this->generateur->combustion()->mode_combustion,
-            annee_installation_generateur: $this->annee_installation(),
-            pn: $this->pn(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Rpn non trouvée');
-        }
-        return $rpn;
+        return $this->get("rpn", function () {
+            if ($this->generateur->combustion()->rpn) {
+                return $this->generateur->combustion()->rpn;
+            }
+            if (null === $rpn = $this->table_repository->rpn(
+                type_generateur: $this->type_generateur(),
+                energie_generateur: $this->energie_generateur(),
+                mode_combustion: $this->generateur->combustion()->mode_combustion,
+                annee_installation_generateur: $this->annee_installation(),
+                pn: $this->pn(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Rpn non trouvée');
+            }
+            return $rpn;
+        });
     }
 
     /**
@@ -74,19 +76,21 @@ final class PerformanceGenerateurCombustion extends EngineRule
      */
     public function rpint(): Pourcentage
     {
-        if ($this->generateur->combustion()->rpint) {
-            return $this->generateur->combustion()->rpint;
-        }
-        if (null === $rpint = $this->table_repository->rpint(
-            type_generateur: $this->type_generateur(),
-            energie_generateur: $this->energie_generateur(),
-            mode_combustion: $this->generateur->combustion()->mode_combustion,
-            annee_installation_generateur: $this->annee_installation(),
-            pn: $this->pn(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Rpint non trouvée');
-        }
-        return $rpint;
+        return $this->get("rpint", function () {
+            if ($this->generateur->combustion()->rpint) {
+                return $this->generateur->combustion()->rpint;
+            }
+            if (null === $rpint = $this->table_repository->rpint(
+                type_generateur: $this->type_generateur(),
+                energie_generateur: $this->energie_generateur(),
+                mode_combustion: $this->generateur->combustion()->mode_combustion,
+                annee_installation_generateur: $this->annee_installation(),
+                pn: $this->pn(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Rpint non trouvée');
+            }
+            return $rpint;
+        });
     }
 
     /**
@@ -94,21 +98,23 @@ final class PerformanceGenerateurCombustion extends EngineRule
      */
     public function qp0(): float
     {
-        $e = $this->generateur->combustion()->presence_ventouse ? 1.75 : 2.5;
-        $f = $this->generateur->combustion()->presence_ventouse ? -0.55 : -0.8;
+        return $this->get("qp0", function () {
+            $e = $this->generateur->combustion()->presence_ventouse ? 1.75 : 2.5;
+            $f = $this->generateur->combustion()->presence_ventouse ? -0.55 : -0.8;
 
-        if (null === $qp0 = $this->table_repository->qp0(
-            type_generateur: $this->type_generateur(),
-            energie_generateur: $this->energie_generateur(),
-            mode_combustion: $this->generateur->combustion()->mode_combustion,
-            annee_installation_generateur: $this->annee_installation(),
-            pn: $this->pn(),
-            e: $e,
-            f: $f,
-        )) {
-            throw new \DomainException('Valeur forfaitaire QP0 non trouvée');
-        }
-        return $qp0;
+            if (null === $qp0 = $this->table_repository->qp0(
+                type_generateur: $this->type_generateur(),
+                energie_generateur: $this->energie_generateur(),
+                mode_combustion: $this->generateur->combustion()->mode_combustion,
+                annee_installation_generateur: $this->annee_installation(),
+                pn: $this->pn(),
+                e: $e,
+                f: $f,
+            )) {
+                throw new \DomainException('Valeur forfaitaire QP0 non trouvée');
+            }
+            return $qp0;
+        });
     }
 
     /**
@@ -116,16 +122,18 @@ final class PerformanceGenerateurCombustion extends EngineRule
      */
     public function pveilleuse(): float
     {
-        if (null === $pveilleuse = $this->table_repository->pveilleuse(
-            type_generateur: $this->type_generateur(),
-            energie_generateur: $this->energie_generateur(),
-            mode_combustion: $this->generateur->combustion()->mode_combustion,
-            annee_installation_generateur: $this->annee_installation(),
-            pn: $this->pn(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Pveilleuse non trouvée');
-        }
-        return $pveilleuse;
+        return $this->get("pveilleuse", function () {
+            if (null === $pveilleuse = $this->table_repository->pveilleuse(
+                type_generateur: $this->type_generateur(),
+                energie_generateur: $this->energie_generateur(),
+                mode_combustion: $this->generateur->combustion()->mode_combustion,
+                annee_installation_generateur: $this->annee_installation(),
+                pn: $this->pn(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Pveilleuse non trouvée');
+            }
+            return $pveilleuse;
+        });
     }
 
     public static function supports(Generateur $generateur): bool
@@ -155,6 +163,7 @@ final class PerformanceGenerateurCombustion extends EngineRule
                 continue;
             }
             $this->generateur = $generateur;
+            $this->clear();
 
             $generateur->calcule($generateur->data()->with(
                 rpn: $this->rpn(),

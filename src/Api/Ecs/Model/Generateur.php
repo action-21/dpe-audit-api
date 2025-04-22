@@ -58,6 +58,8 @@ final class Generateur
 
         #[Assert\Uuid]
         public readonly ?string $generateur_mixte_id,
+
+        public readonly ?GenerateurData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -82,6 +84,7 @@ final class Generateur
             rpn: $entity->combustion()?->rpn?->value(),
             generateur_mixte_id: $entity->position()->generateur_mixte_id,
             reseau_chaleur_id: $entity->position()->reseau_chaleur?->id(),
+            data: GenerateurData::from($entity),
         );
     }
 

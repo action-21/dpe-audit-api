@@ -69,7 +69,9 @@ final class SimulationCommand extends Command
             $audit = $handle($audit);
             $output->writeln("Etiquette énergie: {$audit->data()->etiquette_energie->id()}");
             $output->writeln("Etiquette climat: {$audit->data()->etiquette_climat->id()}");
-            $output->writeln("Cef: {$audit->data()->consommations->get()}");
+            $output->writeln("Cef: {$audit->data()->cef}");
+            $output->writeln("Cep: {$audit->data()->cep}");
+            $output->writeln("Eges: {$audit->data()->eges}");
             $output->writeln("Cch: {$audit->chauffage()->data()->consommations->get()}");
             $output->writeln("Cecs: {$audit->ecs()->data()->consommations->get()}");
             $output->writeln("Cfr: {$audit->refroidissement()->data()->consommations->get()}");

@@ -73,6 +73,9 @@ final class ConsommationRefroidissement extends EngineRule
             $systeme->refroidissement()->calcule($systeme->refroidissement()->data()->with(
                 consommations: $consommations,
             ));
+            $entity->calcule($entity->data()->with(
+                consommations: $consommations,
+            ));
         }
     }
 

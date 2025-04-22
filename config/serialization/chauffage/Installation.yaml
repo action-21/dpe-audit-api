@@ -1,0 +1,47 @@
+App\Api\Chauffage\Model\Installation:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    surface:
+      groups: ["read", "write"]
+    comptage_individuel:
+      groups: ["read", "write"]
+    solaire_thermique:
+      groups: ["read", "write"]
+    regulation_centrale:
+      groups: ["read", "write"]
+    regulation_terminale:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Chauffage\Model\InstallationData:
+  attributes:
+    rdim:
+      groups: ["read"]
+    fch:
+      groups: ["read"]
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]
+
+App\Api\Chauffage\Model\Regulation:
+  attributes:
+    presence_regulation:
+      groups: ["read", "write"]
+    minimum_temperature:
+      groups: ["read", "write"]
+    detection_presence:
+      groups: ["read", "write"]
+
+App\Api\Chauffage\Model\Solaire:
+  attributes:
+    usage:
+      groups: ["read", "write"]
+    annee_installation:
+      groups: ["read", "write"]
+    fch:
+      groups: ["read", "write"]

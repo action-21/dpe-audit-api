@@ -1,0 +1,25 @@
+App\Api\Ventilation\Model\Generateur:
+  attributes:
+    id:
+      groups: ["read", "write"]
+    description:
+      groups: ["read", "write"]
+    type:
+      groups: ["read", "write"]
+    generateur_collectif:
+      groups: ["read", "write"]
+    presence_echangeur_thermique:
+      groups: ["read", "write"]
+    annee_installation:
+      groups: ["read", "write"]
+    type_vmc:
+      groups: ["read", "write"]
+    data:
+      groups: ["read"]
+
+App\Api\Ventilation\Model\GenerateurData:
+  attributes:
+    consommations:
+      groups: ["read"]
+    emissions:
+      groups: ["read"]

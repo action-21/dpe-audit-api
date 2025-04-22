@@ -51,13 +51,15 @@ final class ProductionRenouvelable extends EngineRule
      */
     public function kpv(): float
     {
-        if (null === $kpv = $this->table_repository->kpv(
-            orientation: $this->panneau_photovoltaique->orientation(),
-            inclinaison: $this->panneau_photovoltaique->inclinaison(),
-        )) {
-            throw new \DomainException("Valeur forfaitaire kpv non trouvée");
-        }
-        return $kpv;
+        return $this->get('kpv', function () {
+            if (null === $kpv = $this->table_repository->kpv(
+                orientation: $this->panneau_photovoltaique->orientation(),
+                inclinaison: $this->panneau_photovoltaique->inclinaison(),
+            )) {
+                throw new \DomainException("Valeur forfaitaire kpv non trouvée");
+            }
+            return $kpv;
+        });
     }
 
     /**
@@ -84,6 +86,7 @@ final class ProductionRenouvelable extends EngineRule
 
         foreach ($entity->production()->panneaux_photovoltaiques() as $panneau) {
             $this->panneau_photovoltaique = $panneau;
+            $this->clear();
 
             $production += $ppv = $this->ppv();
 

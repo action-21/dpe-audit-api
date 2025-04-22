@@ -22,6 +22,8 @@ final class MasqueLointain
 
         #[DpeAssert\Orientation]
         public readonly float $orientation,
+
+        public readonly ?MasqueLointainData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -32,6 +34,7 @@ final class MasqueLointain
             type_masque: $entity->type_masque(),
             hauteur: $entity->hauteur(),
             orientation: $entity->orientation()->value,
+            data: MasqueLointainData::from($entity),
         );
     }
 

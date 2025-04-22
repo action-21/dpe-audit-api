@@ -3,7 +3,8 @@
 namespace App\Domain\Audit;
 
 use App\Domain\Audit\Enum\Etiquette;
-use App\Domain\Audit\ValueObject\{Consommations, Emissions, SollicitationsExterieures};
+use App\Domain\Audit\ValueObject\SollicitationsExterieures;
+use App\Domain\Common\ValueObject\{Consommations, Emissions};
 use Webmozart\Assert\Assert;
 
 final class AuditData
@@ -18,6 +19,9 @@ final class AuditData
         public readonly ?bool $effet_joule,
         public readonly ?Emissions $emissions,
         public readonly ?Consommations $consommations,
+        public readonly ?float $cef,
+        public readonly ?float $cep,
+        public readonly ?float $eges,
         public readonly ?Etiquette $etiquette_energie,
         public readonly ?Etiquette $etiquette_climat,
     ) {}
@@ -32,6 +36,9 @@ final class AuditData
         ?bool $effet_joule = null,
         ?Emissions $emissions = null,
         ?Consommations $consommations = null,
+        ?float $cef = null,
+        ?float $cep = null,
+        ?float $eges = null,
         ?Etiquette $etiquette_energie = null,
         ?Etiquette $etiquette_climat = null,
     ): self {
@@ -39,6 +46,9 @@ final class AuditData
         Assert::nullOrGreaterThan($surface_habitable, 0);
         Assert::nullOrGreaterThan($hauteur_sous_plafond, 0);
         Assert::nullOrGreaterThan($nombre_logements, 0);
+        Assert::nullOrGreaterThanEq($cef, 0);
+        Assert::nullOrGreaterThanEq($cep, 0);
+        Assert::nullOrGreaterThanEq($eges, 0);
 
         return new self(
             volume_habitable: $volume_habitable,
@@ -50,6 +60,9 @@ final class AuditData
             effet_joule: $effet_joule,
             emissions: $emissions,
             consommations: $consommations,
+            cef: $cef,
+            cep: $cep,
+            eges: $eges,
             etiquette_energie: $etiquette_energie,
             etiquette_climat: $etiquette_climat,
         );
@@ -65,6 +78,9 @@ final class AuditData
         ?bool $effet_joule = null,
         ?Emissions $emissions = null,
         ?Consommations $consommations = null,
+        ?float $cef = null,
+        ?float $cep = null,
+        ?float $eges = null,
         ?Etiquette $etiquette_energie = null,
         ?Etiquette $etiquette_climat = null,
     ): self {
@@ -76,8 +92,11 @@ final class AuditData
             sollicitations_exterieures: $sollicitations_exterieures ?? $this->sollicitations_exterieures,
             tbase: $tbase ?? $this->tbase,
             effet_joule: $effet_joule ?? $this->effet_joule,
-            emissions: $emissions ?? $this->emissions,
-            consommations: $consommations ?? $this->consommations,
+            consommations: $consommations ? ($this->consommations?->merge($consommations) ?? $consommations) : $this->consommations,
+            emissions: $emissions ? ($this->emissions?->merge($emissions) ?? $emissions) : $this->emissions,
+            cef: $cef ?? $this->cef,
+            cep: $cep ?? $this->cep,
+            eges: $eges ?? $this->eges,
             etiquette_energie: $etiquette_energie ?? $this->etiquette_energie,
             etiquette_climat: $etiquette_climat ?? $this->etiquette_climat,
         );

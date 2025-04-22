@@ -32,6 +32,8 @@ final class DoubleFenetre
 
         #[Assert\Valid]
         public readonly ?Menuiserie $menuiserie,
+
+        public readonly ?DoubleFenetreData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -46,6 +48,7 @@ final class DoubleFenetre
             sw: $entity->performance()->sw?->value(),
             vitrage: ($value = $entity->vitrage()) ? Vitrage::from_value($value) : null,
             menuiserie: ($value = $entity->menuiserie()) ? Menuiserie::from_value($value) : null,
+            data: DoubleFenetreData::from($entity),
         );
     }
 }

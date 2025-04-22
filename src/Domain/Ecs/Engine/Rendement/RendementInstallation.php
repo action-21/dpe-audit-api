@@ -20,21 +20,23 @@ final class RendementInstallation extends EngineRule
      */
     public function fecs(): Pourcentage
     {
-        if (null === $this->installation->solaire_thermique()) {
-            return Pourcentage::from(0);
-        }
-        if ($this->installation->solaire_thermique()->fecs) {
-            return $this->installation->solaire_thermique()->fecs;
-        }
-        if (null === $fecs = $this->table_repository->fecs(
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            type_batiment: $this->audit->batiment()->type,
-            usage_solaire: $this->installation->solaire_thermique()->usage,
-            annee_installation: $this->installation->solaire_thermique()->annee_installation ?? $this->audit->batiment()->annee_construction,
-        )) {
-            throw new \DomainException("Valeurs forfaitaires Fecs non trouvées");
-        }
-        return $fecs;
+        return $this->get("fecs", function () {
+            if (null === $this->installation->solaire_thermique()) {
+                return Pourcentage::from(0);
+            }
+            if ($this->installation->solaire_thermique()->fecs) {
+                return $this->installation->solaire_thermique()->fecs;
+            }
+            if (null === $fecs = $this->table_repository->fecs(
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                type_batiment: $this->audit->batiment()->type,
+                usage_solaire: $this->installation->solaire_thermique()->usage,
+                annee_installation: $this->installation->solaire_thermique()->annee_installation ?? $this->audit->batiment()->annee_construction,
+            )) {
+                throw new \DomainException("Valeurs forfaitaires Fecs non trouvées");
+            }
+            return $fecs;
+        });
     }
 
     public function apply(Audit $entity): void
@@ -43,6 +45,8 @@ final class RendementInstallation extends EngineRule
 
         foreach ($entity->ecs()->installations() as $installation) {
             $this->installation = $installation;
+            $this->clear();
+
             $installation->calcule($installation->data()->with(
                 fecs: $this->fecs()
             ));

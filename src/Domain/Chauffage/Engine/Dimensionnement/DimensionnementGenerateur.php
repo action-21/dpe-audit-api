@@ -51,26 +51,30 @@ final class DimensionnementGenerateur extends EngineRule
      */
     public function pn(): ?float
     {
-        if (null !== $this->generateur->signaletique()->pn) {
-            return $this->generateur->signaletique()->pn;
-        }
-        if (false === $this->generateur->type()->is_chaudiere()) {
-            return $this->pch();
-        }
-        if (null === $pn = $this->table_repository->pn(
-            type_chaudiere: $this->generateur->signaletique()->type_chaudiere ?? TypeChaudiere::CHAUDIERE_SOL,
-            annee_installation_generateur: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
-            pdim: $this->pdim(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Pn non trouvée');
-        }
-        return $pn;
+        return $this->get("pn", function () {
+            if (null !== $this->generateur->signaletique()->pn) {
+                return $this->generateur->signaletique()->pn;
+            }
+            if (false === $this->generateur->type()->is_chaudiere()) {
+                return $this->pch();
+            }
+            if (null === $pn = $this->table_repository->pn(
+                type_chaudiere: $this->generateur->signaletique()->type_chaudiere ?? TypeChaudiere::CHAUDIERE_SOL,
+                annee_installation_generateur: $this->generateur->annee_installation() ?? $this->audit->batiment()->annee_construction,
+                pdim: $this->pdim(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Pn non trouvée');
+            }
+            return $pn;
+        });
     }
 
     public function apply(Audit $entity): void
     {
         foreach ($entity->chauffage()->generateurs() as $generateur) {
             $this->generateur = $generateur;
+            $this->clear();
+
             $generateur->calcule($generateur->data()->with(
                 pn: $this->pn(),
             ));

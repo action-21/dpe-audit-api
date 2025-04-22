@@ -54,6 +54,9 @@ final class EmissionVentilation extends EngineRule
             $systeme->ventilation()->calcule($systeme->ventilation()->data()->with(
                 emissions: $emissions,
             ));
+            $entity->calcule($entity->data()->with(
+                emissions: $emissions,
+            ));
         }
     }
 

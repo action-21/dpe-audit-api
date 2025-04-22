@@ -52,19 +52,21 @@ final class DeperditionPorte extends DeperditionParoi
      */
     public function u(): float
     {
-        if ($this->paroi->u()) {
-            return $this->paroi->u();
-        }
-        if (null === $value = $this->table_repository->u(
-            presence_sas: $this->paroi->presence_sas(),
-            isolation: $this->isolation(),
-            materiau: $this->materiau(),
-            type_vitrage: $this->type_vitrage(),
-            taux_vitrage: $this->paroi->vitrage()->taux_vitrage->value(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire Uporte non trouvée');
-        }
-        return $value;
+        return $this->get('u', function () {
+            if ($this->paroi->u()) {
+                return $this->paroi->u();
+            }
+            if (null === $value = $this->table_repository->u(
+                presence_sas: $this->paroi->presence_sas(),
+                isolation: $this->isolation(),
+                materiau: $this->materiau(),
+                type_vitrage: $this->type_vitrage(),
+                taux_vitrage: $this->paroi->vitrage()->taux_vitrage->value(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire Uporte non trouvée');
+            }
+            return $value;
+        });
     }
 
     /**
@@ -90,6 +92,7 @@ final class DeperditionPorte extends DeperditionParoi
 
         foreach ($entity->enveloppe()->portes() as $paroi) {
             $this->paroi = $paroi;
+            $this->clear();
 
             $paroi->calcule($paroi->data()->with(
                 sdep: $this->sdep(),

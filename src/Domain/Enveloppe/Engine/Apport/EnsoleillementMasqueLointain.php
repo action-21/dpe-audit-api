@@ -60,17 +60,19 @@ final class EnsoleillementMasqueLointain extends EngineRule
      */
     public function fe2(): float
     {
-        if ($this->masque->type_masque() !== TypeMasqueLointain::MASQUE_LOINTAIN_HOMOGENE) {
-            return 1;
-        }
-        if (null === $fe2 = $this->table_repository->fe2(
-            type_masque_lointain: $this->masque->type_masque(),
-            orientation: $this->masque->baie()->position()->orientation?->enum(),
-            hauteur_masque_alpha: $this->masque->hauteur(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire fe2 non trouvée');
-        }
-        return $fe2;
+        return $this->get("fe2", function () {
+            if ($this->masque->type_masque() !== TypeMasqueLointain::MASQUE_LOINTAIN_HOMOGENE) {
+                return 1;
+            }
+            if (null === $fe2 = $this->table_repository->fe2(
+                type_masque_lointain: $this->masque->type_masque(),
+                orientation: $this->masque->baie()->position()->orientation?->enum(),
+                hauteur_masque_alpha: $this->masque->hauteur(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire fe2 non trouvée');
+            }
+            return $fe2;
+        });
     }
 
     /**
@@ -78,18 +80,20 @@ final class EnsoleillementMasqueLointain extends EngineRule
      */
     public function omb(): float
     {
-        if ($this->masque->type_masque() !== TypeMasqueLointain::MASQUE_LOINTAIN_NON_HOMOGENE) {
-            return 0;
-        }
-        if (null === $omb = $this->table_repository->omb(
-            type_masque_lointain: $this->masque->type_masque(),
-            secteur: $this->secteur(),
-            orientation: $this->masque->baie()->position()->orientation?->enum(),
-            hauteur_masque_alpha: $this->masque->hauteur(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire omb non trouvée');
-        }
-        return $omb;
+        return $this->get("omb", function () {
+            if ($this->masque->type_masque() !== TypeMasqueLointain::MASQUE_LOINTAIN_NON_HOMOGENE) {
+                return 0;
+            }
+            if (null === $omb = $this->table_repository->omb(
+                type_masque_lointain: $this->masque->type_masque(),
+                secteur: $this->secteur(),
+                orientation: $this->masque->baie()->position()->orientation?->enum(),
+                hauteur_masque_alpha: $this->masque->hauteur(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire omb non trouvée');
+            }
+            return $omb;
+        });
     }
 
     public function apply(Audit $entity): void
@@ -97,6 +101,8 @@ final class EnsoleillementMasqueLointain extends EngineRule
         foreach ($entity->enveloppe()->baies() as $baie) {
             foreach ($baie->masques_lointains() as $masque) {
                 $this->masque = $masque;
+                $this->clear();
+
                 $masque->calcule($masque->data()->with(
                     fe2: $this->fe2(),
                     omb: $this->omb(),

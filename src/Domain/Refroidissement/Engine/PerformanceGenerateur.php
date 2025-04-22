@@ -25,16 +25,18 @@ final class PerformanceGenerateur extends EngineRule
      */
     public function eer(): float
     {
-        if ($this->generateur->seer()) {
-            return $this->generateur->seer();
-        }
-        if (null === $eer = $this->table_repository->eer(
-            zone_climatique: $this->audit->adresse()->zone_climatique,
-            annee_installation_generateur: $this->annee_installation(),
-        )) {
-            throw new \DomainException('Valeur forfaitaire EER non trouvé');
-        }
-        return $eer;
+        return $this->get('eer', function () {
+            if ($this->generateur->seer()) {
+                return $this->generateur->seer();
+            }
+            if (null === $eer = $this->table_repository->eer(
+                zone_climatique: $this->audit->adresse()->zone_climatique,
+                annee_installation_generateur: $this->annee_installation(),
+            )) {
+                throw new \DomainException('Valeur forfaitaire EER non trouvé');
+            }
+            return $eer;
+        });
     }
 
     public function apply(Audit $entity): void
@@ -42,7 +44,9 @@ final class PerformanceGenerateur extends EngineRule
         $this->audit = $entity;
 
         foreach ($entity->refroidissement()->generateurs() as $generateur) {
+            $this->clear();
             $this->generateur = $generateur;
+
             $generateur->calcule($generateur->data()->with(
                 eer: $this->eer(),
             ));
