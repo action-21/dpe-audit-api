@@ -167,6 +167,7 @@ final class DeperditionPlancherHaut extends DeperditionParoi
                 b: $this->b(),
                 u0: $this->u0(),
                 u: $this->u(),
+                dp: $this->dp(),
                 performance: $this->performance(),
             ));
 
