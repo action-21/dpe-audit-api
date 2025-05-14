@@ -1,5 +1,7 @@
 App\Api\Ventilation\Model\Ventilation:
   attributes:
+    id:
+      groups: ["read"]
     generateurs:
       groups: ["read", "write"]
     installations:

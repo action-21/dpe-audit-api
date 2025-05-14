@@ -9,17 +9,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class MasqueProche
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeMasqueProche $type_masque,
+        public TypeMasqueProche $type_masque,
 
         #[Assert\Positive]
-        public readonly ?float $profondeur,
+        public ?float $profondeur,
 
-        public readonly ?MasqueProcheData $data,
+        public ?MasqueProcheData $data,
     ) {}
 
     public static function from(Entity $entity): self

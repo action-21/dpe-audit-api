@@ -17,15 +17,15 @@ final class RefroidissementData
         /**
          * @var array<Besoin>
          */
-        public readonly array $besoins,
+        public array $besoins,
         /**
          * @var array<Consommation>
          */
-        public readonly array $consommations,
+        public array $consommations,
         /**
          * @var array<Emission>
          */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

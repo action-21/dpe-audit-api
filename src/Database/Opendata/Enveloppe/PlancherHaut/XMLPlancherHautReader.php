@@ -3,40 +3,21 @@
 namespace App\Database\Opendata\Enveloppe\PlancherHaut;
 
 use App\Database\Opendata\Enveloppe\XMLParoiReader;
-use App\Database\Opendata\Enveloppe\Baie\XMLBaieReader;
-use App\Database\Opendata\Enveloppe\Porte\XMLPorteReader;
-use App\Domain\Common\ValueObject\Annee;
-use App\Domain\Common\ValueObject\Orientation;
+use App\Domain\Common\ValueObject\{Annee, Orientation};
 use App\Domain\Enveloppe\Enum\{EtatIsolation, InertieParoi, TypeIsolation};
 use App\Domain\Enveloppe\Enum\PlancherHaut\{Configuration, TypePlancherHaut};
+use App\Domain\Enveloppe\ValueObject\Isolation;
 
 final class XMLPlancherHautReader extends XMLParoiReader
 {
-    /**
-     * @return XMLBaieReader[]
-     */
-    public function baies(): array
+    public function supports(): bool
     {
-        return array_filter(
-            $this->enveloppe()->baies(),
-            fn(XMLBaieReader $reader) => $reader->match($this->identifiants())
-        );
-    }
-
-    /**
-     * @return XMLPorteReader[]
-     */
-    public function portes(): array
-    {
-        return array_filter(
-            $this->enveloppe()->portes(),
-            fn(XMLPorteReader $reader) => $reader->match($this->identifiants())
-        );
+        return $this->surface() > 0;
     }
 
     public function configuration(): Configuration
     {
-        if ($value = Configuration::from_type_plancher_haut($this->type_structure())) {
+        if ($this->type_structure() && $value = Configuration::from_type_plancher_haut($this->type_structure())) {
             return $value;
         }
         return match ($this->enum_type_adjacence_id()) {
@@ -60,7 +41,7 @@ final class XMLPlancherHautReader extends XMLParoiReader
         return null;
     }
 
-    public function type_structure(): TypePlancherHaut
+    public function type_structure(): ?TypePlancherHaut
     {
         return TypePlancherHaut::from_enum_type_plancher_haut_id($this->enum_type_plancher_haut_id());
     }
@@ -85,7 +66,7 @@ final class XMLPlancherHautReader extends XMLParoiReader
             : InertieParoi::LEGERE;
     }
 
-    public function etat_isolation(): EtatIsolation
+    public function etat_isolation(): ?EtatIsolation
     {
         return EtatIsolation::from_enum_type_isolation_id($this->enum_type_isolation_id());
     }
@@ -147,20 +128,14 @@ final class XMLPlancherHautReader extends XMLParoiReader
         return $this->findOneOrError('.//enum_type_isolation_id')->intval();
     }
 
-    // Données intermédiaires
-
-    public function uph0(): ?float
+    public function isolation(): Isolation
     {
-        return $this->findOne('.//uph0')?->floatval();
-    }
-
-    public function uph(): float
-    {
-        return $this->findOneOrError('.//uph')->floatval();
-    }
-
-    public function b(): float
-    {
-        return $this->findOneOrError('.//b')->floatval();
+        return Isolation::create(
+            etat_isolation: $this->etat_isolation(),
+            type_isolation: $this->type_isolation(),
+            annee_isolation: $this->annee_isolation(),
+            epaisseur_isolation: $this->epaisseur_isolation(),
+            resistance_thermique_isolation: $this->resistance_thermique_isolation(),
+        );
     }
 }

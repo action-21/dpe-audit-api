@@ -2,6 +2,7 @@
 
 namespace App\Domain\Enveloppe\Entity;
 
+use App\Domain\Common\Enum\Orientation;
 use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Entity\ParoiCollection;
 use App\Domain\Enveloppe\Enum\EtatIsolation;
@@ -32,6 +33,13 @@ final class MurCollection extends ParoiCollection
     {
         return $this->filter(
             fn(Mur $item) => $item->paroi_ancienne() === $paroi_ancienne,
+        );
+    }
+
+    public function with_orientation(Orientation $orientation): static
+    {
+        return $this->filter(
+            fn(Mur $item) => $item->orientation()->enum() === $orientation,
         );
     }
 }

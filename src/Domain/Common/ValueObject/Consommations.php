@@ -18,7 +18,7 @@ final class Consommations
             usage: $usage,
             scenario: $scenario,
             energie: $energie,
-            consommation: $callback(scenario: $scenario),
+            cef: $callback(scenario: $scenario),
         )));
     }
 
@@ -42,7 +42,7 @@ final class Consommations
             scenario: $value->scenario,
             usage: $value->usage,
             energie: $value->energie,
-            consommation: $value->consommation_ef + $this->get(
+            cef: $value->cef + $this->get(
                 scenario: $value->scenario,
                 usage: $value->usage,
                 energie: $value->energie,
@@ -75,7 +75,7 @@ final class Consommations
         $values = array_filter($this->values, fn(Consommation $item) => $item->scenario === $scenario);
         $values = $usage ? array_filter($values, fn(Consommation $item) => $item->usage === $usage) : $values;
         $values = $energie ? array_filter($values, fn(Consommation $item) => $item->energie === $energie) : $values;
-        return array_reduce($values, fn(float $carry, Consommation $item) => $carry + ($energie_primaire ? $item->consommation_ep : $item->consommation_ef), 0);
+        return array_reduce($values, fn(float $carry, Consommation $item) => $carry + ($energie_primaire ? $item->cep : $item->cef), 0);
     }
 
     /**

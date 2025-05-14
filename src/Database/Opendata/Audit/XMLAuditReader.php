@@ -3,7 +3,7 @@
 namespace App\Database\Opendata\Audit;
 
 use App\Database\Opendata\{XMLReader, XMLElement};
-use App\Domain\Audit\Enum\{Perimetre, TypeBatiment};
+use App\Domain\Audit\Enum\{Perimetre, PeriodeConstruction, TypeBatiment};
 use App\Domain\Audit\ValueObject\{Adresse, Batiment};
 use App\Domain\Common\ValueObject\{Annee, Id};
 
@@ -12,6 +12,22 @@ final class XMLAuditReader extends XMLReader
     public static function from(XMLElement $xml): static
     {
         return parent::from(static::root($xml));
+    }
+
+    /**
+     * @return array<XMLLogementReader>
+     */
+    public function logements(): array
+    {
+        $readers = array_map(
+            fn(XMLElement $xml) => XMLLogementReader::from($xml),
+            $this->findMany('//logement_visite'),
+        );
+
+        if (empty($readers) && $this->surface_habitable_logement()) {
+            $readers[] = XMLLogementReader::from($this->xml);
+        }
+        return $readers;
     }
 
     public function id(): Id
@@ -44,6 +60,7 @@ final class XMLAuditReader extends XMLReader
     public function batiment(): Batiment
     {
         return Batiment::create(
+            type: $this->type_batiment(),
             annee_construction: $this->annee_construction(),
             altitude: $this->altitude(),
             logements: $this->nombre_appartement() ?? 1,
@@ -97,23 +114,8 @@ final class XMLAuditReader extends XMLReader
         if ($value = $this->findOne('//annee_construction')) {
             return Annee::from($value->intval());
         }
-        return match ($this->enum_periode_construction_id()) {
-            1 => Annee::from(1947),
-            2 => Annee::from(1974),
-            3 => Annee::from(1977),
-            4 => Annee::from(1982),
-            5 => Annee::from(1988),
-            6 => Annee::from(2000),
-            7 => Annee::from(2005),
-            8 => Annee::from(2012),
-            9 => Annee::from(2021),
-            10 => Annee::from((int) $this->date_etablissement()->format('Y')),
-        };
-    }
-
-    public function logements(): int
-    {
-        return $this->nombre_appartement() ?? 1;
+        $enum = PeriodeConstruction::from_periode_construction_id(id: $this->enum_periode_construction_id());
+        return Annee::from($enum->intval());
     }
 
     public function surface_habitable_batiment(): float

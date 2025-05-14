@@ -1,4 +1,4 @@
-﻿configuration;zone_climatique;annee_construction_isolation[gte];annee_construction_isolation[lte];effet_joule;uph;tv_uph_id
+﻿configuration;zone_climatique;annee_construction_isolation/gte;annee_construction_isolation/lte;effet_joule;u;tv_uph_id
 rampants;H1;;1974;1;2.5;1
 rampants;H1;;1974;0;2.5;2
 rampants;H2;;1974;1;2.5;3

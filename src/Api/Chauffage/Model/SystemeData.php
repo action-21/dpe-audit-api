@@ -17,21 +17,21 @@ use App\Domain\Chauffage\ValueObject\{Intermittence, Rendement};
 final class SystemeData
 {
     public function __construct(
-        public readonly ?ConfigurationSysteme $configuration,
-        public readonly ?float $rdim,
-        public readonly ?float $rd,
-        public readonly ?float $re,
-        public readonly ?float $rr,
+        public ?ConfigurationSysteme $configuration,
+        public ?float $rdim,
+        public ?float $rd,
+        public ?float $re,
+        public ?float $rr,
         /** @var Rendement[] */
-        public readonly array $rg,
+        public array $rg,
         /** @var Rendement[] */
-        public readonly array $ich,
+        public array $ich,
         /** @var Intermittence[] */
-        public readonly array $intermittences,
+        public array $intermittences,
         /** @var Consommation[] */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var Emission[] */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

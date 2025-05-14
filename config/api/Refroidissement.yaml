@@ -1,6 +1,7 @@
 resources:
   App\Api\Refroidissement\Model\Refroidissement:
     shortName: Refroidissement
+    collectDenormalizationErrors: true
     normalizationContext:
       groups: ["read"]
     denormalizationContext:
@@ -10,3 +11,8 @@ resources:
         uriTemplate: /audit/{id}/refroidissement
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Refroidissement\State\RefroidissementProvider
+        controller: ApiPlatform\Symfony\Action\NotFoundAction
+        openapi:
+          summary: 🚧 Retourne les données de refroidissement d'un audit énergétique
+          description: |
+            **Disponible après syncrhonisation avec les données de l'observatoire DPE-Audit**

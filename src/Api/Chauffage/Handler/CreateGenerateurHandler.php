@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 final class CreateGenerateurHandler
 {
     public function __construct(
-        #[AutowireIterator(GenerateurFactory::class)]
+        #[AutowireIterator('app.chauffage.generateur.factory')]
         private readonly iterable $factories,
     ) {}
 
@@ -60,9 +60,13 @@ final class CreateGenerateurHandler
                     : null,
             );
 
-            return $factory->set_energie_partie_chaudiere(
-                energie_partie_chaudiere: $payload->energie_partie_chaudiere,
-            );
+            if ($payload->energie_partie_chaudiere) {
+                $factory->set_energie_partie_chaudiere(
+                    energie_partie_chaudiere: $payload->energie_partie_chaudiere,
+                );
+            }
+
+            return $factory;
         }
         return null;
     }

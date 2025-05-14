@@ -9,8 +9,10 @@ use App\Domain\Ecs\Entity\Generateur;
 use App\Domain\Ecs\Enum\{EnergieGenerateur, TypeGenerateur, UsageEcs};
 use App\Domain\Ecs\Repository\ReseauChaleurRepository;
 use App\Domain\Ecs\ValueObject\Generateur\{Position, Signaletique};
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Webmozart\Assert\Assert;
 
+#[AutoconfigureTag('app.ecs.generateur.factory')]
 abstract class GenerateurFactory
 {
     protected Id $id;

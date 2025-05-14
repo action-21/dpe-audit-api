@@ -1,4 +1,4 @@
-﻿type_generateur;type_combustion;energie_generateur;annee_installation_generateur[gte];annee_installation_generateur[lte];pn[gt];pn[lte];pn_max;rpn;qp0;pveilleuse
+﻿type_generateur;type_combustion;energie_generateur;annee_installation_generateur/gte;annee_installation_generateur/lte;pn/gt;pn/lte;pn_max;rpn;qp0;pveilleuse
 accumulateur;basse_temperature;gaz_naturel;;1989;;;;81;1.5 / 100 * Pn;200
 accumulateur;basse_temperature;gaz_naturel;1990;2000;;;;84;1.5 / 100 * Pn;150
 accumulateur;basse_temperature;gaz_naturel;2001;;;;;84;1.5 / 100 * Pn;150

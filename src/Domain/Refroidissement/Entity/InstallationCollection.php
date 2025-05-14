@@ -6,7 +6,7 @@ use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\ValueObject\Id;
 
 /**
- * @property Installation[] $elements
+ * @extends ArrayCollection<Installation>
  */
 final class InstallationCollection extends ArrayCollection
 {

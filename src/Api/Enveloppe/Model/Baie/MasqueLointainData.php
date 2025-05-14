@@ -6,7 +6,7 @@ use App\Domain\Enveloppe\Entity\Baie\MasqueLointain as Entity;
 
 final class MasqueLointainData
 {
-    public function __construct(public readonly ?float $fe2, public readonly ?float $omb,) {}
+    public function __construct(public ?float $fe2, public ?float $omb,) {}
 
     public static function from(Entity $entity): self
     {

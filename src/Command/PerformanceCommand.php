@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use App\Api\Audit\ComputeAuditHandler;
-use App\Database\Opendata\Audit\XMLAuditDeserializer;
 use App\Database\Opendata\XMLElement;
+use App\Serializer\Opendata\XMLAuditDeserializer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;

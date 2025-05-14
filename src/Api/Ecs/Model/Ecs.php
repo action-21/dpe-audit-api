@@ -13,27 +13,30 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Ecs
 {
     public function __construct(
+        public string $id,
+
         /** @var Generateur[] */
         #[Assert\All([new Assert\Type(Generateur::class)])]
         #[Assert\Valid]
-        public readonly array $generateurs,
+        public array $generateurs,
 
         /** @var Installation[] */
         #[Assert\All([new Assert\Type(Installation::class)])]
         #[Assert\Valid]
-        public readonly array $installations,
+        public array $installations,
 
         /** @var Systeme[] */
         #[Assert\All([new Assert\Type(Systeme::class)])]
         #[Assert\Valid]
-        public readonly array $systemes,
+        public array $systemes,
 
-        public readonly ?EcsData $data,
+        public ?EcsData $data,
     ) {}
 
     public static function from(Entity $entity): self
     {
         return new self(
+            id: $entity->id(),
             generateurs: Generateur::from_collection($entity->generateurs()),
             installations: Installation::from_collection($entity->installations()),
             systemes: Systeme::from_collection($entity->systemes()),

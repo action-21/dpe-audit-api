@@ -20,14 +20,20 @@ final class CreatePlancherHautHandler
             configuration: $payload->configuration,
             type_structure: $payload->type_structure,
             inertie: $payload->inertie,
-            annee_construction: $payload->annee_construction ? Annee::from($payload->annee_construction) : null,
-            annee_renovation: $payload->annee_renovation ? Annee::from($payload->annee_renovation) : null,
+            annee_construction: $payload->annee_construction
+                ? Annee::from($payload->annee_construction)
+                : null,
+            annee_renovation: $payload->annee_renovation
+                ? Annee::from($payload->annee_renovation)
+                : null,
             u0: $payload->u0,
             u: $payload->u,
             position: Position::create(
                 surface: $payload->position->surface,
                 mitoyennete: $payload->position->mitoyennete,
-                orientation: Orientation::from($payload->position->orientation),
+                orientation: $payload->position->orientation
+                    ? Orientation::from($payload->position->orientation)
+                    : null,
                 local_non_chauffe: $payload->position->local_non_chauffe_id
                     ? $entity->locaux_non_chauffes()->find(Id::from($payload->position->local_non_chauffe_id))
                     : null,

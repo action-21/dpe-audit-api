@@ -8,18 +8,18 @@ use App\Domain\Enveloppe\Entity\Baie as Entity;
 final class Data
 {
     public function __construct(
-        public readonly ?float $sdep,
-        public readonly ?float $ug,
-        public readonly ?float $uw,
-        public readonly ?float $u,
-        public readonly ?float $b,
-        public readonly ?float $dp,
-        public readonly ?Performance $performance,
-        public readonly ?EtatIsolation $isolation,
-        public readonly ?float $sw,
-        public readonly ?float $fe,
-        public readonly ?float $c1,
-        public readonly ?float $sse,
+        public ?float $sdep,
+        public ?float $ug,
+        public ?float $uw,
+        public ?float $u,
+        public ?float $b,
+        public ?float $dp,
+        public ?Performance $performance,
+        public ?EtatIsolation $isolation,
+        public ?float $sw,
+        public ?float $fe,
+        public ?float $c1,
+        public ?float $sse,
     ) {}
 
     public static function from(Entity $entity): self

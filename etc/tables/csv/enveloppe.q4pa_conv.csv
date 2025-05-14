@@ -1,4 +1,4 @@
-﻿type_batiment;annee_construction[gte];annee_construction[lte];presence_joints_menuiserie;isolation_murs_plafonds;q4pa_conv;tv_q4pa_conv_id
+﻿type_batiment;annee_construction/gte;annee_construction/lte;presence_joints_menuiserie;isolation_murs_plafonds;q4pa_conv;tv_q4pa_conv_id
 maison;;1947;0;non_isole;3.3;5
 maison;;1947;;isole;2;10
 maison;;1947;1;;2.5;12

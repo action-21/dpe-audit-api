@@ -32,7 +32,7 @@ final class Systeme
         if (false === $generateur->type()->is_chauffage_divise()) {
             Assert::notNull($reseau);
         } else {
-            Assert::null($reseau);
+            $reseau = null;
         }
 
         return new self(

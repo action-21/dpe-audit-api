@@ -1,6 +1,7 @@
 resources:
   App\Api\Ventilation\Model\Ventilation:
     shortName: Ventilation
+    collectDenormalizationErrors: true
     normalizationContext:
       groups: ["read"]
     denormalizationContext:
@@ -10,3 +11,8 @@ resources:
         uriTemplate: /audit/{id}/ventilation
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Ventilation\State\VentilationProvider
+        controller: ApiPlatform\Symfony\Action\NotFoundAction
+        openapi:
+          summary: 🚧 Retourne les données de ventilation d'un audit énergétique
+          description: |
+            **Disponible après syncrhonisation avec les données de l'observatoire DPE-Audit**

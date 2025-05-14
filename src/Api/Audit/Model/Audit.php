@@ -12,42 +12,49 @@ use App\Api\Ventilation\Model\Ventilation;
 use App\Domain\Audit\Audit as Entity;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @property Logement[] $logements
+ */
 final class Audit
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
         #[Assert\Date]
-        public readonly string $date_etablissement,
+        public string $date_etablissement,
 
         #[Assert\Valid]
-        public readonly Adresse $adresse,
+        public Adresse $adresse,
 
         #[Assert\Valid]
-        public readonly Batiment $batiment,
+        public Batiment $batiment,
+
+        /** @var Logement[] */
+        #[Assert\All([new Assert\Type(Logement::class)])]
+        #[Assert\Valid]
+        public array $logements,
 
         #[Assert\Valid]
-        public readonly Enveloppe $enveloppe,
+        public Enveloppe $enveloppe,
 
         #[Assert\Valid]
-        public readonly Chauffage $chauffage,
+        public Chauffage $chauffage,
 
         #[Assert\Valid]
-        public readonly Ecs $ecs,
+        public Ecs $ecs,
 
         #[Assert\Valid]
-        public readonly Ventilation $ventilation,
+        public Ventilation $ventilation,
 
         #[Assert\Valid]
-        public readonly Refroidissement $refroidissement,
+        public Refroidissement $refroidissement,
 
         #[Assert\Valid]
-        public readonly Production $production,
+        public Production $production,
 
-        public readonly ?Eclairage $eclairage,
+        public ?Eclairage $eclairage,
 
-        public readonly ?AuditData $data,
+        public ?AuditData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -57,6 +64,7 @@ final class Audit
             date_etablissement: $entity->date_etablissement()->format('Y-m-d'),
             adresse: Adresse::from($entity),
             batiment: Batiment::from($entity),
+            logements: Logement::from_collection($entity->logements()),
             enveloppe: Enveloppe::from($entity->enveloppe()),
             chauffage: Chauffage::from($entity->chauffage()),
             ecs: Ecs::from($entity->ecs()),

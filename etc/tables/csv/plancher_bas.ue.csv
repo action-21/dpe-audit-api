@@ -1,4 +1,4 @@
-﻿mitoyennete;annee_construction[gte];annee_construction[lte];2s/p;u;ue;tv_ue_id
+﻿mitoyennete;annee_construction/gte;annee_construction/lte;2s/p;u;ue;tv_ue_id
 vide_sanitaire;;;3;3.33;0.45;1
 vide_sanitaire;;;4;3.33;0.43;2
 vide_sanitaire;;;5;3.33;0.38;3

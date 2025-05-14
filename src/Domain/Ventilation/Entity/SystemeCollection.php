@@ -4,10 +4,9 @@ namespace App\Domain\Ventilation\Entity;
 
 use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\ValueObject\Id;
-use App\Domain\Ventilation\Enum\TypeVentilation;
 
 /**
- * @property Systeme[] $elements
+ * @extends ArrayCollection<Systeme>
  */
 final class SystemeCollection extends ArrayCollection
 {

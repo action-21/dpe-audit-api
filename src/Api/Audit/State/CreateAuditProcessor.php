@@ -17,11 +17,10 @@ final class CreateAuditProcessor implements ProcessorInterface
     /**
      * @param Audit $data
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Audit
     {
         $handle = $this->handler;
         $entity = $handle($data);
-
         return Audit::from($entity);
     }
 }

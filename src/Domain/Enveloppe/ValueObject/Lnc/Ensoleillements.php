@@ -25,7 +25,7 @@ final class Ensoleillements
 
     public function fe(): float
     {
-        $fe = array_reduce($this->values, fn(float $fe, EnsoleillementBaie $item) => $fe += $item->fe, 0);
+        $fe = array_reduce($this->values, fn(float $fe, Ensoleillement $item) => $fe += $item->fe, 0);
         return $fe / count($this->values);
     }
 

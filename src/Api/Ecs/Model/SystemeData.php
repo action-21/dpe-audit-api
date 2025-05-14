@@ -17,17 +17,17 @@ use App\Domain\Ecs\ValueObject\Rendement;
 final class SystemeData
 {
     public function __construct(
-        public readonly ?float $rdim,
+        public ?float $rdim,
         /** @var Rendement[] */
-        public readonly array $rendements,
+        public array $rendements,
         /** @var Perte[] */
-        public readonly array $pertes,
+        public array $pertes,
         /** @var Perte[] */
-        public readonly array $pertes_recuperables,
+        public array $pertes_recuperables,
         /** @var Consommation[] */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var Emission[] */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

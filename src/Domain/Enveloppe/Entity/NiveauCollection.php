@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\Inertie;
 
 /**
- * @property Niveau[] $elements
+ * @extends ArrayCollection<Niveau>
  */
 final class NiveauCollection extends ArrayCollection
 {

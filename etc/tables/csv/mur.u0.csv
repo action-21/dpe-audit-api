@@ -1,4 +1,4 @@
-﻿type_structure;epaisseur_structure;annee_construction[gte];annee_construction[lte];umur0;tv_umur0_id
+﻿type_structure;epaisseur_structure;annee_construction/gte;annee_construction/lte;umur0;tv_umur0_id
 inconnu;;;;2.5;1
 pierre_moellons;20;;;3.2;2
 pierre_moellons;25;;;2.85;3

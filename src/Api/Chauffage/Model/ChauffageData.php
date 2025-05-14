@@ -17,15 +17,15 @@ final class ChauffageData
 {
     public function __construct(
         /** @var Besoin[] */
-        public readonly array $besoins,
+        public array $besoins,
         /** @var Perte[] */
-        public readonly array $pertes,
+        public array $pertes,
         /** @var Perte[] */
-        public readonly array $pertes_recuperables,
+        public array $pertes_recuperables,
         /** @var Consommation[] */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var Emission[] */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

@@ -1,6 +1,7 @@
 resources:
   App\Api\Audit\Model\Audit:
     shortName: Audit
+    collectDenormalizationErrors: true
     normalizationContext:
       groups: ["read"]
     denormalizationContext:
@@ -9,8 +10,162 @@ resources:
       audit.get:
         uriTemplate: /audit/{id}
         class: ApiPlatform\Metadata\Get
-        provider: App\Api\Audit\State\AuditProvider
+        provider: App\Api\Audit\State\AuditItemProvider
+        openapi:
+          summary: Retourne un audit énergétique existant
+          description: |
+            Retourne un audit énergétique existant depuis l'[observatoire DPE-Audit](https://observatoire-dpe-audit.ademe.fr/).
+
       audit.post:
         uriTemplate: /audit
         class: ApiPlatform\Metadata\Post
         processor: App\Api\Audit\State\AuditProcessor
+        openapi:
+          summary: Publie un audit énergétique
+          description: |
+            Publie un audit énergétique conforme au [standard d'échange de données](https://github.com/action-21/dpe-audit-schema).
+
+      audit.put:
+        uriTemplate: /audit/{id}
+        class: ApiPlatform\Metadata\Put
+        provider: App\Api\Audit\State\AuditItemProvider
+        controller: ApiPlatform\Symfony\Action\NotFoundAction
+        openapi:
+          summary: 🚧 Remplace un audit énergétique existant
+          description: |
+            **Disponible après syncrhonisation avec les données de l'observatoire DPE-Audit**
+
+            Avec la généralisation des IDs du [Référentiel National des Bâtiments (RNB)](https://rnb.beta.gouv.fr/), l'objectif 
+            est de ne permettre d'avoir qu'un unique audit actif par bâtiment.
+
+      audit.post.scenario:
+        uriTemplate: /audit/{id}/scenario
+        class: ApiPlatform\Metadata\Patch
+        provider: App\Api\Audit\State\AuditItemProvider
+        processor: App\Api\Audit\State\PostScenarioProcessor
+        openapi:
+          summary: Applique un scenario de travaux à un audit énergétique existant
+          description: |
+            Avec le nouveau standard d'échange de données, la génération de scénarios de travaux est déportée dans 
+            l'API. Il est dès lors possible de créer autant de scénarios de travaux pour un audit énergétique existant.
+
+  App\Api\Audit\Collection\Audit:
+    shortName: Audit
+    normalizationContext:
+      groups: ["read"]
+    operations:
+      audit.search:
+        uriTemplate: /audits
+        class: ApiPlatform\Metadata\GetCollection
+        provider: App\Api\Audit\State\AuditCollectionProvider
+        openapi:
+          summary: Recherche des audits énergétiques
+          description: |
+            Surchouche de l'Opendata de l'ADEME.
+        parameters:
+          sort:
+            required: false
+            schema:
+              type: string
+          randomize:
+            required: false
+            schema:
+              type: boolean
+          date_etablissement_min:
+            required: false
+            schema:
+              type: string
+              format: date
+          date_etablissement_max:
+            required: false
+            schema:
+              type: string
+              format: date
+          surface_habitable_min:
+            required: false
+            schema:
+              type: number
+          surface_habitable_max:
+            required: false
+            schema:
+              type: number
+          annee_construction_min:
+            required: false
+            schema:
+              type: number
+          annee_construction_max:
+            required: false
+            schema:
+              type: number
+          altitude_min:
+            required: false
+            schema:
+              type: number
+          altitude_max:
+            required: false
+            schema:
+              type: number
+          type_batiment:
+            required: false
+            schema:
+              type: array
+              items:
+                type: string
+                enum:
+                  - maison
+                  - immeuble
+          etiquette_energie:
+            required: false
+            schema:
+              type: array
+              items:
+                type: string
+                enum:
+                  - A
+                  - B
+                  - C
+                  - D
+                  - E
+                  - F
+                  - G
+          etiquette_climat:
+            required: false
+            schema:
+              type: array
+              items:
+                type: string
+                enum:
+                  - A
+                  - B
+                  - C
+                  - D
+                  - E
+                  - F
+                  - G
+          zone_climatique:
+            required: false
+            schema:
+              type: array
+              items:
+                type: string
+                enum:
+                  - H1a
+                  - H1b
+                  - H1c
+                  - H2a
+                  - H2b
+                  - H2c
+                  - H2d
+                  - H3
+          code_postal:
+            required: false
+            schema:
+              type: array
+              items:
+                type: string
+          code_departement:
+            required: false
+            schema:
+              type: array
+              items:
+                type: string

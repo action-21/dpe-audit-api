@@ -6,7 +6,7 @@ use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\ValueObject\Id;
 
 /**
- * @property Logement[] $elements
+ * @extends ArrayCollection<Logement>
  */
 final class LogementCollection extends ArrayCollection
 {

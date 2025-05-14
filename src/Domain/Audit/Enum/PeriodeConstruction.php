@@ -3,6 +3,7 @@
 namespace App\Domain\Audit\Enum;
 
 use App\Domain\Common\Enum\Enum;
+use App\Domain\Common\ValueObject\Annee;
 
 enum PeriodeConstruction: string implements Enum
 {
@@ -16,6 +17,22 @@ enum PeriodeConstruction: string implements Enum
     case ENTRE_2006_2012 = '2006_2012';
     case ENTRE_2013_2021 = '2013_2021';
     case APRES_2021 = 'apres_2021';
+
+    public static function from_periode_construction_id(int $id): self
+    {
+        return match ($id) {
+            1 => self::AVANT_1948,
+            2 => self::ENTRE_1948_1974,
+            3 => self::ENTRE_1975_1977,
+            4 => self::ENTRE_1978_1982,
+            5 => self::ENTRE_1983_1988,
+            6 => self::ENTRE_1989_2000,
+            7 => self::ENTRE_2001_2005,
+            8 => self::ENTRE_2006_2012,
+            9 => self::ENTRE_2013_2021,
+            10 => self::APRES_2021,
+        };
+    }
 
     public function id(): int|string
     {
@@ -52,5 +69,26 @@ enum PeriodeConstruction: string implements Enum
             self::ENTRE_2013_2021 => '2013-2021',
             self::APRES_2021 => 'après 2021',
         };
+    }
+
+    public function intval(): int
+    {
+        return match ($this) {
+            self::AVANT_1948 => 1947,
+            self::ENTRE_1948_1974 => 1966,
+            self::ENTRE_1975_1977 => 1976,
+            self::ENTRE_1978_1982 => 1980,
+            self::ENTRE_1983_1988 => 1985,
+            self::ENTRE_1989_2000 => 1995,
+            self::ENTRE_2001_2005 => 2003,
+            self::ENTRE_2006_2012 => 2009,
+            self::ENTRE_2013_2021 => 2017,
+            self::APRES_2021 => 2021,
+        };
+    }
+
+    public function annee(): Annee
+    {
+        return Annee::from($this->intval());
     }
 }

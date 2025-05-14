@@ -174,7 +174,7 @@ final class XMLEcsTableValeurRepository implements EcsTableValeurRepository
             ->and('type_generateur', $type_generateur)
             ->and('energie_generateur', $energie_generateur)
             ->and('mode_combustion', $mode_combustion)
-            ->andCompareTo('annee_installation', $annee_installation->value())
+            ->andCompareTo('annee_installation_generateur', $annee_installation->value())
             ->getOne()
             ?->floatval('pveilleuse');
     }

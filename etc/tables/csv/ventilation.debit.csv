@@ -1,4 +1,4 @@
-﻿type_ventilation;type_generateur;type_vmc;presence_echangeur_thermique;generateur_collectif;annee_installation[gte];annee_installation[lte];qvarep_conv;qvasouf_conv;smea_conv
+﻿type_ventilation;type_generateur;type_vmc;presence_echangeur_thermique;generateur_collectif;annee_installation/gte;annee_installation/lte;qvarep_conv;qvasouf_conv;smea_conv
 ventilation_mecanique;vmc_simple_flux;autoreglable;;;;1981;1.97;0;2
 ventilation_mecanique;vmc_simple_flux;autoreglable;;;1982;2000;1.65;0;2
 ventilation_mecanique;vmc_simple_flux;autoreglable;;;2001;2012;1.5;0;2

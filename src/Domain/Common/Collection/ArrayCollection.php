@@ -2,10 +2,19 @@
 
 namespace App\Domain\Common\Collection;
 
+/**
+ * @template T of object
+ */
 class ArrayCollection implements Collection
 {
+    /**
+     * @param array<T> $elements
+     */
     public function __construct(protected array $elements = []) {}
 
+    /**
+     * @param array<T> $elements
+     */
     protected function createFrom(array $elements): static
     {
         return new static($elements);
@@ -25,16 +34,25 @@ class ArrayCollection implements Collection
         return \count($this->elements);
     }
 
+    /**
+     * @return array<T>
+     */
     public function to_array(): array
     {
         return $this->elements;
     }
 
+    /**
+     * @return ?T
+     */
     public function first(): ?object
     {
         return $this->count() ? reset($this->elements) : null;
     }
 
+    /**
+     * @return ?T
+     */
     public function last(): ?object
     {
         return $this->count() ? end($this->elements) : null;
@@ -45,11 +63,17 @@ class ArrayCollection implements Collection
         return key($this->elements);
     }
 
+    /**
+     * @return false|T
+     */
     public function next(): mixed
     {
         return next($this->elements);
     }
 
+    /**
+     * @return ?T
+     */
     public function current(): mixed
     {
         return current($this->elements);
@@ -65,6 +89,9 @@ class ArrayCollection implements Collection
         return isset($this->elements[$key]) || \array_key_exists($key, $this->elements);
     }
 
+    /**
+     * @param T $element
+     */
     public function contains(mixed $element): bool
     {
         return in_array($element, $this->elements, true);
@@ -119,11 +146,17 @@ class ArrayCollection implements Collection
         return new static($collection);
     }
 
+    /**
+     * @return array<T>
+     */
     public function values(): array
     {
         return $this->elements;
     }
 
+    /**
+     * @return array<T>
+     */
     public function toArray(): array
     {
         return $this->elements;
@@ -134,6 +167,9 @@ class ArrayCollection implements Collection
         return array_search($element, $this->elements, true);
     }
 
+    /**
+     * @return ?T
+     */
     public function get(string|int $key): mixed
     {
         return $this->elements[$key] ?? null;
@@ -144,16 +180,25 @@ class ArrayCollection implements Collection
         return array_keys($this->elements);
     }
 
+    /**
+     * @param T $value
+     */
     public function set(string|int $key, mixed $value): void
     {
         $this->elements[$key] = $value;
     }
 
+    /**
+     * @param T $element
+     */
     public function add(mixed $element): void
     {
         $this->elements[] = $element;
     }
 
+    /**
+     * @param T $element
+     */
     public function remove(mixed $element): bool
     {
         $key = array_search($element, $this->elements, true);

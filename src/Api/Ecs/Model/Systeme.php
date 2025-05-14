@@ -8,22 +8,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Systeme
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        #[Assert\Uuid]
-        public readonly string $installation_id,
+        public string $installation_id,
 
-        #[Assert\Uuid]
-        public readonly string $generateur_id,
+        public string $generateur_id,
 
         #[Assert\Valid]
-        public readonly Reseau $reseau,
+        public Reseau $reseau,
 
         #[Assert\Valid]
-        public readonly ?Stockage $stockage,
+        public ?Stockage $stockage,
 
-        public readonly ?SystemeData $data,
+        public ?SystemeData $data,
     ) {}
 
     public static function from(Entity $entity): self

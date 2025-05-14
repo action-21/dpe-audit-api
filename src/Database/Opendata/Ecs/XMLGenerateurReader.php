@@ -5,6 +5,7 @@ namespace App\Database\Opendata\Ecs;
 use App\Database\Opendata\XMLReader;
 use App\Domain\Common\ValueObject\{Annee, Id, Pourcentage};
 use App\Domain\Ecs\Enum\{EnergieGenerateur, LabelGenerateur, ModeCombustion, TypeChaudiere, TypeGenerateur, UsageEcs};
+use App\Domain\Ecs\ValueObject\Generateur\{Combustion, Signaletique};
 
 final class XMLGenerateurReader extends XMLReader
 {
@@ -82,6 +83,29 @@ final class XMLGenerateurReader extends XMLReader
         return ModeCombustion::from_enum_type_generateur_ecs_id($this->enum_type_generateur_ecs_id());
     }
 
+    public function combustion(): ?Combustion
+    {
+        return $this->mode_combustion() ? Combustion::create(
+            mode_combustion: $this->mode_combustion(),
+            presence_ventouse: $this->presence_ventouse(),
+            pveilleuse: $this->pveilleuse(),
+            qp0: $this->qp0(),
+            rpn: $this->rpn(),
+        ) : null;
+    }
+
+    public function signaletique(): Signaletique
+    {
+        return Signaletique::create(
+            volume_stockage: $this->volume_stockage(),
+            type_chaudiere: $this->type_chaudiere(),
+            label: $this->label(),
+            pn: $this->pn(),
+            cop: $this->cop(),
+            combustion: $this->combustion(),
+        );
+    }
+
     public function generateur_collectif(): bool
     {
         return $this->installation()->installation_collective();
@@ -124,30 +148,28 @@ final class XMLGenerateurReader extends XMLReader
 
     public function annee_installation(): ?Annee
     {
-        $value = match ($this->enum_type_generateur_ecs_id()) {
-            35 => 1969,
-            36 => 1975,
-            15, 22, 29, 85 => 1977,
-            63, 110 => 1979,
-            37, 45, 92, 46, 54, 93, 101 => 1980,
-            58, 64, 105, 111 => 1989,
-            38, 47, 94 => 1990,
-            16, 23, 30, 86 => 1994,
-            48, 51, 55, 59, 61, 65, 95, 98, 102, 106, 108, 112 => 2000,
-            17, 24, 31, 87 => 2003,
-            1, 4, 7, 10 => 2009,
-            13, 115 => 2011,
-            18, 25, 32, 88 => 2012,
-            2, 5, 8, 11 => 2014,
-            39, 41, 43, 49, 52, 56, 66, 96, 99, 103, 113 => 2015,
-            19, 26, 89 => 2017,
-            20, 27, 33, 90 => 2019,
+        return match ($this->enum_type_generateur_ecs_id()) {
+            35 => Annee::from(1969),
+            36 => Annee::from(1975),
+            15, 22, 29, 85 => Annee::from(1977),
+            63, 110 => Annee::from(1979),
+            37, 45, 92, 46, 54, 93, 101 => Annee::from(1980),
+            58, 64, 105, 111 => Annee::from(1989),
+            38, 47, 94 => Annee::from(1990),
+            16, 23, 30, 86 => Annee::from(1994),
+            48, 51, 55, 59, 61, 65, 95, 98, 102, 106, 108, 112 => Annee::from(2000),
+            17, 24, 31, 87 => Annee::from(2003),
+            1, 4, 7, 10 => Annee::from(2009),
+            13, 115 => Annee::from(2011),
+            18, 25, 32, 88 => Annee::from(2012),
+            2, 5, 8, 11 => Annee::from(2014),
+            39, 41, 43, 49, 52, 56, 66, 96, 99, 103, 113 => Annee::from(2015),
+            19, 26, 89 => Annee::from(2017),
+            20, 27, 33, 90 => Annee::from(2019),
             3, 6, 9, 12, 14, 21, 28, 34, 40, 42, 44, 50, 53, 57, 60, 62, 67, 91, 97, 100, 104, 107, 109,
             114, 116 => $this->audit()->annee_etablissement(),
             default => null,
         };
-
-        return $value ? new Annee($value) : null;
     }
 
     public function label(): ?LabelGenerateur
@@ -266,7 +288,7 @@ final class XMLGenerateurReader extends XMLReader
 
     public function pn(): ?float
     {
-        return $this->findOne('.//pn')?->floatval();
+        return ($value = $this->findOne('.//pn')?->floatval()) ? $value / 1000 : null;
     }
 
     public function qp0(): ?float

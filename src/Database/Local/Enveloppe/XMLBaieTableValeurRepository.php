@@ -3,12 +3,12 @@
 namespace App\Database\Local\Enveloppe;
 
 use App\Domain\Common\Enum\{Mois, Orientation, ZoneClimatique};
-use App\Domain\Common\Functions;
 use App\Domain\Common\ValueObject\{Inclinaison, Pourcentage};
 use App\Domain\Enveloppe\Enum\Baie\{Materiau, NatureGazLame, SecteurChampsVision, TypeBaie, TypeFermeture, TypeMasqueLointain, TypeMasqueProche, TypeSurvitrage, TypeVitrage};
 use App\Domain\Enveloppe\Enum\TypePose;
 use App\Domain\Enveloppe\Service\BaieTableValeurRepository;
 use App\Database\Local\{XMLTableElement, XMLTableDatabase};
+use App\Engine\Performance\Functions;
 
 final class XMLBaieTableValeurRepository extends XMLParoiTableValeurRepository implements BaieTableValeurRepository
 {
@@ -113,7 +113,7 @@ final class XMLBaieTableValeurRepository extends XMLParoiTableValeurRepository i
 
     public function sw(
         TypeBaie $type_baie,
-        TypePose $type_pose,
+        ?TypePose $type_pose,
         ?bool $presence_soubassement,
         ?Materiau $materiau,
         ?TypeVitrage $type_vitrage,
@@ -168,7 +168,7 @@ final class XMLBaieTableValeurRepository extends XMLParoiTableValeurRepository i
         return $this->db->repository('baie.fe2')
             ->createQuery()
             ->and('type_masque_lointain', $type_masque_lointain)
-            ->and('orientation', $orientation)
+            ->and('orientation_baie', $orientation)
             ->andCompareTo('hauteur_masque_alpha', $hauteur_masque_alpha)
             ->getOne()
             ?->floatval('fe2');
@@ -177,14 +177,14 @@ final class XMLBaieTableValeurRepository extends XMLParoiTableValeurRepository i
     public function omb(
         TypeMasqueLointain $type_masque_lointain,
         SecteurChampsVision $secteur,
-        ?Orientation $orientation,
-        ?float $hauteur_masque_alpha,
+        Orientation $orientation,
+        float $hauteur_masque_alpha,
     ): ?float {
         return $this->db->repository('baie.omb')
             ->createQuery()
             ->and('type_masque_lointain', $type_masque_lointain)
             ->and('secteur', $secteur)
-            ->and('orientation', $orientation)
+            ->and('orientation_baie', $orientation)
             ->andCompareTo('hauteur_masque_alpha', $hauteur_masque_alpha)
             ->getOne()
             ?->floatval('omb');

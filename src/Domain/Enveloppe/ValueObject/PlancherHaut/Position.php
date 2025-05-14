@@ -24,6 +24,10 @@ final class Position
     ): self {
         Assert::greaterThan($surface, 0);
 
+        if ($mitoyennete === Mitoyennete::LOCAL_NON_CHAUFFE && null === $local_non_chauffe) {
+            $mitoyennete = Mitoyennete::LOCAL_NON_ACCESSIBLE;
+        }
+
         return new self(
             surface: $surface,
             mitoyennete: $local_non_chauffe ? Mitoyennete::LOCAL_NON_CHAUFFE : $mitoyennete,

@@ -9,17 +9,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Adresse
 {
     public function __construct(
-        public readonly ?string $numero,
+        public ?string $numero,
 
-        public readonly string $nom,
+        public string $nom,
 
-        public readonly string $code_postal,
+        public string $code_postal,
 
-        public readonly string $code_commune,
+        public string $code_commune,
 
-        public readonly string $commune,
+        public string $commune,
 
-        public readonly ?string $ban_id,
+        public ?string $ban_id,
     ) {}
 
     public static function from(Entity $entity): self

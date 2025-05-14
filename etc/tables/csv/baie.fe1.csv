@@ -1,4 +1,4 @@
-﻿type_masque_proche;orientation_baie;avancee_masque[gte];avancee_masque[lt];fe1;avancee_defaut;tv_coef_masque_proche_id
+﻿type_masque_proche;orientation_baie;avancee_masque/gte;avancee_masque/le;fe1;avancee_defaut;tv_coef_masque_proche_id
 fond_balcon_ou_fond_et_flanc_loggias;N;0;1;0.4;0.5;1
 fond_balcon_ou_fond_et_flanc_loggias;N;1;2;0.3;1.5;2
 fond_balcon_ou_fond_et_flanc_loggias;N;2;3;0.2;2.5;3

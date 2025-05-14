@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 
 final class GetEclairageHandler
 {
-    public function __construct(private EclairageRepository $repository) {}
+    public function __construct(private readonly EclairageRepository $repository) {}
 
     public function __invoke(Id $id): ?Eclairage
     {

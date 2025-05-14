@@ -14,7 +14,7 @@ final class Survitrage
 
     public static function create(?TypeSurvitrage $type_survitrage, ?float $epaisseur_lame): self
     {
-        Assert::greaterThan($epaisseur_lame, 0);
+        Assert::greaterThanEq($epaisseur_lame, 0);
         return new self(type_survitrage: $type_survitrage, epaisseur_lame: $epaisseur_lame);
     }
 }

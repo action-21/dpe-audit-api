@@ -4,6 +4,7 @@ namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\XMLReader;
 use App\Domain\Chauffage\Enum\{IsolationReseau, TypeChauffage, TypeDistribution};
+use App\Domain\Chauffage\ValueObject\Reseau;
 use App\Domain\Common\ValueObject\Id;
 
 final class XMLSystemeReader extends XMLReader
@@ -27,6 +28,16 @@ final class XMLSystemeReader extends XMLReader
             $this->chauffage()->emetteurs(),
             fn(XMLEmetteurReader $item): bool => $item->supports() && $item->enum_lien_generateur_emetteur_id() === $this->enum_lien_generateur_emetteur_id(),
         );
+    }
+
+    public function reseau(): ?Reseau
+    {
+        return $this->type_distribution() ? Reseau::create(
+            type_distribution: $this->type_distribution(),
+            isolation: $this->isolation_reseau(),
+            niveaux_desservis: $this->niveaux_desservis(),
+            presence_circulateur_externe: $this->presence_circulateur_externe(),
+        ) : null;
     }
 
     public function id(): Id

@@ -8,13 +8,13 @@ use App\Domain\Enveloppe\Entity\PlancherHaut as Entity;
 final class Data
 {
     public function __construct(
-        public readonly ?float $sdep,
-        public readonly ?float $u0,
-        public readonly ?float $u,
-        public readonly ?float $b,
-        public readonly ?float $dp,
-        public readonly ?EtatIsolation $isolation,
-        public readonly ?Performance $performance,
+        public ?float $sdep,
+        public ?float $u0,
+        public ?float $u,
+        public ?float $b,
+        public ?float $dp,
+        public ?EtatIsolation $isolation,
+        public ?Performance $performance,
     ) {}
 
     public static function from(Entity $entity): self

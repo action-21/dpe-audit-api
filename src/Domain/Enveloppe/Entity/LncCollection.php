@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\Lnc\TypeLnc;
 
 /**
- * @property Lnc[] $elements
+ * @extends ArrayCollection<Lnc>
  */
 final class LncCollection extends ArrayCollection
 {

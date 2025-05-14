@@ -5,6 +5,6 @@ namespace App\Domain\Audit;
 use App\Domain\Common\Collection\ArrayCollection;
 
 /**
- * @property Audit[] $elements
+ * @extends ArrayCollection<Audit>
  */
 final class AuditCollection extends ArrayCollection {}

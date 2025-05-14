@@ -21,6 +21,7 @@ final class Niveau
     ) {}
 
     public static function create(
+        Id $id,
         Enveloppe $enveloppe,
         float $surface,
         Inertie $inertie_paroi_verticale,
@@ -29,7 +30,7 @@ final class Niveau
     ): self {
         Assert::greaterThan($surface, 0);
         return new self(
-            id: Id::create(),
+            id: $id,
             enveloppe: $enveloppe,
             surface: $surface,
             inertie_paroi_verticale: $inertie_paroi_verticale,

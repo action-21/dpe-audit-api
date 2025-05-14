@@ -13,7 +13,7 @@ use App\Domain\Common\ValueObject\Id;
  */
 final class EclairageProvider implements ProviderInterface
 {
-    public function __construct(private GetEclairageHandler $handler) {}
+    public function __construct(private readonly GetEclairageHandler $handler) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?Eclairage
     {

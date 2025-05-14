@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 
 final class GetAuditHandler
 {
-    public function __construct(private AuditRepository $repository) {}
+    public function __construct(private readonly AuditRepository $repository) {}
 
     public function __invoke(Id $id): ?Audit
     {

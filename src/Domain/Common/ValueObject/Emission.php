@@ -10,19 +10,19 @@ final class Emission
     public function __construct(
         public readonly Usage $usage,
         public readonly ScenarioUsage $scenario,
-        public readonly float $emission,
+        public readonly float $eges,
     ) {}
 
     public static function create(
         Usage $usage,
         ScenarioUsage $scenario,
-        float $emission
+        float $eges
     ): self {
-        Assert::greaterThanEq($emission, 0);
+        Assert::greaterThanEq($eges, 0);
         return new self(
             usage: $usage,
             scenario: $scenario,
-            emission: $emission,
+            eges: $eges,
         );
     }
 }

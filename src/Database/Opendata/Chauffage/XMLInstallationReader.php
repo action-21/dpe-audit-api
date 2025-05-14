@@ -4,8 +4,8 @@ namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\{XMLElement, XMLReader};
 use App\Domain\Chauffage\Enum\UsageChauffage;
-use App\Domain\Common\ValueObject\Id;
-use App\Domain\Common\ValueObject\Pourcentage;
+use App\Domain\Chauffage\ValueObject\{Regulation, Solaire};
+use App\Domain\Common\ValueObject\{Id, Pourcentage};
 
 final class XMLInstallationReader extends XMLReader
 {
@@ -31,6 +31,33 @@ final class XMLInstallationReader extends XMLReader
                 $this->findMany('.//emetteur_chauffage_collection//emetteur_chauffage'),
             ),
             fn(XMLEmetteurReader $reader): bool => $reader->supports(),
+        );
+    }
+
+    public function solaire_thermique(): ?Solaire
+    {
+        return $this->usage_solaire() ? new Solaire(
+            usage: $this->usage_solaire(),
+            annee_installation: $this->annee_installation_solaire(),
+            fch: $this->fch_saisi(),
+        ) : null;
+    }
+
+    public function regulation_centrale(): Regulation
+    {
+        return Regulation::create(
+            presence_regulation: $this->presence_regulation_centrale(),
+            minimum_temperature: $this->regulation_centrale_minimum_temperature(),
+            detection_presence: $this->regulation_centrale_detection_presence(),
+        );
+    }
+
+    public function regulation_terminale(): Regulation
+    {
+        return Regulation::create(
+            presence_regulation: $this->presence_regulation_terminale(),
+            minimum_temperature: $this->regulation_terminale_minimum_temperature(),
+            detection_presence: $this->regulation_terminale_detection_presence(),
         );
     }
 

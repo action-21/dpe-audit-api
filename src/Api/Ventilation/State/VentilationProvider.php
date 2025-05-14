@@ -13,7 +13,7 @@ use App\Domain\Common\ValueObject\Id;
  */
 final class VentilationProvider implements ProviderInterface
 {
-    public function __construct(private GetVentilationHandler $handler) {}
+    public function __construct(private readonly GetVentilationHandler $handler) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?Ventilation
     {

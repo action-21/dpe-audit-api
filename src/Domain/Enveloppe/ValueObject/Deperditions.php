@@ -42,9 +42,9 @@ final class Deperditions
         return $value;
     }
 
-    public function get(?TypeDeperdition $type = null): float
+    public function get(TypeDeperdition ...$types): float
     {
-        $values = $type ? array_filter($this->values, fn(Deperdition $value) => $value->type === $type) : $this->values;
+        $values = $types ? array_filter($this->values, fn(Deperdition $value) => in_array($value->type, $types)) : $this->values;
         return array_reduce($values, fn(float $dp, Deperdition $value) => $dp + $value->deperdition, 0);
     }
 

@@ -9,17 +9,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class ParoiOpaque
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly ?EtatIsolation $isolation,
+        public ?EtatIsolation $isolation,
 
         #[Assert\Valid]
-        public readonly PositionParoiOpaque $position,
+        public PositionParoiOpaque $position,
 
-        public readonly ?ParoiOpaqueData $data,
+        public ?ParoiOpaqueData $data,
     ) {}
 
     public static function from(Entity $entity): self

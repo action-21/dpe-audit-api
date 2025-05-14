@@ -17,7 +17,7 @@ final class Emissions
         return self::from(...ScenarioUsage::each(fn(ScenarioUsage $scenario) => Emission::create(
             usage: $usage,
             scenario: $scenario,
-            emission: $callback(scenario: $scenario),
+            eges: $callback(scenario: $scenario),
         )));
     }
 
@@ -36,7 +36,7 @@ final class Emissions
         $values = [Emission::create(
             scenario: $value->scenario,
             usage: $value->usage,
-            emission: $value->emission + $this->get(scenario: $value->scenario, usage: $value->usage),
+            eges: $value->eges + $this->get(scenario: $value->scenario, usage: $value->usage),
         )];
 
         foreach ($this->values as $item) {
@@ -60,7 +60,7 @@ final class Emissions
     {
         $values = array_filter($this->values, fn(Emission $item) => $item->scenario === $scenario);
         $values = $usage ? array_filter($values, fn(Emission $item) => $item->usage === $usage) : $values;
-        return array_reduce($values, fn(float $carry, Emission $item) => $carry + $item->emission, 0);
+        return array_reduce($values, fn(float $eges, Emission $item) => $eges + $item->eges, 0);
     }
 
     /**

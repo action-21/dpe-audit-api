@@ -10,25 +10,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Generateur
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeGenerateur $type,
+        public TypeGenerateur $type,
 
-        public readonly EnergieGenerateur $energie,
+        public EnergieGenerateur $energie,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_installation,
+        public ?int $annee_installation,
 
         #[Assert\Positive]
-        public readonly ?float $seer,
+        public ?float $seer,
 
-        #[Assert\Uuid]
-        public readonly ?string $reseau_froid_id,
+        public ?string $reseau_froid_id,
 
-        public readonly ?GenerateurData $data,
+        public ?GenerateurData $data,
     ) {}
 
     public static function from(Entity $entity): self

@@ -10,15 +10,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Vitrage
 {
     public function __construct(
-        public readonly ?TypeVitrage $type_vitrage,
+        public ?TypeVitrage $type_vitrage,
 
-        public readonly ?NatureGazLame $nature_lame,
+        public ?NatureGazLame $nature_lame,
 
         #[Assert\PositiveOrZero]
-        public readonly ?float $epaisseur_lame,
+        public ?float $epaisseur_lame,
 
         #[Assert\Valid]
-        public readonly ?Survitrage $survitrage,
+        public ?Survitrage $survitrage,
     ) {}
 
     public static function from(Entity $entity): ?self

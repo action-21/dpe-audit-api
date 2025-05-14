@@ -10,56 +10,55 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Generateur
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeGenerateur $type,
+        public TypeGenerateur $type,
 
-        public readonly EnergieGenerateur $energie,
+        public EnergieGenerateur $energie,
 
         #[Assert\PositiveOrZero]
-        public readonly float $volume_stockage,
+        public float $volume_stockage,
 
-        public readonly bool $generateur_collectif,
+        public bool $generateur_collectif,
 
-        public readonly bool $position_volume_chauffe,
+        public bool $generateur_multi_batiment,
+
+        public bool $position_volume_chauffe,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_installation,
+        public ?int $annee_installation,
 
         #[Assert\Positive]
-        public readonly ?float $pn,
+        public ?float $pn,
 
         #[Assert\Positive]
-        public readonly ?float $cop,
+        public ?float $cop,
 
-        public readonly ?LabelGenerateur $label,
+        public ?LabelGenerateur $label,
 
-        public readonly ?TypeChaudiere $type_chaudiere,
+        public ?TypeChaudiere $type_chaudiere,
 
-        public readonly ?ModeCombustion $mode_combustion,
+        public ?ModeCombustion $mode_combustion,
 
-        public readonly ?bool $presence_ventouse,
+        public ?bool $presence_ventouse,
 
         #[Assert\PositiveOrZero]
-        public readonly ?float $pveilleuse,
+        public ?float $pveilleuse,
 
         #[Assert\Positive]
-        public readonly ?float $qp0,
+        public ?float $qp0,
 
         #[Assert\Positive]
         #[Assert\LessThanOrEqual(150)]
-        public readonly ?float $rpn,
+        public ?float $rpn,
 
-        #[Assert\Uuid]
-        public readonly ?string $reseau_chaleur_id,
+        public ?string $reseau_chaleur_id,
 
-        #[Assert\Uuid]
-        public readonly ?string $generateur_mixte_id,
+        public ?string $generateur_mixte_id,
 
-        public readonly ?GenerateurData $data,
+        public ?GenerateurData $data,
     ) {}
 
     public static function from(Entity $entity): self
@@ -71,6 +70,7 @@ final class Generateur
             energie: $entity->energie(),
             volume_stockage: $entity->signaletique()->volume_stockage,
             generateur_collectif: $entity->position()->generateur_collectif,
+            generateur_multi_batiment: $entity->position()->generateur_multi_batiment,
             position_volume_chauffe: $entity->position()->position_volume_chauffe,
             annee_installation: $entity->annee_installation()?->value,
             pn: $entity->signaletique()->pn,

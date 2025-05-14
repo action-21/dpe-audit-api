@@ -19,59 +19,65 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Enveloppe
 {
     public function __construct(
-        public readonly Exposition $exposition,
+        public string $id,
+
+        public Exposition $exposition,
 
         #[Assert\Positive]
-        public readonly ?float $q4pa_conv,
+        public ?float $q4pa_conv,
+
+        public bool $presence_brasseurs_air,
 
         /** @var Lnc[] */
         #[Assert\All([new Assert\Type(Lnc::class)])]
         #[Assert\Valid]
-        public readonly array $locaux_non_chauffes,
+        public array $locaux_non_chauffes,
 
         /** @var Baie[] */
         #[Assert\All([new Assert\Type(Baie::class)])]
         #[Assert\Valid]
-        public readonly array $baies,
+        public array $baies,
 
         /** @var Mur[] */
         #[Assert\All([new Assert\Type(Mur::class)])]
         #[Assert\Valid]
-        public readonly array $murs,
+        public array $murs,
 
         /** @var PlancherBas[] */
         #[Assert\All([new Assert\Type(PlancherBas::class)])]
         #[Assert\Valid]
-        public readonly array $planchers_bas,
+        public array $planchers_bas,
 
         /** @var PlancherHaut[] */
         #[Assert\All([new Assert\Type(PlancherHaut::class)])]
         #[Assert\Valid]
-        public readonly array $planchers_hauts,
+        public array $planchers_hauts,
 
         /** @var Porte[] */
         #[Assert\All([new Assert\Type(Porte::class)])]
         #[Assert\Valid]
-        public readonly array $portes,
+        public array $portes,
 
         /** @var PontThermique[] */
         #[Assert\All([new Assert\Type(PontThermique::class)])]
         #[Assert\Valid]
-        public readonly array $ponts_thermiques,
+        public array $ponts_thermiques,
 
         /** @var Niveau[] */
         #[Assert\All([new Assert\Type(Niveau::class)])]
         #[Assert\Valid]
-        public readonly array $niveaux,
+        public array $niveaux,
 
-        public readonly ?EnveloppeData $data,
+        public ?EnveloppeData $data,
     ) {}
 
     public static function from(Entity $entity): self
     {
         return new self(
+            id: $entity->id(),
             exposition: $entity->exposition(),
             q4pa_conv: $entity->q4pa_conv(),
+            presence_brasseurs_air: $entity->presence_brasseurs_air(),
             locaux_non_chauffes: Lnc::from_collection($entity->locaux_non_chauffes()),
             baies: Baie::from_collection($entity->baies()),
             murs: Mur::from_collection($entity->murs()),

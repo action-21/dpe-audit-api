@@ -126,7 +126,7 @@ final class PlancherHaut extends Paroi
     /** @inheritdoc */
     public function pont_thermique_negligeable(): bool
     {
-        return $this->type_structure->pont_thermique_negligeable();
+        return $this->type_structure?->pont_thermique_negligeable() ?? false;
     }
 
     public function description(): string
@@ -177,6 +177,22 @@ final class PlancherHaut extends Paroi
     public function isolation(): Isolation
     {
         return $this->isolation;
+    }
+
+    /**
+     * @return BaieCollection<Baie>
+     */
+    public function baies(): BaieCollection
+    {
+        return $this->enveloppe->baies()->with_paroi($this->id);
+    }
+
+    /**
+     * @return PorteCollection<Porte>
+     */
+    public function portes(): PorteCollection
+    {
+        return $this->enveloppe->portes()->with_paroi($this->id);
     }
 
     public function data(): PlancherHautData

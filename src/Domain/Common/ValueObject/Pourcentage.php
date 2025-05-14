@@ -16,12 +16,6 @@ final class Pourcentage
         return static::from($value * 100);
     }
 
-    #[\Deprecated]
-    public function number(): int|float
-    {
-        return $this->value / 100;
-    }
-
     public function decimal(): float
     {
         return $this->value / 100;

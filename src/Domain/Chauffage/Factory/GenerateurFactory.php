@@ -9,8 +9,10 @@ use App\Domain\Chauffage\Enum\{EnergieGenerateur, TypeGenerateur, UsageChauffage
 use App\Domain\Chauffage\Repository\ReseauChaleurRepository;
 use App\Domain\Chauffage\ValueObject\Generateur\{Position, Signaletique};
 use App\Domain\Common\ValueObject\{Annee, Id};
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Webmozart\Assert\Assert;
 
+#[AutoconfigureTag('app.chauffage.generateur.factory')]
 abstract class GenerateurFactory
 {
     protected Id $id;

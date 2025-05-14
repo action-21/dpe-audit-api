@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\Mitoyennete;
 
 /**
- * @property ParoiOpaque[] $elements
+ * @extends ArrayCollection<ParoiOpaque>
  */
 final class ParoiOpaqueCollection extends ArrayCollection
 {

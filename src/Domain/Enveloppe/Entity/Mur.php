@@ -36,7 +36,7 @@ final class Mur extends Paroi
         Id $id,
         Enveloppe $enveloppe,
         string $description,
-        TypeMur $type_structure,
+        ?TypeMur $type_structure,
         ?float $epaisseur_structure,
         TypeDoublage $type_doublage,
         bool $presence_enduit_isolant,
@@ -128,7 +128,7 @@ final class Mur extends Paroi
     }
 
     /** @inheritdoc */
-    public function orientation(): ?Orientation
+    public function orientation(): Orientation
     {
         return $this->position->orientation;
     }
@@ -136,7 +136,7 @@ final class Mur extends Paroi
     /** @inheritdoc */
     public function pont_thermique_negligeable(): bool
     {
-        return $this->type_structure->pont_thermique_negligeable();
+        return $this->type_structure?->pont_thermique_negligeable() ?? false;
     }
 
     public function description(): string
@@ -144,7 +144,7 @@ final class Mur extends Paroi
         return $this->description;
     }
 
-    public function type_structure(): TypeMur
+    public function type_structure(): ?TypeMur
     {
         return $this->type_structure;
     }
@@ -154,7 +154,7 @@ final class Mur extends Paroi
         return $this->epaisseur_structure;
     }
 
-    public function type_doublage(): TypeDoublage
+    public function type_doublage(): ?TypeDoublage
     {
         return $this->type_doublage;
     }
@@ -202,6 +202,22 @@ final class Mur extends Paroi
     public function isolation(): Isolation
     {
         return $this->isolation;
+    }
+
+    /**
+     * @return BaieCollection<Baie>
+     */
+    public function baies(): BaieCollection
+    {
+        return $this->enveloppe->baies()->with_paroi($this->id);
+    }
+
+    /**
+     * @return PorteCollection<Porte>
+     */
+    public function portes(): PorteCollection
+    {
+        return $this->enveloppe->portes()->with_paroi($this->id);
     }
 
     public function data(): MurData

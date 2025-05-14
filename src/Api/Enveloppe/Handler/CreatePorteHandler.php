@@ -3,7 +3,7 @@
 namespace App\Api\Enveloppe\Handler;
 
 use App\Api\Enveloppe\Model\Porte as Payload;
-use App\Domain\Common\ValueObject\{Annee, Id, Orientation};
+use App\Domain\Common\ValueObject\{Annee, Id, Orientation, Pourcentage};
 use App\Domain\Enveloppe\Entity\Porte;
 use App\Domain\Enveloppe\Enveloppe;
 use App\Domain\Enveloppe\ValueObject\Porte\{Menuiserie, Position, Vitrage};
@@ -20,7 +20,9 @@ final class CreatePorteHandler
             isolation: $payload->isolation,
             materiau: $payload->materiau,
             presence_sas: $payload->presence_sas,
-            annee_installation: $payload->annee_installation ? Annee::from($payload->annee_installation) : null,
+            annee_installation: $payload->annee_installation
+                ? Annee::from($payload->annee_installation)
+                : null,
             u: $payload->u,
             position: Position::create(
                 surface: $payload->position->surface,
@@ -36,7 +38,7 @@ final class CreatePorteHandler
                     : null,
             ),
             vitrage: Vitrage::create(
-                taux_vitrage: $payload->vitrage->taux_vitrage,
+                taux_vitrage: Pourcentage::from($payload->vitrage->taux_vitrage),
                 type_vitrage: $payload->vitrage->type_vitrage,
             ),
             menuiserie: Menuiserie::create(

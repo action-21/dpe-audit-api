@@ -10,22 +10,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Position
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly ?string $paroi_id,
+        public ?string $paroi_id,
 
-        #[Assert\Uuid]
-        public readonly ?string $local_non_chauffe_id,
+        public ?string $local_non_chauffe_id,
 
         #[Assert\Positive]
-        public readonly float $surface,
+        public float $surface,
 
         #[DpeAssert\Inclinaison]
-        public readonly float $inclinaison,
+        public float $inclinaison,
 
         #[DpeAssert\Orientation]
-        public readonly ?float $orientation,
+        public ?float $orientation,
 
-        public readonly Mitoyennete $mitoyennete,
+        public Mitoyennete $mitoyennete,
     ) {}
 
     public static function from(Entity $entity): self

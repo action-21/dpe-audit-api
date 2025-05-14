@@ -4,6 +4,7 @@ namespace App\Database\Opendata\Chauffage;
 
 use App\Database\Opendata\XMLReader;
 use App\Domain\Chauffage\Enum\{EnergieGenerateur, LabelGenerateur, ModeCombustion, TypeChaudiere, TypeGenerateur, UsageChauffage};
+use App\Domain\Chauffage\ValueObject\Generateur\{Combustion, Signaletique};
 use App\Domain\Common\ValueObject\{Annee, Id, Pourcentage};
 
 final class XMLGenerateurReader extends XMLReader
@@ -39,13 +40,11 @@ final class XMLGenerateurReader extends XMLReader
 
     public function references(): array
     {
-        return [
+        return array_filter([
             $this->reference(),
             $this->reference_generateur_mixte(),
-            \preg_replace('/(#\d+)/', '', $this->reference()),
-            \preg_replace('/(#\d+)/', '', $this->reference_generateur_mixte()),
             $this->findOne('.//description')?->reference(),
-        ];
+        ]);
     }
 
     public function installation(): XMLInstallationReader
@@ -62,6 +61,33 @@ final class XMLGenerateurReader extends XMLReader
             $this->chauffage()->emetteurs(),
             fn(XMLEmetteurReader $item): bool => $item->supports() && $item->enum_lien_generateur_emetteur_id() === $this->enum_lien_generateur_emetteur_id(),
         );
+    }
+
+    public function signaletique(): Signaletique
+    {
+        return Signaletique::create(
+            type_chaudiere: $this->type_chaudiere(),
+            pn: $this->pn_saisi(),
+            scop: $this->scop_saisi(),
+            label: $this->label(),
+            priorite_cascade: $this->priorite_cascade(),
+            combustion: $this->combustion(),
+        );
+    }
+
+    public function combustion(): ?Combustion
+    {
+        return $this->mode_combustion() ? Combustion::create(
+            mode_combustion: $this->mode_combustion(),
+            presence_ventouse: $this->presence_ventouse(),
+            presence_regulation_combustion: $this->presence_regulation_combustion(),
+            pveilleuse: $this->pveilleuse_saisi(),
+            qp0: $this->qp0_saisi(),
+            rpn: $this->rpn_saisi(),
+            rpint: $this->rpint_saisi(),
+            tfonc30: $this->tfonc30_saisi(),
+            tfonc100: $this->tfonc100_saisi(),
+        ) : null;
     }
 
     /**
@@ -343,7 +369,7 @@ final class XMLGenerateurReader extends XMLReader
 
     public function pn(): ?float
     {
-        return $this->findOne('.//pn')?->floatval();
+        return ($value = $this->findOne('.//pn')?->floatval()) ? $value / 1000 : null;
     }
 
     public function qp0(): ?float

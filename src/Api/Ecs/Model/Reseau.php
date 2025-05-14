@@ -9,14 +9,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Reseau
 {
     public function __construct(
-        public readonly bool $alimentation_contigue,
+        public bool $alimentation_contigue,
 
         #[Assert\Positive]
-        public readonly int $niveaux_desservis,
+        public int $niveaux_desservis,
 
-        public readonly ?IsolationReseau $isolation,
+        public ?IsolationReseau $isolation,
 
-        public readonly ?BouclageReseau $bouclage,
+        public ?BouclageReseau $bouclage,
     ) {}
 
     public static function from(Entity $entity): self

@@ -10,18 +10,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Isolation
 {
     public function __construct(
-        public readonly ?EtatIsolation $etat_isolation,
+        public ?EtatIsolation $etat_isolation,
 
-        public readonly ?TypeIsolation $type_isolation,
+        public ?TypeIsolation $type_isolation,
 
         #[Assert\Positive]
-        public readonly ?float $epaisseur_isolation,
+        public ?float $epaisseur_isolation,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_isolation,
+        public ?int $annee_isolation,
 
         #[Assert\Positive]
-        public readonly ?float $resistance_thermique_isolation,
+        public ?float $resistance_thermique_isolation,
     ) {}
 
     public static function from(Entity $entity): self

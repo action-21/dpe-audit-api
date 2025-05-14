@@ -12,17 +12,17 @@ use App\Domain\Ventilation\Entity\Systeme as Entity;
 final class SystemeData
 {
     public function __construct(
-        public readonly ?float $rdim,
-        public readonly ?float $qvarep_conv,
-        public readonly ?float $qvasouf_conv,
-        public readonly ?float $smea_conv,
-        public readonly ?float $ratio_utilisation,
-        public readonly ?float $pvent_moy,
-        public readonly ?float $pvent,
+        public ?float $rdim,
+        public ?float $qvarep_conv,
+        public ?float $qvasouf_conv,
+        public ?float $smea_conv,
+        public ?float $ratio_utilisation,
+        public ?float $pvent_moy,
+        public ?float $pvent,
         /** @var array<Consommation> */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var array<Emission> */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

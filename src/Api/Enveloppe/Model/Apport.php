@@ -8,13 +8,13 @@ use App\Domain\Enveloppe\ValueObject\Apports as Value;
 final class Apport
 {
     public function __construct(
-        public readonly ScenarioUsage $scenario,
-        public readonly float $f,
-        public readonly float $apport_interne,
-        public readonly float $apport_interne_fr,
-        public readonly float $apport_solaire,
-        public readonly float $apport_solaire_fr,
-        public readonly float $sse,
+        public ScenarioUsage $scenario,
+        public float $f,
+        public float $apport_interne,
+        public float $apport_interne_fr,
+        public float $apport_solaire,
+        public float $apport_solaire_fr,
+        public float $sse,
     ) {}
 
     /**

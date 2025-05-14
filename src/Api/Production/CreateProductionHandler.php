@@ -17,8 +17,9 @@ final class CreateProductionHandler
         $entity = Production::create();
 
         foreach ($payload->panneaux_photovoltaiques as $panneau_photovoltaique) {
-            $handle = $this->panneau_photovoltaique_handler;
-            $entity->add_panneau_photovoltaique($handle(payload: $panneau_photovoltaique, production: $entity));
+            $entity->add_panneau_photovoltaique(
+                $this->panneau_photovoltaique_handler->__invoke(payload: $panneau_photovoltaique, production: $entity)
+            );
         }
 
         return $entity;

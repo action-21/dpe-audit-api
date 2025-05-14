@@ -9,23 +9,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Baie
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeBaie $type_baie,
+        public TypeBaie $type_baie,
 
-        public readonly ?Materiau $materiau,
+        public ?Materiau $materiau,
 
-        public readonly ?TypeVitrage $type_vitrage,
+        public ?TypeVitrage $type_vitrage,
 
-        public readonly ?bool $presence_rupteur_pont_thermique,
+        public ?bool $presence_rupteur_pont_thermique,
 
         #[Assert\Valid]
-        public readonly PositionBaie $position,
+        public PositionBaie $position,
 
-        public readonly ?BaieData $data,
+        public ?BaieData $data,
     ) {}
 
     public static function from(Entity $entity): self

@@ -121,7 +121,7 @@ final class XMLChauffageTableValeurRepository implements ChauffageTableValeurRep
     public function rg(
         TypeGenerateur $type_generateur,
         EnergieGenerateur $energie_generateur,
-        LabelGenerateur $label_generateur,
+        ?LabelGenerateur $label_generateur,
         Annee $anne_installation_generateur
     ): ?float {
         return $this->db->repository('chauffage.rg')
@@ -234,7 +234,7 @@ final class XMLChauffageTableValeurRepository implements ChauffageTableValeurRep
                 $pn = $record->floatval('pn_max') ? max($record->floatval('pn_max'), $pn) : $pn;
                 $expression = $record->strval('qp0');
                 $value =  $this->expression_resolver->evalue($expression, ['Pn' => $pn, 'E' => $e, 'F' => $f]);
-                return Pourcentage::from_decimal($value);
+                return $value;
             });
     }
 

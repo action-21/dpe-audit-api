@@ -10,13 +10,13 @@ final class Niveau
 {
     public function __construct(
         #[Assert\Positive]
-        public readonly float $surface,
+        public float $surface,
 
-        public readonly ?Inertie $inertie_paroi_verticale,
+        public ?Inertie $inertie_paroi_verticale,
 
-        public readonly ?Inertie $inertie_plancher_bas,
+        public ?Inertie $inertie_plancher_bas,
 
-        public readonly ?Inertie $inertie_plancher_haut,
+        public ?Inertie $inertie_plancher_haut,
     ) {}
 
     public static function from(Entity $entity): self

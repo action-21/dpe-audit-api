@@ -13,7 +13,7 @@ use App\Domain\Common\ValueObject\Id;
  */
 final class EnveloppeProvider implements ProviderInterface
 {
-    public function __construct(private GetEnveloppeHandler $handler) {}
+    public function __construct(private readonly GetEnveloppeHandler $handler) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?Enveloppe
     {

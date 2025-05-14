@@ -36,6 +36,8 @@ final class Audit
     ) {}
 
     public static function create(
+        Id $id,
+        \DateTimeImmutable $date_etablissement,
         Adresse $adresse,
         Batiment $batiment,
         Enveloppe $enveloppe,
@@ -46,8 +48,8 @@ final class Audit
         Production $production,
     ): self {
         return new self(
-            id: Id::create(),
-            date_etablissement: new \DateTimeImmutable(),
+            id: $id,
+            date_etablissement: $date_etablissement,
             etat: Etat::SIMULATION,
             adresse: $adresse,
             batiment: $batiment,

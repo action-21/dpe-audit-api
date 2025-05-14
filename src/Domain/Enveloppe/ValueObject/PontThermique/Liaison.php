@@ -14,6 +14,36 @@ final class Liaison
         public readonly ?Paroi $paroi,
     ) {}
 
+    public static function create(
+        TypeLiaison $type,
+        Mur $mur,
+        ?Paroi $paroi,
+        bool $pont_thermique_partiel = false,
+    ): self {
+        return match ($type) {
+            TypeLiaison::PLANCHER_BAS_MUR => self::create_liaison_plancher_bas_mur(
+                mur: $mur,
+                paroi: $paroi,
+            ),
+            TypeLiaison::PLANCHER_INTERMEDIAIRE_MUR => self::create_liaison_plancher_intermediaire_mur(
+                mur: $mur,
+                pont_thermique_partiel: $pont_thermique_partiel,
+            ),
+            TypeLiaison::PLANCHER_HAUT_MUR => self::create_liaison_plancher_haut_mur(
+                mur: $mur,
+                paroi: $paroi,
+            ),
+            TypeLiaison::REFEND_MUR => self::create_liaison_refend_mur(
+                mur: $mur,
+                pont_thermique_partiel: $pont_thermique_partiel,
+            ),
+            TypeLiaison::MENUISERIE_MUR => self::create_liaison_menuiserie_mur(
+                mur: $mur,
+                paroi: $paroi,
+            ),
+        };
+    }
+
     public static function create_liaison_plancher_bas_mur(
         Mur $mur,
         Paroi $paroi,

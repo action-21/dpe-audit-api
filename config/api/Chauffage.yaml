@@ -1,6 +1,7 @@
 resources:
   App\Api\Chauffage\Model\Chauffage:
     shortName: Chauffage
+    collectDenormalizationErrors: true
     normalizationContext:
       groups: ["read"]
     denormalizationContext:
@@ -10,3 +11,8 @@ resources:
         uriTemplate: /audit/{id}/chauffage
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Chauffage\State\ChauffageProvider
+        controller: ApiPlatform\Symfony\Action\NotFoundAction
+        openapi:
+          summary: 🚧 Retourne les données de chauffage d'un audit énergétique
+          description: |
+            **Disponible après syncrhonisation avec les données de l'observatoire DPE-Audit**

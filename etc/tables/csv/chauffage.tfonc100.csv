@@ -1,4 +1,4 @@
-﻿temperature_distribution;annee_installation_emetteur[gte];annee_installation_emetteur[lte];tfonc100
+﻿temperature_distribution;annee_installation_emetteur/gte;annee_installation_emetteur/lte;tfonc100
 basse;;1980;60
 moyenne;;1980;80
 haute;;1980;80

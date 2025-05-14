@@ -6,24 +6,34 @@ use App\Database\Opendata\Enveloppe\XMLParoiReader;
 use App\Domain\Common\ValueObject\{Annee, Id, Orientation, Pourcentage};
 use App\Domain\Enveloppe\Enum\{EtatIsolation, TypePose};
 use App\Domain\Enveloppe\Enum\Porte\{Materiau, TypeVitrage};
+use App\Domain\Enveloppe\ValueObject\Porte\{Menuiserie, Vitrage};
 
 final class XMLPorteReader extends XMLParoiReader
 {
-    public function identifiants(): array
+    public function supports(): bool
     {
-        return $this->reference_paroi()
-            ? parent::identifiants() + [$this->reference_paroi()]
-            : parent::identifiants();
+        return $this->nb_porte() > 0 && $this->surface() > 0;
+    }
+
+    public function paroi_id(): ?Id
+    {
+        if (null === $this->reference_paroi()) {
+            return null;
+        }
+        foreach ($this->enveloppe()->parois() as $reader) {
+            if ($reader->reference() === $this->reference()) {
+                continue;
+            }
+            if ($reader->reference() === $this->reference_paroi()) {
+                return $reader->id();
+            }
+        }
+        return null;
     }
 
     public function reference_paroi(): ?string
     {
         return $this->findOne('.//reference_paroi')?->reference();
-    }
-
-    public function paroi_id(): ?Id
-    {
-        return $this->findOne('.//reference_paroi')?->id();
     }
 
     public function annee_installation(): ?Annee
@@ -36,12 +46,12 @@ final class XMLPorteReader extends XMLParoiReader
         return null;
     }
 
-    public function isolation(): EtatIsolation
+    public function isolation(): ?EtatIsolation
     {
         return EtatIsolation::from_enum_type_porte_id($this->enum_type_porte_id());
     }
 
-    public function materiau(): Materiau
+    public function materiau(): ?Materiau
     {
         return Materiau::from_enum_type_porte_id($this->enum_type_porte_id());
     }
@@ -111,15 +121,20 @@ final class XMLPorteReader extends XMLParoiReader
         return (int) $this->findOneOrError('.//enum_type_pose_id')->intval();
     }
 
-    // Données intermédiaires
-
-    public function uporte(): float
+    public function menuiserie(): Menuiserie
     {
-        return $this->findOneOrError('.//uporte')->floatval();
+        return Menuiserie::create(
+            presence_joint: $this->presence_joint(),
+            presence_retour_isolation: $this->presence_retour_isolation(),
+            largeur_dormant: $this->largeur_dormant(),
+        );
     }
 
-    public function b(): float
+    public function vitrage(): Vitrage
     {
-        return $this->findOneOrError('.//b')->floatval();
+        return Vitrage::create(
+            taux_vitrage: $this->taux_vitrage(),
+            type_vitrage: $this->type_vitrage(),
+        );
     }
 }

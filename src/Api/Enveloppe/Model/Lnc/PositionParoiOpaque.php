@@ -10,9 +10,9 @@ final class PositionParoiOpaque
 {
     public function __construct(
         #[Assert\Positive]
-        public readonly float $surface,
+        public float $surface,
 
-        public readonly Mitoyennete $mitoyennete,
+        public Mitoyennete $mitoyennete,
     ) {}
 
     public static function from(Entity $entity): self

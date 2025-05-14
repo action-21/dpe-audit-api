@@ -6,7 +6,7 @@ use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\ValueObject\Id;
 
 /**
- * @property PontThermique[] $elements
+ * @extends ArrayCollection<PontThermique>
  */
 final class PontThermiqueCollection extends ArrayCollection
 {

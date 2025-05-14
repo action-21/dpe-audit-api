@@ -1,5 +1,7 @@
 App\Api\Ecs\Model\Ecs:
   attributes:
+    id:
+      groups: ["read"]
     generateurs:
       groups: ["read", "write"]
     installations:

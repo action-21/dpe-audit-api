@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\Baie\TypeMasqueLointain;
 
 /**
- * @property MasqueLointain[] $elements
+ * @extends ArrayCollection<MasqueLointain>
  */
 final class MasqueLointainCollection extends ArrayCollection
 {

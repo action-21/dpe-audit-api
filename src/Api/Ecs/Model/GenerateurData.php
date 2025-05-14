@@ -15,21 +15,21 @@ use App\Domain\Ecs\Entity\Generateur as Entity;
 final class GenerateurData
 {
     public function __construct(
-        public readonly ?float $pecs,
-        public readonly ?float $paux,
-        public readonly ?float $pn,
-        public readonly ?float $cop,
-        public readonly ?float $rpn,
-        public readonly ?float $qp0,
-        public readonly ?float $pveilleuse,
+        public ?float $pecs,
+        public ?float $paux,
+        public ?float $pn,
+        public ?float $cop,
+        public ?float $rpn,
+        public ?float $qp0,
+        public ?float $pveilleuse,
         /** @var Perte[] */
-        public readonly array $pertes,
+        public array $pertes,
         /** @var Perte[] */
-        public readonly array $pertes_recuperables,
+        public array $pertes_recuperables,
         /** @var Consommation[] */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var Emission[] */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

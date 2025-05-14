@@ -1,6 +1,7 @@
 resources:
   App\Api\Eclairage\Model\Eclairage:
     shortName: Eclairage
+    collectDenormalizationErrors: true
     normalizationContext:
       groups: ["read"]
     denormalizationContext:
@@ -9,4 +10,9 @@ resources:
       eclairage.get:
         uriTemplate: /audit/{id}/eclairage
         class: ApiPlatform\Metadata\Get
-        provider: App\Api\Eclairage\State\EclairageProvider
+        provider: App\Api\Eclairage\State\AuditItemProvider
+        controller: ApiPlatform\Symfony\Action\NotFoundAction
+        openapi:
+          summary: 🚧 Retourne les données d'éclairage d'un audit énergétique
+          description: |
+            **Disponible après syncrhonisation avec les données de l'observatoire DPE-Audit**

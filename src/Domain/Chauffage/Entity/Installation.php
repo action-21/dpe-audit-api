@@ -29,7 +29,7 @@ final class Installation
         string $description,
         float $surface,
         bool $comptage_individuel,
-        Solaire $solaire_thermique,
+        ?Solaire $solaire_thermique,
         Regulation $regulation_centrale,
         Regulation $regulation_terminale,
     ): self {

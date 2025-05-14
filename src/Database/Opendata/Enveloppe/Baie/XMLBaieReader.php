@@ -3,13 +3,18 @@
 namespace App\Database\Opendata\Enveloppe\Baie;
 
 use App\Database\Opendata\Enveloppe\XMLParoiReader;
-use App\Database\Opendata\XMLElement;
 use App\Domain\Common\ValueObject\{Annee, Id, Inclinaison, Orientation};
 use App\Domain\Enveloppe\Enum\Baie\{Materiau, NatureGazLame, TypeBaie, TypeFermeture, TypeSurvitrage, TypeVitrage};
 use App\Domain\Enveloppe\Enum\TypePose;
+use App\Domain\Enveloppe\ValueObject\Baie\{Composition, Menuiserie, Performance, Survitrage, Vitrage};
 
 final class XMLBaieReader extends XMLParoiReader
 {
+    public function supports(): bool
+    {
+        return $this->nb_baie() > 0 && $this->surface() > 0;
+    }
+
     public function double_fenetre(): ?XMLDoubleFenetreReader
     {
         return ($xml = $this->findOne('.//baie_vitree_double_fenetre'))
@@ -31,13 +36,15 @@ final class XMLBaieReader extends XMLParoiReader
      */
     public function masques_lointains(): array
     {
-        $readers = array_filter(
-            array_map(
-                fn(XMLElement $xml) => XMLMasqueLointainNonHomogeneReader::from($xml),
-                $this->findMany('.//masque_lointain_non_homogene')
-            ),
-            fn(XMLMasqueLointainNonHomogeneReader $reader): bool => $reader->supports(),
-        );
+        $readers = [];
+
+        foreach ($this->findMany('.//masque_lointain_non_homogene') as $xml) {
+            $reader = XMLMasqueLointainNonHomogeneReader::from($xml);
+
+            if ($reader->supports()) {
+                $readers[] = $reader;
+            }
+        }
 
         $reader = XMLMasqueLointainHomogeneReader::from($this->xml());
 
@@ -48,22 +55,28 @@ final class XMLBaieReader extends XMLParoiReader
         return $readers;
     }
 
-
     public function paroi_id(): ?Id
     {
-        return $this->findOne('.//reference_paroi')?->id();
-    }
-
-    public function reference_paroi(): ?string
-    {
-        return $this->findOneOrError('.//reference_paroi')?->reference();
+        if (null === $this->reference_paroi()) {
+            return null;
+        }
+        foreach ($this->enveloppe()->parois() as $reader) {
+            if ($reader->reference() === $this->reference()) {
+                continue;
+            }
+            if ($reader->reference() === $this->reference_paroi()) {
+                return $reader->id();
+            }
+        }
+        return null;
     }
 
     public function orientation(): ?Orientation
     {
-        return ($enum = $this->findOneOrError('.//enum_orientation_id')?->intval())
-            ? Orientation::from_enum_orientation_id($enum)
-            : null;
+        if (null === $value = $this->findOne('.//enum_orientation_id')?->intval()) {
+            return null;
+        }
+        return Orientation::from_enum_orientation_id($value);
     }
 
     public function inclinaison(): Inclinaison
@@ -83,7 +96,7 @@ final class XMLBaieReader extends XMLParoiReader
         return TypeBaie::from_enum_type_baie_id($this->enum_type_baie_id());
     }
 
-    public function type_pose(): TypePose
+    public function type_pose(): ?TypePose
     {
         return TypePose::from_enum_type_pose_id($this->enum_type_pose_id());
     }
@@ -233,35 +246,65 @@ final class XMLBaieReader extends XMLParoiReader
         return $this->findOneOrError('.//nb_baie')->intval();
     }
 
-    // Données intermédiaires
-
-    public function b(): float
+    public function composition(): Composition
     {
-        return $this->findOneOrError('.//b')->floatval();
+        return new Composition(
+            type_baie: $this->type_baie(),
+            type_pose: $this->type_pose(),
+            materiau: $this->materiau(),
+            presence_soubassement: $this->presence_soubassement(),
+            vitrage: $this->vitrage(),
+            menuiserie: $this->menuiserie(),
+        );
     }
 
-    public function uw(): float
+    public function menuiserie(): ?Menuiserie
     {
-        return $this->findOneOrError('.//uw')->floatval();
+        if ($this->type_baie()->is_paroi_vitree()) {
+            return null;
+        }
+        return Menuiserie::create(
+            largeur_dormant: $this->largeur_dormant(),
+            presence_joint: $this->presence_joint(),
+            presence_retour_isolation: $this->presence_retour_isolation(),
+            presence_rupteur_pont_thermique: $this->presence_rupteur_pont_thermique(),
+        );
     }
 
-    public function u_menuiserie(): float
+    public function performance(): Performance
     {
-        return $this->findOneOrError('.//u_menuiserie')->floatval();
+        return Performance::create(
+            ug: $this->ug_saisi(),
+            uw: $this->uw_saisi(),
+            ujn: $this->ujn_saisi(),
+            sw: $this->sw_saisi(),
+        );
     }
 
-    public function sw(): float
+    public function vitrage(): ?Vitrage
     {
-        return $this->findOneOrError('.//sw')->floatval();
+        if ($this->type_baie()->is_paroi_vitree()) {
+            return null;
+        }
+        return Vitrage::create(
+            type_vitrage: $this->type_vitrage(),
+            nature_gaz_lame: $this->nature_gaz_lame(),
+            epaisseur_lame: $this->epaisseur_lame(),
+            survitrage: $this->survitrage(),
+        );
     }
 
-    public function fe1(): float
+    public function survitrage(): ?Survitrage
     {
-        return $this->findOneOrError('.//fe1')->floatval();
-    }
-
-    public function fe2(): float
-    {
-        return $this->findOneOrError('.//fe2')->floatval();
+        if ($this->type_baie()->is_paroi_vitree()) {
+            return null;
+        }
+        if (null === $this->type_survitrage()) {
+            return null;
+        }
+        return Survitrage::create(
+            type_survitrage: $this->type_survitrage(),
+            epaisseur_lame: $this->epaisseur_survitrage(),
+        );
     }
 }

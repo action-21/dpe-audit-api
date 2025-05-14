@@ -17,6 +17,7 @@ use App\Domain\Common\ValueObject\Id;
 final class CreateAuditHandler
 {
     public function __construct(
+        private readonly ComputeAuditHandler $compute_handler,
         private readonly CreateEnveloppeHandler $enveloppe_handler,
         private readonly CreateVentilationHandler $ventilation_handler,
         private readonly CreateChauffageHandler $chauffage_handler,
@@ -34,7 +35,7 @@ final class CreateAuditHandler
         $handle_refroidissement = $this->refroidissement_handler;
         $handle_production = $this->production_handler;
 
-        return Audit::create(
+        $entity = Audit::create(
             adresse: Adresse::create(
                 numero: $payload->adresse->numero,
                 nom: $payload->adresse->nom,
@@ -59,5 +60,9 @@ final class CreateAuditHandler
             refroidissement: $handle_refroidissement($payload->refroidissement),
             production: $handle_production($payload->production),
         );
+
+        $this->compute_handler->__invoke($entity);
+
+        return $entity;
     }
 }

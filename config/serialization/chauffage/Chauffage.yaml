@@ -1,5 +1,7 @@
 App\Api\Chauffage\Model\Chauffage:
   attributes:
+    id:
+      groups: ["read"]
     generateurs:
       groups: ["read", "write"]
     emetteurs:

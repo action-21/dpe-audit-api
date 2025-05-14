@@ -2,7 +2,8 @@
 
 namespace App\Domain\Enveloppe\Enum\Baie;
 
-use App\Domain\Common\Enum\{Enum, Orientation};
+use App\Domain\Common\Enum\{Enum, Orientation as PointCardinal};
+use App\Domain\Common\ValueObject\Orientation;
 
 enum SecteurChampsVision: string implements Enum
 {
@@ -15,35 +16,33 @@ enum SecteurChampsVision: string implements Enum
     case SECTEUR_CENTRAL_SUD = 'secteur_central_sud';
     case SECTEUR_CENTRAL_OUEST = 'secteur_central_ouest';
 
-    public static function determine(float $orientation_masque, float $orientation_baie,): self
+    public static function determine(Orientation $baie, Orientation $masque): self
     {
-        $diff = \abs($orientation_masque - $orientation_baie);
-
-        return match (Orientation::from_azimut($orientation_baie)) {
-            Orientation::NORD => match (true) {
-                $diff >= -90 && $diff < -45 => self::SECTEUR_LATERAL_OUEST,
-                $diff >= -45 && $diff <= 0 => self::SECTEUR_CENTRAL_OUEST,
-                $diff >= 0 && $diff <= 45 => self::SECTEUR_CENTRAL_EST,
-                $diff > 45 && $diff <= 90 => self::SECTEUR_LATERAL_EST,
+        return match ($baie->enum()) {
+            PointCardinal::NORD => match (true) {
+                $masque->between($baie->minus(90), $baie->minus(45)) => self::SECTEUR_LATERAL_OUEST,
+                $masque->between($baie->plus(45), $baie->plus(90)) => self::SECTEUR_LATERAL_EST,
+                $masque->between($baie->minus(45), $baie->value()) => self::SECTEUR_CENTRAL_OUEST,
+                $masque->between($baie->value(), $baie->plus(45)) => self::SECTEUR_CENTRAL_EST,
             },
-            Orientation::EST => match (true) {
-                $diff >= -90 && $diff < -45 => self::SECTEUR_LATERAL_NORD,
-                $diff >= -45 && $diff < 0 => self::SECTEUR_CENTRAL_NORD,
-                $diff >= 0 && $diff <= 45 => self::SECTEUR_CENTRAL_SUD,
-                $diff > 45 && $diff <= 90 => self::SECTEUR_LATERAL_SUD,
+            PointCardinal::SUD => match (true) {
+                $masque->between($baie->plus(45), $baie->plus(90)) => self::SECTEUR_LATERAL_OUEST,
+                $masque->between($baie->minus(90), $baie->minus(45)) => self::SECTEUR_LATERAL_EST,
+                $masque->between($baie->value(), $baie->plus(45)) => self::SECTEUR_CENTRAL_OUEST,
+                $masque->between($baie->minus(45), $baie->value()) => self::SECTEUR_CENTRAL_EST,
             },
-            Orientation::SUD => match (true) {
-                $diff >= -90 && $diff < -45 => self::SECTEUR_LATERAL_EST,
-                $diff >= -45 && $diff <= 0 => self::SECTEUR_CENTRAL_EST,
-                $diff >= 0 && $diff <= 45 => self::SECTEUR_CENTRAL_OUEST,
-                $diff > 45 && $diff <= 90 => self::SECTEUR_LATERAL_OUEST,
+            PointCardinal::EST => match (true) {
+                $masque->between($baie->minus(90), $baie->minus(45)) => self::SECTEUR_LATERAL_NORD,
+                $masque->between($baie->minus(45), $baie->value()) => self::SECTEUR_CENTRAL_NORD,
+                $masque->between($baie->plus(45), $baie->plus(90)) => self::SECTEUR_LATERAL_SUD,
+                $masque->between($baie->value(), $baie->plus(45)) => self::SECTEUR_CENTRAL_SUD,
             },
-            Orientation::OUEST => match (true) {
-                $diff >= -90 && $diff < -45 => self::SECTEUR_LATERAL_SUD,
-                $diff >= -45 && $diff <= 0 => self::SECTEUR_CENTRAL_SUD,
-                $diff > 0 && $diff <= 45 => self::SECTEUR_CENTRAL_NORD,
-                $diff > 45 && $diff <= 90 => self::SECTEUR_LATERAL_NORD,
-            }
+            PointCardinal::OUEST => match (true) {
+                $masque->between($baie->plus(45), $baie->plus(90)) => self::SECTEUR_LATERAL_NORD,
+                $masque->between($baie->value(), $baie->plus(45)) => self::SECTEUR_CENTRAL_NORD,
+                $masque->between($baie->minus(90), $baie->minus(45)) => self::SECTEUR_LATERAL_SUD,
+                $masque->between($baie->minus(45), $baie->value()) => self::SECTEUR_CENTRAL_SUD,
+            },
         };
     }
 
@@ -63,37 +62,6 @@ enum SecteurChampsVision: string implements Enum
             self::SECTEUR_CENTRAL_EST => 'Secteur central est',
             self::SECTEUR_CENTRAL_SUD => 'Secteur central sud',
             self::SECTEUR_CENTRAL_OUEST => 'Secteur central ouest',
-        };
-    }
-
-    /** @return self[] */
-    public static function secteurs_by_orientation(Orientation $orientation_baie): array
-    {
-        return match ($orientation_baie) {
-            Orientation::NORD => [
-                self::SECTEUR_LATERAL_OUEST,
-                self::SECTEUR_CENTRAL_OUEST,
-                self::SECTEUR_CENTRAL_EST,
-                self::SECTEUR_LATERAL_EST,
-            ],
-            Orientation::EST => [
-                self::SECTEUR_LATERAL_NORD,
-                self::SECTEUR_CENTRAL_NORD,
-                self::SECTEUR_CENTRAL_SUD,
-                self::SECTEUR_LATERAL_SUD,
-            ],
-            Orientation::SUD => [
-                self::SECTEUR_LATERAL_EST,
-                self::SECTEUR_CENTRAL_EST,
-                self::SECTEUR_CENTRAL_OUEST,
-                self::SECTEUR_LATERAL_OUEST,
-            ],
-            Orientation::OUEST => [
-                self::SECTEUR_LATERAL_SUD,
-                self::SECTEUR_CENTRAL_SUD,
-                self::SECTEUR_CENTRAL_NORD,
-                self::SECTEUR_LATERAL_NORD,
-            ],
         };
     }
 }

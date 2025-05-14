@@ -10,7 +10,7 @@ final class XMLMasqueLointainNonHomogeneReader extends XMLMasqueLointainReader
 {
     public function baie(): XMLBaieReader
     {
-        return XMLBaieReader::from($this->findOneOrError('//ancestor::baie_vitree'));
+        return XMLBaieReader::from($this->findOneOrError('.//ancestor::baie_vitree'));
     }
 
     public function supports(): bool
@@ -35,17 +35,15 @@ final class XMLMasqueLointainNonHomogeneReader extends XMLMasqueLointainReader
 
     public function orientation(): Orientation
     {
-        $orientation_baie = $this->baie()->orientation();
-        $orientation_baie_enum = $orientation_baie->enum();
-
-        $orientation = match ($this->tv_coef_masque_lointain_non_homogene_id()) {
-            1, 2, 3, 4 => $orientation_baie + 77.5,
-            5, 6, 7, 8 => $orientation_baie + 77.5,
-            9, 10, 11, 12 => $orientation_baie_enum === OrientationEnum::EST ? $orientation_baie + 77.5 : $orientation_baie - 77.5,
-            13, 14, 15, 16 => $orientation_baie_enum === OrientationEnum::EST ? $orientation_baie + 22.5 : $orientation_baie - 22.5,
-            17, 18, 19, 20 => $orientation_baie_enum === OrientationEnum::EST ? $orientation_baie - 22.5 : $orientation_baie + 22.5,
+        $orientation = $this->baie()->orientation();
+        $value = match ($this->tv_coef_masque_lointain_non_homogene_id()) {
+            1, 2, 3, 4 => $orientation->plus(77.5),
+            5, 6, 7, 8 => $orientation->value(),
+            9, 10, 11, 12 => $orientation->enum() === OrientationEnum::EST ? $orientation->plus(77.5) : $orientation->minus(77.5),
+            13, 14, 15, 16 => $orientation->enum() === OrientationEnum::EST ? $orientation->plus(22.5) : $orientation->minus(22.5),
+            17, 18, 19, 20 => $orientation->enum() === OrientationEnum::EST ? $orientation->minus(22.5) : $orientation->plus(22.5),
         };
-        return Orientation::from($orientation);
+        return Orientation::from($value);
     }
 
     public function hauteur(): float

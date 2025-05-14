@@ -2,12 +2,11 @@
 
 namespace App\Database\Local\Enveloppe;
 
-use App\Database\Local\XMLTableElement;
 use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\Functions;
 use App\Domain\Common\ValueObject\Annee;
 use App\Domain\Enveloppe\Enum\Mur\TypeMur;
 use App\Domain\Enveloppe\Service\MurTableValeurRepository;
+use App\Engine\Performance\Functions;
 
 final class XMLMurTableValeurRepository extends XMLParoiTableValeurRepository implements MurTableValeurRepository
 {

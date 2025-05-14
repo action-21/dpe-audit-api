@@ -7,7 +7,7 @@ use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\ValueObject\Id;
 
 /**
- * @property Generateur[] $elements
+ * @extends ArrayCollection<Generateur>
  */
 final class GenerateurCollection extends ArrayCollection
 {

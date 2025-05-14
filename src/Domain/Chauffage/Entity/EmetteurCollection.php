@@ -6,7 +6,7 @@ use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\ValueObject\Id;
 
 /**
- * @property Emetteur[] $elements
+ * @extends ArrayCollection<Emetteur>
  */
 final class EmetteurCollection extends ArrayCollection
 {

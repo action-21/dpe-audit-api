@@ -24,7 +24,7 @@ final class XMLVentilationTableValeurRepository implements VentilationTableValeu
             ->and('type_generateur', $type_generateur)
             ->and('type_vmc', $type_vmc)
             ->and('generateur_collectif', $generateur_collectif)
-            ->andCompareTo('annee_installation', $annee_installation)
+            ->andCompareTo('annee_installation', $annee_installation?->value())
             ->getOne();
     }
 

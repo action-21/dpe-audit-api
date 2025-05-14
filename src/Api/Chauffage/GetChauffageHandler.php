@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 
 final class GetChauffageHandler
 {
-    public function __construct(private ChauffageRepository $repository) {}
+    public function __construct(private readonly ChauffageRepository $repository) {}
 
     public function __invoke(Id $id): ?Chauffage
     {

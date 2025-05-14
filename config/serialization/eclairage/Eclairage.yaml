@@ -1,5 +1,7 @@
 App\Api\Eclairage\Model\Eclairage:
   attributes:
+    id:
+      groups: ["read"]
     data:
       groups: ["read"]
 

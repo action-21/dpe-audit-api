@@ -8,13 +8,13 @@ use App\Domain\Enveloppe\Entity\Lnc\Baie as Entity;
 final class BaieData
 {
     public function __construct(
-        public readonly ?float $aue,
-        public readonly ?float $aiu,
-        public readonly ?EtatIsolation $isolation,
-        public readonly ?float $t,
-        public readonly ?float $fe,
-        public readonly ?float $c1,
-        public readonly ?float $sst,
+        public ?float $aue,
+        public ?float $aiu,
+        public ?EtatIsolation $isolation,
+        public ?float $t,
+        public ?float $fe,
+        public ?float $c1,
+        public ?float $sst,
     ) {}
 
     public static function from(Entity $entity): self

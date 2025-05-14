@@ -56,6 +56,8 @@ App\Api\Audit\Model\AuditData:
 
 App\Api\Audit\Model\Adresse:
   attributes:
+    zone_climatique:
+      groups: ["read"]
     numero:
       groups: ["read", "write"]
     nom:
@@ -71,6 +73,8 @@ App\Api\Audit\Model\Adresse:
 
 App\Api\Audit\Model\Batiment:
   attributes:
+    type_batiment:
+      groups: ["read"]
     annee_construction:
       groups: ["read", "write"]
     altitude:
@@ -85,3 +89,38 @@ App\Api\Audit\Model\Batiment:
       groups: ["read", "write"]
     rnb_id:
       groups: ["read", "write"]
+
+App\Api\Audit\Dto\PostScenarios:
+  attributes:
+    scenarios:
+      groups: ["write"]
+
+App\Api\Audit\Model\Scenario:
+  attributes:
+    enveloppe:
+      groups: ["read", "write"]
+    chauffage:
+      groups: ["read", "write"]
+    ecs:
+      groups: ["read", "write"]
+    ventilation:
+      groups: ["read", "write"]
+    refroidissement:
+      groups: ["read", "write"]
+    production:
+      groups: ["read", "write"]
+    eclairage:
+      groups: ["read"]
+    data:
+      groups: ["read"]
+
+App\Api\Audit\Collection\Audit:
+  attributes:
+    id:
+      groups: ["read"]
+    date_etablissement:
+      groups: ["read"]
+    adresse:
+      groups: ["read"]
+    batiment:
+      groups: ["read"]

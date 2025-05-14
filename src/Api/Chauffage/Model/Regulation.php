@@ -7,11 +7,11 @@ use App\Domain\Chauffage\ValueObject\Regulation as Value;
 final class Regulation
 {
     public function __construct(
-        public readonly bool $presence_regulation,
+        public bool $presence_regulation,
 
-        public readonly bool $minimum_temperature,
+        public bool $minimum_temperature,
 
-        public readonly bool $detection_presence,
+        public bool $detection_presence,
     ) {}
 
     public static function from(Value $value): self

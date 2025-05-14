@@ -16,56 +16,55 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Baie
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeBaie $type_baie,
+        public TypeBaie $type_baie,
 
-        public readonly bool $presence_protection_solaire,
+        public bool $presence_protection_solaire,
 
-        public readonly TypeFermeture $type_fermeture,
+        public TypeFermeture $type_fermeture,
 
-        public readonly ?Materiau $materiau,
+        public ?Materiau $materiau,
 
-        public readonly ?TypePose $type_pose,
+        public ?TypePose $type_pose,
 
-        public readonly ?bool $presence_soubassement,
+        public ?bool $presence_soubassement,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_installation,
+        public ?int $annee_installation,
 
         #[Assert\Positive]
-        public readonly ?float $ug,
+        public ?float $ug,
 
         #[Assert\Positive]
-        public readonly ?float $uw,
+        public ?float $uw,
 
         #[Assert\Positive]
-        public readonly ?float $ujn,
+        public ?float $ujn,
 
         #[Assert\Positive]
-        public readonly ?float $sw,
+        public ?float $sw,
 
         #[Assert\Valid]
-        public readonly Position $position,
+        public Position $position,
 
         #[Assert\Valid]
-        public readonly ?Menuiserie $menuiserie,
+        public ?Menuiserie $menuiserie,
 
         #[Assert\Valid]
-        public readonly ?Vitrage $vitrage,
+        public ?Vitrage $vitrage,
 
-        public readonly ?DoubleFenetre $double_fenetre,
+        public ?DoubleFenetre $double_fenetre,
 
         /** @var MasqueLointain[] */
-        public readonly array $masques_lointains,
+        public array $masques_lointains,
 
         /** @var MasqueProche[] */
-        public readonly array $masques_proches,
+        public array $masques_proches,
 
-        public readonly ?Data $data,
+        public ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self

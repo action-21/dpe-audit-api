@@ -10,14 +10,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Solaire
 {
     public function __construct(
-        public readonly UsageChauffage $usage,
+        public UsageChauffage $usage,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_installation,
+        public ?int $annee_installation,
 
         #[Assert\PositiveOrZero]
         #[Assert\LessThanOrEqual(100)]
-        public readonly ?float $fch,
+        public ?float $fch,
     ) {}
 
     public static function from(Entity $entity): self

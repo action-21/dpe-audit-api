@@ -13,7 +13,7 @@ use App\Domain\Common\ValueObject\Id;
  */
 final class RefroidissementProvider implements ProviderInterface
 {
-    public function __construct(private GetRefroidissementHandler $handler) {}
+    public function __construct(private readonly GetRefroidissementHandler $handler) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?Refroidissement
     {

@@ -11,25 +11,28 @@ use App\Domain\Refroidissement\Refroidissement;
 final class CreateRefroidissementHandler
 {
     public function __construct(
-        private CreateGenerateurHandler $generateur_handler,
-        private CreateInstallationHandler $installation_handler,
-        private CreateSystemeHandler $systeme_handler,
+        private readonly CreateGenerateurHandler $generateur_handler,
+        private readonly CreateInstallationHandler $installation_handler,
+        private readonly CreateSystemeHandler $systeme_handler,
     ) {}
     public function __invoke(Payload $payload): Refroidissement
     {
         $entity = Refroidissement::create();
 
         foreach ($payload->generateurs as $generateur) {
-            $handle = $this->generateur_handler;
-            $entity->add_generateur($handle(payload: $generateur, refroidissement: $entity));
+            $entity->add_generateur(
+                $this->generateur_handler->__invoke(payload: $generateur, entity: $entity)
+            );
         }
         foreach ($payload->installations as $installation) {
-            $handle = $this->installation_handler;
-            $entity->add_installation($handle(payload: $installation, refroidissement: $entity));
+            $entity->add_installation(
+                $this->installation_handler->__invoke(payload: $installation, entity: $entity)
+            );
         }
         foreach ($payload->systemes as $systeme) {
-            $handle = $this->systeme_handler;
-            $entity->add_systeme($handle(payload: $systeme, refroidissement: $entity));
+            $entity->add_systeme(
+                $this->systeme_handler->__invoke(payload: $systeme, entity: $entity)
+            );
         }
         return $entity;
     }

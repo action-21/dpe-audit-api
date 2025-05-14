@@ -11,7 +11,7 @@ enum Materiau: string implements Enum
     case BOIS_METAL = 'bois_metal';
     case METAL = 'metal';
 
-    public static function from_enum_type_porte_id(int $type_porte_id): self
+    public static function from_enum_type_porte_id(int $type_porte_id): ?self
     {
         return match ($type_porte_id) {
             1, 2, 3, 4 => self::BOIS,

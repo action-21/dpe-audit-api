@@ -12,35 +12,34 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Porte
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypePose $type_pose,
+        public TypePose $type_pose,
 
-        public readonly ?EtatIsolation $isolation,
+        public ?EtatIsolation $isolation,
 
-        public readonly ?Materiau $materiau,
+        public ?Materiau $materiau,
 
-        public readonly ?bool $presence_sas,
+        public ?bool $presence_sas,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_installation,
+        public ?int $annee_installation,
 
         #[Assert\Positive]
-        public readonly ?float $u,
+        public ?float $u,
 
         #[Assert\Valid]
-        public readonly Position $position,
+        public Position $position,
 
         #[Assert\Valid]
-        public readonly Vitrage $vitrage,
+        public Vitrage $vitrage,
 
         #[Assert\Valid]
-        public readonly Menuiserie $menuiserie,
+        public Menuiserie $menuiserie,
 
-        public readonly ?Data $data,
+        public ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self

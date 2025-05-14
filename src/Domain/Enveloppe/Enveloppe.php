@@ -22,6 +22,7 @@ final class Enveloppe
         private readonly Id $id,
         private Exposition $exposition,
         private ?float $q4pa_conv,
+        private bool $presence_brasseurs_air,
         private LncCollection $locaux_non_chauffes,
         private BaieCollection $baies,
         private MurCollection $murs,
@@ -33,7 +34,7 @@ final class Enveloppe
         private EnveloppeData $data,
     ) {}
 
-    public static function create(Exposition $exposition, ?float $q4pa_conv,): self
+    public static function create(Exposition $exposition, ?float $q4pa_conv, bool $presence_brasseurs_air): self
     {
         Assert::nullOrGreaterThan($q4pa_conv, 0);
 
@@ -41,6 +42,7 @@ final class Enveloppe
             id: Id::create(),
             exposition: $exposition,
             q4pa_conv: $q4pa_conv,
+            presence_brasseurs_air: $presence_brasseurs_air,
             niveaux: new NiveauCollection,
             locaux_non_chauffes: new LncCollection,
             baies: new BaieCollection,
@@ -84,6 +86,11 @@ final class Enveloppe
     public function q4pa_conv(): ?float
     {
         return $this->q4pa_conv;
+    }
+
+    public function presence_brasseurs_air(): bool
+    {
+        return $this->presence_brasseurs_air;
     }
 
     /**

@@ -9,14 +9,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Reseau
 {
     public function __construct(
-        public readonly TypeDistribution $type_distribution,
+        public TypeDistribution $type_distribution,
 
-        public readonly bool $presence_circulateur_externe,
+        public bool $presence_circulateur_externe,
 
         #[Assert\Positive]
-        public readonly int $niveaux_desservis,
+        public int $niveaux_desservis,
 
-        public readonly ?IsolationReseau $isolation,
+        public ?IsolationReseau $isolation,
     ) {}
 
     public static function from(Entity $entity): ?self

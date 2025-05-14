@@ -2,11 +2,14 @@
 
 namespace App\Database\Opendata\Enveloppe\Lnc;
 
+use App\Database\Opendata\XMLElement;
 use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\Lnc\{TypeLnc};
 
 interface XMLLncReader
 {
+    public function xml(): XMLElement;
+
     public function id(): Id;
 
     public function description(): string;

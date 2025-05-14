@@ -32,6 +32,24 @@ final class Orientation implements \Stringable
         return $orientation === Enum::from_azimut($this->value);
     }
 
+    public function minus(float $azimut): float
+    {
+        return fmod($this->value - $azimut + 360, 360);
+    }
+
+    public function plus(float $azimut): float
+    {
+        $orientation = fmod($this->value + $azimut, 360);
+        return $orientation < 0 ? $orientation += 360 : $orientation;
+    }
+
+    public function between(float $azimut1, float $azimut2): bool
+    {
+        return $azimut1 < $azimut2
+            ? $this->value >= $azimut1 && $this->value <= $azimut2
+            : $this->value >= $azimut1 || $this->value <= $azimut2;
+    }
+
     public function enum(): Enum
     {
         return Enum::from_azimut($this->value);

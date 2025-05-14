@@ -1,8 +1,12 @@
 App\Api\Enveloppe\Model\Enveloppe:
   attributes:
+    id:
+      groups: ["read"]
     exposition:
       groups: ["read", "write"]
     q4pa_conv:
+      groups: ["read", "write"]
+    presence_brasseurs_air:
       groups: ["read", "write"]
     locaux_non_chauffes:
       groups: ["read", "write"]

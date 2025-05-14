@@ -100,6 +100,8 @@ enum TypeGenerateur: string implements Enum
     public function is_chauffage_electrique(): bool
     {
         return \in_array($this, [
+            self::CONVECTEUR_BI_JONCTION,
+            self::CONVECTEUR_ELECTRIQUE,
             self::PANNEAU_RAYONNANT_ELECTRIQUE,
             self::PLAFOND_RAYONNANT_ELECTRIQUE,
             self::PLANCHER_RAYONNANT_ELECTRIQUE,

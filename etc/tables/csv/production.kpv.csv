@@ -1,4 +1,4 @@
-﻿orientation_pv[gt];orientation_pv[gte];orientation_pv[lt];orientation_pv[lte];inclinaison_pv[gt];inclinaison_pv[lte];kpv
+﻿orientation_pv/gt;orientation_pv/gte;orientation_pv/lt;orientation_pv/lte;inclinaison_pv/gt;inclinaison_pv/lte;kpv
 ;;67.5;;;;0
 ;67.5;;292.5;;15;1
 ;67.5;112.5;;15;45;0.96

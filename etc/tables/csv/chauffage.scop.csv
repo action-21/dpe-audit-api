@@ -1,4 +1,4 @@
-﻿zone_climatique;type_generateur;type_emission;annee_installation_generateur[gte];annee_installation_generateur[lte];scop
+﻿zone_climatique;type_generateur;type_emission;annee_installation_generateur/gte;annee_installation_generateur/lte;scop
 H1;pac_air_air;air_souffle;;2007;2.2
 H1;pac_air_air;air_souffle;2008;2014;2.3
 H1;pac_air_air;air_souffle;2015;;3

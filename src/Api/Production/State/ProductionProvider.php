@@ -13,7 +13,7 @@ use App\Domain\Common\ValueObject\Id;
  */
 final class ProductionProvider implements ProviderInterface
 {
-    public function __construct(private GetProductionHandler $handler) {}
+    public function __construct(private readonly GetProductionHandler $handler) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?Production
     {

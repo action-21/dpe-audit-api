@@ -10,20 +10,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class MasqueLointain
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeMasqueLointain $type_masque,
+        public TypeMasqueLointain $type_masque,
 
         #[Assert\Positive]
-        public readonly float $hauteur,
+        public float $hauteur,
 
         #[DpeAssert\Orientation]
-        public readonly float $orientation,
+        public float $orientation,
 
-        public readonly ?MasqueLointainData $data,
+        public ?MasqueLointainData $data,
     ) {}
 
     public static function from(Entity $entity): self

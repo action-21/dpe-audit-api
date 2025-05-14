@@ -9,21 +9,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class PontThermique
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
-
-        #[Assert\Positive]
-        public readonly float $longueur,
+        public string $description,
 
         #[Assert\Positive]
-        public readonly ?float $kpt,
+        public float $longueur,
+
+        #[Assert\Positive]
+        public ?float $kpt,
 
         #[Assert\Valid]
-        public readonly Liaison $liaison,
+        public Liaison $liaison,
 
-        public readonly ?Data $data,
+        public ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self

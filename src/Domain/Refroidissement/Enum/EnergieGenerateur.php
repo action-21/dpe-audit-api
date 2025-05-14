@@ -6,10 +6,10 @@ use App\Domain\Common\Enum\Energie;
 
 enum EnergieGenerateur: string
 {
-    case ELECTRICITE = 'ELECTRICITE';
-    case GAZ_NATUREL = 'GAZ_NATUREL';
-    case GPL = 'GPL';
-    case RESEAU_FROID = 'RESEAU_FROID';
+    case ELECTRICITE = 'electricite';
+    case GAZ_NATUREL = 'gaz_naturel';
+    case GPL = 'gpl';
+    case RESEAU_FROID = 'reseau_froid';
 
     public static function from_enum_type_energie_id(int $id): static
     {

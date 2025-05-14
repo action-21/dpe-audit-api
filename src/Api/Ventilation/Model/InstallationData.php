@@ -12,14 +12,14 @@ use App\Domain\Ventilation\Entity\Installation as Entity;
 final class InstallationData
 {
     public function __construct(
-        public readonly ?float $rdim,
-        public readonly ?float $qvarep_conv,
-        public readonly ?float $qvasouf_conv,
-        public readonly ?float $smea_conv,
+        public ?float $rdim,
+        public ?float $qvarep_conv,
+        public ?float $qvasouf_conv,
+        public ?float $smea_conv,
         /** @var array<Consommation> */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var array<Emission> */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

@@ -8,20 +8,20 @@ use App\Domain\Enveloppe\Entity\Lnc as Entity;
 final class Data
 {
     public function __construct(
-        public readonly ?float $aiu,
-        public readonly ?float $aue,
-        public readonly ?EtatIsolation $isolation_aiu,
-        public readonly ?EtatIsolation $isolation_aue,
-        public readonly ?float $uvue,
-        public readonly ?float $b,
-        public readonly ?float $bver,
-        public readonly ?float $t,
-        public readonly ?float $fe,
-        public readonly ?float $c1,
-        public readonly ?float $sst,
-        public readonly ?float $ssd,
-        public readonly ?float $ssind,
-        public readonly ?float $sse,
+        public ?float $aiu,
+        public ?float $aue,
+        public ?EtatIsolation $isolation_aiu,
+        public ?EtatIsolation $isolation_aue,
+        public ?float $uvue,
+        public ?float $b,
+        public ?float $bver,
+        public ?float $t,
+        public ?float $fe,
+        public ?float $c1,
+        public ?float $sst,
+        public ?float $ssd,
+        public ?float $ssind,
+        public ?float $sse,
     ) {}
 
     public static function from(Entity $entity): self

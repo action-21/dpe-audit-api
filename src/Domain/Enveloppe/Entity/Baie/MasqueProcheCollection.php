@@ -6,7 +6,7 @@ use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\ValueObject\Id;
 
 /**
- * @property MasqueProche[] $elements
+ * @extends ArrayCollection<MasqueProche>
  */
 final class MasqueProcheCollection extends ArrayCollection
 {

@@ -4,6 +4,7 @@ namespace App\Domain\Audit;
 
 use App\Domain\Audit\Enum\Etiquette;
 use App\Domain\Audit\ValueObject\SollicitationsExterieures;
+use App\Domain\Common\Enum\ZoneClimatique;
 use App\Domain\Common\ValueObject\{Consommations, Emissions};
 use Webmozart\Assert\Assert;
 
@@ -14,6 +15,7 @@ final class AuditData
         public readonly ?float $surface_habitable,
         public readonly ?float $hauteur_sous_plafond,
         public readonly ?int $nombre_logements,
+        public readonly ?ZoneClimatique $zone_climatique,
         public readonly ?SollicitationsExterieures $sollicitations_exterieures,
         public readonly ?float $tbase,
         public readonly ?bool $effet_joule,
@@ -31,6 +33,7 @@ final class AuditData
         ?float $surface_habitable = null,
         ?float $hauteur_sous_plafond = null,
         ?int $nombre_logements = null,
+        ?ZoneClimatique $zone_climatique = null,
         ?SollicitationsExterieures $sollicitations_exterieures = null,
         ?float $tbase = null,
         ?bool $effet_joule = null,
@@ -55,6 +58,7 @@ final class AuditData
             surface_habitable: $surface_habitable,
             hauteur_sous_plafond: $hauteur_sous_plafond,
             nombre_logements: $nombre_logements,
+            zone_climatique: $zone_climatique,
             sollicitations_exterieures: $sollicitations_exterieures,
             tbase: $tbase,
             effet_joule: $effet_joule,
@@ -73,6 +77,7 @@ final class AuditData
         ?float $surface_habitable = null,
         ?float $hauteur_sous_plafond = null,
         ?int $nombre_logements = null,
+        ?ZoneClimatique $zone_climatique = null,
         ?SollicitationsExterieures $sollicitations_exterieures = null,
         ?float $tbase = null,
         ?bool $effet_joule = null,
@@ -89,6 +94,7 @@ final class AuditData
             surface_habitable: $surface_habitable ?? $this->surface_habitable,
             hauteur_sous_plafond: $hauteur_sous_plafond ?? $this->hauteur_sous_plafond,
             nombre_logements: $nombre_logements ?? $this->nombre_logements,
+            zone_climatique: $zone_climatique ?? $this->zone_climatique,
             sollicitations_exterieures: $sollicitations_exterieures ?? $this->sollicitations_exterieures,
             tbase: $tbase ?? $this->tbase,
             effet_joule: $effet_joule ?? $this->effet_joule,

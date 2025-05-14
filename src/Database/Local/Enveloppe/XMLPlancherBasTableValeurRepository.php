@@ -3,11 +3,11 @@
 namespace App\Database\Local\Enveloppe;
 
 use App\Domain\Common\Enum\ZoneClimatique;
-use App\Domain\Common\Functions;
 use App\Domain\Common\ValueObject\Annee;
 use App\Domain\Enveloppe\Enum\Mitoyennete;
 use App\Domain\Enveloppe\Enum\PlancherBas\TypePlancherBas;
 use App\Domain\Enveloppe\Service\PlancherBasTableValeurRepository;
+use App\Engine\Performance\Functions;
 
 final class XMLPlancherBasTableValeurRepository extends XMLParoiTableValeurRepository implements PlancherBasTableValeurRepository
 {

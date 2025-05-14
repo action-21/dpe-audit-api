@@ -2,6 +2,7 @@
 
 namespace App\Domain\Enveloppe\Entity;
 
+use App\Domain\Common\Enum\Orientation;
 use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\EtatIsolation;
 
@@ -24,5 +25,12 @@ final class BaieCollection extends ParoiCollection
     public function with_isolation(EtatIsolation $isolation): static
     {
         return $this->filter(fn(Baie $item) => $item->data()->isolation === $isolation);
+    }
+
+    public function with_orientation(Orientation $orientation): static
+    {
+        return $this->filter(
+            fn(Baie $item) => $item->orientation()?->enum() === $orientation,
+        );
     }
 }

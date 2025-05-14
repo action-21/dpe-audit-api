@@ -8,6 +8,17 @@ use App\Domain\Enveloppe\Enum\PontThermique\TypeLiaison;
 
 final class XMLPontThermiqueReader extends XMLReader
 {
+    public function supports(): bool
+    {
+        if (false === $this->mur_id()) {
+            return false;
+        }
+        if (false === $this->paroi_id()) {
+            return false;
+        }
+        return true;
+    }
+
     public function id(): Id
     {
         return $this->findOneOrError('.//reference')->id();
@@ -37,45 +48,71 @@ final class XMLPontThermiqueReader extends XMLReader
         ]);
     }
 
-    public function mur_id(): Id
+    /**
+     * Si la référence au mur est rompue, on associe par défaut le pont thermique au premier mur trouvé
+     * 
+     * @return Id|false
+     * 
+     * @return false en cas d'erreur
+     */
+    public function mur_id(): Id|false
     {
         foreach ($this->enveloppe()->murs() as $item) {
-            if ($item->match($this->references())) {
+            if (in_array($item->reference(), $this->references())) {
                 return $item->id();
             }
         }
-        throw new \DomainException("Mur non trouvé pour le pont thermique {$this->reference()}", 400);
+        if (count($this->enveloppe()->murs())) {
+            return current($this->enveloppe()->murs())->id();
+        }
+        return false;
     }
 
-    public function paroi_id(): ?Id
+    /**
+     * Si la référence à la paroi est rompue, on associe par défaut le pont thermique à la première paroi compatible
+     */
+    public function paroi_id(): null|Id|false
     {
         if (in_array($this->type_liaison(), [TypeLiaison::REFEND_MUR, TypeLiaison::PLANCHER_INTERMEDIAIRE_MUR])) {
             return null;
         }
         if (\in_array($this->type_liaison(), [TypeLiaison::MENUISERIE_MUR])) {
             foreach ($this->enveloppe()->baies() as $item) {
-                if ($item->match($this->references())) {
+                if (in_array($item->reference(), $this->references())) {
                     return $item->id();
                 }
             }
             foreach ($this->enveloppe()->portes() as $item) {
-                if ($item->match($this->references())) {
+                if (in_array($item->reference(), $this->references())) {
                     return $item->id();
                 }
             }
-            throw new \DomainException("Menuiserie non trouvée pour le pont thermique {$this->reference()}");
+            if (count($this->enveloppe()->baies())) {
+                return current($this->enveloppe()->baies())->id();
+            }
+            if (count($this->enveloppe()->portes())) {
+                return current($this->enveloppe()->portes())->id();
+            }
+            return false;
         }
         foreach ($this->enveloppe()->planchers_bas() as $item) {
-            if ($item->match($this->references())) {
+            if (in_array($item->reference(), $this->references())) {
                 return $item->id();
             }
         }
         foreach ($this->enveloppe()->planchers_hauts() as $item) {
-            if ($item->match($this->references())) {
+            if (in_array($item->reference(), $this->references())) {
                 return $item->id();
             }
         }
-        throw new \DomainException("Plancher non trouvé pour le pont thermique {$this->reference()}");
+        if (count($this->enveloppe()->planchers_bas())) {
+            return current($this->enveloppe()->planchers_bas())->id();
+        }
+        if (count($this->enveloppe()->planchers_hauts())) {
+            return current($this->enveloppe()->planchers_hauts())->id();
+        }
+
+        return false;
     }
 
     public function description(): string
@@ -106,12 +143,5 @@ final class XMLPontThermiqueReader extends XMLReader
     public function enum_type_liaison_id(): string
     {
         return $this->findOne('.//enum_type_liaison_id')->strval();
-    }
-
-    // Données intermédaires
-
-    public function k(): float
-    {
-        return $this->findOneOrError('.//k')->floatval();
     }
 }

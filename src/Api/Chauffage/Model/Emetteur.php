@@ -5,24 +5,22 @@ namespace App\Api\Chauffage\Model;
 use App\Domain\Chauffage\Entity\{Emetteur as Entity, EmetteurCollection as EntityCollection};
 use App\Domain\Chauffage\Enum\{TemperatureDistribution, TypeEmetteur};
 use App\Services\Validator\Constraints as DpeAssert;
-use Symfony\Component\Validator\Constraints as Assert;
 
 final class Emetteur
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeEmetteur $type,
+        public TypeEmetteur $type,
 
-        public readonly TemperatureDistribution $temperature_distribution,
+        public TemperatureDistribution $temperature_distribution,
 
-        public readonly bool $presence_robinet_thermostatique,
+        public bool $presence_robinet_thermostatique,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_installation,
+        public ?int $annee_installation,
     ) {}
 
     public static function from(Entity $entity): self

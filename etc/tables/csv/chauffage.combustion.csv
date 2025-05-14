@@ -1,4 +1,4 @@
-﻿type_generateur;mode_combustion;energie_generateur;annee_installation_generateur[gte];annee_installation_generateur[lte];pn[gt];pn[lte];pn_max;rpn;rpint;qp0;pveilleuse
+﻿type_generateur;mode_combustion;energie_generateur;annee_installation_generateur/gte;annee_installation_generateur/lte;pn/gt;pn/lte;pn_max;rpn;rpint;qp0;pveilleuse
 chaudiere;;bois_buche;;1977;;70;;47 + 6 * logPn;48 + 6 * logPn;0.08 * Pn * (Pn ^ -0.27);0
 chaudiere;;bois_buche;;1977;70;400;70;58;59;1.8;0
 chaudiere;;bois_buche;;1977;400;;70;58;59;1.1;0

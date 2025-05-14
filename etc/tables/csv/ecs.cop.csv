@@ -1,4 +1,4 @@
-﻿zone_climatique;type_generateur;annee_installation_generateur[gte];annee_installation_generateur[lte];cop;tv_scop_id
+﻿zone_climatique;type_generateur;annee_installation_generateur/gte;annee_installation_generateur/lte;cop;tv_scop_id
 H1;cet_air_ambiant;;2009;2;71
 H1;cet_air_ambiant;2010;2014;2.2;72
 H1;cet_air_ambiant;2015;;2.5;73

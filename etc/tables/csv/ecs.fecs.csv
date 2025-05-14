@@ -1,4 +1,4 @@
-﻿type_batiment;zone_climatique;usage_solaire;anciennete_installation[gt];anciennete_installation[lte];fecs;tv_facteur_couverture_solaire_id
+﻿type_batiment;zone_climatique;usage_solaire;anciennete_installation/gt;anciennete_installation/lte;fecs;tv_facteur_couverture_solaire_id
 maison;H1a;ecs;5;;0.49;9
 maison;H1b;ecs;5;;0.5;10
 maison;H1c;ecs;5;;0.53;11

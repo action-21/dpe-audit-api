@@ -1,4 +1,4 @@
-﻿type_generateur;mode_combustion;temperature_distribution;annee_installation_emetteur[gte];annee_installation_emetteur[lte];annee_installation_generateur[gte];annee_installation_generateur[lte];tfonc30
+﻿type_generateur;mode_combustion;temperature_distribution;annee_installation_emetteur/gte;annee_installation_emetteur/lte;annee_installation_generateur/gte;annee_installation_generateur/lte;tfonc30
 chaudiere;standard;basse;;1980;;1990;53
 chaudiere;standard;basse;1981;2000;;1990;50
 chaudiere;standard;basse;2001;;;1990;50

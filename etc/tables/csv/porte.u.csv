@@ -1,4 +1,4 @@
-﻿presence_sas;isolation;materiau;type_vitrage;taux_vitrage[gt];taux_vitrage[lt];taux_vitrage[gte];taux_vitrage[lte];u
+﻿presence_sas;isolation;materiau;type_vitrage;taux_vitrage/gt;taux_vitrage/lt;taux_vitrage/gte;taux_vitrage/lte;u
 1;;;;;;;;1.5
 0;non_isole;pvc;;;;;;3.5
 0;non_isole;bois;;;;;;3.5

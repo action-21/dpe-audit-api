@@ -12,11 +12,11 @@ use App\Domain\Refroidissement\Entity\Generateur as Entity;
 final class GenerateurData
 {
     public function __construct(
-        public readonly ?float $eer,
+        public ?float $eer,
         /** @var array<Consommation> */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var array<Emission> */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

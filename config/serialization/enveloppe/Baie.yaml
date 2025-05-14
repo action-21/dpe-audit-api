@@ -68,7 +68,7 @@ App\Api\Enveloppe\Model\Baie\Data:
     sse:
       groups: ["read"]
 
-App\Api\Enveloppe\Model\DoubleFenetre:
+App\Api\Enveloppe\Model\Baie\DoubleFenetre:
   attributes:
     type_baie:
       groups: ["read", "write"]
@@ -100,7 +100,7 @@ App\Api\Enveloppe\Model\Baie\DoubleFenetreData:
     sw:
       groups: ["read"]
 
-App\Api\Enveloppe\Model\MasqueLointain:
+App\Api\Enveloppe\Model\Baie\MasqueLointain:
   attributes:
     id:
       groups: ["read", "write"]
@@ -115,14 +115,14 @@ App\Api\Enveloppe\Model\MasqueLointain:
     data:
       groups: ["read"]
 
-App\Api\Enveloppe\Model\Baie\MasqueLointainData:
+App\Api\Enveloppe\Model\Baie\Baie\MasqueLointainData:
   attributes:
     fe2:
       groups: ["read"]
     omb:
       groups: ["read"]
 
-App\Api\Enveloppe\Model\MasqueProche:
+App\Api\Enveloppe\Model\Baie\MasqueProche:
   attributes:
     id:
       groups: ["read", "write"]

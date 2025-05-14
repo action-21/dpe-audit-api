@@ -10,24 +10,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class PanneauPhotovoltaique
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
         #[DpeAssert\Orientation]
-        public readonly float $orientation,
+        public float $orientation,
 
         #[DpeAssert\Inclinaison]
-        public readonly float $inclinaison,
+        public float $inclinaison,
 
         #[Assert\Positive]
-        public readonly int $modules,
+        public int $modules,
 
         #[Assert\Positive]
-        public readonly ?float $surface,
+        public ?float $surface,
 
-        public readonly ?PanneauPhotovoltaiqueData $data,
+        public ?PanneauPhotovoltaiqueData $data,
     ) {}
 
     public static function from(Entity $entity): self

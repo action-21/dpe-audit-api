@@ -1,6 +1,7 @@
 resources:
   App\Api\Enveloppe\Model\Enveloppe:
     shortName: Enveloppe
+    collectDenormalizationErrors: true
     normalizationContext:
       groups: ["read"]
     denormalizationContext:
@@ -10,3 +11,8 @@ resources:
         uriTemplate: /audit/{id}/enveloppe
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Enveloppe\State\EnveloppeProvider
+        controller: ApiPlatform\Symfony\Action\NotFoundAction
+        openapi:
+          summary: 🚧 Retourne les données de l'enveloppe d'un audit énergétique
+          description: |
+            **Disponible après syncrhonisation avec les données de l'observatoire DPE-Audit**

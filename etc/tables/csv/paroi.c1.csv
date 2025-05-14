@@ -1,4 +1,4 @@
-﻿mois;zone_climatique;orientation;inclinaison[lt];inclinaison[lte];inclinaison[gte];inclinaison[eq];c1
+﻿mois;zone_climatique;orientation;inclinaison/lt;inclinaison/lte;inclinaison/gte;inclinaison/eq;c1
 01;H1a;S;;;75;;1
 02;H1a;S;;;75;;1
 03;H1a;S;;;75;;1

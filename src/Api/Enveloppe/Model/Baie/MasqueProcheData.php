@@ -6,7 +6,7 @@ use App\Domain\Enveloppe\Entity\Baie\MasqueProche as Entity;
 
 final class MasqueProcheData
 {
-    public function __construct(public readonly ?float $fe1) {}
+    public function __construct(public ?float $fe1) {}
 
     public static function from(Entity $entity): self
     {

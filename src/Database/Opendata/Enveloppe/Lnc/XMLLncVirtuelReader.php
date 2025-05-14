@@ -3,19 +3,14 @@
 namespace App\Database\Opendata\Enveloppe\Lnc;
 
 use App\Database\Opendata\Enveloppe\XMLParoiReader;
-use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\{EtatIsolation, Mitoyennete};
 use App\Domain\Enveloppe\Enum\Lnc\TypeLnc;
 
+/**
+ * Reconstitution des locaux non chauffés pour les parois qui ne sont pas associées à un espace tampon solarisé
+ */
 final class XMLLncVirtuelReader extends XMLParoiReader implements XMLLncReader
 {
-    public function id(): Id
-    {
-        return $this->reference_lnc()
-            ? Id::from($this->reference_lnc())
-            : Id::from($this->reference());
-    }
-
     public function description(): string
     {
         return 'Local non chauffé reconstitué';

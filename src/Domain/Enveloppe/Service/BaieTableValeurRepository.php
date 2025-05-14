@@ -34,7 +34,7 @@ interface BaieTableValeurRepository extends ParoiTableValeurRepository
 
     public function sw(
         TypeBaie $type_baie,
-        TypePose $type_pose,
+        ?TypePose $type_pose,
         ?bool $presence_soubassement,
         ?Materiau $materiau,
         ?TypeVitrage $type_vitrage,
@@ -63,7 +63,7 @@ interface BaieTableValeurRepository extends ParoiTableValeurRepository
     public function omb(
         TypeMasqueLointain $type_masque_lointain,
         SecteurChampsVision $secteur,
-        ?Orientation $orientation,
-        ?float $hauteur_masque_alpha,
+        Orientation $orientation,
+        float $hauteur_masque_alpha,
     ): ?float;
 }

@@ -1,4 +1,4 @@
-﻿mois;zone_climatique;altitude[gt];altitude[gte];altitude[lt];altitude[lte];parois_anciennes_lourdes;epv;e;efr26;efr28;nref19;nref21;nref26;nref28;dh14;dh19;dh21;dh26;dh28;text;tefs;textmoy_clim26;textmoy_clim28
+﻿mois;zone_climatique;altitude/gt;altitude/gte;altitude/lt;altitude/lte;parois_anciennes_lourdes;epv;e;efr26;efr28;nref19;nref21;nref26;nref28;dh14;dh19;dh21;dh26;dh28;text;tefs;textmoy_clim26;textmoy_clim28
 01;H1a;;;400;;0;50.1;38.36;0;0;744;744;0;0;8488;11712.4;13200.4;0;0;2.6;7.8;;
 02;H1a;;;400;;0;54.7;37.47;0;0;672;672;0;0;7038.8;9966.8;11310.8;0;0;3.5;5.5;;
 03;H1a;;;400;;0;123.4;77.61;0;0;738;741;0;0;4733.2;7922.7;9402.4;0;0;7.7;6.9;;

@@ -1,5 +1,7 @@
 App\Api\Refroidissement\Model\Refroidissement:
   attributes:
+    id:
+      groups: ["read"]
     generateurs:
       groups: ["read", "write"]
     installations:

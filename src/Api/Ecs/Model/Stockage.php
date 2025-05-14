@@ -9,10 +9,10 @@ final class Stockage
 {
     public function __construct(
         #[Assert\PositiveOrZero]
-        public readonly float $volume,
+        public float $volume,
 
         #[Assert\Positive]
-        public readonly bool $position_volume_chauffe,
+        public bool $position_volume_chauffe,
     ) {}
 
     public static function from(Entity $entity): ?self

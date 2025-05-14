@@ -1,6 +1,7 @@
 resources:
   App\Api\Production\Model\Production:
     shortName: Production
+    collectDenormalizationErrors: true
     normalizationContext:
       groups: ["read"]
     denormalizationContext:
@@ -10,3 +11,8 @@ resources:
         uriTemplate: /audit/{id}/production
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Production\State\ProductionProvider
+        controller: ApiPlatform\Symfony\Action\NotFoundAction
+        openapi:
+          summary: 🚧 Retourne les données de production d'électricité renouvelable d'un audit énergétique
+          description: |
+            **Disponible après syncrhonisation avec les données de l'observatoire DPE-Audit**

@@ -7,9 +7,9 @@ use App\Domain\Production\Entity\PanneauPhotovoltaique as Entity;
 final class PanneauPhotovoltaiqueData
 {
     public function __construct(
-        public readonly ?float $kpv,
-        public readonly ?float $surface,
-        public readonly ?float $production,
+        public ?float $kpv,
+        public ?float $surface,
+        public ?float $production,
     ) {}
 
     public static function from(Entity $entity): self

@@ -3,13 +3,13 @@ api_platform:
     version: 1.0.0
     show_webby: false
     mapping:
-        paths:
-            - "%kernel.project_dir%/config/api"
+        paths: ["%kernel.project_dir%/config/api"]
     formats:
-        json:
-            mime_types: ["application/json"]
-        jsonld:
-            mime_types: ['application/ld+json']
+        json: ["application/json"]
+        jsonld: ["application/ld+json"]
+        jsonpatch: ["application/merge-patch+json"]
+    patch_formats:
+        json: ["application/merge-patch+json"]
     defaults:
         stateless: true
         normalization_context:

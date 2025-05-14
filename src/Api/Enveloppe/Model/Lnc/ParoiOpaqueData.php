@@ -8,9 +8,9 @@ use App\Domain\Enveloppe\Entity\Lnc\ParoiOpaque as Entity;
 final class ParoiOpaqueData
 {
     public function __construct(
-        public readonly ?float $aue,
-        public readonly ?float $aiu,
-        public readonly ?EtatIsolation $isolation,
+        public ?float $aue,
+        public ?float $aiu,
+        public ?EtatIsolation $isolation,
     ) {}
 
     public static function from(Entity $entity): self

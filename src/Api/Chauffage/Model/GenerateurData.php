@@ -15,24 +15,24 @@ use App\Domain\Chauffage\Entity\Generateur as Entity;
 final class GenerateurData
 {
     public function __construct(
-        public readonly ?float $pch,
-        public readonly ?float $pn,
-        public readonly ?float $paux,
-        public readonly ?float $scop,
-        public readonly ?float $rpn,
-        public readonly ?float $rpint,
-        public readonly ?float $qp0,
-        public readonly ?float $pveilleuse,
-        public readonly ?float $tfonc30,
-        public readonly ?float $tfonc100,
+        public ?float $pch,
+        public ?float $pn,
+        public ?float $paux,
+        public ?float $scop,
+        public ?float $rpn,
+        public ?float $rpint,
+        public ?float $qp0,
+        public ?float $pveilleuse,
+        public ?float $tfonc30,
+        public ?float $tfonc100,
         /** @var Perte[] */
-        public readonly array $pertes,
+        public array $pertes,
         /** @var Perte[] */
-        public readonly array $pertes_recuperables,
+        public array $pertes_recuperables,
         /** @var Consommation[] */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var Emission[] */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

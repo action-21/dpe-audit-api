@@ -1,4 +1,4 @@
-﻿zone_climatique;altitude[gt];altitude[gte];altitude[lt];altitude[lte];tbase
+﻿zone_climatique;altitude/gt;altitude/gte;altitude/lt;altitude/lte;tbase
 H1;;;400;;-9.5
 H1;;400;;800;-11.5
 H1;800;;;;-13.5

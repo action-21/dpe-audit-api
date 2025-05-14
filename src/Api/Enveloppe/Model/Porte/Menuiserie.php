@@ -9,11 +9,11 @@ final class Menuiserie
 {
     public function __construct(
         #[Assert\PositiveOrZero]
-        public readonly ?float $largeur_dormant,
+        public ?float $largeur_dormant,
 
-        public readonly ?bool $presence_joint,
+        public ?bool $presence_joint,
 
-        public readonly ?bool $presence_retour_isolation,
+        public ?bool $presence_retour_isolation,
     ) {}
 
     public static function from(Entity $entity): self

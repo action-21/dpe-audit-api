@@ -2,35 +2,17 @@
 
 namespace App\Database\Opendata\Enveloppe\Mur;
 
-use App\Database\Opendata\Enveloppe\Baie\XMLBaieReader;
-use App\Database\Opendata\Enveloppe\Porte\XMLPorteReader;
 use App\Database\Opendata\Enveloppe\XMLParoiReader;
 use App\Domain\Common\ValueObject\{Annee, Orientation};
 use App\Domain\Enveloppe\Enum\{EtatIsolation, InertieParoi, TypeIsolation};
 use App\Domain\Enveloppe\Enum\Mur\{TypeDoublage, TypeMur};
+use App\Domain\Enveloppe\ValueObject\Isolation;
 
 final class XMLMurReader extends XMLParoiReader
 {
-    /**
-     * @return XMLBaieReader[]
-     */
-    public function baies(): array
+    public function supports(): bool
     {
-        return array_filter(
-            $this->enveloppe()->baies(),
-            fn(XMLBaieReader $reader) => $reader->match($this->identifiants())
-        );
-    }
-
-    /**
-     * @return XMLPorteReader[]
-     */
-    public function portes(): array
-    {
-        return array_filter(
-            $this->enveloppe()->portes(),
-            fn(XMLPorteReader $reader) => $reader->match($this->identifiants())
-        );
+        return $this->surface() > 0;
     }
 
     public function annee_construction(): ?Annee
@@ -45,17 +27,17 @@ final class XMLMurReader extends XMLParoiReader
 
     public function orientation(): Orientation
     {
-        return Orientation::from(
+        return Orientation::from_enum_orientation_id(
             $this->findOneOrError('.//enum_orientation_id')->intval()
         );
     }
 
-    public function type_structure(): TypeMur
+    public function type_structure(): ?TypeMur
     {
         return TypeMur::from_enum_materiaux_structure_id($this->enum_materiaux_structure_mur_id());
     }
 
-    public function type_doublage(): TypeDoublage
+    public function type_doublage(): ?TypeDoublage
     {
         return TypeDoublage::from_enum_type_doublage_id($this->enum_type_doublage_id());
     }
@@ -77,18 +59,16 @@ final class XMLMurReader extends XMLParoiReader
 
     public function surface(): float
     {
-        if (null === $surface = $this->surface_paroi_totale()) {
-            $surface = $this->surface_paroi_opaque();
+        $surface_totale = $this->surface_paroi_totale();
+        $surface_opaque = $this->surface_paroi_opaque();
 
-            foreach ($this->baies() as $paroi) {
-                $surface += $paroi->surface();
-            }
-            foreach ($this->portes() as $paroi) {
-                $surface += $paroi->surface();
-            }
-            return $surface;
+        foreach ($this->baies() as $paroi) {
+            $surface_opaque += $paroi->surface();
         }
-        return $surface;
+        foreach ($this->portes() as $paroi) {
+            $surface_opaque += $paroi->surface();
+        }
+        return max([$surface_totale, $surface_opaque]);
     }
 
     public function surface_paroi_totale(): ?float
@@ -108,7 +88,7 @@ final class XMLMurReader extends XMLParoiReader
             : InertieParoi::LEGERE;
     }
 
-    public function etat_isolation(): EtatIsolation
+    public function etat_isolation(): ?EtatIsolation
     {
         return EtatIsolation::from_enum_type_isolation_id($this->enum_type_isolation_id());
     }
@@ -175,20 +155,14 @@ final class XMLMurReader extends XMLParoiReader
         return $this->findOneOrError('.//enum_type_isolation_id')->intval();
     }
 
-    // Données intermédiaires
-
-    public function umur0(): ?float
+    public function isolation(): Isolation
     {
-        return $this->findOne('.//umur0')?->floatval();
-    }
-
-    public function umur(): float
-    {
-        return $this->findOneOrError('.//umur')->floatval();
-    }
-
-    public function b(): float
-    {
-        return $this->findOneOrError('.//b')->floatval();
+        return Isolation::create(
+            etat_isolation: $this->etat_isolation(),
+            type_isolation: $this->type_isolation(),
+            annee_isolation: $this->annee_isolation(),
+            epaisseur_isolation: $this->epaisseur_isolation(),
+            resistance_thermique_isolation: $this->resistance_thermique_isolation(),
+        );
     }
 }

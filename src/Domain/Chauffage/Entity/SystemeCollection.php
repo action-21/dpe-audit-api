@@ -7,7 +7,7 @@ use App\Domain\Common\Collection\ArrayCollection;
 use App\Domain\Common\ValueObject\Id;
 
 /**
- * @property Systeme[] $elements
+ * @extends ArrayCollection<Systeme>
  */
 final class SystemeCollection extends ArrayCollection
 {

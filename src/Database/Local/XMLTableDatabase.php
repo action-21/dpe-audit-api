@@ -24,7 +24,7 @@ final class XMLTableDatabase
     {
         $key = "xmltable::{$this->name}";
 
-        $xml = $this->cache->get($key, function (CacheItemInterface $item) {
+        $xml = $this->cache->get($key, function (CacheItemInterface $item): string {
             if (false === $item->isHit()) {
                 $file = $this->projectDir . "/etc/tables/xml/{$this->name}.xml";
 
@@ -35,8 +35,8 @@ final class XMLTableDatabase
                     throw new \RuntimeException("Failed to load XML content: {$file}");
                 }
                 $item->set($content);
-                return $item->get();
             }
+            return $item->get();
         });
 
         return self::stringToXML($xml);
@@ -50,8 +50,10 @@ final class XMLTableDatabase
         /** @var string[] */
         $values = $this->cache->get($key, function (CacheItemInterface $item) use ($query) {
             if (false === $item->isHit()) {
-                if (!$result = $this->table()->xpath($query->getQuery())) {
-                    throw new \RuntimeException("Error on query {$query->getQuery()}");
+                $result = $this->table()->xpath($query->getQuery());
+
+                if (null === $result || false === $result) {
+                    throw new \RuntimeException("Query error for table {$this->name} : {$query->getQuery()}");
                 }
                 $datas = array_map(fn(XMLTableElement $xml): string => self::XMLToString($xml), $result);
                 $item->set($datas);

@@ -6,6 +6,9 @@ use App\Domain\Common\ValueObject\Id;
 use App\Domain\Common\ValueObject\Orientation;
 use App\Domain\Enveloppe\Enum\Baie\TypeMasqueLointain;
 
+/**
+ * Données reconstituées pour chaque baie
+ */
 final class XMLMasqueLointainHomogeneReader extends XMLMasqueLointainReader
 {
     public function supports(): bool
@@ -15,7 +18,7 @@ final class XMLMasqueLointainHomogeneReader extends XMLMasqueLointainReader
 
     public function baie(): XMLBaieReader
     {
-        return XMLBaieReader::from($this->findOneOrError('//ancestor::baie_vitree'));
+        return XMLBaieReader::from($this->xml());
     }
 
     public function id(): Id

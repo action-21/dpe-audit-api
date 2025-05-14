@@ -12,12 +12,12 @@ use App\Domain\Chauffage\Entity\Installation as Entity;
 final class InstallationData
 {
     public function __construct(
-        public readonly ?float $rdim,
-        public readonly ?float $fch,
+        public ?float $rdim,
+        public ?float $fch,
         /** @var Consommation[] */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var Emission[] */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

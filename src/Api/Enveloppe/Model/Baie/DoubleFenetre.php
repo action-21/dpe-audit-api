@@ -10,30 +10,30 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class DoubleFenetre
 {
     public function __construct(
-        public readonly TypeBaie $type_baie,
+        public TypeBaie $type_baie,
 
-        public readonly ?TypePose $type_pose,
+        public ?TypePose $type_pose,
 
-        public readonly ?Materiau $materiau,
+        public ?Materiau $materiau,
 
-        public readonly ?bool $presence_soubassement,
-
-        #[Assert\Positive]
-        public readonly ?float $ug,
+        public ?bool $presence_soubassement,
 
         #[Assert\Positive]
-        public readonly ?float $uw,
+        public ?float $ug,
 
         #[Assert\Positive]
-        public readonly ?float $sw,
+        public ?float $uw,
+
+        #[Assert\Positive]
+        public ?float $sw,
 
         #[Assert\Valid]
-        public readonly ?Vitrage $vitrage,
+        public ?Vitrage $vitrage,
 
         #[Assert\Valid]
-        public readonly ?Menuiserie $menuiserie,
+        public ?Menuiserie $menuiserie,
 
-        public readonly ?DoubleFenetreData $data,
+        public ?DoubleFenetreData $data,
     ) {}
 
     public static function from(Entity $entity): self

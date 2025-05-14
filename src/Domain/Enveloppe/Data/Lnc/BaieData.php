@@ -2,9 +2,8 @@
 
 namespace App\Domain\Enveloppe\Data\Lnc;
 
-use App\Domain\Common\Enum\Mois;
 use App\Domain\Enveloppe\Enum\EtatIsolation;
-use App\Domain\Enveloppe\ValueObject\Lnc\{EnsoleillementBaie, EnsoleillementsBaie};
+use App\Domain\Enveloppe\ValueObject\Lnc\EnsoleillementsBaie;
 use Webmozart\Assert\Assert;
 
 final class BaieData
@@ -45,10 +44,5 @@ final class BaieData
             isolation: $isolation ?? $this->isolation,
             ensoleillements: $ensoleillements ?? $this->ensoleillements,
         );
-    }
-
-    public function ensoleillement(Mois $mois): ?EnsoleillementBaie
-    {
-        return $this->ensoleillements?->find($mois);
     }
 }

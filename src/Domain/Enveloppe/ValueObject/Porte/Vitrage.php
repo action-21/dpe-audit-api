@@ -13,14 +13,14 @@ final class Vitrage
         public readonly ?TypeVitrage $type_vitrage,
     ) {}
 
-    public static function create(Pourcentage $taux_vitrage, TypeVitrage $type_vitrage,): self
+    public static function create(Pourcentage $taux_vitrage, ?TypeVitrage $type_vitrage,): self
     {
         Assert::greaterThanEq($taux_vitrage->value(), 0);
         Assert::lessThanEq($taux_vitrage->value(), 60);
 
         return new self(
             taux_vitrage: $taux_vitrage,
-            type_vitrage: $taux_vitrage > 0 ? $type_vitrage : null,
+            type_vitrage: $taux_vitrage->decimal() > 0 ? $type_vitrage : null,
         );
     }
 }

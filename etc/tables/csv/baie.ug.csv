@@ -1,4 +1,4 @@
-﻿type_baie;type_vitrage;nature_gaz_lame;inclinaison_vitrage[gte];inclinaison_vitrage[lt];epaisseur_lame_air;ug;tv_ug_id
+﻿type_baie;type_vitrage;nature_gaz_lame;inclinaison_vitrage/gte;inclinaison_vitrage/lt;epaisseur_lame_air;ug;tv_ug_id
 brique_verre_pleine;;;;;;3.5;
 brique_verre_creuse;;;;;;2;
 polycarbonate;;;;;;3;

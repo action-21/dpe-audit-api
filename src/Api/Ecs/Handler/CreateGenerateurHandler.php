@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 final class CreateGenerateurHandler
 {
     public function __construct(
-        #[AutowireIterator(GenerateurFactory::class)]
+        #[AutowireIterator('app.ecs.generateur.factory')]
         private readonly iterable $factories,
     ) {}
 
@@ -30,6 +30,7 @@ final class CreateGenerateurHandler
         $factory->set_position(
             generateur_collectif: $payload->generateur_collectif,
             position_volume_chauffe: $payload->position_volume_chauffe,
+            generateur_multi_batiment: $payload->generateur_multi_batiment,
             generateur_mixte_id: $payload->generateur_mixte_id
                 ? Id::from($payload->generateur_mixte_id)
                 : null,

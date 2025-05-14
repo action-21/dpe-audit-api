@@ -9,7 +9,7 @@ enum TypeDeperdition: string implements Enum
     case BAIE = 'baie';
     case MUR = 'mur';
     case PLANCHER_BAS = 'plancher_bas';
-    case PLANCHER_HAUT = 'plancher_hauts';
+    case PLANCHER_HAUT = 'plancher_haut';
     case PORTE = 'porte';
     case PONT_THERMIQUE = 'pont_thermique';
     case RENOUVELEMENT_AIR = 'renouvellement_air';
@@ -30,5 +30,16 @@ enum TypeDeperdition: string implements Enum
             self::PONT_THERMIQUE => 'Déperdition par les ponts thermiques',
             self::RENOUVELEMENT_AIR => 'Déperdition par renouvellement d\'air',
         };
+    }
+
+    public static function dp(): array
+    {
+        return [
+            self::BAIE,
+            self::MUR,
+            self::PLANCHER_BAS,
+            self::PLANCHER_HAUT,
+            self::PORTE,
+        ];
     }
 }

@@ -1,5 +1,7 @@
 App\Api\Production\Model\Production:
   attributes:
+    id:
+      groups: ["read"]
     panneaux_photovoltaiques:
       groups: ["read", "write"]
     data:

@@ -15,17 +15,9 @@ enum TauxCharge: int
     case TCH85 = 85;
     case TCH95 = 95;
 
-    public static function classe(float $taux_charge): self
-    {
-        foreach (self::cases() as $case) {
-            if ($taux_charge <= $case->value + 5)
-                return $case;
-        }
-    }
-
     public function taux_charge(): float
     {
-        return $this->value;
+        return $this->value / 100;
     }
 
     public function coefficient_ponderation(): float

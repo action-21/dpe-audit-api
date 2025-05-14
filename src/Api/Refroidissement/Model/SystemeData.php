@@ -12,11 +12,11 @@ use App\Domain\Refroidissement\Entity\Systeme as Entity;
 final class SystemeData
 {
     public function __construct(
-        public readonly ?float $rdim,
+        public ?float $rdim,
         /** @var array<Consommation> */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var array<Emission> */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

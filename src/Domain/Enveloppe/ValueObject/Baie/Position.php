@@ -27,13 +27,17 @@ final class Position
         ?Lnc $local_non_chauffe,
     ): self {
         Assert::greaterThan($surface, 0);
-        Assert::nullOrOneOf($paroi?->type_paroi(), [TypeParoi::parois_opaques()]);
+        Assert::nullOrOneOf($paroi?->type_paroi(), TypeParoi::parois_opaques());
+
+        if ($mitoyennete === Mitoyennete::LOCAL_NON_CHAUFFE && null === $local_non_chauffe) {
+            $mitoyennete = Mitoyennete::LOCAL_NON_ACCESSIBLE;
+        }
 
         return new self(
             surface: $surface,
             mitoyennete: $local_non_chauffe ? Mitoyennete::LOCAL_NON_CHAUFFE : $mitoyennete,
             inclinaison: $inclinaison,
-            orientation: $paroi?->orientation() ?? $orientation,
+            orientation: $orientation ?? $paroi?->orientation(),
             paroi: $paroi,
             local_non_chauffe: $local_non_chauffe,
         );

@@ -8,26 +8,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Installation
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
         #[Assert\Positive]
-        public readonly float $surface,
+        public float $surface,
 
-        public readonly bool $comptage_individuel,
-
-        #[Assert\Valid]
-        public readonly ?Solaire $solaire_thermique,
+        public bool $comptage_individuel,
 
         #[Assert\Valid]
-        public readonly Regulation $regulation_centrale,
+        public ?Solaire $solaire_thermique,
 
         #[Assert\Valid]
-        public readonly Regulation $regulation_terminale,
+        public Regulation $regulation_centrale,
 
-        public readonly ?InstallationData $data,
+        #[Assert\Valid]
+        public Regulation $regulation_terminale,
+
+        public ?InstallationData $data,
     ) {}
 
     public static function from(Entity $entity): self

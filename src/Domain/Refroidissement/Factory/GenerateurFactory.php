@@ -9,7 +9,9 @@ use App\Domain\Refroidissement\Entity\{Generateur, ReseauFroid};
 use App\Domain\Refroidissement\Enum\{EnergieGenerateur, TypeGenerateur};
 use App\Domain\Refroidissement\Repository\ReseauFroidRepository;
 use Webmozart\Assert\Assert;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('app.refroidissement.generateur.factory')]
 abstract class GenerateurFactory
 {
     protected Id $id;

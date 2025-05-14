@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 
 final class GetProductionHandler
 {
-    public function __construct(private ProductionRepository $repository) {}
+    public function __construct(private readonly ProductionRepository $repository) {}
 
     public function __invoke(Id $id): ?Production
     {

@@ -9,18 +9,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Liaison
 {
     public function __construct(
-        public readonly TypeLiaison $type_liaison,
+        public TypeLiaison $type_liaison,
 
-        #[Assert\Uuid]
-        public readonly string $mur_id,
+        public string $mur_id,
 
-        #[Assert\Uuid]
-        public readonly ?string $plancher_id,
+        public ?string $plancher_id,
 
-        #[Assert\Uuid]
-        public readonly ?string $ouverture_id,
+        public ?string $ouverture_id,
 
-        public readonly ?bool $pont_thermique_partiel,
+        public ?bool $pont_thermique_partiel,
     ) {}
 
     public static function from(Entity $entity): self

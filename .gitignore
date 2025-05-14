@@ -1,5 +1,5 @@
 
-/data/*
+/data
 
 ###> symfony/framework-bundle ###
 /.env

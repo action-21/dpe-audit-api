@@ -1,4 +1,4 @@
-﻿type_generateur;energie_generateur;label_generateur;anne_installation_generateur[gte];anne_installation_generateur[lte];rg
+﻿type_generateur;energie_generateur;label_generateur;anne_installation_generateur/gte;anne_installation_generateur/lte;rg
 cuisiniere;;;;1989;0.5
 cuisiniere;;;1990;2004;0.6
 cuisiniere;;;2005;;0.65

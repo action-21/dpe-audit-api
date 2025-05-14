@@ -1,4 +1,4 @@
-﻿type_ventilation;type_generateur;type_vmc;generateur_collectif;annee_installation[gte];annee_installation[lte];ratio_utilisation;pvent_moy;pvent
+﻿type_ventilation;type_generateur;type_vmc;generateur_collectif;annee_installation/gte;annee_installation/lte;ratio_utilisation;pvent_moy;pvent
 ventilation_mecanique;puit_climatique;;;;;0;0;0
 ventilation_mecanique;ventilation_mecanique;;;;;0;0;0
 ventilation_naturelle_ouverture_fenetres;;;;;;0;0;0

@@ -13,21 +13,21 @@ use App\Domain\Audit\Audit as Entity;
 final class AuditData
 {
     public function __construct(
-        public readonly ?float $volume_habitable,
-        public readonly ?float $surface_habitable,
-        public readonly ?float $hauteur_sous_plafond,
-        public readonly ?int $nombre_logements,
-        public readonly ?float $tbase,
-        public readonly ?bool $effet_joule,
-        public readonly ?float $cef,
-        public readonly ?float $cep,
-        public readonly ?float $eges,
-        public readonly ?Etiquette $etiquette_energie,
-        public readonly ?Etiquette $etiquette_climat,
+        public ?float $volume_habitable,
+        public ?float $surface_habitable,
+        public ?float $hauteur_sous_plafond,
+        public ?int $nombre_logements,
+        public ?float $tbase,
+        public ?bool $effet_joule,
+        public ?float $cef,
+        public ?float $cep,
+        public ?float $eges,
+        public ?Etiquette $etiquette_energie,
+        public ?Etiquette $etiquette_climat,
         /** @var Consommation[] */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var Emission[] */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

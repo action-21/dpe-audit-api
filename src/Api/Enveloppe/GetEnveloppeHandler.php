@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 
 final class GetEnveloppeHandler
 {
-    public function __construct(private EnveloppeRepository $repository) {}
+    public function __construct(private readonly EnveloppeRepository $repository) {}
 
     public function __invoke(Id $id): ?Enveloppe
     {

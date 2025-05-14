@@ -18,11 +18,12 @@ final class DoubleFenetre
     ) {}
 
     public static function create(
+        Id $id,
         Composition $composition,
         ?Performance $performance,
     ): self {
         return new self(
-            id: Id::create(),
+            id: $id,
             composition: $composition,
             performance: $performance ?? Performance::create(),
             data: DoubleFenetreData::create(),

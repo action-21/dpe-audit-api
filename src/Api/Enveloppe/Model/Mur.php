@@ -12,43 +12,42 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Mur
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly ?TypeMur $type_structure,
+        public ?TypeMur $type_structure,
 
         #[Assert\Positive]
-        public readonly ?float $epaisseur_structure,
+        public ?float $epaisseur_structure,
 
-        public readonly TypeDoublage $type_doublage,
+        public TypeDoublage $type_doublage,
 
-        public readonly ?bool $presence_enduit_isolant,
+        public ?bool $presence_enduit_isolant,
 
-        public readonly ?bool $paroi_ancienne,
+        public ?bool $paroi_ancienne,
 
-        public readonly ?InertieParoi $inertie,
+        public ?InertieParoi $inertie,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_construction,
+        public ?int $annee_construction,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_renovation,
+        public ?int $annee_renovation,
 
         #[Assert\Positive]
-        public readonly ?float $u0,
+        public ?float $u0,
 
         #[Assert\Positive]
-        public readonly ?float $u,
+        public ?float $u,
 
         #[Assert\Valid]
-        public readonly Position $position,
+        public Position $position,
 
         #[Assert\Valid]
-        public readonly Isolation $isolation,
+        public Isolation $isolation,
 
-        public readonly ?Data $data,
+        public ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self

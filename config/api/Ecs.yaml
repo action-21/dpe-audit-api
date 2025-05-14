@@ -1,6 +1,7 @@
 resources:
   App\Api\Ecs\Model\Ecs:
     shortName: Ecs
+    collectDenormalizationErrors: true
     normalizationContext:
       groups: ["read"]
     denormalizationContext:
@@ -10,3 +11,8 @@ resources:
         uriTemplate: /audit/{id}/ecs
         class: ApiPlatform\Metadata\Get
         provider: App\Api\Ecs\State\EcsProvider
+        controller: ApiPlatform\Symfony\Action\NotFoundAction
+        openapi:
+          summary: 🚧 Retourne les données d'eau chaude sanitaire d'un audit énergétique
+          description: |
+            **Disponible après syncrhonisation avec les données de l'observatoire DPE-Audit**

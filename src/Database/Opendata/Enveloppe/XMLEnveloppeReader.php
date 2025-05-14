@@ -11,7 +11,7 @@ use App\Database\Opendata\Enveloppe\PlancherBas\XMLPlancherBasReader;
 use App\Database\Opendata\Enveloppe\PlancherHaut\XMLPlancherHautReader;
 use App\Database\Opendata\Enveloppe\PontThermique\XMLPontThermiqueReader;
 use App\Database\Opendata\Enveloppe\Porte\XMLPorteReader;
-use App\Domain\Enveloppe\Enum\{Exposition, Inertie, TypeParoi};
+use App\Domain\Enveloppe\Enum\{Exposition, Inertie};
 
 final class XMLEnveloppeReader extends XMLReader
 {
@@ -42,68 +42,83 @@ final class XMLEnveloppeReader extends XMLReader
     {
         $locaux_non_chauffes = array_map(
             fn(XMLElement $xml): XMLEtsReader => XMLEtsReader::from($xml),
-            $this->findMany('.//ets_collection//ets')
+            $this->findMany('//ets_collection//ets')
         );
-
-        foreach (TypeParoi::parois_opaques() as $type_paroi) {
-            foreach ($this->parois($type_paroi) as $reader) {
-                if (null === $reader->local_non_chauffe_id()) {
-                    continue;
-                }
-                if (array_find(
-                    $locaux_non_chauffes,
-                    fn(XMLLncReader $item) => $item->id()->compare($reader->local_non_chauffe_id())
-                )) {
-                    continue;
-                }
-                $locaux_non_chauffes[] = XMLLncVirtuelReader::from($reader->xml());
+        foreach ($this->parois() as $reader) {
+            if (false === $reader->local_non_chauffe_virtuel()) {
+                continue;
             }
-        }
-        foreach (TypeParoi::ouvertures() as $type_paroi) {
-            foreach ($this->parois($type_paroi) as $reader) {
-                if (null === $reader->local_non_chauffe_id()) {
-                    continue;
-                }
-                if ($this->paroi($reader->identifiants())) {
-                    continue;
-                }
-                if (array_find(
-                    $locaux_non_chauffes,
-                    fn(XMLLncReader $item) => $item->id()->compare($reader->local_non_chauffe_id())
-                )) {
-                    continue;
-                }
-                $locaux_non_chauffes[] = XMLLncVirtuelReader::from($reader->xml());
+            if (array_find(
+                $locaux_non_chauffes,
+                fn(XMLLncReader $item): bool => $item->id()->compare($reader->local_non_chauffe_id())
+            )) {
+                continue;
             }
+            $locaux_non_chauffes[] = XMLLncVirtuelReader::from($reader->xml());
         }
         return $locaux_non_chauffes;
+    }
+
+    /**
+     * @return XMLParoiReader[]
+     */
+    public function parois(): array
+    {
+        return array_merge(
+            $this->murs(),
+            $this->planchers_bas(),
+            $this->planchers_hauts(),
+            $this->baies(),
+            $this->portes()
+        );
     }
 
     /** @return XMLMurReader[] */
     public function murs(): array
     {
-        return \array_map(
-            fn(XMLElement $xml): XMLMurReader => XMLMurReader::from($xml),
-            $this->findMany('.//mur_collection//mur')
-        );
+        $readers = [];
+
+        foreach ($this->findMany('.//mur_collection//mur') as $item) {
+            $reader = XMLMurReader::from($item);
+
+            if (false === $reader->supports()) {
+                continue;
+            }
+            $readers[] = $reader;
+        }
+        return $readers;
     }
 
     /** @return XMLPlancherBasReader[] */
     public function planchers_bas(): array
     {
-        return \array_map(
-            fn(XMLElement $xml): XMLPlancherBasReader => XMLPlancherBasReader::from($xml),
-            $this->findMany('.//plancher_bas_collection//plancher_bas')
-        );
+        $readers = [];
+
+        foreach ($this->findMany('.//plancher_bas_collection//plancher_bas') as $item) {
+            $reader = XMLPlancherBasReader::from($item);
+
+            if (false === $reader->supports()) {
+                continue;
+            }
+            $readers[] = $reader;
+        }
+        return $readers;
     }
 
     /** @return XMLPlancherHautReader[] */
     public function planchers_hauts(): array
     {
-        return \array_map(
-            fn(XMLElement $xml): XMLPlancherHautReader => XMLPlancherHautReader::from($xml),
-            $this->findMany('.//plancher_haut_collection//plancher_haut')
-        );
+        $readers = [];
+
+        foreach ($this->findMany('.//plancher_haut_collection//plancher_haut') as $item) {
+            $reader = XMLPlancherHautReader::from($item);
+
+            if (false === $reader->supports()) {
+                continue;
+            }
+            $readers[] = $reader;
+        }
+        return $readers;
     }
 
     /** @return XMLBaieReader[] */
@@ -113,7 +128,8 @@ final class XMLEnveloppeReader extends XMLReader
 
         foreach ($this->findMany('.//baie_vitree_collection//baie_vitree') as $item) {
             $reader = XMLBaieReader::from($item);
-            if (!$reader->nb_baie()) {
+
+            if (false === $reader->supports()) {
                 continue;
             }
             for ($i = 1; $i <= $reader->nb_baie(); $i++) {
@@ -130,7 +146,8 @@ final class XMLEnveloppeReader extends XMLReader
 
         foreach ($this->findMany('.//porte_collection//porte') as $item) {
             $reader = XMLPorteReader::from($item);
-            if (!$reader->nb_porte()) {
+
+            if (false === $reader->supports()) {
                 continue;
             }
             for ($i = 1; $i <= $reader->nb_porte(); $i++) {
@@ -143,41 +160,10 @@ final class XMLEnveloppeReader extends XMLReader
     /** @return XMLPontThermiqueReader[] */
     public function ponts_thermiques(): array
     {
-        return \array_map(
+        return array_filter(array_map(
             fn(XMLElement $xml): XMLPontThermiqueReader => XMLPontThermiqueReader::from($xml),
             $this->findMany('.//pont_thermique_collection//pont_thermique')
-        );
-    }
-
-    /**
-     * @return XMLParoiReader[]
-     */
-    public function parois(TypeParoi $type_paroi): array
-    {
-        return match ($type_paroi) {
-            TypeParoi::MUR => $this->murs(),
-            TypeParoi::PLANCHER_BAS => $this->planchers_bas(),
-            TypeParoi::PLANCHER_HAUT => $this->planchers_hauts(),
-            TypeParoi::BAIE => $this->baies(),
-            TypeParoi::PORTE => $this->portes(),
-        };
-    }
-
-    /**
-     * @param string[] $identifiants
-     */
-    public function paroi(array $identifiants): ?XMLParoiReader
-    {
-        foreach (TypeParoi::cases() as $type_paroi) {
-            $match = array_find(
-                $this->parois($type_paroi),
-                fn(XMLParoiReader $paroi_reader) => $paroi_reader->match($identifiants),
-            );
-            if ($match) {
-                return $match;
-            }
-        }
-        return null;
+        ), fn(XMLPontThermiqueReader $reader) => $reader->supports());
     }
 
     public function plusieurs_facade_exposee(): bool
@@ -193,6 +179,11 @@ final class XMLEnveloppeReader extends XMLReader
     public function exposition(): Exposition
     {
         return $this->plusieurs_facade_exposee() ? Exposition::EXPOSITION_MULTIPLE : Exposition::EXPOSITION_SIMPLE;
+    }
+
+    public function presence_brasseurs_air(): bool
+    {
+        return $this->findOne('//brasseur_air')?->boolval() ?? false;
     }
 
     public function inertie(): Inertie
@@ -232,42 +223,53 @@ final class XMLEnveloppeReader extends XMLReader
         return $this->findOneOrError('//deperdition/hperm')->floatval();
     }
 
-    public function deperdition_renouvellement_air(): float
+    public function dr(): float
     {
         return $this->findOneOrError('//deperdition/deperdition_renouvellement_air')->floatval();
     }
 
-    public function deperdition_mur(): float
+    public function dp(): float
+    {
+        return array_sum([
+            $this->dp_murs(),
+            $this->dp_plancher_bas(),
+            $this->dp_plancher_haut(),
+            $this->dp_baie(),
+            $this->dp_porte(),
+        ]);
+    }
+
+    public function dp_murs(): float
     {
         return $this->findOneOrError('//deperdition/deperdition_mur')->floatval();
     }
 
-    public function deperdition_plancher_bas(): float
+    public function dp_plancher_bas(): float
     {
         return $this->findOneOrError('//deperdition/deperdition_plancher_bas')->floatval();
     }
 
-    public function deperdition_plancher_haut(): float
+    public function dp_plancher_haut(): float
     {
         return $this->findOneOrError('//deperdition/deperdition_plancher_haut')->floatval();
     }
 
-    public function deperdition_baie(): float
+    public function dp_baie(): float
     {
         return $this->findOneOrError('//deperdition/deperdition_baie_vitree')->floatval();
     }
 
-    public function deperdition_porte(): float
+    public function dp_porte(): float
     {
         return $this->findOneOrError('//deperdition/deperdition_porte')->floatval();
     }
 
-    public function deperdition_pont_thermique(): float
+    public function pt(): float
     {
         return $this->findOneOrError('//deperdition/deperdition_pont_thermique')->floatval();
     }
 
-    public function deperdition_enveloppe(): float
+    public function gv(): float
     {
         return $this->findOneOrError('//deperdition/deperdition_enveloppe')->floatval();
     }

@@ -13,7 +13,7 @@ use App\Domain\Common\ValueObject\Id;
  */
 final class EcsProvider implements ProviderInterface
 {
-    public function __construct(private GetEcsHandler $handler) {}
+    public function __construct(private readonly GetEcsHandler $handler) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?Ecs
     {

@@ -10,10 +10,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Survitrage
 {
     public function __construct(
-        public readonly ?TypeSurvitrage $type_survitrage,
+        public ?TypeSurvitrage $type_survitrage,
 
         #[Assert\PositiveOrZero]
-        public readonly ?float $epaisseur_lame,
+        public ?float $epaisseur_lame,
     ) {}
 
     public static function from(Entity $entity): ?self

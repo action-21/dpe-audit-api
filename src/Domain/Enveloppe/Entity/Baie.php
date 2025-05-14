@@ -198,12 +198,12 @@ final class Baie extends Paroi
 
     public function presence_retour_isolation(): ?bool
     {
-        return $this->menuiserie()->presence_retour_isolation;
+        return $this->menuiserie()?->presence_retour_isolation;
     }
 
     public function largeur_dormant(): ?float
     {
-        return $this->menuiserie()->largeur_dormant;
+        return $this->menuiserie()?->largeur_dormant;
     }
 
     /**

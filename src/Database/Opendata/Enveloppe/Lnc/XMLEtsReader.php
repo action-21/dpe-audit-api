@@ -31,7 +31,12 @@ final class XMLEtsReader extends XMLReader implements XMLLncReader
 
     public function id(): Id
     {
-        return $this->findOneOrError('.//reference')->id();
+        return Id::from($this->reference());
+    }
+
+    public function reference(): string
+    {
+        return $this->findOneOrError('./donnee_entree/reference')->reference();
     }
 
     public function description(): string

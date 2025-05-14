@@ -14,24 +14,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Lnc
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeLnc $type,
+        public TypeLnc $type,
 
         /** @var ParoiOpaque[] */
         #[Assert\All([new Assert\Type(ParoiOpaque::class)])]
         #[Assert\Valid]
-        public readonly array $parois_opaques,
+        public array $parois_opaques,
 
         /** @var Baie[] */
         #[Assert\All([new Assert\Type(Baie::class)])]
         #[Assert\Valid]
-        public readonly array $baies,
+        public array $baies,
 
-        public readonly ?Data $data,
+        public ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self

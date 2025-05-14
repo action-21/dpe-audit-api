@@ -6,12 +6,13 @@ use App\Database\Opendata\XMLReader;
 use App\Domain\Common\ValueObject\{Id, Inclinaison};
 use App\Domain\Enveloppe\Enum\Baie\{Materiau, NatureGazLame, TypeBaie, TypeSurvitrage, TypeVitrage};
 use App\Domain\Enveloppe\Enum\TypePose;
+use App\Domain\Enveloppe\ValueObject\Baie\{Composition, Menuiserie, Performance, Survitrage, Vitrage};
 
 final class XMLDoubleFenetreReader extends XMLReader
 {
     public function baie(): XMLBaieReader
     {
-        return XMLBaieReader::from($this->findOneOrError('//ancestor::baie_vitree'));
+        return XMLBaieReader::from($this->findOneOrError('.//ancestor::baie_vitree'));
     }
 
     public function id(): Id
@@ -144,6 +145,68 @@ final class XMLDoubleFenetreReader extends XMLReader
     public function vitrage_vir(): bool
     {
         return $this->findOne('.//vitrage_vir')?->boolval() ?? false;
+    }
+
+    public function composition(): Composition
+    {
+        return Composition::create(
+            type_baie: $this->type_baie(),
+            type_pose: $this->type_pose(),
+            materiau: $this->materiau(),
+            presence_soubassement: $this->presence_soubassement(),
+            vitrage: $this->vitrage(),
+            menuiserie: $this->menuiserie(),
+        );
+    }
+
+    public function vitrage(): ?Vitrage
+    {
+        if ($this->type_baie()->is_paroi_vitree()) {
+            return null;
+        }
+        return Vitrage::create(
+            type_vitrage: $this->type_vitrage(),
+            nature_gaz_lame: $this->nature_gaz_lame(),
+            epaisseur_lame: $this->epaisseur_lame(),
+            survitrage: $this->survitrage(),
+        );
+    }
+
+    public function survitrage(): ?Survitrage
+    {
+        if ($this->type_baie()->is_paroi_vitree()) {
+            return null;
+        }
+        if (null === $this->type_survitrage()) {
+            return null;
+        }
+        return Survitrage::create(
+            type_survitrage: $this->type_survitrage(),
+            epaisseur_lame: $this->epaisseur_survitrage(),
+        );
+    }
+
+    public function menuiserie(): ?Menuiserie
+    {
+        if ($this->type_baie()->is_paroi_vitree()) {
+            return null;
+        }
+        return Menuiserie::create(
+            largeur_dormant: $this->largeur_dormant(),
+            presence_joint: $this->presence_joint(),
+            presence_retour_isolation: $this->presence_retour_isolation(),
+            presence_rupteur_pont_thermique: $this->presence_rupteur_pont_thermique(),
+        );
+    }
+
+    public function performance(): Performance
+    {
+        return Performance::create(
+            ug: $this->ug_saisi(),
+            uw: $this->uw_saisi(),
+            sw: $this->sw_saisi(),
+            ujn: null,
+        );
     }
 
     // Données intermédiaires

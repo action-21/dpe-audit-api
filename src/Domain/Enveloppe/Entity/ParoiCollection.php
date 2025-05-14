@@ -7,7 +7,7 @@ use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\EtatIsolation;
 
 /**
- * @property Paroi[] $elements
+ * @extends ArrayCollection<Paroi>
  */
 abstract class ParoiCollection extends ArrayCollection
 {

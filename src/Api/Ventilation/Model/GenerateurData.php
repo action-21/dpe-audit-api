@@ -13,9 +13,9 @@ final class GenerateurData
 {
     public function __construct(
         /** @var array<Consommation> */
-        public readonly array $consommations,
+        public array $consommations,
         /** @var array<Emission> */
-        public readonly array $emissions,
+        public array $emissions,
     ) {}
 
     public static function from(Entity $entity): self

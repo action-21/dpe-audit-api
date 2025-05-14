@@ -10,74 +10,71 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Generateur
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly TypeGenerateur $type,
+        public TypeGenerateur $type,
 
-        public readonly EnergieGenerateur $energie,
+        public EnergieGenerateur $energie,
 
-        public readonly ?EnergieGenerateur $energie_partie_chaudiere,
+        public ?EnergieGenerateur $energie_partie_chaudiere,
 
-        public readonly bool $generateur_collectif,
+        public bool $generateur_collectif,
 
-        public readonly bool $position_volume_chauffe,
+        public bool $position_volume_chauffe,
 
-        public readonly bool $generateur_multi_batiment,
+        public bool $generateur_multi_batiment,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_installation,
+        public ?int $annee_installation,
 
         #[Assert\Positive]
-        public readonly ?float $pn,
+        public ?float $pn,
 
         #[Assert\Positive]
-        public readonly ?float $scop,
+        public ?float $scop,
 
-        public readonly ?LabelGenerateur $label,
+        public ?LabelGenerateur $label,
 
-        public readonly ?TypeChaudiere $type_chaudiere,
+        public ?TypeChaudiere $type_chaudiere,
 
         #[Assert\PositiveOrZero]
-        public readonly ?int $priorite_cascade,
+        public ?int $priorite_cascade,
 
-        public readonly ?ModeCombustion $mode_combustion,
+        public ?ModeCombustion $mode_combustion,
 
-        public readonly ?bool $presence_ventouse,
+        public ?bool $presence_ventouse,
 
-        public readonly ?bool $presence_regulation_combustion,
+        public ?bool $presence_regulation_combustion,
 
         #[Assert\PositiveOrZero]
-        public readonly ?float $pveilleuse,
+        public ?float $pveilleuse,
 
         #[Assert\Positive]
-        public readonly ?float $qp0,
+        public ?float $qp0,
 
         #[Assert\Positive]
         #[Assert\LessThanOrEqual(150)]
-        public readonly ?float $rpn,
+        public ?float $rpn,
 
         #[Assert\Positive]
         #[Assert\LessThanOrEqual(150)]
-        public readonly ?float $rpint,
+        public ?float $rpint,
 
         #[Assert\Positive]
         #[Assert\LessThanOrEqual(70)]
-        public readonly ?float $tfonc30,
+        public ?float $tfonc30,
 
         #[Assert\Positive]
         #[Assert\LessThanOrEqual(70)]
-        public readonly ?float $tfonc100,
+        public ?float $tfonc100,
 
-        #[Assert\Uuid]
-        public readonly ?string $reseau_chaleur_id,
+        public ?string $reseau_chaleur_id,
 
-        #[Assert\Uuid]
-        public readonly ?string $generateur_mixte_id,
+        public ?string $generateur_mixte_id,
 
-        public readonly ?GenerateurData $data,
+        public ?GenerateurData $data,
     ) {}
 
     public static function from(Entity $entity): self

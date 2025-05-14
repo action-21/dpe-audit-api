@@ -8,7 +8,7 @@ use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\Enum\Mitoyennete;
 
 /**
- * @property Baie[] $elements
+ * @extends ArrayCollection<Baie>
  */
 final class BaieCollection extends ArrayCollection
 {

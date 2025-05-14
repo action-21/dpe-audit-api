@@ -12,36 +12,35 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class PlancherHaut
 {
     public function __construct(
-        #[Assert\Uuid]
-        public readonly string $id,
+        public string $id,
 
-        public readonly string $description,
+        public string $description,
 
-        public readonly Configuration $configuration,
+        public Configuration $configuration,
 
-        public readonly ?TypePlancherHaut $type_structure,
+        public ?TypePlancherHaut $type_structure,
 
-        public readonly ?InertieParoi $inertie,
-
-        #[DpeAssert\Annee]
-        public readonly ?int $annee_construction,
+        public ?InertieParoi $inertie,
 
         #[DpeAssert\Annee]
-        public readonly ?int $annee_renovation,
+        public ?int $annee_construction,
+
+        #[DpeAssert\Annee]
+        public ?int $annee_renovation,
 
         #[Assert\Positive]
-        public readonly ?float $u0,
+        public ?float $u0,
 
         #[Assert\Positive]
-        public readonly ?float $u,
+        public ?float $u,
 
         #[Assert\Valid]
-        public readonly Position $position,
+        public Position $position,
 
         #[Assert\Valid]
-        public readonly Isolation $isolation,
+        public Isolation $isolation,
 
-        public readonly ?Data $data,
+        public ?Data $data,
     ) {}
 
     public static function from(Entity $entity): self

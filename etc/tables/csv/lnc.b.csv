@@ -1,4 +1,4 @@
-﻿uvue;isolation_aiu;isolation_aue;aiu_aue[gt];aiu_aue[lte];b;tv_coef_reduction_deperdition_id
+﻿uvue;isolation_aiu;isolation_aue;aiu_aue/gt;aiu_aue/lte;b;tv_coef_reduction_deperdition_id
 0;isole;non_isole;;0.25;0.95;9
 0;isole;non_isole;0.25;0.5;0.95;10
 0;isole;non_isole;0.5;0.75;0.9;11

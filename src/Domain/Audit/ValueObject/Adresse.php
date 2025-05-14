@@ -2,8 +2,6 @@
 
 namespace App\Domain\Audit\ValueObject;
 
-use App\Domain\Common\Enum\ZoneClimatique;
-
 final class Adresse
 {
     public function __construct(
@@ -14,7 +12,6 @@ final class Adresse
         public readonly string $code_commune,
         public readonly string $commune,
         public readonly ?string $ban_id,
-        public readonly ZoneClimatique $zone_climatique,
     ) {}
 
     public static function create(
@@ -32,8 +29,7 @@ final class Adresse
             code_commune: $code_commune,
             commune: $commune,
             ban_id: $ban_id,
-            code_departement: ($code_departement = \substr($code_postal, 0, 2)),
-            zone_climatique: ZoneClimatique::from_code_departement($code_departement),
+            code_departement: \substr($code_commune, 0, 2),
         );
     }
 }

@@ -84,10 +84,6 @@ final class XMLEmetteurReader extends XMLReader
         };
     }
 
-
-
-
-
     public function presence_regulation_centrale(): bool
     {
         return match ($this->enum_equipement_intermittence_id()) {

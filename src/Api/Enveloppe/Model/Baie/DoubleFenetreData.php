@@ -7,9 +7,9 @@ use App\Domain\Enveloppe\Entity\Baie\DoubleFenetre as Entity;
 final class DoubleFenetreData
 {
     public function __construct(
-        public readonly ?float $ug,
-        public readonly ?float $uw,
-        public readonly ?float $sw,
+        public ?float $ug,
+        public ?float $uw,
+        public ?float $sw,
     ) {}
 
     public static function from(Entity $entity): self
