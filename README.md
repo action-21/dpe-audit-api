@@ -8,8 +8,8 @@ API du projet [DPE-Audit](https://github.com/action-21/dpe-audit).
 ## Installation
 
 ```
-git clone https://github.com/action-21/reno-audit-api
-cd reno-audit-api
+git clone https://github.com/action-21/dpe-audit-api
+cd dpe-audit-api
 composer install
 symfony server:start
 ```
