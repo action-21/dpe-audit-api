@@ -19,12 +19,13 @@ enum ClasseAltitude: string implements Enum
         };
     }
 
-    public static function from_classe_altitude(string $value): self
+    public static function from_opendata(string $value): self
     {
         return match ($value) {
             'inférieur à 400m' => self::_400_LT,
             '400-800m' => self::_400_800,
             'supérieur à 800m' => self::_800_GT,
+            default => self::_400_LT
         };
     }
 
@@ -42,21 +43,30 @@ enum ClasseAltitude: string implements Enum
         };
     }
 
-    public function filter(): string
-    {
-        return match ($this) {
-            self::_400_LT => 'inférieur à 400m',
-            self::_400_800 => '400-800m',
-            self::_800_GT => 'supérieur à 800m',
-        };
-    }
-
     public function floatval(): float
     {
         return match ($this) {
             self::_400_LT => 200,
             self::_400_800 => 600,
             self::_800_GT => 1000,
+        };
+    }
+
+    public function min(): ?float
+    {
+        return match ($this) {
+            self::_400_LT => 0,
+            self::_400_800 => 400,
+            self::_800_GT => 801,
+        };
+    }
+
+    public function max(): ?float
+    {
+        return match ($this) {
+            self::_400_LT => 399,
+            self::_400_800 => 800,
+            self::_800_GT => null,
         };
     }
 }

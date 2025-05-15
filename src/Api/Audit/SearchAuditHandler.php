@@ -24,14 +24,18 @@ final class SearchAuditHandler
             ->with_annee_construction(min: $query->annee_construction_min, max: $query->annee_construction_max)
             ->with_altitude(min: $query->altitude_min, max: $query->altitude_max)
             ->with_type_batiment(...$query->type_batiment)
-            ->with_zone_climatique(...$query->zone_climatique)
+            ->with_periode_construction(...$query->periode_constrcution)
+            ->with_classe_altitude(...$query->classe_altitude)
             ->with_etiquette_energie(...$query->etiquette_energie)
             ->with_etiquette_climat(...$query->etiquette_climat)
             ->with_code_departement(...$query->code_departement)
             ->with_code_postal(...$query->code_postal)
+            ->with_zone_climatique(...$query->zone_climatique)
             ->sort($query->sort ?? 'numero_dpe');
 
+        $collection = $repository->search(page: $query->page ?? 1, randomize: $query->randomize ?? false);
         $this->count = $repository->count();
-        return $repository->search(page: $query->page ?? 1);
+
+        return $collection;
     }
 }

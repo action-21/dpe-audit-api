@@ -6,19 +6,22 @@ use App\Domain\Audit\Enum\{ClasseAltitude, Etiquette, PeriodeConstruction, TypeB
 use App\Domain\Common\Enum\ZoneClimatique;
 use App\Domain\Common\ValueObject\Id;
 
-interface AuditRepository
+interface AuditRepository extends \Countable
 {
     public function find(Id $id): ?Audit;
 
-    public function search(int $page = 1): AuditCollection;
-
-    public function count(): int;
+    /**
+     * @return AuditCollection|Audit[]
+     */
+    public function search(int $page = 1, bool $randomize = false): AuditCollection;
 
     public function sort(string $name): static;
 
-    public function randomize(): static;
-
     public function with_type_batiment(TypeBatiment ...$filters): static;
+
+    public function with_periode_construction(PeriodeConstruction ...$filters): static;
+
+    public function with_classe_altitude(ClasseAltitude ...$filters): static;
 
     public function with_etiquette_energie(Etiquette ...$filters): static;
 

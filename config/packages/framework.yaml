@@ -6,6 +6,12 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+    http_client:
+        scoped_clients:
+            ademe.observatoire.client:
+                scope: 'https://prd-x-ademe-externe-api\.de-c1\.eu1\.cloudhub\.io'
+                auth_basic: '%env(OBSERVATOIRE_DPE_API_CLIENT_ID)%:%env(OBSERVATOIRE_DPE_API_CLIENT_SECRET)%'
+
     #esi: true
     #fragments: true
     serializer:

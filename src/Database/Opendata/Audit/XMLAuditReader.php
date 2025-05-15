@@ -101,6 +101,7 @@ final class XMLAuditReader extends XMLReader
             1 => 200,
             2 => 600,
             3 => 1000,
+            default => 200,
         };
     }
 

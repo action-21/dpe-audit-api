@@ -9,6 +9,15 @@ enum TypeBatiment: string implements Enum
     case MAISON = 'maison';
     case IMMEUBLE = 'immeuble';
 
+    public static function from_opendata(string $type): self
+    {
+        return match ($type) {
+            'maison' => self::MAISON,
+            'appartement' => self::IMMEUBLE,
+            'immeuble' => self::IMMEUBLE,
+        };
+    }
+
     public static function from_enum_methode_application_dpe_log_id(int $id): self
     {
         return match ($id) {

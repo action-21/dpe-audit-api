@@ -2,20 +2,25 @@
 
 namespace App\Database\Opendata\Enveloppe;
 
-use App\Database\Opendata\ObservatoireDPEAuditFinder;
+use App\Database\Opendata\XMLElement;
 use App\Domain\Common\ValueObject\Id;
 use App\Domain\Enveloppe\{Enveloppe, EnveloppeRepository};
 use App\Serializer\Opendata\XMLEnveloppeDeserializer;
+use App\Services\Observatoire\Observatoire;
 
 final class OpendataEnveloppeRepository implements EnveloppeRepository
 {
     public function __construct(
-        private ObservatoireDPEAuditFinder $finder,
-        private XMLEnveloppeDeserializer $deserializer
+        private readonly Observatoire $observatoire,
+        private readonly XMLEnveloppeDeserializer $deserializer
     ) {}
 
     public function find(Id $id): ?Enveloppe
     {
-        return ($xml = $this->finder->find($id)) ? $this->deserializer->deserialize($xml) : null;
+        if ($content = $this->observatoire->find($id)) {
+            $xml = \simplexml_load_string($content, XMLElement::class);
+            return $this->deserializer->deserialize($xml);
+        }
+        return null;
     }
 }

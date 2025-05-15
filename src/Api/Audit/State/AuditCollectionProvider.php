@@ -23,38 +23,28 @@ final class AuditCollectionProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): PaginatorInterface
     {
-        $query = new SearchQuery(
-            page: $context['filters']['page'] ?? 1,
-            date_etablissement_min: $context['filters']['date_etablissement_min'] ?? null,
-            date_etablissement_max: $context['filters']['date_etablissement_max'] ?? null,
-            surface_habitable_min: $context['filters']['surface_habitable_min'] ?? null,
-            surface_habitable_max: $context['filters']['surface_habitable_max'] ?? null,
-            type_batiment: array_map(
-                fn(string $item) => TypeBatiment::from($item),
-                $context['filters']['type_batiment'] ?? [],
-            ),
-            etiquette_energie: array_map(
-                fn(string $item) => Etiquette::from($item),
-                $context['filters']['etiquette_energie'] ?? [],
-            ),
-            etiquette_climat: array_map(
-                fn(string $item) => Etiquette::from($item),
-                $context['filters']['etiquette_climat'] ?? [],
-            ),
-            zone_climatique: array_map(
-                fn(string $item) => ZoneClimatique::from($item),
-                $context['filters']['zone_climatique'] ?? [],
-            ),
-            code_postal: $context['filters']['code_postal'] ?? [],
-            code_departement: $context['filters']['code_departement'] ?? [],
-        );
+        $filters = $context['filters'] ?? [];
 
-        if ($context['filters']['periode_construction'] ?? null) {
-            $query->with_periode_construction(PeriodeConstruction::from($context['filters']['periode_construction']));
-        }
-        if ($context['filters']['classe_altitude'] ?? null) {
-            $query->with_classe_altitude(ClasseAltitude::from($context['filters']['classe_altitude']));
-        }
+        $query = new SearchQuery;
+        $query->page = $filters['page'] ?? $query->page;
+        $query->randomize = $filters['randomize'] ?? $query->randomize;
+        $query->sort = $filters['sort'] ?? $query->sort;
+        $query->date_etablissement_min = $filters['date_etablissement_min'] ?? null;
+        $query->date_etablissement_max = $filters['date_etablissement_max'] ?? null;
+        $query->surface_habitable_min = $filters['surface_habitable_min'] ?? null;
+        $query->surface_habitable_max = $filters['surface_habitable_max'] ?? null;
+        $query->annee_construction_min = $filters['annee_construction_min'] ?? null;
+        $query->annee_construction_max = $filters['annee_construction_max'] ?? null;
+        $query->altitude_min = $filters['altitude_min'] ?? null;
+        $query->altitude_max = $filters['altitude_max'] ?? null;
+        $query->type_batiment = array_map(fn($item) => TypeBatiment::from($item), $filters['type_batiment'] ?? []);
+        $query->periode_constrcution = array_map(fn($item) => PeriodeConstruction::from($item), $filters['periode_construction'] ?? []);
+        $query->classe_altitude = array_map(fn($item) => ClasseAltitude::from($item), $filters['classe_altitude'] ?? []);
+        $query->etiquette_energie = array_map(fn($item) => Etiquette::from($item), $filters['etiquette_energie'] ?? []);
+        $query->etiquette_climat = array_map(fn($item) => Etiquette::from($item), $filters['etiquette_climat'] ?? []);
+        $query->zone_climatique = array_map(fn($item) => ZoneClimatique::from($item), $filters['zone_climatique'] ?? []);
+        $query->code_postal = $filters['code_postal'] ?? [];
+        $query->code_departement = $filters['code_departement'] ?? [];
 
         $handle = $this->handler;
 

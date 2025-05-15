@@ -2,20 +2,25 @@
 
 namespace App\Database\Opendata\Production;
 
-use App\Database\Opendata\ObservatoireDPEAuditFinder;
+use App\Database\Opendata\XMLElement;
 use App\Domain\Common\ValueObject\Id;
 use App\Domain\Production\{Production, ProductionRepository};
 use App\Serializer\Opendata\XMLProductionDeserializer;
+use App\Services\Observatoire\Observatoire;
 
 final class OpendataProductionRepository implements ProductionRepository
 {
     public function __construct(
-        private ObservatoireDPEAuditFinder $finder,
-        private XMLProductionDeserializer $deserializer,
+        private readonly Observatoire $observatoire,
+        private readonly XMLProductionDeserializer $deserializer,
     ) {}
 
     public function find(Id $id): ?Production
     {
-        return ($xml = $this->finder->find($id)) ? $this->deserializer->deserialize($xml) : null;
+        if ($content = $this->observatoire->find($id)) {
+            $xml = \simplexml_load_string($content, XMLElement::class);
+            return $this->deserializer->deserialize($xml);
+        }
+        return null;
     }
 }

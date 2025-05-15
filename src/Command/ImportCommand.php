@@ -2,30 +2,28 @@
 
 namespace App\Command;
 
-use App\Database\Opendata\ObservatoireDPEAuditFinder;
-use App\Database\Opendata\ObservatoireDPEAuditSearcher;
+use App\Domain\Audit\AuditRepository;
 use App\Domain\Audit\Enum\PeriodeConstruction;
+use App\Domain\Audit\Enum\TypeBatiment;
 use App\Domain\Common\Enum\ZoneClimatique;
 use App\Domain\Common\ValueObject\Id;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Services\Observatoire\Observatoire;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:audit:import',
-    description: 'Importe aléatoirement des audits depuis l\'observatoire DPE-Audit',
+    description: 'Importe des audits depuis l\'observatoire DPE-Audit',
     hidden: false,
 )]
 final class ImportCommand extends Command
 {
-    public final const BASE_URL = 'https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines';
-
     public function __construct(
-        private readonly HttpClientInterface $client,
-        private readonly ObservatoireDPEAuditSearcher $searcher,
-        private readonly ObservatoireDPEAuditFinder $finder,
+        private readonly AuditRepository $repository,
+        private readonly Observatoire $observatoire,
         private readonly string $projectDir,
     ) {
         parent::__construct();
@@ -33,26 +31,35 @@ final class ImportCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $searcher = $this->searcher
-            ->addQuery('sort', 'date_etablissement_dpe')
-            ->addQuery('type_batiment_eq', 'maison')
-            ->randomize();
+        if ($search = $input->getArgument('search')) {
+            $id = Id::from($search);
+            $content = $this->observatoire->find($id);
+            dd($content);
+            $this->save($id, $content);
+            return Command::SUCCESS;
+        };
+
+        dd('exit');
+
+        $repository = $this->repository
+            ->with_type_batiment(TypeBatiment::MAISON)
+            ->sort('date_etablissement_dpe');
 
         foreach (ZoneClimatique::cases() as $zone_climatique) {
-            $searcher->addQuery('zone_climatique__eq', $zone_climatique->value);
+            $repository->with_zone_climatique($zone_climatique);
 
             foreach (PeriodeConstruction::cases() as $periode_construction) {
-                $searcher->addQuery('periode_construction_eq', $periode_construction->value);
+                $repository->with_periode_construction($periode_construction);
 
-                foreach ($searcher->search() as $result) {
-                    $id = $result['numero_dpe'];
+                foreach ($repository->search() as $audit) {
+                    $id = $audit->id();
                     $output->writeln("Importing audit {$id}...");
 
-                    if (null === $xml = $this->finder->find(Id::from($id))) {
+                    if (null === $content = $this->observatoire->find($audit->id())) {
                         $output->writeln("Failed");
                         continue;
                     }
-                    $xml->saveXML("{$this->projectDir}/data/audits/{$id}.xml");
+                    $this->save($id, $content);
                     $output->writeln("Done");
                 }
             }
@@ -60,13 +67,15 @@ final class ImportCommand extends Command
         return Command::SUCCESS;
     }
 
-    /**
-     * @return string[]
-     */
-    public function queries(): array
+    private function save(Id $id, string $content): void
     {
-        $queries = [];
+        $path = "{$this->projectDir}/data/audits/{$id}.xml";
+        $xml = \simplexml_load_string($content);
+        $xml->saveXML($path);
+    }
 
-        return $queries;
+    protected function configure(): void
+    {
+        $this->addArgument('search', InputArgument::OPTIONAL, 'Numéro de DPE :');
     }
 }

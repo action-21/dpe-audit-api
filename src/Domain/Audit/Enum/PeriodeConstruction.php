@@ -34,6 +34,22 @@ enum PeriodeConstruction: string implements Enum
         };
     }
 
+    public static function from_opendata(string $value): self
+    {
+        return match ($value) {
+            'avant 1948' => self::AVANT_1948,
+            '1948-1974' => self::ENTRE_1948_1974,
+            '1975-1977' => self::ENTRE_1975_1977,
+            '1978-1982' => self::ENTRE_1978_1982,
+            '1983-1988' => self::ENTRE_1983_1988,
+            '1989-2000' => self::ENTRE_1989_2000,
+            '2001-2005' => self::ENTRE_2001_2005,
+            '2006-2012' => self::ENTRE_2006_2012,
+            '2013-2021' => self::ENTRE_2013_2021,
+            'après 2021' => self::APRES_2021,
+        };
+    }
+
     public function id(): int|string
     {
         return $this->value;
@@ -52,22 +68,6 @@ enum PeriodeConstruction: string implements Enum
             self::ENTRE_2006_2012 => 'Entre 2006 et 2012',
             self::ENTRE_2013_2021 => 'Entre 2013 et 2021',
             self::APRES_2021 => 'Après 2021',
-        };
-    }
-
-    public function filter(): string
-    {
-        return match ($this) {
-            self::AVANT_1948 => 'avant 1948',
-            self::ENTRE_1948_1974 => '1948-1974',
-            self::ENTRE_1975_1977 => '1975-1977',
-            self::ENTRE_1978_1982 => '1978-1982',
-            self::ENTRE_1983_1988 => '1983-1988',
-            self::ENTRE_1989_2000 => '1989-2000',
-            self::ENTRE_2001_2005 => '2001-2005',
-            self::ENTRE_2006_2012 => '2006-2012',
-            self::ENTRE_2013_2021 => '2013-2021',
-            self::APRES_2021 => 'après 2021',
         };
     }
 
@@ -90,5 +90,37 @@ enum PeriodeConstruction: string implements Enum
     public function annee(): Annee
     {
         return Annee::from($this->intval());
+    }
+
+    public function min(): ?int
+    {
+        return match ($this) {
+            self::AVANT_1948 => null,
+            self::ENTRE_1948_1974 => 1948,
+            self::ENTRE_1975_1977 => 1975,
+            self::ENTRE_1978_1982 => 1978,
+            self::ENTRE_1983_1988 => 1983,
+            self::ENTRE_1989_2000 => 1989,
+            self::ENTRE_2001_2005 => 2001,
+            self::ENTRE_2006_2012 => 2006,
+            self::ENTRE_2013_2021 => 2013,
+            self::APRES_2021 => 2022,
+        };
+    }
+
+    public function max(): ?int
+    {
+        return match ($this) {
+            self::AVANT_1948 => 1947,
+            self::ENTRE_1948_1974 => 1974,
+            self::ENTRE_1975_1977 => 1977,
+            self::ENTRE_1978_1982 => 1982,
+            self::ENTRE_1983_1988 => 1988,
+            self::ENTRE_1989_2000 => 2000,
+            self::ENTRE_2001_2005 => 2005,
+            self::ENTRE_2006_2012 => 2012,
+            self::ENTRE_2013_2021 => 2021,
+            self::APRES_2021 => null,
+        };
     }
 }
