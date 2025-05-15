@@ -6,9 +6,9 @@ use App\Domain\Common\Enum\Enum;
 
 enum BouclageReseau: string implements Enum
 {
-    case RESEAU_NON_BOUCLE = 'reseau_non_boucle';
-    case RESEAU_BOUCLE = 'reseau_boucle';
-    case RESEAU_TRACE = 'reseau_trace';
+    case RESEAU_NON_BOUCLE = 'non_boucle';
+    case RESEAU_BOUCLE = 'boucle';
+    case RESEAU_TRACE = 'trace';
 
     public static function from_enum_bouclage_reseau_ecs_id(int $id): ?self
     {
